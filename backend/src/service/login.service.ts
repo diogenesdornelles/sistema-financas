@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import * as dotenv from 'dotenv'
 import { BaseService } from './base.service'
-import { User } from '../entity/user'
+import { User } from '../entity/entities'
 import { ResponseTokenDTO } from '../dtos/response/response-token.dto'
 import { CreateTokenDTO } from '../dtos/create/create-token.dto'
 import { UpdateTokenDTO } from '../dtos/update/update-token.dto'
@@ -24,20 +24,20 @@ export default class LoginService extends BaseService<User,
   }
 
   public create = async (data: CreateTokenDTO): Promise<ResponseTokenDTO> => {
-    // Find employee
-    const dbFuncionario = await this.repository.findOne({
+
+    const dbUser = await this.repository.findOne({
       where: { cpf: data.cpf },
     })
 
-    if (!dbFuncionario) {
+    if (!dbUser) {
       throw new ApiError(400, 'CPF not found or is not correct')
     }
     // If match, configure token
-    if (bcrypt.compareSync(data.senha, dbFuncionario.senha)) {
+    if (bcrypt.compareSync(data.pwd, dbUser.pwd)) {
       const token = jwt.sign(
         {
-          cpf: dbFuncionario.cpf,
-          nome: dbFuncionario.nome,
+          cpf: dbUser.cpf,
+          name: dbUser.name,
         },
         SECRET_KEY,
         {
@@ -47,9 +47,9 @@ export default class LoginService extends BaseService<User,
 
       return {
         user: {
-          cpf: dbFuncionario.cpf,
-          nome: dbFuncionario.nome,
-          id: dbFuncionario.id
+          cpf: dbUser.cpf,
+          name: dbUser.name,
+          id: dbUser.id
         },
         token: token,
       }

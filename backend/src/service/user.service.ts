@@ -1,5 +1,5 @@
 import { BaseService } from "./base.service";
-import { User } from "../entity/user";
+import { User } from "../entity/entities";
 import { CreateUserDTO } from "../dtos/create/create-user.dto";
 import { UpdateUserDTO } from "../dtos/update/update-user.dto";
 import { ResponseUserDTO } from "../dtos/response/response-user.dto";
@@ -22,7 +22,7 @@ export class UserService extends BaseService<
    * Recupera todos os usuários.
    */
   public getAll = async (): Promise<ResponseUserDTO[]> => {
-    const users = await this.repository.find({ select: { senha: false } });
+    const users = await this.repository.find({ select: { pwd: false } });
     return users;
   };
 
@@ -32,7 +32,7 @@ export class UserService extends BaseService<
    * @param id - Identificador do usuário.
    */
   public getOne = async (id: string): Promise<ResponseUserDTO | null> => {
-    const user = await this.repository.findOne({ where: { id }, select: { senha: false } });
+    const user = await this.repository.findOne({ where: { id }, select: { pwd: false } });
     return user;
   };
 
@@ -42,7 +42,7 @@ export class UserService extends BaseService<
    * @param data - Dados para criação do usuário.
    */
   public create = async (data: CreateUserDTO): Promise<ResponseUserDTO> => {
-    data.senha = await hashPassword(data.senha)
+    data.pwd = await hashPassword(data.pwd)
     const user = this.repository.create(data);
     const createdUser = await this.repository.save(user);
     return createdUser;
@@ -58,8 +58,8 @@ export class UserService extends BaseService<
     id: string,
     data: UpdateUserDTO,
   ): Promise<Partial<ResponseUserDTO> | null> => {
-    if (data.senha) {
-      data.senha = await hashPassword(data.senha)
+    if (data.pwd) {
+      data.pwd = await hashPassword(data.pwd)
     }
     await this.repository.update({ id }, data);
     const updatedUser = await this.repository.findOne({ where: { id } });

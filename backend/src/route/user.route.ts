@@ -35,6 +35,7 @@ export default class UserRouter extends BaseRouter<UserController> {
       "/:id",
       GeneralMiddleware.authentication,
       GeneralMiddleware.validateUUID,
+      GeneralMiddleware.validateBodyRequest,
       this.controller.update,
       GeneralMiddleware.errorHandler,
     );

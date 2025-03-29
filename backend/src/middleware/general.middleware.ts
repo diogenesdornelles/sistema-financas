@@ -63,8 +63,8 @@ export default class GeneralMiddleware {
     res: Response,
     next: NextFunction,
   ): void => {
-    let { cod } = req.params;
-    if (GeneralValidator.validateUUID(cod)) {
+    let { id } = req.params;
+    if (GeneralValidator.validateUUID(id)) {
       next();
       return;
     }

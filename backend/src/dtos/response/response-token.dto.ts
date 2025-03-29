@@ -1,7 +1,7 @@
 export interface ResponseTokenDTO {
   user: {
     cpf: string
-    nome: string
+    name: string
     id: string
   }
   token: string

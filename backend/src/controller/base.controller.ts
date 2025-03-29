@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { BaseService } from "../service/base.service";
-import { Base } from "../entity/base";
+import { Base } from "../entity/entities";
 
 /**
  * Abstract base controller class.

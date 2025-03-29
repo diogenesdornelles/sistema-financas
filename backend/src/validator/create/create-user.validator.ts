@@ -4,15 +4,15 @@ import GeneralValidator from "../general.validator";
 
 // Define o schema de criação de usuário
 export const createUserSchema = z.object({
-  nome: z
+  name: z
     .string()
     .min(3, "Nome precisa ter ao menos 3 caracteres")
     .max(255, "Nome pode ter no máximo 255 caracteres"),
-  sobrenome: z
+  surname: z
     .string()
     .min(3, "Sobrenome precisa ter ao menos 3 caracteres")
     .max(255, "Sobrenome pode ter no máximo 255 caracteres"),
-  senha: z.string().refine(GeneralValidator.isValidPwd, {
+  pwd: z.string().refine(GeneralValidator.isValidPwd, {
     message: `
               Ao menos 8 caracteres
               Ao menos um caracter minúsculo

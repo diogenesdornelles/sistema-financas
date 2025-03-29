@@ -1,7 +1,7 @@
 // Infera o tipo a partir do schema
 export type CreateUserDTO = {
-    nome: string,
-    senha: string,
-    sobrenome: string,
+    name: string,
+    pwd: string,
+    surname: string,
     cpf: string
 }

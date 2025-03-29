@@ -1,4 +1,4 @@
 export interface CreateTokenDTO {
   cpf: string
-  senha: string
+  pwd: string
 }

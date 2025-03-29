@@ -10,7 +10,7 @@ export const createTokenSchema = z
             .refine(GeneralValidator.validateCpf, {
                 message: 'Invalid CPF format. Please provide a valid CPF.',
             }),
-        senha: z.string().refine(GeneralValidator.isValidPwd, {
+        pwd: z.string().refine(GeneralValidator.isValidPwd, {
             message: `
         Ao menos 8 caracteres
         Ao menos um caracter minúsculo

@@ -1,3 +1,3 @@
-import { User } from "../../entity/user";
+import { User } from "../../entity/entities";
 
-export interface ResponseUserDTO extends Omit<User, "senha"> {}
+export interface ResponseUserDTO extends Omit<User, "pwd"> {}

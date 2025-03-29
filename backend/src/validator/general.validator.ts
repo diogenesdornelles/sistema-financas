@@ -33,13 +33,6 @@ export default class GeneralValidator {
     return true;
   };
 
-  public static validatePhone = (phone: string): boolean => {
-    if (!phone || phone.length < 10 || phone.length > 12 || /\D/g.test(phone)) {
-      return false;
-    }
-    return true;
-  };
-
   public static validateUUID = (cod: string): boolean => {
     if (!cod || !isUuid(cod)) {
       return false;

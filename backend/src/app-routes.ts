@@ -6,11 +6,51 @@ import { RouteConfigType } from "./types/route-config.type";
 const appRoutes: RouteConfigType[] = [
   {
     baseRouter: new UserRouter(),
-    basePath: "/users",
+    basePath: "/user",
   },
   {
     baseRouter: new LoginRouter(),
     basePath: "/login",
+  },
+  {
+    baseRouter: new CfRouter(),
+    basePath: "/cf",
+  },
+  {
+    baseRouter: new TcfRouter(),
+    basePath: "/tcf",
+  },
+  {
+    baseRouter: new CpRouter(),
+    basePath: "/cp",
+  },
+  {
+    baseRouter: new TcpRouter(),
+    basePath: "/tcp",
+  },
+  {
+    baseRouter: new CrRouter(),
+    basePath: "/cr",
+  },
+  {
+    baseRouter: new TcrRouter(),
+    basePath: "/tcr",
+  },
+  {
+    baseRouter: new CrRouter(),
+    basePath: "/cr",
+  },
+  {
+    baseRouter: new PartnerRouter(),
+    basePath: "/partner",
+  },
+  {
+    baseRouter: new TxRouter(),
+    basePath: "/tx",
+  },
+  {
+    baseRouter: new CatRouter(),
+    basePath: "/cat",
   },
 ];
 

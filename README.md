@@ -8,6 +8,8 @@ O foco inicial é oferecer operações CRUD (criação, leitura, atualização e
 
 1. **Usuário**
    - *id (uuid) (pk)*: Identificador único do usuário.
+   - *nome (varchar(30))*: Nome.
+   - *sobrenome (varchar(60))*: Sobrenome.
    - *cpf (varchar(11))*: Armazena o CPF; é importante aplicar validações e formatação adequadas.
    - *senha (varchar(128))*: Senha do usuário, que deve ser armazenada de forma criptografada.
    - *criadoEm (DateTime)*: Data e hora em que o registro foi criado.

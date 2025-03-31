@@ -3,11 +3,10 @@ import jwt from "jsonwebtoken";
 import * as dotenv from "dotenv";
 import { BaseService } from "./base.service";
 import { User } from "../entity/entities";
-import { ResponseTokenDTO } from "../dtos/response/response-token.dto";
-import { CreateTokenDTO } from "../dtos/create/create-token.dto";
-import { UpdateTokenDTO } from "../dtos/update/update-token.dto";
+
 import ms from "ms";
 import { ApiError } from "../utils/api-error.util";
+import { CreateTokenDTO, ResponseTokenDTO, UpdateTokenDTO } from "../dtos/token.dto";
 
 dotenv.config();
 

@@ -1,5 +1,5 @@
 import { CPStatus } from "../entity/entities";
-import { PartnerResponseDto } from "./supplier.dto";
+import { PartnerResponseDto } from "./partner.dto";
 import { TcpResponseDto } from "./tcp.dto";
 
 export class CreateCpDto {
@@ -32,8 +32,6 @@ export class CpResponseDto {
   supplier!: PartnerResponseDto;
   due!: Date;
   obs!: string;
-  // O campo user pode ser omitido na resposta se não for exposto
-  user?: string;
   status!: CPStatus;
   createdAt!: Date;
   updatedAt!: Date;

@@ -1,5 +1,6 @@
 import { TransactionType } from "../entity/entities";
 import { CfResponseDto } from "./cf.dto";
+import { CatResponseDto } from "./cat.dto";
 
 export class CreateTxDto {
   value!: number;
@@ -28,8 +29,7 @@ export class TxResponseDto {
   type!: TransactionType;
   cf!: CfResponseDto;
   description!: string;
-  user!: string;
-  category!: CfResponseDto;
+  category!: CatResponseDto;
   obs!: string;
   status!: boolean;
   createdAt!: Date;

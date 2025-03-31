@@ -21,8 +21,14 @@ export class UserService extends BaseService<
    * Recupera todos os usuários.
    */
   public getAll = async (): Promise<UserResponseDto[]> => {
-    const users = await this.repository.find({ select: { pwd: false } });
-    return users;
+    try {
+      const users = await this.repository.find({
+        select: ["id", "name", "status", "surname", "createdAt", "updatedAt"],
+      });
+      return users;
+    } catch (error) {
+      throw new Error(`Erro ao obter usuários: ${error}`);
+    }
   };
 
   /**
@@ -31,11 +37,15 @@ export class UserService extends BaseService<
    * @param id - Identificador do usuário.
    */
   public getOne = async (id: string): Promise<UserResponseDto | null> => {
-    const user = await this.repository.findOne({
-      where: { id },
-      select: { pwd: false },
-    });
-    return user;
+    try {
+      const user = await this.repository.findOne({
+        where: { id },
+        select: ["id", "name", "status", "surname", "createdAt", "updatedAt"],
+      });
+      return user;
+    } catch (error) {
+      throw new Error(`Erro ao obter usuário com ID ${id}: ${error}`);
+    }
   };
 
   /**
@@ -44,10 +54,17 @@ export class UserService extends BaseService<
    * @param data - Dados para criação do usuário.
    */
   public create = async (data: CreateUserDto): Promise<UserResponseDto> => {
-    data.pwd = await hashPassword(data.pwd);
-    const user = this.repository.create(data);
-    const createdUser = await this.repository.save(user);
-    return createdUser;
+    try {
+      const hashedPwd = await hashPassword(data.pwd);
+      const user = this.repository.create({ ...data, pwd: hashedPwd });
+      const createdUser = await this.repository.save(user);
+
+      // Evita retorno da senha
+      const { pwd, ...userWithoutPwd } = createdUser;
+      return userWithoutPwd;
+    } catch (error) {
+      throw new Error(`Erro ao criar usuário: ${error}`);
+    }
   };
 
   /**
@@ -60,27 +77,33 @@ export class UserService extends BaseService<
     id: string,
     data: UpdateUserDto,
   ): Promise<Partial<UserResponseDto> | null> => {
-    if (data.pwd) {
-      data.pwd = await hashPassword(data.pwd);
+    try {
+      if (data.pwd) {
+        data.pwd = await hashPassword(data.pwd);
+      }
+      await this.repository.update({ id }, data);
+      const updatedUser = await this.repository.findOne({
+        where: { id },
+        select: ["id", "name", "status", "surname", "createdAt", "updatedAt"],
+      });
+      return updatedUser;
+    } catch (error) {
+      throw new Error(`Erro ao atualizar usuário com ID ${id}: ${error}`);
     }
-    await this.repository.update({ id }, data);
-    const updatedUser = await this.repository.findOne({ where: { id } });
-    return updatedUser;
   };
 
   /**
-   * Remove um usuário que esteja ativo.
+   * Remove logicamente um usuário (status=false).
    *
    * @param id - Identificador do usuário.
    */
   public delete = async (id: string): Promise<boolean> => {
     try {
-      await this.repository.update({ id }, { status: true });
+      await this.repository.update({ id }, { status: false });
       const updatedUser = await this.repository.findOne({ where: { id } });
-      if (updatedUser) return true;
-      return false;
+      return !!updatedUser && !updatedUser.status;
     } catch (error) {
-      return false;
+      throw new Error(`Erro ao remover usuário com ID ${id}: ${error}`);
     }
   };
 }

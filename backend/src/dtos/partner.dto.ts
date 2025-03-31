@@ -23,7 +23,6 @@ export class PartnerResponseDto {
   name!: string;
   type!: PartnerType;
   cod!: string;
-  user!: string;
   status!: boolean;
   obs!: string;
   createdAt!: Date;

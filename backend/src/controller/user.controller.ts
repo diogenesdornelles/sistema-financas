@@ -20,8 +20,8 @@ export default class UserController extends BaseController<UserService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const users: UserResponseDto[] = await this.service.getAll();
-      res.status(200).json(users);
+      const items: UserResponseDto[] = await this.service.getAll();
+      res.status(200).json(items);
       return;
     } catch (error) {
       next(error);
@@ -36,12 +36,12 @@ export default class UserController extends BaseController<UserService> {
   ): Promise<void> => {
     try {
       const { id } = req.params;
-      const user: UserResponseDto | null = await this.service.getOne(id);
-      if (!user) {
-        res.status(404).json({ message: "User not found" });
+      const item: UserResponseDto | null = await this.service.getOne(id);
+      if (!item) {
+        res.status(404).json({ message: "Usuário não encontrado" });
         return;
       }
-      res.status(200).json(user);
+      res.status(200).json(item);
       return;
     } catch (error) {
       next(error);
@@ -76,7 +76,7 @@ export default class UserController extends BaseController<UserService> {
       const updatedUser: Partial<UserResponseDto> | null =
         await this.service.update(id, validatedData);
       if (!updatedUser) {
-        res.status(404).json({ message: "User not found" });
+        res.status(404).json({ message: "Usuário não encontrado"  });
         return;
       }
       res.status(200).json(updatedUser);
@@ -96,10 +96,10 @@ export default class UserController extends BaseController<UserService> {
       const { id } = req.params;
       const success: boolean = await this.service.delete(id);
       if (!success) {
-        res.status(404).json({ message: "User not found" });
+        res.status(404).json({ message: "Usuário não encontrado"  });
         return;
       }
-      res.status(200).json({ message: "User deleted!" });
+      res.status(200).json({ message: "Usuário deletado!" });
       return;
     } catch (error) {
       next(error);

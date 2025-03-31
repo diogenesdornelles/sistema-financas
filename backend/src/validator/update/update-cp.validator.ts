@@ -1,10 +1,10 @@
 import { z } from "zod";
 import { createCpSchema } from "../create/create-cp.validator";
+import { CPStatus } from "../../entity/entities";
 
-const CpStatusEnum = z.enum(["pending", "paid", "cancelled"]);
 
 export const updateCpSchema = createCpSchema
   .extend({
-    status: CpStatusEnum.optional(),
+    status: z.nativeEnum(CPStatus).optional(),
   })
   .partial();

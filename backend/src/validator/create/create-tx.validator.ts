@@ -1,8 +1,6 @@
 import { z } from "zod";
 import GeneralValidator from "../general.validator";
-
-
-const TxTypeEnum = z.enum(["PF", "PJ"]);
+import { TransactionType } from "../../entity/entities";
 
 
 export const createTxSchema = z
@@ -10,7 +8,7 @@ export const createTxSchema = z
     value: z.number().refine(GeneralValidator.validateMoney, {
       message: "Não possui o formato de dinheiro",
     }),
-    type: TxTypeEnum,
+    type: z.nativeEnum(TransactionType),
     user: z.string().uuid(),
     cf: z.string().uuid(),
     category: z.string().uuid(),

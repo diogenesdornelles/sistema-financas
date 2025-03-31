@@ -8,7 +8,6 @@ export class CreateCpDto {
   type!: string; // Identificador de Tcp
   supplier!: string; // Identificador de Partner
   due!: Date;
-  // Opcional: obs (default ''), user e status (default CPStatus.PENDING)
   obs?: string;
   user?: string;
 }
@@ -26,9 +25,7 @@ export class UpdateCpDto {
 export class CpResponseDto {
   id!: string;
   value!: number;
-  // Retorna o objeto Tcp (ou pode ser somente o id, conforme sua estratégia)
   type!: TcpResponseDto;
-  // Retorna o objeto Partner
   supplier!: PartnerResponseDto;
   due!: Date;
   obs!: string;

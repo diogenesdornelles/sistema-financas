@@ -15,6 +15,7 @@ import swaggerUi from "swagger-ui-express";
 import swaggerDocument from "./swagger.json";
 import { RouteConfigType } from "./types/route-config.type";
 import { AppDataSource } from "./config/db";
+import { seedSuperUser } from "./config/seedSuperUser";
 
 dotenv.config();
 
@@ -27,7 +28,7 @@ const corsOptions: cors.CorsOptions = {
 };
 
 // Set server port and host using environment variables or default values.
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.APP_PORT || 3000;
 const HOST = process.env.HOST || "";
 
 /**
@@ -73,7 +74,7 @@ class App {
     this.app.use(morgan("dev"));
     // Setup API documentation route.
     // Accessible via: https://localhost:3000/api-docs/ or http://localhost:3000/api-docs/
-    this.app.use("api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+    // this.app.use("api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   }
 
   /**
@@ -89,6 +90,7 @@ class App {
     await AppDataSource.initialize()
       .then(async () => {
         console.log("Initilizing database conn...");
+        await seedSuperUser();
       })
       .catch((error) => console.log(error));
   }

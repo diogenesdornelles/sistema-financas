@@ -1,7 +1,6 @@
 import { z } from "zod";
 import GeneralValidator from "../general.validator";
-
-const PartnerTypeEnum = z.enum(["PF", "PJ"]);
+import { PartnerType } from "../../entity/entities";
 
 
 export const createPartnerSchema = z
@@ -30,7 +29,7 @@ export const createPartnerSchema = z
                     }
                 )
         ),
-        type: PartnerTypeEnum,
+        type: z.nativeEnum(PartnerType),
         user: z.string().uuid(),
         obs: z
             .string()

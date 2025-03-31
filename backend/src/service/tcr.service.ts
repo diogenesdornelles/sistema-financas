@@ -6,7 +6,7 @@ import {
   TcrResponseDto,
 } from "../dtos/tcr.dto";
 
-export class TcpService extends BaseService<
+export class TcrService extends BaseService<
   Tcr,
   TcrResponseDto,
   CreateTcrDto,

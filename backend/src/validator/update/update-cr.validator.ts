@@ -1,10 +1,9 @@
 import { z } from "zod";
 import { createCrSchema } from "../create/create-cr.validator";
+import { PaymentStatus } from "../../entity/entities";
 
-const CrStatusEnum = z.enum(["pending", "paid", "cancelled"]);
-
-export const updateCpSchema = createCrSchema
+export const updateCrSchema = createCrSchema
   .extend({
-    status: CrStatusEnum.optional(),
+    status: z.nativeEnum(PaymentStatus).optional(),
   })
   .partial();

@@ -105,7 +105,7 @@ export class Cf extends Base {
   @Column({ type: "varchar", length: 30, nullable: true })
   bank!: string; // Create: no required; Update: no required; Response: required
 
-  @Column({ type: "text", default: "" })
+  @Column({ type: "text", nullable: true })
   obs!: string; // Create: no required; Update: no required; Response: required
 
   @Column({ type: "boolean", default: true })
@@ -145,7 +145,7 @@ export class Cp extends Base {
   @Column({ type: "date" })
   due!: Date; // Create: required; Update: no required; Response: required
 
-  @Column({ type: "text", default: "" })
+  @Column({ type: "text", nullable: true })
   obs!: string; // Create: no required; Update: no required; Response: required
 
   @ManyToOne(() => User, (user) => user.cps)
@@ -186,7 +186,7 @@ export class Cr extends Base {
   @Column({ type: "date" })
   due!: Date; // Create: required; Update: no required; Response: required
 
-  @Column({ type: "text", default: "" })
+  @Column({ type: "text", nullable: true })
   obs!: string; // Create: no required; Update: no required; Response: required
 
   @ManyToOne(() => User, (user) => user.crs)
@@ -229,7 +229,7 @@ export class Partner extends Base {
   @Column({ type: "boolean", default: true })
   status!: boolean; // Create: no required; Update: no required; Response: required
 
-  @Column({ type: "text", default: "" })
+  @Column({ type: "text", nullable: true })
   obs!: string; // Create: no required; Update: no required; Response: required
 
   @OneToMany(() => Cp, (cp) => cp.supplier)
@@ -252,7 +252,7 @@ export class Tx extends Base {
   @JoinColumn({ name: "cfId" })
   cf!: Cf; // Create: required; Update: no required; Response: required as Cf
 
-  @Column({ type: "text", default: "" })
+  @Column({ type: "text", nullable: true })
   description!: string; // Create: no required; Update: no required; Response: required
 
   @ManyToOne(() => User, (user) => user.txs)
@@ -263,7 +263,7 @@ export class Tx extends Base {
   @JoinColumn({ name: "catId" })
   category!: Cat; // Create: required; Update: no required; Response: required as Cat
 
-  @Column({ type: "text", default: "" })
+  @Column({ type: "text", nullable: true })
   obs!: string; // Create: no required; Update: no required; Response: required
 
   @Column({ type: "boolean", default: true })
@@ -276,7 +276,7 @@ export class Cat extends Base {
   @Column({ type: "varchar", length: 100, unique: true })
   name!: string; // Create: required; Update: no required; Response: required
 
-  @Column({ type: "text", default: "" })
+  @Column({ type: "text", nullable: true })
   description!: string; // Create: required; Update: no required; Response: required
 
   @ManyToOne(() => User, (user) => user.cats)
@@ -286,7 +286,7 @@ export class Cat extends Base {
   @Column({ type: "boolean", default: true })
   status!: boolean; // Create: no required; Update: no required; Response: required
 
-  @Column({ type: "text", default: "" })
+  @Column({ type: "text", nullable: true })
   obs!: string; // Create: no required; Update: no required; Response: required
 
   @OneToMany(() => Tx, (tx) => tx.category)

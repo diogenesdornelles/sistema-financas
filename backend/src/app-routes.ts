@@ -1,4 +1,13 @@
+import CatRouter from "./route/cat.route";
+import CfRouter from "./route/cf.route";
+import CpRouter from "./route/cp.route";
+import CrRouter from "./route/cr.route";
 import LoginRouter from "./route/login.routes";
+import PartnerRouter from "./route/partner.route";
+import TcfRouter from "./route/tcf.route";
+import TcpRouter from "./route/tcp.route";
+import TcrRouter from "./route/tcr.route";
+import TxRouter from "./route/tx.route";
 import UserRouter from "./route/user.route";
 import { RouteConfigType } from "./types/route-config.type";
 

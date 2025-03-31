@@ -9,7 +9,12 @@ import { AppDataSource } from "../config/db";
  * @template CreateDTO - DTO para criação.
  * @template UpdateDTO - DTO para atualização.
  */
-export abstract class BaseService<T extends ObjectLiteral, ResponseDTO, CreateDTO, UpdateDTO> {
+export abstract class BaseService<
+  T extends ObjectLiteral,
+  ResponseDTO,
+  CreateDTO,
+  UpdateDTO,
+> {
   protected repository: Repository<T>;
 
   constructor(entity: EntityTarget<T>) {

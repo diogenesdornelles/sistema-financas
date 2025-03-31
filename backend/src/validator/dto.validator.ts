@@ -45,15 +45,19 @@ export default class DTOValidator {
         },
         z
           .string()
-          .refine((val) => val.length === 11, { message: "CPF deve conter 11 dígitos" })
-          .refine(GeneralValidator.validateCpf, { message: "CPF inválido" })
+          .refine((val) => val.length === 11, {
+            message: "CPF deve conter 11 dígitos",
+          })
+          .refine(GeneralValidator.validateCpf, { message: "CPF inválido" }),
       ),
     })
     .strict();
 
-  private readonly updateUserSchema = this.createUserSchema.extend({
-    status: z.boolean().optional(),
-  }).partial();
+  private readonly updateUserSchema = this.createUserSchema
+    .extend({
+      status: z.boolean().optional(),
+    })
+    .partial();
   /*
       Métodos estáticos para validação, que recebem o objeto de entrada,
       executam o parse e retornam o objeto validado ou lançam erros caso haja divergências.

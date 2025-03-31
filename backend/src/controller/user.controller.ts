@@ -1,9 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import { UserService } from "../service/user.service";
 import { BaseController } from "./base.controller";
-import { CreateUserDTO } from "../dtos/create/create-user.dto";
-import { UpdateUserDTO } from "../dtos/update/update-user.dto";
-import { ResponseUserDTO } from "../dtos/response/response-user.dto";
+import {
+  UserResponseDto,
+  UpdateUserDto,
+  CreateUserDto,
+} from "../dtos/user.dto";
 import { createUserSchema } from "../validator/create/create-user.validator";
 import { updateUserSchema } from "../validator/update/update-user.validator";
 
@@ -18,7 +20,7 @@ export default class UserController extends BaseController<UserService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const users: ResponseUserDTO[] = await this.service.getAll();
+      const users: UserResponseDto[] = await this.service.getAll();
       res.status(200).json(users);
       return;
     } catch (error) {
@@ -34,7 +36,7 @@ export default class UserController extends BaseController<UserService> {
   ): Promise<void> => {
     try {
       const { id } = req.params;
-      const user: ResponseUserDTO | null = await this.service.getOne(id);
+      const user: UserResponseDto | null = await this.service.getOne(id);
       if (!user) {
         res.status(404).json({ message: "User not found" });
         return;
@@ -53,8 +55,8 @@ export default class UserController extends BaseController<UserService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const validatedData: CreateUserDTO = createUserSchema.parse(req.body);
-      const user: ResponseUserDTO = await this.service.create(validatedData);
+      const validatedData: CreateUserDto = createUserSchema.parse(req.body);
+      const user: UserResponseDto = await this.service.create(validatedData);
       res.status(201).json(user);
       return;
     } catch (error) {
@@ -70,8 +72,9 @@ export default class UserController extends BaseController<UserService> {
   ): Promise<void> => {
     try {
       const { id } = req.params;
-      const validatedData: UpdateUserDTO = updateUserSchema.parse(req.body);
-      const updatedUser: Partial<ResponseUserDTO> | null = await this.service.update(id, validatedData);
+      const validatedData: UpdateUserDto = updateUserSchema.parse(req.body);
+      const updatedUser: Partial<UserResponseDto> | null =
+        await this.service.update(id, validatedData);
       if (!updatedUser) {
         res.status(404).json({ message: "User not found" });
         return;

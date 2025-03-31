@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
-import { QueryFailedError, EntityNotFoundError } from 'typeorm';
+import { QueryFailedError, EntityNotFoundError } from "typeorm";
 import jwt, { Secret } from "jsonwebtoken";
 import * as dotenv from "dotenv";
 import { z } from "zod";
@@ -108,7 +108,10 @@ export default class GeneralMiddleware {
 
     // Tratamento de erros do TypeORM - erros de consulta
     if (error instanceof QueryFailedError) {
-      console.error(`Erro de consulta do TypeORM em ${req.method} ${req.url}:`, error);
+      console.error(
+        `Erro de consulta do TypeORM em ${req.method} ${req.url}:`,
+        error,
+      );
       res.status(500).json({
         error: "Erro na consulta ao banco de dados",
         details: error.message,
@@ -118,7 +121,10 @@ export default class GeneralMiddleware {
 
     // Tratamento de erros do TypeORM - entidade não encontrada
     if (error instanceof EntityNotFoundError) {
-      console.error(`Entidade não encontrada (TypeORM) em ${req.method} ${req.url}:`, error);
+      console.error(
+        `Entidade não encontrada (TypeORM) em ${req.method} ${req.url}:`,
+        error,
+      );
       res.status(404).json({
         error: "Entidade não encontrada",
         details: error.message,

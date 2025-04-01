@@ -25,3 +25,6 @@ export class UserResponseDto {
   createdAt!: Date;
   updatedAt!: Date;
 }
+
+
+export interface UserProps extends UserResponseDto {}

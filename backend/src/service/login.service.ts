@@ -25,7 +25,7 @@ export default class LoginService extends BaseService<
 
   public create = async (data: CreateTokenDTO): Promise<ResponseTokenDTO> => {
     const dbUser = await this.repository.findOne({
-      where: { cpf: data.cpf },
+      where: { cpf: data.cpf, status: true },
     });
 
     if (!dbUser) {

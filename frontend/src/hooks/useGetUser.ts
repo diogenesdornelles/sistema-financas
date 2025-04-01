@@ -2,10 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { Api } from "../api/api";
 
 
-export function useGetItem(id: string) {
+export function useGetUser(id: string) {
   return useQuery({
-    queryFn: () => Api.getItem(id),
-    queryKey: ["useGetItem", id],
+    queryFn: () => Api.getUser(id),
+    queryKey: ["useGetUser", id],
   });
 }
 

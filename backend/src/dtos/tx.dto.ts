@@ -1,6 +1,6 @@
-import { TransactionType } from "../entity/entities";
 import { CfResponseDto } from "./cf.dto";
 import { CatResponseDto } from "./cat.dto";
+import { TransactionType } from "../entity/entities";
 
 export class CreateTxDto {
   value!: number;

@@ -4,13 +4,16 @@ import {
 } from '@tanstack/react-query'
 
 import './App.css'
+import { SessionProvider } from './context/session-provider'
 
 const queryClient = new QueryClient()
 
 export default function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <></>
-    </QueryClientProvider>
+    <SessionProvider>
+      <QueryClientProvider client={queryClient}>
+        <></>
+      </QueryClientProvider>
+    </SessionProvider>
   )
 }

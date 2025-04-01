@@ -2,12 +2,12 @@ import { Request, Response, NextFunction } from "express";
 import { TcpService } from "../service/tcp.service";
 import { BaseController } from "./base.controller";
 import {
-  TcpResponseDto,
-  UpdateTcpDto,
-  CreateTcpDto,
-} from "../dtos/tcp.dto";
-import { createTcpSchema } from "../validator/create/create-tcp.validator";
-import { updateTcpSchema } from "../validator/update/update-tcp.validator";
+  TcpProps,
+  UpdateTcp,
+  CreateTcp,
+} from "../../../packages/dtos/tcp.dto"
+import {createTcpSchema} from '../../../packages/validators/zod-schemas/create/create-tcp.validator'
+import {updateTcpSchema} from '../../../packages/validators/zod-schemas/update/update-tcp.validator'
 
 export default class TcpController extends BaseController<TcpService> {
   constructor() {
@@ -20,7 +20,7 @@ export default class TcpController extends BaseController<TcpService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const items: TcpResponseDto[] = await this.service.getAll();
+      const items: TcpProps[] = await this.service.getAll();
       res.status(200).json(items);
       return;
     } catch (error) {
@@ -36,7 +36,7 @@ export default class TcpController extends BaseController<TcpService> {
   ): Promise<void> => {
     try {
       const { id } = req.params;
-      const item: TcpResponseDto | null = await this.service.getOne(id);
+      const item: TcpProps | null = await this.service.getOne(id);
       if (!item) {
         res.status(404).json({ message: "Tipo conta não encontrada" });
         return;
@@ -55,8 +55,8 @@ export default class TcpController extends BaseController<TcpService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const validatedData: CreateTcpDto = createTcpSchema.parse(req.body);
-      const item: TcpResponseDto = await this.service.create(validatedData);
+      const validatedData: CreateTcp = createTcpSchema.parse(req.body);
+      const item: TcpProps = await this.service.create(validatedData);
       res.status(201).json(item);
       return;
     } catch (error) {
@@ -72,8 +72,8 @@ export default class TcpController extends BaseController<TcpService> {
   ): Promise<void> => {
     try {
       const { id } = req.params;
-      const validatedData: UpdateTcpDto = updateTcpSchema.parse(req.body);
-      const updatedItem: Partial<TcpResponseDto> | null =
+      const validatedData: UpdateTcp = updateTcpSchema.parse(req.body);
+      const updatedItem: Partial<TcpProps> | null =
         await this.service.update(id, validatedData);
       if (!updatedItem) {
         res.status(404).json({ message: "Tipo conta não encontrada" });

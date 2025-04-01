@@ -2,12 +2,12 @@ import { Request, Response, NextFunction } from "express";
 import { TcrService } from "../service/tcr.service";
 import { BaseController } from "./base.controller";
 import {
-  TcrResponseDto,
-  UpdateTcrDto,
-  CreateTcrDto,
-} from "../dtos/tcr.dto";
-import { createTcrSchema } from "../validator/create/create-tcr.validator";
-import { updateTcrSchema } from "../validator/update/update-tcr.validator";
+  TcrProps,
+  UpdateTcr,
+  CreateTcr,
+} from "../../../packages/dtos/tcr.dto"
+import {createTcrSchema} from '../../../packages/validators/zod-schemas/create/create-tcr.validator'
+import {updateTcrSchema} from '../../../packages/validators/zod-schemas/update/update-tcr.validator'
 
 export default class TcrController extends BaseController<TcrService> {
   constructor() {
@@ -20,7 +20,7 @@ export default class TcrController extends BaseController<TcrService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const items: TcrResponseDto[] = await this.service.getAll();
+      const items: TcrProps[] = await this.service.getAll();
       res.status(200).json(items);
       return;
     } catch (error) {
@@ -36,7 +36,7 @@ export default class TcrController extends BaseController<TcrService> {
   ): Promise<void> => {
     try {
       const { id } = req.params;
-      const item: TcrResponseDto | null = await this.service.getOne(id);
+      const item: TcrProps | null = await this.service.getOne(id);
       if (!item) {
         res.status(404).json({ message: "Tipo conta não encontrada" });
         return;
@@ -55,8 +55,8 @@ export default class TcrController extends BaseController<TcrService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const validatedData: CreateTcrDto = createTcrSchema.parse(req.body);
-      const item: TcrResponseDto = await this.service.create(validatedData);
+      const validatedData: CreateTcr = createTcrSchema.parse(req.body);
+      const item: TcrProps = await this.service.create(validatedData);
       res.status(201).json(item);
       return;
     } catch (error) {
@@ -72,8 +72,8 @@ export default class TcrController extends BaseController<TcrService> {
   ): Promise<void> => {
     try {
       const { id } = req.params;
-      const validatedData: UpdateTcrDto = updateTcrSchema.parse(req.body);
-      const updatedItem: Partial<TcrResponseDto> | null =
+      const validatedData: UpdateTcr = updateTcrSchema.parse(req.body);
+      const updatedItem: Partial<TcrProps> | null =
         await this.service.update(id, validatedData);
       if (!updatedItem) {
         res.status(404).json({ message: "Tipo conta não encontrada" });

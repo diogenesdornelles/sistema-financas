@@ -2,12 +2,12 @@ import { Request, Response, NextFunction } from "express";
 import { CrService } from "../service/cr.service";
 import { BaseController } from "./base.controller";
 import {
-  CrResponseDto,
-  UpdateCrDto,
-  CreateCrDto,
-} from "../dtos/cr.dto";
-import { createCrSchema } from "../validator/create/create-cr.validator";
-import { updateCrSchema } from "../validator/update/update-cr.validator";
+  CrProps,
+  UpdateCr,
+  CreateCr,
+} from "../../../packages/dtos/cr.dto"
+import {createCrSchema} from '../../../packages/validators/zod-schemas/create/create-cr.validator'
+import {updateCrSchema} from '../../../packages/validators/zod-schemas/update/update-cr.validator'
 
 export default class CrController extends BaseController<CrService> {
   constructor() {
@@ -20,7 +20,7 @@ export default class CrController extends BaseController<CrService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const items: CrResponseDto[] = await this.service.getAll();
+      const items: CrProps[] = await this.service.getAll();
       res.status(200).json(items);
       return;
     } catch (error) {
@@ -36,7 +36,7 @@ export default class CrController extends BaseController<CrService> {
   ): Promise<void> => {
     try {
       const { id } = req.params;
-      const item: CrResponseDto | null = await this.service.getOne(id);
+      const item: CrProps | null = await this.service.getOne(id);
       if (!item) {
         res.status(404).json({ message: "Conta não encontrada" });
         return;
@@ -55,8 +55,8 @@ export default class CrController extends BaseController<CrService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const validatedData: CreateCrDto = createCrSchema.parse(req.body);
-      const item: CrResponseDto = await this.service.create(validatedData);
+      const validatedData: CreateCr = createCrSchema.parse(req.body);
+      const item: CrProps = await this.service.create(validatedData);
       res.status(201).json(item);
       return;
     } catch (error) {
@@ -72,8 +72,8 @@ export default class CrController extends BaseController<CrService> {
   ): Promise<void> => {
     try {
       const { id } = req.params;
-      const validatedData: UpdateCrDto = updateCrSchema.parse(req.body);
-      const updatedItem: Partial<CrResponseDto> | null =
+      const validatedData: UpdateCr = updateCrSchema.parse(req.body);
+      const updatedItem: Partial<CrProps> | null =
         await this.service.update(id, validatedData);
       if (!updatedItem) {
         res.status(404).json({ message: "Conta não encontrada" });

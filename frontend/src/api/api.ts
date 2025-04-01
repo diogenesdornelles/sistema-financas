@@ -1,7 +1,7 @@
 import { restClient } from '../utils/client'
-import { UserResponseDto as UserProps } from '../../../backend/src/dtos/user.dto'
-import { ResponseTokenDTO as TokenProps } from '../../../backend/src/dtos/token.dto'
-  
+import {CreateToken, TokenProps} from '../../../packages/dtos/token.dto'
+import {UserProps} from '../../../packages/dtos/user.dto'
+
 export const Api = {
 
   getUser: async (id: string): Promise<UserProps> => {
@@ -9,7 +9,7 @@ export const Api = {
     return data;
   },
 
-  login: async (cpf: string, pwd: string): Promise<TokenProps> => {
+  login: async ({ cpf, pwd }: CreateToken): Promise<TokenProps> => {
     const { data } = await restClient.post(`login`, {
       cpf,
       pwd

@@ -2,9 +2,12 @@ import { Request, Response, NextFunction } from "express";
 
 import { BaseController } from "./base.controller";
 
-import { ResponseTokenDTO, CreateTokenDTO } from "../dtos/token.dto";
+import {
+  TokenProps,
+  CreateToken,
+} from "../../../packages/dtos/token.dto"
 import LoginService from "../service/login.service";
-import { createTokenSchema } from "../validator/create/create-token.validator";
+import {createTokenSchema} from '../../../packages/validators/zod-schemas/create/create-token.validator'
 
 export default class LoginController extends BaseController<LoginService> {
   constructor() {
@@ -17,8 +20,8 @@ export default class LoginController extends BaseController<LoginService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const validatedData: CreateTokenDTO = createTokenSchema.parse(req.body);
-      const result: ResponseTokenDTO = await this.service.create(validatedData);
+      const validatedData: CreateToken = createTokenSchema.parse(req.body);
+      const result: TokenProps = await this.service.create(validatedData);
       res.status(201).json(result);
       return;
     } catch (error) {

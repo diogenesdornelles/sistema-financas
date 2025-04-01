@@ -2,12 +2,12 @@ import { Request, Response, NextFunction } from "express";
 import { UserService } from "../service/user.service";
 import { BaseController } from "./base.controller";
 import {
-  UserResponseDto,
-  UpdateUserDto,
-  CreateUserDto,
-} from "../dtos/user.dto";
-import { createUserSchema } from "../validator/create/create-user.validator";
-import { updateUserSchema } from "../validator/update/update-user.validator";
+  UserProps,
+  UpdateUser,
+  CreateUser,
+} from "../../../packages/dtos/user.dto"
+import {createUserSchema} from '../../../packages/validators/zod-schemas/create/create-user.validator'
+import {updateUserSchema} from '../../../packages/validators/zod-schemas/update/update-user.validator'
 
 export default class UserController extends BaseController<UserService> {
   constructor() {
@@ -20,7 +20,7 @@ export default class UserController extends BaseController<UserService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const items: UserResponseDto[] = await this.service.getAll();
+      const items: UserProps[] = await this.service.getAll();
       res.status(200).json(items);
       return;
     } catch (error) {
@@ -36,7 +36,7 @@ export default class UserController extends BaseController<UserService> {
   ): Promise<void> => {
     try {
       const { id } = req.params;
-      const item: UserResponseDto | null = await this.service.getOne(id);
+      const item: UserProps | null = await this.service.getOne(id);
       if (!item) {
         res.status(404).json({ message: "Usuário não encontrado" });
         return;
@@ -55,8 +55,8 @@ export default class UserController extends BaseController<UserService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const validatedData: CreateUserDto = createUserSchema.parse(req.body);
-      const user: UserResponseDto = await this.service.create(validatedData);
+      const validatedData: CreateUser = createUserSchema.parse(req.body);
+      const user: UserProps = await this.service.create(validatedData);
       res.status(201).json(user);
       return;
     } catch (error) {
@@ -72,8 +72,8 @@ export default class UserController extends BaseController<UserService> {
   ): Promise<void> => {
     try {
       const { id } = req.params;
-      const validatedData: UpdateUserDto = updateUserSchema.parse(req.body);
-      const updatedUser: Partial<UserResponseDto> | null =
+      const validatedData: UpdateUser = updateUserSchema.parse(req.body);
+      const updatedUser: Partial<UserProps> | null =
         await this.service.update(id, validatedData);
       if (!updatedUser) {
         res.status(404).json({ message: "Usuário não encontrado"  });

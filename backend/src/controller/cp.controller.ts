@@ -2,12 +2,12 @@ import { Request, Response, NextFunction } from "express";
 import { CpService } from "../service/cp.service";
 import { BaseController } from "./base.controller";
 import {
-  CpResponseDto,
-  UpdateCpDto,
-  CreateCpDto,
-} from "../dtos/cp.dto";
-import { createCpSchema } from "../validator/create/create-cp.validator";
-import { updateCpSchema } from "../validator/update/update-cp.validator";
+  CpProps,
+  UpdateCp,
+  CreateCp,
+} from "../../../packages/dtos/cp.dto"
+import {createCpSchema} from '../../../packages/validators/zod-schemas/create/create-cp.validator'
+import {updateCpSchema} from '../../../packages/validators/zod-schemas/update/update-cp.validator'
 
 export default class CpController extends BaseController<CpService> {
   constructor() {
@@ -20,7 +20,7 @@ export default class CpController extends BaseController<CpService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const items: CpResponseDto[] = await this.service.getAll();
+      const items: CpProps[] = await this.service.getAll();
       res.status(200).json(items);
       return;
     } catch (error) {
@@ -36,7 +36,7 @@ export default class CpController extends BaseController<CpService> {
   ): Promise<void> => {
     try {
       const { id } = req.params;
-      const item: CpResponseDto | null = await this.service.getOne(id);
+      const item: CpProps | null = await this.service.getOne(id);
       if (!item) {
         res.status(404).json({ message: "Conta não encontrada" });
         return;
@@ -55,8 +55,8 @@ export default class CpController extends BaseController<CpService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const validatedData: CreateCpDto = createCpSchema.parse(req.body);
-      const item: CpResponseDto = await this.service.create(validatedData);
+      const validatedData: CreateCp = createCpSchema.parse(req.body);
+      const item: CpProps = await this.service.create(validatedData);
       res.status(201).json(item);
       return;
     } catch (error) {
@@ -72,8 +72,8 @@ export default class CpController extends BaseController<CpService> {
   ): Promise<void> => {
     try {
       const { id } = req.params;
-      const validatedData: UpdateCpDto = updateCpSchema.parse(req.body);
-      const updateditem: Partial<CpResponseDto> | null =
+      const validatedData: UpdateCp = updateCpSchema.parse(req.body);
+      const updateditem: Partial<CpProps> | null =
         await this.service.update(id, validatedData);
       if (!updateditem) {
         res.status(404).json({ message: "Conta não encontrada" });

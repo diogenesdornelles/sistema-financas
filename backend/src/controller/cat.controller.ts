@@ -2,12 +2,12 @@ import { Request, Response, NextFunction } from "express";
 import { CatService } from "../service/cat.service";
 import { BaseController } from "./base.controller";
 import {
-  CatResponseDto,
-  UpdateCatDto,
-  CreateCatDto,
-} from "../dtos/cat.dto";
-import { createCatSchema } from "../validator/create/create-cat.validator";
-import { updateCatSchema } from "../validator/update/update-cat.validator";
+  CatProps,
+  UpdateCat,
+  CreateCat,
+} from "../../../packages/dtos/cat.dto"
+import {createCatSchema} from '../../../packages/validators/zod-schemas/create/create-cat.validator'
+import {updateCatSchema} from '../../../packages/validators/zod-schemas/update/update-cat.validator'
 
 export default class CatController extends BaseController<CatService> {
   constructor() {
@@ -20,7 +20,7 @@ export default class CatController extends BaseController<CatService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const items: CatResponseDto[] = await this.service.getAll();
+      const items: CatProps[] = await this.service.getAll();
       res.status(200).json(items);
       return;
     } catch (error) {
@@ -36,7 +36,7 @@ export default class CatController extends BaseController<CatService> {
   ): Promise<void> => {
     try {
       const { id } = req.params;
-      const item: CatResponseDto | null = await this.service.getOne(id);
+      const item: CatProps | null = await this.service.getOne(id);
       if (!item) {
         res.status(404).json({ message: "Categoria não encontrada" });
         return;
@@ -55,8 +55,8 @@ export default class CatController extends BaseController<CatService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const validatedData: CreateCatDto = createCatSchema.parse(req.body);
-      const item: CatResponseDto = await this.service.create(validatedData);
+      const validatedData: CreateCat = createCatSchema.parse(req.body);
+      const item: CatProps = await this.service.create(validatedData);
       res.status(201).json(item);
       return;
     } catch (error) {
@@ -72,8 +72,8 @@ export default class CatController extends BaseController<CatService> {
   ): Promise<void> => {
     try {
       const { id } = req.params;
-      const validatedData: UpdateCatDto = updateCatSchema.parse(req.body);
-      const updatedItem: Partial<CatResponseDto> | null =
+      const validatedData: UpdateCat = updateCatSchema.parse(req.body);
+      const updatedItem: Partial<CatProps> | null =
         await this.service.update(id, validatedData);
       if (!updatedItem) {
         res.status(404).json({ message: "Categoria não encontrada" });

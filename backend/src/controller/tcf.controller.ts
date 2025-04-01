@@ -2,12 +2,12 @@ import { Request, Response, NextFunction } from "express";
 import { TcfService } from "../service/tcf.service";
 import { BaseController } from "./base.controller";
 import {
-  TcfResponseDto,
-  UpdateTcfDto,
-  CreateTcfDto,
-} from "../dtos/tcf.dto";
-import { createTcfSchema } from "../validator/create/create-tcf.validator";
-import { updateTcfSchema } from "../validator/update/update-tcf.validator";
+  TcfProps,
+  UpdateTcf,
+  CreateTcf,
+} from "../../../packages/dtos/tcf.dto"
+import {createTcfSchema} from '../../../packages/validators/zod-schemas/create/create-tcf.validator'
+import {updateTcfSchema} from '../../../packages/validators/zod-schemas/update/update-tcf.validator'
 
 export default class TcfController extends BaseController<TcfService> {
   constructor() {
@@ -20,7 +20,7 @@ export default class TcfController extends BaseController<TcfService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const items: TcfResponseDto[] = await this.service.getAll();
+      const items: TcfProps[] = await this.service.getAll();
       res.status(200).json(items);
       return;
     } catch (error) {
@@ -36,7 +36,7 @@ export default class TcfController extends BaseController<TcfService> {
   ): Promise<void> => {
     try {
       const { id } = req.params;
-      const item: TcfResponseDto | null = await this.service.getOne(id);
+      const item: TcfProps| null = await this.service.getOne(id);
       if (!item) {
         res.status(404).json({ message: "Tipo conta não encontrada" });
         return;
@@ -55,8 +55,8 @@ export default class TcfController extends BaseController<TcfService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const validatedData: CreateTcfDto = createTcfSchema.parse(req.body);
-      const item: TcfResponseDto = await this.service.create(validatedData);
+      const validatedData: CreateTcf = createTcfSchema.parse(req.body);
+      const item: TcfProps = await this.service.create(validatedData);
       res.status(201).json(item);
       return;
     } catch (error) {
@@ -72,8 +72,8 @@ export default class TcfController extends BaseController<TcfService> {
   ): Promise<void> => {
     try {
       const { id } = req.params;
-      const validatedData: UpdateTcfDto = updateTcfSchema.parse(req.body);
-      const updatedItem: Partial<TcfResponseDto> | null =
+      const validatedData: UpdateTcf = updateTcfSchema.parse(req.body);
+      const updatedItem: Partial<TcfProps> | null =
         await this.service.update(id, validatedData);
       if (!updatedItem) {
         res.status(404).json({ message: "Tipo conta não encontrada" });

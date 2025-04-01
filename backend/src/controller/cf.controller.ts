@@ -2,12 +2,12 @@ import { Request, Response, NextFunction } from "express";
 import { CfService } from "../service/cf.service";
 import { BaseController } from "./base.controller";
 import {
-  CfResponseDto,
-  UpdateCfDto,
-  CreateCfDto,
-} from "../dtos/cf.dto";
-import { createCfSchema } from "../validator/create/create-cf.validator";
-import { updateCfSchema } from "../validator/update/update-cf.validator";
+  CfProps,
+  UpdateCf,
+  CreateCf,
+} from "../../../packages/dtos/cf.dto"
+import {createCfSchema} from '../../../packages/validators/zod-schemas/create/create-cf.validator'
+import {updateCfSchema} from '../../../packages/validators/zod-schemas/update/update-cf.validator'
 
 export default class CfController extends BaseController<CfService> {
   constructor() {
@@ -20,7 +20,7 @@ export default class CfController extends BaseController<CfService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const items: CfResponseDto[] = await this.service.getAll();
+      const items: CfProps[] = await this.service.getAll();
       res.status(200).json(items);
       return;
     } catch (error) {
@@ -36,7 +36,7 @@ export default class CfController extends BaseController<CfService> {
   ): Promise<void> => {
     try {
       const { id } = req.params;
-      const item: CfResponseDto | null = await this.service.getOne(id);
+      const item: CfProps | null = await this.service.getOne(id);
       if (!item) {
         res.status(404).json({ message: "Conta não encontrada" });
         return;
@@ -55,8 +55,8 @@ export default class CfController extends BaseController<CfService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const validatedData: CreateCfDto = createCfSchema.parse(req.body);
-      const item: CfResponseDto = await this.service.create(validatedData);
+      const validatedData: CreateCf = createCfSchema.parse(req.body);
+      const item: CfProps = await this.service.create(validatedData);
       res.status(201).json(item);
       return;
     } catch (error) {
@@ -72,8 +72,8 @@ export default class CfController extends BaseController<CfService> {
   ): Promise<void> => {
     try {
       const { id } = req.params;
-      const validatedData: UpdateCfDto = updateCfSchema.parse(req.body);
-      const updateditem: Partial<CfResponseDto> | null =
+      const validatedData: UpdateCf = updateCfSchema.parse(req.body);
+      const updateditem: Partial<CfProps> | null =
         await this.service.update(id, validatedData);
       if (!updateditem) {
         res.status(404).json({ message: "Conta não encontrada" });

@@ -1,0 +1,19 @@
+{
+  "name": "packages",
+  "version": "1.0.0",
+  "description": "O sistema terá como objetivo gerenciar o fluxo de caixa, permitindo registrar entradas e saídas, controlar contas financeiras, gerenciar obrigações (contas a pagar) e recebíveis (contas a receber) e relacionar essas movimentações com os parceiros (fornecedores e clientes) e suas categorias correspondentes.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/diogenesdornelles/sistema-financas.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/diogenesdornelles/sistema-financas/issues"
+  },
+  "homepage": "https://github.com/diogenesdornelles/sistema-financas#readme"
+}

@@ -141,6 +141,10 @@ example
 
 - [Zod](https://zod.dev/): Garante a validação dos dados no backend, protegendo o sistema contra inconsistências e entradas maliciosas.
 
+### Gestão de ambiente (monorepo)
+
+- [TurboRepo](https://turbo.build/): Utilizado para buildar o sistema
+
 ## Expansões Futuras
 
 A modularidade do sistema permite a inclusão de funcionalidades adicionais, como:

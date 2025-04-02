@@ -1,18 +1,9 @@
 import { BaseService } from "./base.service";
 import { Cr, Partner, Tcr, Tx, User } from "../entity/entities";
-import {
-  CreateCr,
-  UpdateCr,
-  CrProps,
-} from "../../../packages/dtos/cr.dto";
+import { CreateCr, UpdateCr, CrProps } from "../../../packages/dtos/cr.dto";
 import { PaymentStatus } from "../../../packages/dtos/utils/enums";
 
-export class CrService extends BaseService<
-  Cr,
-  CrProps,
-  CreateCr,
-  UpdateCr
-> {
+export class CrService extends BaseService<Cr, CrProps, CreateCr, UpdateCr> {
   constructor() {
     super(Cr);
   }
@@ -87,7 +78,9 @@ export class CrService extends BaseService<
         ...data,
         user: data.user ? ({ id: data.user } as User) : undefined,
         type: data.type ? ({ id: data.type } as Tcr) : undefined,
-        customer: data.customer ? ({ id: data.customer } as Partner) : undefined,
+        customer: data.customer
+          ? ({ id: data.customer } as Partner)
+          : undefined,
         tx: data.tx ? ({ id: data.tx } as Tx) : undefined,
       };
 

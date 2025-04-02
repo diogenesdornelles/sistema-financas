@@ -1,10 +1,6 @@
 import { BaseService } from "./base.service";
 import { Tcf } from "../entity/entities";
-import {
-  CreateTcf,
-  UpdateTcf,
-  TcfProps,
-} from "../../../packages/dtos/tcf.dto";
+import { CreateTcf, UpdateTcf, TcfProps } from "../../../packages/dtos/tcf.dto";
 
 export class TcfService extends BaseService<
   Tcf,
@@ -36,7 +32,9 @@ export class TcfService extends BaseService<
     try {
       return await this.repository.findOne({ where: { id } });
     } catch (error) {
-      throw new Error(`Erro ao recuperar tipo de conta financeira com ID ${id}: ${error}`);
+      throw new Error(
+        `Erro ao recuperar tipo de conta financeira com ID ${id}: ${error}`,
+      );
     }
   };
 
@@ -47,7 +45,9 @@ export class TcfService extends BaseService<
    */
   public create = async (data: CreateTcf): Promise<TcfProps> => {
     try {
-      const createdTcf = await this.repository.save(this.repository.create(data));
+      const createdTcf = await this.repository.save(
+        this.repository.create(data),
+      );
       return createdTcf;
     } catch (error) {
       throw new Error(`Erro ao criar tipo de conta financeira: ${error}`);
@@ -68,7 +68,9 @@ export class TcfService extends BaseService<
       await this.repository.update({ id }, data);
       return await this.repository.findOne({ where: { id } });
     } catch (error) {
-      throw new Error(`Erro ao atualizar tipo de conta financeira com ID ${id}: ${error}`);
+      throw new Error(
+        `Erro ao atualizar tipo de conta financeira com ID ${id}: ${error}`,
+      );
     }
   };
 
@@ -83,7 +85,9 @@ export class TcfService extends BaseService<
       const updated = await this.repository.findOne({ where: { id } });
       return !!updated && updated.status === false;
     } catch (error) {
-      throw new Error(`Erro ao remover tipo de conta financeira com ID ${id}: ${error}`);
+      throw new Error(
+        `Erro ao remover tipo de conta financeira com ID ${id}: ${error}`,
+      );
     }
   };
 }

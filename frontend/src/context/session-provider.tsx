@@ -1,4 +1,4 @@
-import { PropsWithChildren, useState } from "react";
+import { PropsWithChildren, useEffect, useState } from "react";
 import { AuthContext } from "./auth-context";
 import { useLoginMutation } from "../hooks/use-login-mutation";
 import { TokenProps} from '../../../packages/dtos/token.dto'
@@ -6,6 +6,13 @@ import { TokenProps} from '../../../packages/dtos/token.dto'
 export function SessionProvider({ children }: PropsWithChildren) {
   const [session, setSession] = useState<TokenProps | null>(null);
   const { mutateAsync: login, isPending } = useLoginMutation();
+  // Carregar a sessão do localStorage quando o componente for montado
+  useEffect(() => {
+    const sessionDb = localStorage.getItem("session");
+    if (sessionDb) {
+      setSession(JSON.parse(sessionDb));
+    }
+  }, []);
 
   return (
     <AuthContext.Provider

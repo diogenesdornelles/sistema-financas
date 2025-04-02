@@ -6,7 +6,11 @@ import { User } from "../entity/entities";
 
 import ms from "ms";
 import { ApiError } from "../utils/api-error.util";
-import { CreateToken, TokenProps, UpdateToken } from "../../../packages/dtos/token.dto";
+import {
+  CreateToken,
+  TokenProps,
+  UpdateToken,
+} from "../../../packages/dtos/token.dto";
 
 dotenv.config();
 
@@ -63,10 +67,7 @@ export default class LoginService extends BaseService<
   public getOne(pk: string): Promise<TokenProps | null> {
     throw new Error("Method not implemented.");
   }
-  public update(
-    pk: string,
-    data: UpdateToken,
-  ): Promise<Partial<TokenProps>> {
+  public update(pk: string, data: UpdateToken): Promise<Partial<TokenProps>> {
     throw new Error("Method not implemented.");
   }
   public delete(pk: string): Promise<boolean> {

@@ -1,10 +1,6 @@
 import { BaseService } from "./base.service";
 import { Tcr } from "../entity/entities";
-import {
-  CreateTcr,
-  UpdateTcr,
-  TcrProps,
-} from "../../../packages/dtos/tcr.dto";
+import { CreateTcr, UpdateTcr, TcrProps } from "../../../packages/dtos/tcr.dto";
 
 export class TcrService extends BaseService<
   Tcr,
@@ -47,7 +43,9 @@ export class TcrService extends BaseService<
    */
   public create = async (data: CreateTcr): Promise<TcrProps> => {
     try {
-      const createdTcf = await this.repository.save(this.repository.create(data));
+      const createdTcf = await this.repository.save(
+        this.repository.create(data),
+      );
       return createdTcf;
     } catch (error) {
       throw new Error(`Erro ao criar tipo de conta: ${error}`);

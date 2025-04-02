@@ -24,7 +24,7 @@ export class UserService extends BaseService<
     try {
       const users = await this.repository.find({
         select: ["id", "name", "status", "surname", "createdAt", "updatedAt"],
-        relations: []
+        relations: [],
       });
       return users;
     } catch (error) {
@@ -42,7 +42,7 @@ export class UserService extends BaseService<
       const user = await this.repository.findOne({
         where: { id },
         select: ["id", "name", "status", "surname", "createdAt", "updatedAt"],
-        relations: []
+        relations: [],
       });
       return user;
     } catch (error) {
@@ -87,7 +87,7 @@ export class UserService extends BaseService<
       const updatedUser = await this.repository.findOne({
         where: { id },
         select: ["id", "name", "status", "surname", "createdAt", "updatedAt"],
-        relations: []
+        relations: [],
       });
       return updatedUser;
     } catch (error) {

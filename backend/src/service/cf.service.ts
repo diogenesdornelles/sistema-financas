@@ -1,17 +1,8 @@
 import { BaseService } from "./base.service";
 import { Cf, Tcf, User } from "../entity/entities";
-import {
-  CreateCf,
-  UpdateCf,
-  CfProps,
-} from "../../../packages/dtos/cf.dto";
+import { CreateCf, UpdateCf, CfProps } from "../../../packages/dtos/cf.dto";
 
-export class CfService extends BaseService<
-  Cf,
-  CfProps,
-  CreateCf,
-  UpdateCf
-> {
+export class CfService extends BaseService<Cf, CfProps, CreateCf, UpdateCf> {
   constructor() {
     super(Cf);
   }

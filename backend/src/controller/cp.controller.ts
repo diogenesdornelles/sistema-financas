@@ -1,13 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { CpService } from "../service/cp.service";
 import { BaseController } from "./base.controller";
-import {
-  CpProps,
-  UpdateCp,
-  CreateCp,
-} from "../../../packages/dtos/cp.dto"
-import {createCpSchema} from '../../../packages/validators/zod-schemas/create/create-cp.validator'
-import {updateCpSchema} from '../../../packages/validators/zod-schemas/update/update-cp.validator'
+import { CpProps, UpdateCp, CreateCp } from "../../../packages/dtos/cp.dto";
+import { createCpSchema } from "../../../packages/validators/zod-schemas/create/create-cp.validator";
+import { updateCpSchema } from "../../../packages/validators/zod-schemas/update/update-cp.validator";
 
 export default class CpController extends BaseController<CpService> {
   constructor() {
@@ -73,8 +69,10 @@ export default class CpController extends BaseController<CpService> {
     try {
       const { id } = req.params;
       const validatedData: UpdateCp = updateCpSchema.parse(req.body);
-      const updateditem: Partial<CpProps> | null =
-        await this.service.update(id, validatedData);
+      const updateditem: Partial<CpProps> | null = await this.service.update(
+        id,
+        validatedData,
+      );
       if (!updateditem) {
         res.status(404).json({ message: "Conta não encontrada" });
         return;

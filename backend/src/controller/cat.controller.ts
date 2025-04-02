@@ -1,13 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { CatService } from "../service/cat.service";
 import { BaseController } from "./base.controller";
-import {
-  CatProps,
-  UpdateCat,
-  CreateCat,
-} from "../../../packages/dtos/cat.dto"
-import {createCatSchema} from '../../../packages/validators/zod-schemas/create/create-cat.validator'
-import {updateCatSchema} from '../../../packages/validators/zod-schemas/update/update-cat.validator'
+import { CatProps, UpdateCat, CreateCat } from "../../../packages/dtos/cat.dto";
+import { createCatSchema } from "../../../packages/validators/zod-schemas/create/create-cat.validator";
+import { updateCatSchema } from "../../../packages/validators/zod-schemas/update/update-cat.validator";
 
 export default class CatController extends BaseController<CatService> {
   constructor() {
@@ -73,8 +69,10 @@ export default class CatController extends BaseController<CatService> {
     try {
       const { id } = req.params;
       const validatedData: UpdateCat = updateCatSchema.parse(req.body);
-      const updatedItem: Partial<CatProps> | null =
-        await this.service.update(id, validatedData);
+      const updatedItem: Partial<CatProps> | null = await this.service.update(
+        id,
+        validatedData,
+      );
       if (!updatedItem) {
         res.status(404).json({ message: "Categoria não encontrada" });
         return;

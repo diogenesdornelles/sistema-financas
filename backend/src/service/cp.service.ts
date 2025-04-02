@@ -1,18 +1,9 @@
 import { BaseService } from "./base.service";
 import { Cp, Partner, Tcp, Tx, User } from "../entity/entities";
-import {
-  CreateCp,
-  UpdateCp,
-  CpProps,
-} from "../../../packages/dtos/cp.dto";
+import { CreateCp, UpdateCp, CpProps } from "../../../packages/dtos/cp.dto";
 import { CPStatus } from "../../../packages/dtos/utils/enums";
 
-export class CpService extends BaseService<
-  Cp,
-  CpProps,
-  CreateCp,
-  UpdateCp
-> {
+export class CpService extends BaseService<Cp, CpProps, CreateCp, UpdateCp> {
   constructor() {
     super(Cp);
   }
@@ -87,7 +78,9 @@ export class CpService extends BaseService<
         ...data,
         user: data.user ? ({ id: data.user } as User) : undefined,
         type: data.type ? ({ id: data.type } as Tcp) : undefined,
-        supplier: data.supplier ? ({ id: data.supplier } as Partner) : undefined,
+        supplier: data.supplier
+          ? ({ id: data.supplier } as Partner)
+          : undefined,
         tx: data.tx ? ({ id: data.tx } as Tx) : undefined,
       };
 

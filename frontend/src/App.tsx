@@ -10,6 +10,7 @@ import Home from './pages/home';
 import Login from './pages/login';
 import { RequireAuth } from './components/require-auth';
 import { queryClient } from './utils/client';;
+import { ColorModeProvider } from './context/theme-contex';
 
 
 const router = createBrowserRouter([
@@ -61,7 +62,9 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <SessionProvider>
+      <ColorModeProvider>
         <RouterProvider router={router} />
+        </ColorModeProvider>
       </SessionProvider>
     </QueryClientProvider>
 

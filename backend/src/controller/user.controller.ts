@@ -5,9 +5,9 @@ import {
   UserProps,
   UpdateUser,
   CreateUser,
-} from "../../../packages/dtos/user.dto"
-import {createUserSchema} from '../../../packages/validators/zod-schemas/create/create-user.validator'
-import {updateUserSchema} from '../../../packages/validators/zod-schemas/update/update-user.validator'
+} from "../../../packages/dtos/user.dto";
+import { createUserSchema } from "../../../packages/validators/zod-schemas/create/create-user.validator";
+import { updateUserSchema } from "../../../packages/validators/zod-schemas/update/update-user.validator";
 
 export default class UserController extends BaseController<UserService> {
   constructor() {
@@ -73,10 +73,12 @@ export default class UserController extends BaseController<UserService> {
     try {
       const { id } = req.params;
       const validatedData: UpdateUser = updateUserSchema.parse(req.body);
-      const updatedUser: Partial<UserProps> | null =
-        await this.service.update(id, validatedData);
+      const updatedUser: Partial<UserProps> | null = await this.service.update(
+        id,
+        validatedData,
+      );
       if (!updatedUser) {
-        res.status(404).json({ message: "Usuário não encontrado"  });
+        res.status(404).json({ message: "Usuário não encontrado" });
         return;
       }
       res.status(200).json(updatedUser);
@@ -96,7 +98,7 @@ export default class UserController extends BaseController<UserService> {
       const { id } = req.params;
       const success: boolean = await this.service.delete(id);
       if (!success) {
-        res.status(404).json({ message: "Usuário não encontrado"  });
+        res.status(404).json({ message: "Usuário não encontrado" });
         return;
       }
       res.status(200).json({ message: "Usuário deletado!" });

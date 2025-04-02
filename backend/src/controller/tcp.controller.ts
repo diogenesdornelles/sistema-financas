@@ -1,13 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { TcpService } from "../service/tcp.service";
 import { BaseController } from "./base.controller";
-import {
-  TcpProps,
-  UpdateTcp,
-  CreateTcp,
-} from "../../../packages/dtos/tcp.dto"
-import {createTcpSchema} from '../../../packages/validators/zod-schemas/create/create-tcp.validator'
-import {updateTcpSchema} from '../../../packages/validators/zod-schemas/update/update-tcp.validator'
+import { TcpProps, UpdateTcp, CreateTcp } from "../../../packages/dtos/tcp.dto";
+import { createTcpSchema } from "../../../packages/validators/zod-schemas/create/create-tcp.validator";
+import { updateTcpSchema } from "../../../packages/validators/zod-schemas/update/update-tcp.validator";
 
 export default class TcpController extends BaseController<TcpService> {
   constructor() {
@@ -73,8 +69,10 @@ export default class TcpController extends BaseController<TcpService> {
     try {
       const { id } = req.params;
       const validatedData: UpdateTcp = updateTcpSchema.parse(req.body);
-      const updatedItem: Partial<TcpProps> | null =
-        await this.service.update(id, validatedData);
+      const updatedItem: Partial<TcpProps> | null = await this.service.update(
+        id,
+        validatedData,
+      );
       if (!updatedItem) {
         res.status(404).json({ message: "Tipo conta não encontrada" });
         return;

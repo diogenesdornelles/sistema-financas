@@ -1,9 +1,9 @@
 import { BaseService } from "./base.service";
 import { Partner, User } from "../entity/entities";
-import { 
-  CreatePartner, 
-  PartnerProps, 
-  UpdatePartner 
+import {
+  CreatePartner,
+  PartnerProps,
+  UpdatePartner,
 } from "../../../packages/dtos/partner.dto";
 
 export class PartnerService extends BaseService<

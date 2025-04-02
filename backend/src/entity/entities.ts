@@ -8,7 +8,12 @@ import {
   OneToMany,
   JoinColumn,
 } from "typeorm";
-import { CPStatus, PartnerType, PaymentStatus, TransactionType } from "../../../packages/dtos/utils/enums";
+import {
+  CPStatus,
+  PartnerType,
+  PaymentStatus,
+  TransactionType,
+} from "../../../packages/dtos/utils/enums";
 
 // Classe base com id, createdAt e updatedAt
 @Entity()
@@ -22,7 +27,6 @@ export abstract class Base {
   @UpdateDateColumn({ type: "timestamp" })
   updatedAt!: Date; // Create: no required; Update: no required; Response: required
 }
-
 
 // 1. Usuário
 @Entity("user")

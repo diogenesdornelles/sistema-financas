@@ -4,8 +4,8 @@ import Box from '@mui/material/Box';
 function Footer() {
     return (
 
-        <Box component="footer" sx={{ bgcolor: 'primary.main', color: 'white', py: 2, mt: 'auto', textAlign: 'center' }}>
-            <Typography variant="body2">© 2025 Meu Sistema</Typography>
+        <Box component="footer" sx={{  py: 2, mt: 'auto', textAlign: 'center' }}>
+            <Typography variant="body2">© 2025 SysFINAN</Typography>
         </Box>
 
     );

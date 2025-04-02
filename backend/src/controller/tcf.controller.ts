@@ -1,13 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { TcfService } from "../service/tcf.service";
 import { BaseController } from "./base.controller";
-import {
-  TcfProps,
-  UpdateTcf,
-  CreateTcf,
-} from "../../../packages/dtos/tcf.dto"
-import {createTcfSchema} from '../../../packages/validators/zod-schemas/create/create-tcf.validator'
-import {updateTcfSchema} from '../../../packages/validators/zod-schemas/update/update-tcf.validator'
+import { TcfProps, UpdateTcf, CreateTcf } from "../../../packages/dtos/tcf.dto";
+import { createTcfSchema } from "../../../packages/validators/zod-schemas/create/create-tcf.validator";
+import { updateTcfSchema } from "../../../packages/validators/zod-schemas/update/update-tcf.validator";
 
 export default class TcfController extends BaseController<TcfService> {
   constructor() {
@@ -36,7 +32,7 @@ export default class TcfController extends BaseController<TcfService> {
   ): Promise<void> => {
     try {
       const { id } = req.params;
-      const item: TcfProps| null = await this.service.getOne(id);
+      const item: TcfProps | null = await this.service.getOne(id);
       if (!item) {
         res.status(404).json({ message: "Tipo conta não encontrada" });
         return;
@@ -73,8 +69,10 @@ export default class TcfController extends BaseController<TcfService> {
     try {
       const { id } = req.params;
       const validatedData: UpdateTcf = updateTcfSchema.parse(req.body);
-      const updatedItem: Partial<TcfProps> | null =
-        await this.service.update(id, validatedData);
+      const updatedItem: Partial<TcfProps> | null = await this.service.update(
+        id,
+        validatedData,
+      );
       if (!updatedItem) {
         res.status(404).json({ message: "Tipo conta não encontrada" });
         return;

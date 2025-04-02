@@ -1,13 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { CrService } from "../service/cr.service";
 import { BaseController } from "./base.controller";
-import {
-  CrProps,
-  UpdateCr,
-  CreateCr,
-} from "../../../packages/dtos/cr.dto"
-import {createCrSchema} from '../../../packages/validators/zod-schemas/create/create-cr.validator'
-import {updateCrSchema} from '../../../packages/validators/zod-schemas/update/update-cr.validator'
+import { CrProps, UpdateCr, CreateCr } from "../../../packages/dtos/cr.dto";
+import { createCrSchema } from "../../../packages/validators/zod-schemas/create/create-cr.validator";
+import { updateCrSchema } from "../../../packages/validators/zod-schemas/update/update-cr.validator";
 
 export default class CrController extends BaseController<CrService> {
   constructor() {
@@ -73,8 +69,10 @@ export default class CrController extends BaseController<CrService> {
     try {
       const { id } = req.params;
       const validatedData: UpdateCr = updateCrSchema.parse(req.body);
-      const updatedItem: Partial<CrProps> | null =
-        await this.service.update(id, validatedData);
+      const updatedItem: Partial<CrProps> | null = await this.service.update(
+        id,
+        validatedData,
+      );
       if (!updatedItem) {
         res.status(404).json({ message: "Conta não encontrada" });
         return;

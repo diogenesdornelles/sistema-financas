@@ -1,13 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { CfService } from "../service/cf.service";
 import { BaseController } from "./base.controller";
-import {
-  CfProps,
-  UpdateCf,
-  CreateCf,
-} from "../../../packages/dtos/cf.dto"
-import {createCfSchema} from '../../../packages/validators/zod-schemas/create/create-cf.validator'
-import {updateCfSchema} from '../../../packages/validators/zod-schemas/update/update-cf.validator'
+import { CfProps, UpdateCf, CreateCf } from "../../../packages/dtos/cf.dto";
+import { createCfSchema } from "../../../packages/validators/zod-schemas/create/create-cf.validator";
+import { updateCfSchema } from "../../../packages/validators/zod-schemas/update/update-cf.validator";
 
 export default class CfController extends BaseController<CfService> {
   constructor() {
@@ -73,8 +69,10 @@ export default class CfController extends BaseController<CfService> {
     try {
       const { id } = req.params;
       const validatedData: UpdateCf = updateCfSchema.parse(req.body);
-      const updateditem: Partial<CfProps> | null =
-        await this.service.update(id, validatedData);
+      const updateditem: Partial<CfProps> | null = await this.service.update(
+        id,
+        validatedData,
+      );
       if (!updateditem) {
         res.status(404).json({ message: "Conta não encontrada" });
         return;

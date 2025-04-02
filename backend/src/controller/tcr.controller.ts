@@ -1,13 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { TcrService } from "../service/tcr.service";
 import { BaseController } from "./base.controller";
-import {
-  TcrProps,
-  UpdateTcr,
-  CreateTcr,
-} from "../../../packages/dtos/tcr.dto"
-import {createTcrSchema} from '../../../packages/validators/zod-schemas/create/create-tcr.validator'
-import {updateTcrSchema} from '../../../packages/validators/zod-schemas/update/update-tcr.validator'
+import { TcrProps, UpdateTcr, CreateTcr } from "../../../packages/dtos/tcr.dto";
+import { createTcrSchema } from "../../../packages/validators/zod-schemas/create/create-tcr.validator";
+import { updateTcrSchema } from "../../../packages/validators/zod-schemas/update/update-tcr.validator";
 
 export default class TcrController extends BaseController<TcrService> {
   constructor() {
@@ -73,8 +69,10 @@ export default class TcrController extends BaseController<TcrService> {
     try {
       const { id } = req.params;
       const validatedData: UpdateTcr = updateTcrSchema.parse(req.body);
-      const updatedItem: Partial<TcrProps> | null =
-        await this.service.update(id, validatedData);
+      const updatedItem: Partial<TcrProps> | null = await this.service.update(
+        id,
+        validatedData,
+      );
       if (!updatedItem) {
         res.status(404).json({ message: "Tipo conta não encontrada" });
         return;

@@ -14,15 +14,12 @@ export const createPartnerSchema = z
             .min(3, "Nome precisa ter ao menos 3 caracteres")
             .max(100, "Nome pode ter no máximo 100 caracteres"),
         
-        cod: z.preprocess(
-            (cod) => {
-                if (typeof cod === "string") {
-                    return cod.replace(/\D/g, "");
-                }
-                return cod;
-            },
-            z.string()
-        ),
+        cod: z
+            .string()
+            .regex(/^\d+$/, "Código deve conter apenas números")
+            .refine((cod) => cod.length === 11 || cod.length === 14, {
+                message: "Código deve ter 11 dígitos (CPF) ou 14 dígitos (CNPJ)",
+            }),
         
         type: z.nativeEnum(PartnerType),
         
@@ -64,3 +61,5 @@ export const createPartnerSchema = z
             }
         }
     });
+
+

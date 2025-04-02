@@ -5,9 +5,9 @@ import {
   PartnerProps,
   UpdatePartner,
   CreatePartner,
-} from "../../../packages/dtos/partner.dto"
-import {createPartnerSchema} from '../../../packages/validators/zod-schemas/create/create-partner.validator'
-import {updatePartnerSchema} from '../../../packages/validators/zod-schemas/update/update-partner.validator'
+} from "../../../packages/dtos/partner.dto";
+import { createPartnerSchema } from "../../../packages/validators/zod-schemas/create/create-partner.validator";
+import { updatePartnerSchema } from "../../../packages/validators/zod-schemas/update/update-partner.validator";
 
 export default class PartnerController extends BaseController<PartnerService> {
   constructor() {

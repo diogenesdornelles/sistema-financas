@@ -1,21 +1,17 @@
 import { User } from "../entity/entities";
 import hashPassword from "../utils/hash-pwd.util";
 import { AppDataSource } from "./db";
-import * as dotenv from 'dotenv'
+import * as dotenv from "dotenv";
 
+dotenv.config();
 
-dotenv.config()
-
-
-const CPF = process.env.SUPER_CPF
-const PWD = process.env.SUPER_PWD
-
-
+const CPF = process.env.SUPER_CPF;
+const PWD = process.env.SUPER_PWD;
 
 export const seedSuperUser = async () => {
   const userRepository = AppDataSource.getRepository(User);
 
-  const existingUser = await userRepository.findOne({where: { cpf: CPF }});
+  const existingUser = await userRepository.findOne({ where: { cpf: CPF } });
 
   if (existingUser) {
     console.log("Superusuário já existe.");

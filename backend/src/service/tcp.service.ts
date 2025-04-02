@@ -1,10 +1,6 @@
 import { BaseService } from "./base.service";
 import { Tcp } from "../entity/entities";
-import {
-  CreateTcp,
-  UpdateTcp,
-  TcpProps,
-} from "../../../packages/dtos/tcp.dto";
+import { CreateTcp, UpdateTcp, TcpProps } from "../../../packages/dtos/tcp.dto";
 
 export class TcpService extends BaseService<
   Tcp,
@@ -47,7 +43,9 @@ export class TcpService extends BaseService<
    */
   public create = async (data: CreateTcp): Promise<TcpProps> => {
     try {
-      const createdTcf = await this.repository.save(this.repository.create(data));
+      const createdTcf = await this.repository.save(
+        this.repository.create(data),
+      );
       return createdTcf;
     } catch (error) {
       throw new Error(`Erro ao criar tipo de conta: ${error}`);

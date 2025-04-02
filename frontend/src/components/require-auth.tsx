@@ -1,5 +1,5 @@
 import { ReactNode, useEffect } from "react";
-import { useAuth } from "../context/use-auth";
+import { useAuth } from "../hooks/use-auth";
 import { useNavigate } from "react-router-dom";
 
 // Componente para proteger as rotas privadas

@@ -1,17 +1,8 @@
 import { BaseService } from "./base.service";
 import { Cat, Cf, Tx, User } from "../entity/entities";
-import { 
-  CreateTx, 
-  TxProps, 
-  UpdateTx 
-} from "../../../packages/dtos/tx.dto";
+import { CreateTx, TxProps, UpdateTx } from "../../../packages/dtos/tx.dto";
 
-export class TxService extends BaseService<
-  Tx,
-  TxProps,
-  CreateTx,
-  UpdateTx
-> {
+export class TxService extends BaseService<Tx, TxProps, CreateTx, UpdateTx> {
   constructor() {
     super(Tx);
   }

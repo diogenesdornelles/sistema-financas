@@ -1,10 +1,6 @@
 import { BaseService } from "./base.service";
 import { Cat, User } from "../entity/entities";
-import {
-  CreateCat,
-  UpdateCat,
-  CatProps,
-} from "../../../packages/dtos/cat.dto";
+import { CreateCat, UpdateCat, CatProps } from "../../../packages/dtos/cat.dto";
 
 export class CatService extends BaseService<
   Cat,

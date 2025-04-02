@@ -1,13 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { TxService } from "../service/tx.service";
 import { BaseController } from "./base.controller";
-import {
-  TxProps,
-  UpdateTx,
-  CreateTx,
-} from "../../../packages/dtos/tx.dto"
-import {createTxSchema} from '../../../packages/validators/zod-schemas/create/create-tx.validator'
-import {updateTxSchema} from '../../../packages/validators/zod-schemas/update/update-tx.validator'
+import { TxProps, UpdateTx, CreateTx } from "../../../packages/dtos/tx.dto";
+import { createTxSchema } from "../../../packages/validators/zod-schemas/create/create-tx.validator";
+import { updateTxSchema } from "../../../packages/validators/zod-schemas/update/update-tx.validator";
 
 export default class TxController extends BaseController<TxService> {
   constructor() {
@@ -73,8 +69,10 @@ export default class TxController extends BaseController<TxService> {
     try {
       const { id } = req.params;
       const validatedData: UpdateTx = updateTxSchema.parse(req.body);
-      const updatedItem: Partial<TxProps> | null =
-        await this.service.update(id, validatedData);
+      const updatedItem: Partial<TxProps> | null = await this.service.update(
+        id,
+        validatedData,
+      );
       if (!updatedItem) {
         res.status(404).json({ message: "Transação não encontrada" });
         return;

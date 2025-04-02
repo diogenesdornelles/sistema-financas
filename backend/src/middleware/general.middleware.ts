@@ -8,7 +8,8 @@ import { z } from "zod";
 import { AuthPayloadInterface } from "../interfaces/auth-payload.interface";
 import { CustomRequestInterface } from "../interfaces/custom-request.interface";
 import { ApiError } from "../utils/api-error.util";
-import GeneralValidator from "../validator/general.validator";
+import GeneralValidator from "../../../packages/validators/general.validator";
+
 
 // Load environment variables from .env file
 dotenv.config();

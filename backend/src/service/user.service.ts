@@ -1,17 +1,17 @@
 import { BaseService } from "./base.service";
 import { User } from "../entity/entities";
 import {
-  CreateUserDto,
-  UpdateUserDto,
-  UserResponseDto,
-} from "../dtos/user.dto";
+  CreateUser,
+  UpdateUser,
+  UserProps,
+} from "../../../packages/dtos/user.dto";
 import hashPassword from "../utils/hash-pwd.util";
 
 export class UserService extends BaseService<
   User,
-  UserResponseDto,
-  CreateUserDto,
-  UpdateUserDto
+  UserProps,
+  CreateUser,
+  UpdateUser
 > {
   constructor() {
     super(User);
@@ -20,7 +20,7 @@ export class UserService extends BaseService<
   /**
    * Recupera todos os usuários.
    */
-  public getAll = async (): Promise<UserResponseDto[]> => {
+  public getAll = async (): Promise<UserProps[]> => {
     try {
       const users = await this.repository.find({
         select: ["id", "name", "status", "surname", "createdAt", "updatedAt"],
@@ -37,7 +37,7 @@ export class UserService extends BaseService<
    *
    * @param id - Identificador do usuário.
    */
-  public getOne = async (id: string): Promise<UserResponseDto | null> => {
+  public getOne = async (id: string): Promise<UserProps | null> => {
     try {
       const user = await this.repository.findOne({
         where: { id },
@@ -55,7 +55,7 @@ export class UserService extends BaseService<
    *
    * @param data - Dados para criação do usuário.
    */
-  public create = async (data: CreateUserDto): Promise<UserResponseDto> => {
+  public create = async (data: CreateUser): Promise<UserProps> => {
     try {
       const hashedPwd = await hashPassword(data.pwd);
       const user = this.repository.create({ ...data, pwd: hashedPwd });
@@ -77,8 +77,8 @@ export class UserService extends BaseService<
    */
   public update = async (
     id: string,
-    data: UpdateUserDto,
-  ): Promise<Partial<UserResponseDto> | null> => {
+    data: UpdateUser,
+  ): Promise<Partial<UserProps> | null> => {
     try {
       if (data.pwd) {
         data.pwd = await hashPassword(data.pwd);

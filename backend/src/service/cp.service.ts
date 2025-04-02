@@ -1,16 +1,17 @@
 import { BaseService } from "./base.service";
-import { Cp, CPStatus, Partner, Tcp, User } from "../entity/entities";
+import { Cp, Partner, Tcp, Tx, User } from "../entity/entities";
 import {
-  CreateCpDto,
-  UpdateCpDto,
-  CpResponseDto,
-} from "../dtos/cp.dto";
+  CreateCp,
+  UpdateCp,
+  CpProps,
+} from "../../../packages/dtos/cp.dto";
+import { CPStatus } from "../../../packages/dtos/utils/enums";
 
 export class CpService extends BaseService<
   Cp,
-  CpResponseDto,
-  CreateCpDto,
-  UpdateCpDto
+  CpProps,
+  CreateCp,
+  UpdateCp
 > {
   constructor() {
     super(Cp);
@@ -19,10 +20,10 @@ export class CpService extends BaseService<
   /**
    * Recupera todas as contas.
    */
-  public getAll = async (): Promise<CpResponseDto[]> => {
+  public getAll = async (): Promise<CpProps[]> => {
     try {
       return await this.repository.find({
-        relations: ["type", "supplier"],
+        relations: ["type", "supplier", "tx"],
       });
     } catch (error) {
       throw new Error(`Erro ao recuperar contas: ${error}`);
@@ -34,11 +35,11 @@ export class CpService extends BaseService<
    *
    * @param id - Identificador.
    */
-  public getOne = async (id: string): Promise<CpResponseDto | null> => {
+  public getOne = async (id: string): Promise<CpProps | null> => {
     try {
       return await this.repository.findOne({
         where: { id },
-        relations: ["type", "supplier"],
+        relations: ["type", "supplier", "tx"],
       });
     } catch (error) {
       throw new Error(`Erro ao recuperar conta com ID ${id}: ${error}`);
@@ -50,20 +51,21 @@ export class CpService extends BaseService<
    *
    * @param data - Dados para criação.
    */
-  public create = async (data: CreateCpDto): Promise<CpResponseDto> => {
+  public create = async (data: CreateCp): Promise<CpProps> => {
     try {
       const newCp = this.repository.create({
         ...data,
         user: { id: data.user } as User,
         type: { id: data.type } as Tcp,
         supplier: { id: data.supplier } as Partner,
+        tx: { id: data.tx } as Tx,
       });
 
       const createdCp = await this.repository.save(newCp);
 
       return await this.repository.findOneOrFail({
         where: { id: createdCp.id },
-        relations: ["type", "supplier"],
+        relations: ["type", "supplier", "tx"],
       });
     } catch (error) {
       throw new Error(`Erro ao criar conta: ${error}`);
@@ -78,21 +80,22 @@ export class CpService extends BaseService<
    */
   public update = async (
     id: string,
-    data: UpdateCpDto,
-  ): Promise<Partial<CpResponseDto> | null> => {
+    data: UpdateCp,
+  ): Promise<Partial<CpProps> | null> => {
     try {
       const updateData: Partial<Cp> = {
         ...data,
         user: data.user ? ({ id: data.user } as User) : undefined,
         type: data.type ? ({ id: data.type } as Tcp) : undefined,
         supplier: data.supplier ? ({ id: data.supplier } as Partner) : undefined,
+        tx: data.tx ? ({ id: data.tx } as Tx) : undefined,
       };
 
       await this.repository.update({ id }, updateData);
 
       return await this.repository.findOne({
         where: { id },
-        relations: ["type", "supplier"],
+        relations: ["type", "supplier", "tx"],
       });
     } catch (error) {
       throw new Error(`Erro ao atualizar conta com ID ${id}: ${error}`);

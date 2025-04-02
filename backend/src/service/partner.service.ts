@@ -1,16 +1,16 @@
 import { BaseService } from "./base.service";
 import { Partner, User } from "../entity/entities";
 import { 
-  CreatePartnerDto, 
-  PartnerResponseDto, 
-  UpdatePartnerDto 
-} from "../dtos/partner.dto";
+  CreatePartner, 
+  PartnerProps, 
+  UpdatePartner 
+} from "../../../packages/dtos/partner.dto";
 
 export class PartnerService extends BaseService<
   Partner,
-  PartnerResponseDto,
-  CreatePartnerDto,
-  UpdatePartnerDto
+  PartnerProps,
+  CreatePartner,
+  UpdatePartner
 > {
   constructor() {
     super(Partner);
@@ -19,7 +19,7 @@ export class PartnerService extends BaseService<
   /**
    * Recupera todos os parceiros.
    */
-  public getAll = async (): Promise<PartnerResponseDto[]> => {
+  public getAll = async (): Promise<PartnerProps[]> => {
     try {
       return await this.repository.find({
         relations: [],
@@ -34,7 +34,7 @@ export class PartnerService extends BaseService<
    *
    * @param id - Identificador.
    */
-  public getOne = async (id: string): Promise<PartnerResponseDto | null> => {
+  public getOne = async (id: string): Promise<PartnerProps | null> => {
     try {
       return await this.repository.findOne({
         where: { id },
@@ -50,7 +50,7 @@ export class PartnerService extends BaseService<
    *
    * @param data - Dados para criação.
    */
-  public create = async (data: CreatePartnerDto): Promise<PartnerResponseDto> => {
+  public create = async (data: CreatePartner): Promise<PartnerProps> => {
     try {
       const newPartner = this.repository.create({
         ...data,
@@ -76,8 +76,8 @@ export class PartnerService extends BaseService<
    */
   public update = async (
     id: string,
-    data: UpdatePartnerDto,
-  ): Promise<Partial<PartnerResponseDto> | null> => {
+    data: UpdatePartner,
+  ): Promise<Partial<PartnerProps> | null> => {
     try {
       const updateData: Partial<Partner> = {
         ...data,

@@ -3,6 +3,11 @@ export interface CreateToken {
   pwd: string;
 }
 
+
+export interface UpdateToken {
+  cpf?: string;
+  pwd?: string;
+}
 // Removed UpdateToken interface as it is equivalent to CreateToken
 
 export interface TokenProps {

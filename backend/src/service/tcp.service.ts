@@ -1,16 +1,16 @@
 import { BaseService } from "./base.service";
 import { Tcp } from "../entity/entities";
 import {
-  CreateTcpDto,
-  UpdateTcpDto,
-  TcpResponseDto,
-} from "../dtos/tcp.dto";
+  CreateTcp,
+  UpdateTcp,
+  TcpProps,
+} from "../../../packages/dtos/tcp.dto";
 
 export class TcpService extends BaseService<
   Tcp,
-  TcpResponseDto,
-  CreateTcpDto,
-  UpdateTcpDto
+  TcpProps,
+  CreateTcp,
+  UpdateTcp
 > {
   constructor() {
     super(Tcp);
@@ -19,7 +19,7 @@ export class TcpService extends BaseService<
   /**
    * Recupera todos os tipos de contas.
    */
-  public getAll = async (): Promise<TcpResponseDto[]> => {
+  public getAll = async (): Promise<TcpProps[]> => {
     try {
       return await this.repository.find();
     } catch (error) {
@@ -32,7 +32,7 @@ export class TcpService extends BaseService<
    *
    * @param id - Identificador.
    */
-  public getOne = async (id: string): Promise<TcpResponseDto | null> => {
+  public getOne = async (id: string): Promise<TcpProps | null> => {
     try {
       return await this.repository.findOne({ where: { id } });
     } catch (error) {
@@ -45,7 +45,7 @@ export class TcpService extends BaseService<
    *
    * @param data - Dados para criação.
    */
-  public create = async (data: CreateTcpDto): Promise<TcpResponseDto> => {
+  public create = async (data: CreateTcp): Promise<TcpProps> => {
     try {
       const createdTcf = await this.repository.save(this.repository.create(data));
       return createdTcf;
@@ -62,8 +62,8 @@ export class TcpService extends BaseService<
    */
   public update = async (
     id: string,
-    data: UpdateTcpDto,
-  ): Promise<Partial<TcpResponseDto> | null> => {
+    data: UpdateTcp,
+  ): Promise<Partial<TcpProps> | null> => {
     try {
       await this.repository.update({ id }, data);
       return await this.repository.findOne({ where: { id } });

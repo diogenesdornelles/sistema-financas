@@ -1,16 +1,16 @@
 import { BaseService } from "./base.service";
 import { Cat, Cf, Tx, User } from "../entity/entities";
 import { 
-  CreateTxDto, 
-  TxResponseDto, 
-  UpdateTxDto 
-} from "../dtos/tx.dto";
+  CreateTx, 
+  TxProps, 
+  UpdateTx 
+} from "../../../packages/dtos/tx.dto";
 
 export class TxService extends BaseService<
   Tx,
-  TxResponseDto,
-  CreateTxDto,
-  UpdateTxDto
+  TxProps,
+  CreateTx,
+  UpdateTx
 > {
   constructor() {
     super(Tx);
@@ -19,7 +19,7 @@ export class TxService extends BaseService<
   /**
    * Recupera todas as transações.
    */
-  public getAll = async (): Promise<TxResponseDto[]> => {
+  public getAll = async (): Promise<TxProps[]> => {
     try {
       return await this.repository.find({
         relations: ["category", "cf"],
@@ -34,7 +34,7 @@ export class TxService extends BaseService<
    *
    * @param id - Identificador da transação.
    */
-  public getOne = async (id: string): Promise<TxResponseDto | null> => {
+  public getOne = async (id: string): Promise<TxProps | null> => {
     try {
       return await this.repository.findOne({
         where: { id },
@@ -50,7 +50,7 @@ export class TxService extends BaseService<
    *
    * @param data - Dados para criação.
    */
-  public create = async (data: CreateTxDto): Promise<TxResponseDto> => {
+  public create = async (data: CreateTx): Promise<TxProps> => {
     try {
       const newTx = this.repository.create({
         ...data,
@@ -78,8 +78,8 @@ export class TxService extends BaseService<
    */
   public update = async (
     id: string,
-    data: UpdateTxDto,
-  ): Promise<Partial<TxResponseDto> | null> => {
+    data: UpdateTx,
+  ): Promise<Partial<TxProps> | null> => {
     try {
       const updateData: Partial<Tx> = {
         ...data,

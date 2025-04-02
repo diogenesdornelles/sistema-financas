@@ -1,16 +1,16 @@
 import { BaseService } from "./base.service";
 import { Tcr } from "../entity/entities";
 import {
-  CreateTcrDto,
-  UpdateTcrDto,
-  TcrResponseDto,
-} from "../dtos/tcr.dto";
+  CreateTcr,
+  UpdateTcr,
+  TcrProps,
+} from "../../../packages/dtos/tcr.dto";
 
 export class TcrService extends BaseService<
   Tcr,
-  TcrResponseDto,
-  CreateTcrDto,
-  UpdateTcrDto
+  TcrProps,
+  CreateTcr,
+  UpdateTcr
 > {
   constructor() {
     super(Tcr);
@@ -19,7 +19,7 @@ export class TcrService extends BaseService<
   /**
    * Recupera todos os tipos de contas.
    */
-  public getAll = async (): Promise<TcrResponseDto[]> => {
+  public getAll = async (): Promise<TcrProps[]> => {
     try {
       return await this.repository.find();
     } catch (error) {
@@ -32,7 +32,7 @@ export class TcrService extends BaseService<
    *
    * @param id - Identificador.
    */
-  public getOne = async (id: string): Promise<TcrResponseDto | null> => {
+  public getOne = async (id: string): Promise<TcrProps | null> => {
     try {
       return await this.repository.findOne({ where: { id } });
     } catch (error) {
@@ -45,7 +45,7 @@ export class TcrService extends BaseService<
    *
    * @param data - Dados para criação.
    */
-  public create = async (data: CreateTcrDto): Promise<TcrResponseDto> => {
+  public create = async (data: CreateTcr): Promise<TcrProps> => {
     try {
       const createdTcf = await this.repository.save(this.repository.create(data));
       return createdTcf;
@@ -62,8 +62,8 @@ export class TcrService extends BaseService<
    */
   public update = async (
     id: string,
-    data: UpdateTcrDto,
-  ): Promise<Partial<TcrResponseDto> | null> => {
+    data: UpdateTcr,
+  ): Promise<Partial<TcrProps> | null> => {
     try {
       await this.repository.update({ id }, data);
       return await this.repository.findOne({ where: { id } });

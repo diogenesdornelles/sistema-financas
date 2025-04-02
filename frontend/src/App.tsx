@@ -4,12 +4,12 @@ import {
 
 import './App.css'
 import { SessionProvider } from './context/session-provider'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import RootLayout from './layouts/root-layout';
 import Home from './pages/home';
 import Login from './pages/login';
 import { RequireAuth } from './components/require-auth';
-import { queryClient } from './utils/client';
+import { queryClient } from './utils/client';;
 
 
 const router = createBrowserRouter([
@@ -17,6 +17,7 @@ const router = createBrowserRouter([
     path: "/",
     element: <RootLayout />,
     children: [
+      { index: true, element: <Navigate to="/home" replace /> },
       { path: "/login", element: <Login /> },
       {
         path: "/home",
@@ -30,7 +31,7 @@ const router = createBrowserRouter([
         path: "/cadastrar",
         element: (
           <RequireAuth>
-            <Home /> 
+            <Home />
           </RequireAuth>
         ),
       },
@@ -56,6 +57,7 @@ const router = createBrowserRouter([
 
 
 export default function App() {
+
   return (
     <QueryClientProvider client={queryClient}>
       <SessionProvider>

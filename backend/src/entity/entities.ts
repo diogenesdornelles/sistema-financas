@@ -8,6 +8,7 @@ import {
   OneToMany,
   JoinColumn,
 } from "typeorm";
+import { CPStatus, PartnerType, PaymentStatus, TransactionType } from "../../../packages/dtos/utils/enums";
 
 // Classe base com id, createdAt e updatedAt
 @Entity()
@@ -22,28 +23,6 @@ export abstract class Base {
   updatedAt!: Date; // Create: no required; Update: no required; Response: required
 }
 
-// Enums para status, tipos e transações
-export enum CPStatus {
-  PENDING = "pending",
-  PAID = "paid",
-  CANCELLED = "cancelled",
-}
-
-export enum PaymentStatus {
-  PENDING = "pending",
-  PAID = "paid",
-  CANCELLED = "cancelled",
-}
-
-export enum PartnerType {
-  PF = "PF",
-  PJ = "PJ",
-}
-
-export enum TransactionType {
-  ENTRY = "E",
-  OUTFLOW = "O",
-}
 
 // 1. Usuário
 @Entity("user")
@@ -85,7 +64,7 @@ export class User extends Base {
 // 2. Cf (Conta Financeira)
 @Entity("cf")
 export class Cf extends Base {
-  @Column({ type: "decimal", precision: 10, scale: 2, default: 0.0 })
+  @Column({ type: "decimal", precision: 15, scale: 2, default: 0.0 })
   balance!: number; // Create: no required; Update: no required; Response: required
 
   @ManyToOne(() => Tcf, (tcf) => tcf.cfs)
@@ -131,7 +110,7 @@ export class Tcf extends Base {
 // 4. Cp (Conta a Pagar)
 @Entity("cp")
 export class Cp extends Base {
-  @Column({ type: "decimal", precision: 10, scale: 2 })
+  @Column({ type: "decimal", precision: 15, scale: 2 })
   value!: number; // Create: required; Update: no required; Response: required
 
   @ManyToOne(() => Tcp, (tcp) => tcp.cps)
@@ -145,15 +124,22 @@ export class Cp extends Base {
   @Column({ type: "date" })
   due!: Date; // Create: required; Update: no required; Response: required
 
+  @Column({ type: "date" })
+  pdate!: Date; // Create: no required; Update: no required; Response: no required
+
   @Column({ type: "text", nullable: true })
   obs!: string; // Create: no required; Update: no required; Response: required
 
   @ManyToOne(() => User, (user) => user.cps)
   @JoinColumn({ name: "userId" })
-  user!: User; // Create: no required; Update: no required; Response: no required
+  user!: User; // Create: required; Update: no required; Response: no required
+
+  @ManyToOne(() => Tx, (tx) => tx.crs, { nullable: true })
+  @JoinColumn({ name: "txId" })
+  tx?: Tx; // Create: no required; Update: no required; Response: no required
 
   @Column({ type: "enum", enum: CPStatus, default: CPStatus.PENDING })
-  status!: CPStatus;
+  status!: CPStatus; // Create: no required; Update: no required; Response: required
 }
 
 // 5. Tcp (Tipo Conta a Pagar)
@@ -172,7 +158,7 @@ export class Tcp extends Base {
 // 6. Cr (Conta a Receber)
 @Entity("cr")
 export class Cr extends Base {
-  @Column({ type: "decimal", precision: 10, scale: 2 })
+  @Column({ type: "decimal", precision: 15, scale: 2 })
   value!: number; // Create: required; Update: no required; Response: required
 
   @ManyToOne(() => Tcr, (tcr) => tcr.crs)
@@ -186,12 +172,19 @@ export class Cr extends Base {
   @Column({ type: "date" })
   due!: Date; // Create: required; Update: no required; Response: required
 
+  @Column({ type: "date" })
+  rdate!: Date; // Create: no required; Update: no required; Response: no required
+
   @Column({ type: "text", nullable: true })
   obs!: string; // Create: no required; Update: no required; Response: required
 
   @ManyToOne(() => User, (user) => user.crs)
   @JoinColumn({ name: "userId" })
   user!: User; // Create: required; Update: no required; Response: no required
+
+  @ManyToOne(() => Tx, (tx) => tx.crs, { nullable: true })
+  @JoinColumn({ name: "txId" })
+  tx?: Tx; // Create: no required; Update: no required; Response: no required
 
   @Column({ type: "enum", enum: PaymentStatus, default: PaymentStatus.PENDING })
   status!: PaymentStatus; // Create: no required; Update: no required; Response: required
@@ -242,7 +235,7 @@ export class Partner extends Base {
 // 9. Tx (Transação)
 @Entity("tx")
 export class Tx extends Base {
-  @Column({ type: "decimal", precision: 10, scale: 2 })
+  @Column({ type: "decimal", precision: 15, scale: 2 })
   value!: number; // Create: required; Update: no required; Response: required
 
   @Column({ type: "enum", enum: TransactionType })
@@ -259,9 +252,18 @@ export class Tx extends Base {
   @JoinColumn({ name: "userId" })
   user!: User; // Create: required; Update: no required; Response: no required
 
+  @Column({ type: "date" })
+  tdate!: Date; // Create: no required; Update: no required; Response: no required
+
   @ManyToOne(() => Cat, (cat) => cat.txs)
   @JoinColumn({ name: "catId" })
   category!: Cat; // Create: required; Update: no required; Response: required as Cat
+
+  @OneToMany(() => Cp, (cp) => cp.tx)
+  cps!: Cp[]; // Create: no required; Update: no required; Response: no required
+
+  @OneToMany(() => Cr, (cr) => cr.tx)
+  crs!: Cr[]; // Create: no required; Update: no required; Response: no required
 
   @Column({ type: "text", nullable: true })
   obs!: string; // Create: no required; Update: no required; Response: required

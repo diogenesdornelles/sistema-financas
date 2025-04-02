@@ -1,16 +1,17 @@
 import { BaseService } from "./base.service";
-import { Cr, Partner, Tcr, User, PaymentStatus } from "../entity/entities";
+import { Cr, Partner, Tcr, Tx, User } from "../entity/entities";
 import {
-  CreateCrDto,
-  UpdateCrDto,
-  CrResponseDto,
-} from "../dtos/cr.dto";
+  CreateCr,
+  UpdateCr,
+  CrProps,
+} from "../../../packages/dtos/cr.dto";
+import { PaymentStatus } from "../../../packages/dtos/utils/enums";
 
 export class CrService extends BaseService<
   Cr,
-  CrResponseDto,
-  CreateCrDto,
-  UpdateCrDto
+  CrProps,
+  CreateCr,
+  UpdateCr
 > {
   constructor() {
     super(Cr);
@@ -19,10 +20,10 @@ export class CrService extends BaseService<
   /**
    * Recupera todas as contas.
    */
-  public getAll = async (): Promise<CrResponseDto[]> => {
+  public getAll = async (): Promise<CrProps[]> => {
     try {
       return await this.repository.find({
-        relations: ["type", "customer"],
+        relations: ["type", "customer", "tx"],
       });
     } catch (error) {
       throw new Error(`Erro ao recuperar contas: ${error}`);
@@ -34,11 +35,11 @@ export class CrService extends BaseService<
    *
    * @param id - Identificador.
    */
-  public getOne = async (id: string): Promise<CrResponseDto | null> => {
+  public getOne = async (id: string): Promise<CrProps | null> => {
     try {
       return await this.repository.findOne({
         where: { id },
-        relations: ["type", "customer"],
+        relations: ["type", "customer", "tx"],
       });
     } catch (error) {
       throw new Error(`Erro ao recuperar conta com ID ${id}: ${error}`);
@@ -50,13 +51,14 @@ export class CrService extends BaseService<
    *
    * @param data - Dados para criação.
    */
-  public create = async (data: CreateCrDto): Promise<CrResponseDto> => {
+  public create = async (data: CreateCr): Promise<CrProps> => {
     try {
       const newCr = this.repository.create({
         ...data,
         user: { id: data.user } as User,
         type: { id: data.type } as Tcr,
         customer: { id: data.customer } as Partner,
+        tx: { id: data.tx } as Tx,
       });
 
       const createdCr = await this.repository.save(newCr);
@@ -78,21 +80,22 @@ export class CrService extends BaseService<
    */
   public update = async (
     id: string,
-    data: UpdateCrDto,
-  ): Promise<Partial<CrResponseDto> | null> => {
+    data: UpdateCr,
+  ): Promise<Partial<CrProps> | null> => {
     try {
       const updateData: Partial<Cr> = {
         ...data,
         user: data.user ? ({ id: data.user } as User) : undefined,
         type: data.type ? ({ id: data.type } as Tcr) : undefined,
         customer: data.customer ? ({ id: data.customer } as Partner) : undefined,
+        tx: data.tx ? ({ id: data.tx } as Tx) : undefined,
       };
 
       await this.repository.update({ id }, updateData);
 
       return await this.repository.findOne({
         where: { id },
-        relations: ["type", "customer"],
+        relations: ["type", "customer", "tx"],
       });
     } catch (error) {
       throw new Error(`Erro ao atualizar conta com ID ${id}: ${error}`);

@@ -6,7 +6,7 @@ import { User } from "../entity/entities";
 
 import ms from "ms";
 import { ApiError } from "../utils/api-error.util";
-import { CreateTokenDTO, ResponseTokenDTO, UpdateTokenDTO } from "../dtos/token.dto";
+import { CreateToken, TokenProps, UpdateToken } from "../../../packages/dtos/token.dto";
 
 dotenv.config();
 
@@ -15,15 +15,15 @@ const EXPIRES_IN = process.env.EXPIRES_IN || "2d";
 
 export default class LoginService extends BaseService<
   User,
-  ResponseTokenDTO,
-  CreateTokenDTO,
-  UpdateTokenDTO
+  TokenProps,
+  CreateToken,
+  UpdateToken
 > {
   constructor() {
     super(User);
   }
 
-  public create = async (data: CreateTokenDTO): Promise<ResponseTokenDTO> => {
+  public create = async (data: CreateToken): Promise<TokenProps> => {
     const dbUser = await this.repository.findOne({
       where: { cpf: data.cpf, status: true },
     });
@@ -57,16 +57,16 @@ export default class LoginService extends BaseService<
     }
   };
 
-  public getAll(): Promise<ResponseTokenDTO[]> {
+  public getAll(): Promise<TokenProps[]> {
     throw new Error("Method not implemented.");
   }
-  public getOne(pk: string): Promise<ResponseTokenDTO | null> {
+  public getOne(pk: string): Promise<TokenProps | null> {
     throw new Error("Method not implemented.");
   }
   public update(
     pk: string,
-    data: UpdateTokenDTO,
-  ): Promise<Partial<ResponseTokenDTO>> {
+    data: UpdateToken,
+  ): Promise<Partial<TokenProps>> {
     throw new Error("Method not implemented.");
   }
   public delete(pk: string): Promise<boolean> {

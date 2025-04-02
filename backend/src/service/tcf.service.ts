@@ -1,16 +1,16 @@
 import { BaseService } from "./base.service";
 import { Tcf } from "../entity/entities";
 import {
-  CreateTcfDto,
-  UpdateTcfDto,
-  TcfResponseDto,
-} from "../dtos/tcf.dto";
+  CreateTcf,
+  UpdateTcf,
+  TcfProps,
+} from "../../../packages/dtos/tcf.dto";
 
 export class TcfService extends BaseService<
   Tcf,
-  TcfResponseDto,
-  CreateTcfDto,
-  UpdateTcfDto
+  TcfProps,
+  CreateTcf,
+  UpdateTcf
 > {
   constructor() {
     super(Tcf);
@@ -19,7 +19,7 @@ export class TcfService extends BaseService<
   /**
    * Recupera todos os tipos de contas.
    */
-  public getAll = async (): Promise<TcfResponseDto[]> => {
+  public getAll = async (): Promise<TcfProps[]> => {
     try {
       return await this.repository.find();
     } catch (error) {
@@ -32,7 +32,7 @@ export class TcfService extends BaseService<
    *
    * @param id - Identificador.
    */
-  public getOne = async (id: string): Promise<TcfResponseDto | null> => {
+  public getOne = async (id: string): Promise<TcfProps | null> => {
     try {
       return await this.repository.findOne({ where: { id } });
     } catch (error) {
@@ -45,7 +45,7 @@ export class TcfService extends BaseService<
    *
    * @param data - Dados para criação.
    */
-  public create = async (data: CreateTcfDto): Promise<TcfResponseDto> => {
+  public create = async (data: CreateTcf): Promise<TcfProps> => {
     try {
       const createdTcf = await this.repository.save(this.repository.create(data));
       return createdTcf;
@@ -62,8 +62,8 @@ export class TcfService extends BaseService<
    */
   public update = async (
     id: string,
-    data: UpdateTcfDto,
-  ): Promise<Partial<TcfResponseDto> | null> => {
+    data: UpdateTcf,
+  ): Promise<Partial<TcfProps> | null> => {
     try {
       await this.repository.update({ id }, data);
       return await this.repository.findOne({ where: { id } });

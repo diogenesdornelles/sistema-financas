@@ -1,16 +1,16 @@
 import { BaseService } from "./base.service";
 import { Cf, Tcf, User } from "../entity/entities";
 import {
-  CreateCfDto,
-  UpdateCfDto,
-  CfResponseDto,
-} from "../dtos/cf.dto";
+  CreateCf,
+  UpdateCf,
+  CfProps,
+} from "../../../packages/dtos/cf.dto";
 
 export class CfService extends BaseService<
   Cf,
-  CfResponseDto,
-  CreateCfDto,
-  UpdateCfDto
+  CfProps,
+  CreateCf,
+  UpdateCf
 > {
   constructor() {
     super(Cf);
@@ -19,7 +19,7 @@ export class CfService extends BaseService<
   /**
    * Recupera todas as contas.
    */
-  public getAll = async (): Promise<CfResponseDto[]> => {
+  public getAll = async (): Promise<CfProps[]> => {
     try {
       const cfs = await this.repository.find({ relations: ["type"] });
       return cfs;
@@ -33,7 +33,7 @@ export class CfService extends BaseService<
    *
    * @param id - Identificador.
    */
-  public getOne = async (id: string): Promise<CfResponseDto | null> => {
+  public getOne = async (id: string): Promise<CfProps | null> => {
     try {
       const cf = await this.repository.findOne({
         where: { id },
@@ -50,7 +50,7 @@ export class CfService extends BaseService<
    *
    * @param data - Dados para criação.
    */
-  public create = async (data: CreateCfDto): Promise<CfResponseDto> => {
+  public create = async (data: CreateCf): Promise<CfProps> => {
     try {
       const cf = this.repository.create({
         ...data,
@@ -76,8 +76,8 @@ export class CfService extends BaseService<
    */
   public update = async (
     id: string,
-    data: UpdateCfDto,
-  ): Promise<Partial<CfResponseDto> | null> => {
+    data: UpdateCf,
+  ): Promise<Partial<CfProps> | null> => {
     try {
       const updateData: Partial<Cf> = {
         ...data,

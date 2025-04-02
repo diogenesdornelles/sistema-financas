@@ -5,7 +5,6 @@ import Nav from '../templates/nav';
 import Footer from '../templates/footer';
 
 function RootLayout() {
-
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', minWidth: '100vw' }}>
       <Nav/>

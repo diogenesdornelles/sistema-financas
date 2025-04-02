@@ -1,16 +1,16 @@
 import { BaseService } from "./base.service";
 import { Cat, User } from "../entity/entities";
 import {
-  CreateCatDto,
-  UpdateCatDto,
-  CatResponseDto,
-} from "../dtos/cat.dto";
+  CreateCat,
+  UpdateCat,
+  CatProps,
+} from "../../../packages/dtos/cat.dto";
 
 export class CatService extends BaseService<
   Cat,
-  CatResponseDto,
-  CreateCatDto,
-  UpdateCatDto
+  CatProps,
+  CreateCat,
+  UpdateCat
 > {
   constructor() {
     super(Cat);
@@ -19,7 +19,7 @@ export class CatService extends BaseService<
   /**
    * Recupera todos.
    */
-  public getAll = async (): Promise<CatResponseDto[]> => {
+  public getAll = async (): Promise<CatProps[]> => {
     try {
       const cats = await this.repository.find({ relations: [] });
       return cats;
@@ -33,7 +33,7 @@ export class CatService extends BaseService<
    *
    * @param id - Identificador.
    */
-  public getOne = async (id: string): Promise<CatResponseDto | null> => {
+  public getOne = async (id: string): Promise<CatProps | null> => {
     try {
       const cat = await this.repository.findOne({
         where: { id },
@@ -50,7 +50,7 @@ export class CatService extends BaseService<
    *
    * @param data - Dados para criação.
    */
-  public create = async (data: CreateCatDto): Promise<CatResponseDto> => {
+  public create = async (data: CreateCat): Promise<CatProps> => {
     try {
       const cat = this.repository.create({
         ...data,
@@ -70,8 +70,8 @@ export class CatService extends BaseService<
    */
   public update = async (
     id: string,
-    data: UpdateCatDto,
-  ): Promise<Partial<CatResponseDto> | null> => {
+    data: UpdateCat,
+  ): Promise<Partial<CatProps> | null> => {
     try {
       const updateData: Partial<Cat> = {
         ...data,

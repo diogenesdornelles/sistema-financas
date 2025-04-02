@@ -1,5 +1,6 @@
 import { z } from "zod";
 import GeneralValidator from "../../general.validator";
+import { dateSchemaMin } from "../../utils/date-schema";
 
 
 export enum TransactionType {
@@ -16,6 +17,7 @@ export const createTxSchema = z
     user: z.string().uuid(),
     cf: z.string().uuid(),
     category: z.string().uuid(),
+    tdate: dateSchemaMin,
     obs: z
       .string()
       .max(255, "Observação pode ter no máximo 255 caracteres")

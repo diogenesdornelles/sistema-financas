@@ -1,5 +1,6 @@
 import { PartnerProps } from "./partner.dto";
 import { TcrProps } from "./tcr.dto";
+import { TxProps } from "./tx.dto";
 import { PaymentStatus } from "./utils/enums";
 
 export interface CreateCr {
@@ -7,8 +8,10 @@ export interface CreateCr {
   type: string; // Identificador de Tcr
   customer: string; // Identificador de Partner
   due: Date;
+  rdate?: Date;
   obs?: string;
   user: string;
+  tx?: string;
 }
 
 export interface UpdateCr {
@@ -19,6 +22,8 @@ export interface UpdateCr {
   obs?: string;
   user?: string;
   status?: PaymentStatus;
+  tx?: string;
+  rdate?: Date;
 }
 
 export interface CrProps {
@@ -28,6 +33,8 @@ export interface CrProps {
   customer: PartnerProps;
   due: Date;
   obs: string;
+  tx?: TxProps;
+  rdate?: Date;
   status: PaymentStatus;
   createdAt: Date;
   updatedAt: Date;

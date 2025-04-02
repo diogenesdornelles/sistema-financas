@@ -28,7 +28,7 @@ example
     - *number (varchar(10))*: Identificador da conta na instituição bancária. Required: response create. Optional: update.
     - *ag (nullable) (varchar(10))*: Agência bancária. Required: response. Optional: update e create.
     - *bank varchar(30) (nullable)*: Banco. Required: response. Optional: update e create.
-    - *balance (decimal(10,2)) (default 0.0)*: Valor atual da conta, com precisão para operações financeiras. Optional: create e update. Required: response.
+    - *balance (decimal(15,2)) (default 0.0)*: Valor atual da conta, com precisão para operações financeiras. Optional: create e update. Required: response.
     - *type (TipoCF) (fk)*: Indica o tipo de conta (ex.: conta corrente, poupança, cartão de crédito, cartão de débito, etc). Uma CF tem um tipo dentre muitos (1:N). Required: response e create. Optional: update.
     - *user (Usuario) (fk)*: Tem um único usuário, dentre muitos (1:N). Required: create e response. Optional: update.
     - *obs (text) (default '')*: Campo opcional para anotações ou comentários. Required: response. Optional: create e update.
@@ -45,11 +45,12 @@ example
 
 4. **Conta a Pagar (CP)**
     - *id (uuid) (pk) (default uuid)*: Identificador único da obrigação. Required: response.
-    - *value (decimal(10,2))*: Valor da conta a pagar. Required: create e response. Optional: update.
+    - *value (decimal(15,2))*: Valor da conta a pagar. Required: create e response. Optional: update.
     - *type (TipoCP) (fk)*: Define a forma de pagamento ou a origem da obrigação (ex.: Nota Promissória, Cheque, Nota Fiscal). Uma CP tem um tipo dentre muitos (1:N). Required: create e response. Optional: update.
+    - *pdate (Datetime) (nullable)*: data em que foi pago. Required: response. Optional: create update.
     - *supplier (Parceiro) (fk)*: A quem é devido o título. Uma conta a pagar possui um único fornecedor, dentre muitos (1:N). Required: create e response. Optional: update.
     - *due (Date)*: data de vencimento da obrigação. Required: create e response. Optional: update.
-    - *obs (text) (default '')*: Campo opcional para anotações ou comentários. Optional: create e update. Required: response.
+    - *obs (text) (nullable)*: Campo opcional para anotações ou comentários. Optional: create e update. Required: response.
     - *user (Usuario) (fk)*: Tem um único usuário, dentre muitos (1:N). Required: create e response. Optional: update.
     - *status enum(pendente, paga, cancelada) (default=pendente)*: Indica se está pago, pendente ou cancelado. Optional: update. Required: response.
     - *createdAt (DateTime) (default now)*: Data e hora em que o registro foi criado. Required: response.
@@ -64,11 +65,12 @@ example
 
 6. **Conta a Receber (CR)**
     - *id (uuid) (pk) (default uuid)*: Identificador único do recebível. Required: response.
-    - *value (decimal(10,2))*: Valor a ser recebido. Required: create e response. Optional: update.
+    - *value (decimal(15,2))*: Valor a ser recebido. Required: create e response. Optional: update.
     - *type (TipoCR) (fk)*: Define a forma de recebimento ou a origem (ex.: Nota Promissória, Cheque, Nota Fiscal). Uma CR tem um tipo dentre muitos (1:N). Required: create e response. Optional: update.
     - *customer (Parceiro) (fk)*: De quem se deve receber. Uma conta a receber possui um único cliente, dentre muitos (1:N). Required: create e response. Optional: update.
     - *due (Date)*: data de vencimento do direito. Required: create e response. Optional: update.
-    - *obs (text) (default '')*: Campo opcional para anotações ou comentários. Required: response. Optional: update.
+    - *rdate (Datetime) (nullable)*: data em que foi recebido. Required: response. Optional: create update.
+    - *obs (text) (nullable)*: Campo opcional para anotações ou comentários. Required: response. Optional: update.
     - *user (Usuario) (fk)*: Tem um único usuário, dentre muitos (1:N). Required: create e response. Optional: update.
     - *status enum(pendente, paga, cancelada) (default=pendente)*: Indica se está pago, pendente ou cancelado. Optional: update. Required: response.
     - *createdAt (DateTime) (default now)*: Data e hora em que o registro foi criado. Required: response.
@@ -88,19 +90,20 @@ example
     - *cod (varchar(20)) (unique)*: Código identificador para integrações ou referência interna. É o CPF ou CNPJ. Required: create e response. Optional: update.
     - *user (Usuario) (fk)*: Tem um único usuário, dentre muitos (1:N). Required: create e response. Optional: update.
     - *status boolean (default=true)*: Indica se está ativo ou inativo. Optional: update. Required: response.
-    - *obs (text) (default '')*: Campo opcional para anotações ou comentários. Required: response. Optional: update.
+    - *obs (text) (nullable)*: Campo opcional para anotações ou comentários. Required: response. Optional: update.
     - *createdAt (DateTime) (default now)*: Data e hora em que o registro foi criado. Required: response.
     - *updatedAt (DateTime) (default now)*: Data e hora da última atualização do registro. Required: response.
 
 9. **Transação (Atualizar o saldo de CF)**
     - *id (uuid) (pk) (default uuid)*: Identificador único da transação. Required: response.
-    - *value (decimal(10,2))*: Valor da transação. Required: create e response. Optional: update.
+    - *value (decimal(15,2))*: Valor da transação. Required: create e response. Optional: update.
     - *type (enum: E, S)*: Indica se a transação é uma entrada (E) ou uma saída (S). Required: create e response. Optional: update.
     - *cf (CF) (fk)*: Uma Conta Financeira pode ter muitas Transações (relação 1:N). Required: create e response. Optional: update.
-    - *description (text) (default '')*: Descrição detalhada da transação. Required: response. Optional: create e update.
+    - *description (text) (nullable)*: Descrição detalhada da transação. Required: response. Optional: create e update.
+    - *tdate (Datetime) (nullable)*: data em que foi transacionado. Required: response. Optional: create update.
     - *user (Usuario) (fk)*: Tem um único usuário, dentre muitos (1:N). Required: create e response. Update: optional.
     - *category (Categoria) (fk)*: Referência à categoria associada à transação. Possui uma única categoria, dentre muitas (1:N). Required: create e response. Optional: update.
-    - *obs (text) (default '')*: Campo opcional para anotações ou comentários. Required: response. Optional: create e update.
+    - *obs (text) (nullable)*: Campo opcional para anotações ou comentários. Required: response. Optional: create e update.
     - *status boolean (default=true)*: Indica se está ativo ou inativo. Optional: update. Required: response.
     - *createdAt (DateTime) (default now)*: Data e hora em que o registro foi criado. Required: response.
     - *updatedAt (DateTime) (default now)*: Data e hora da última atualização do registro. Required: response.
@@ -108,10 +111,10 @@ example
 10. **Categoria**
     - *id (uuid) (pk) (default uuid)*: Identificador único da categoria. Required: response.
     - *name (varchar(100)) (unique)*: Nome da categoria. Required: response.
-    - *description (text) (default '')*: Descrição adicional da categoria, se necessário. Required: response. Optional: create e update.
+    - *description (text) (nullable)*: Descrição adicional da categoria, se necessário. Required: response. Optional: create e update.
     - *user (Usuario) (fk)*: Tem um único usuário, dentre muitos (1:N). Required: create e response. Optional: update.
     - *status boolean (default=true)*: Indica se está ativo ou inativo. Optional: update. Required: response.
-    - *obs (text) (default '')*: Campo opcional para anotações ou comentários. Required: response. Optional: create e update.
+    - *obs (text) (nullable)*: Campo opcional para anotações ou comentários. Required: response. Optional: create e update.
     - *createdAt (DateTime) (default now)*: Data e hora em que o registro foi criado. Required: response.
     - *updatedAt (DateTime) (default now)*: Data e hora da última atualização do registro. Required: response.
 

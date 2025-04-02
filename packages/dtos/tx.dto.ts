@@ -11,6 +11,7 @@ export interface CreateTx {
   user: string;
   category: string; // Identificador de Cat
   obs?: string;
+  rdate?: Date;
 }
 
 export interface UpdateTx {
@@ -22,6 +23,7 @@ export interface UpdateTx {
   category?: string;
   obs?: string;
   status?: boolean;
+  rdate?: Date;
 }
 
 export interface TxProps {
@@ -33,6 +35,7 @@ export interface TxProps {
   category: CatProps;
   obs: string;
   status: boolean;
+  rdate?: Date;
   createdAt: Date;
   updatedAt: Date;
 }

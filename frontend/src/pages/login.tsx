@@ -73,7 +73,9 @@ function Login() {
             {...register('pwd')}
             variant="outlined"
             error={!!errors.pwd}
-            helperText={errors.pwd?.message}
+            helperText={errors.pwd?.message?.split("\n").map((line, index) => (
+              <div key={index}>{line}</div>
+            ))}
           />
           <Button type="submit" variant="contained" color="primary">
             Entrar

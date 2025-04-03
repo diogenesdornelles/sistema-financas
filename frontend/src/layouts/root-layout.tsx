@@ -5,10 +5,20 @@ import { Box } from '@mui/material';
 
 function RootLayout() {
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', minWidth: '100vw', overflow: 'hidden' }}>
-      <Nav/>
-      <Outlet />
-      <Footer/>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh', // Garante que o layout ocupe toda a altura da viewport
+        minWidth: '100vw',
+        overflow: 'hidden',
+      }}
+    >
+      <Nav />
+      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <Outlet />
+      </Box>
+      <Footer />
     </Box>
   );
 }

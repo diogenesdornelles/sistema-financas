@@ -4,8 +4,8 @@ import { Api } from "../api/api";
 
 export function useGetUser(id: string) {
   return useQuery({
-    queryFn: () => Api.getUser(id),
-    queryKey: ["useGetUser", id],
+    queryFn: () => Api.user.get(id),
+    queryKey: ["user", "get", id],
   });
 }
 

@@ -1,18 +1,32 @@
 import { Box, Tab, Tabs, Typography } from "@mui/material";
-import { useState } from "react";
-import {CreateTcfForm} from "../components/forms/tcf-forms";
+import { useEffect, useState } from "react";
+import { CreateTcfForm, UpdateTcfForm } from "../components/forms/tcf-forms";
+import TcfList from "../components/lists/tcf-list";
+import ManageArea from "../components/manage-area";
+import { TValue } from "../types/form-state";
+import { useFormStore } from "../hooks/use-form-store";
 
-type TValue = "cf" | "tcf" | "cr" | "tcr" | "cp" | "tcp" | "partner" | "tx" | "cat" | "user";
 
 function Manage() {
   const [value, setValue] = useState<TValue>("cf");
+  const { forms } = useFormStore();
+  const [forceRender, setForceRender] = useState(0);
+
+  useEffect(() => {
+    setForceRender((prev) => prev + 1);
+  }, [forms]);
 
   const renderContent = () => {
     switch (value) {
       case "cf":
-        return  <Typography>Conteúdo de Contas financeiras</Typography>;
+        return <Typography>Conteúdo de Contas financeiras</Typography>;
       case "tcf":
-        return <CreateTcfForm/>
+        return (
+          <ManageArea
+            Form={forms.tcf.type === "create" ? <CreateTcfForm /> : <UpdateTcfForm />}
+            List={<TcfList />}
+          />
+        );
       case "cr":
         return <Typography>Conteúdo de Contas a Receber</Typography>;
       case "tcr":
@@ -36,38 +50,40 @@ function Manage() {
 
   return (
     <Box
+      key={forceRender} // Força o re-render ao alterar o estado
       sx={{
         display: "flex",
         flex: 1,
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "flex-start",
+        marginTop: 2,
         height: "100%",
-        marginTop: 4,
       }}
     >
       <Tabs
         value={value}
-        onChange={(e, newValue) => setValue(newValue as TValue)} // Corrigido o evento onChange
+        onChange={(e, newValue) => setValue(newValue as TValue)}
         textColor="primary"
         variant="scrollable"
         scrollButtons={true}
         indicatorColor="primary"
         aria-label="Tabs de gerenciamento"
-        centered
       >
-        <Tab value="cf" label="Contas financeiras" sx={{fontWeight: 800}}/>
-        <Tab value="tcf" label="Tipos de conta financeira" sx={{fontWeight: 800}}/>
-        <Tab value="cr" label="Contas a receber" sx={{fontWeight: 800}}/>
-        <Tab value="tcr" label="Tipos de conta a receber" sx={{fontWeight: 800}}/>
-        <Tab value="cp" label="Contas a pagar" sx={{fontWeight: 800}}/>
-        <Tab value="tcp" label="Tipos de conta a pagar" sx={{fontWeight: 800}}/>
-        <Tab value="partner" label="Parceiros" sx={{fontWeight: 800}}/>
-        <Tab value="tx" label="Transações" sx={{fontWeight: 800}}/>
-        <Tab value="cat" label="Categorias" sx={{fontWeight: 800}}/>
-        <Tab value="user" label="Usuários" sx={{fontWeight: 800}}/>
+        <Tab value="cf" label="Contas financeiras" sx={{ fontWeight: 800 }} />
+        <Tab value="tcf" label="Tipos de conta financeira" sx={{ fontWeight: 800 }} />
+        <Tab value="cr" label="Contas a receber" sx={{ fontWeight: 800 }} />
+        <Tab value="tcr" label="Tipos de conta a receber" sx={{ fontWeight: 800 }} />
+        <Tab value="cp" label="Contas a pagar" sx={{ fontWeight: 800 }} />
+        <Tab value="tcp" label="Tipos de conta a pagar" sx={{ fontWeight: 800 }} />
+        <Tab value="partner" label="Parceiros" sx={{ fontWeight: 800 }} />
+        <Tab value="tx" label="Transações" sx={{ fontWeight: 800 }} />
+        <Tab value="cat" label="Categorias" sx={{ fontWeight: 800 }} />
+        <Tab value="user" label="Usuários" sx={{ fontWeight: 800 }} />
       </Tabs>
-      <Box sx={{ display: 'flex', flex: 1, marginTop: 4, width: "100%", height: '100%' }}>{renderContent()}</Box>
+      <Box sx={{ display: "flex", flex: 1, marginTop: 4, width: "100%", height: "100%" }}>
+        {renderContent()}
+      </Box>
     </Box>
   );
 }

@@ -1,5 +1,5 @@
 import { PropsWithChildren, useEffect, useState } from "react";
-import { AuthContext } from "./auth-context";
+import { AuthContext } from "../context/auth-context";
 import { useLoginMutation } from "../hooks/use-login-mutation";
 import { TokenProps} from '../../../packages/dtos/token.dto'
 

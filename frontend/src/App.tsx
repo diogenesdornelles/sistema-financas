@@ -3,14 +3,15 @@ import {
 } from '@tanstack/react-query'
 
 import './App.css'
-import { SessionProvider } from './context/session-provider'
+import { SessionProvider } from './providers/session-provider'
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import RootLayout from './layouts/root-layout';
 import Home from './pages/home';
 import Login from './pages/login';
 import { RequireAuth } from './components/require-auth';
 import { queryClient } from './utils/client';;
-import { ColorModeProvider } from './context/theme-contex';
+import { ColorModeProvider } from './providers/color-mode-provider';
+import Manage from './pages/manage'
 
 
 const router = createBrowserRouter([
@@ -29,10 +30,10 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/cadastrar",
+        path: "/gerenciar",
         element: (
           <RequireAuth>
-            <Home />
+            <Manage />
           </RequireAuth>
         ),
       },

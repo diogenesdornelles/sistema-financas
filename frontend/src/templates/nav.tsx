@@ -27,7 +27,7 @@ function Nav() {
 
     const navItems = [
         { label: 'Home', icon: <HomeIcon />, path: '/' },
-        { label: 'Cadastrar', icon: <AppRegistrationIcon />, path: '/cadastrar' },
+        { label: 'Gerenciar', icon: <AppRegistrationIcon />, path: '/gerenciar' },
         { label: 'Consultas', icon: <ManageSearchIcon />, path: '/consultas' },
         { label: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
     ];

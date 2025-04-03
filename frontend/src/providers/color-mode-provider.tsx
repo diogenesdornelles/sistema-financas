@@ -1,9 +1,9 @@
 // ThemeContext.jsx
-import { createContext, useState, useMemo, useEffect, ReactNode } from 'react';
+import { useState, useMemo, useEffect, ReactNode } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import { ColorModeContext } from '../context/color-mode-context';
 
-export const ColorModeContext = createContext({ toggleColorMode: () => {} });
 
 export const ColorModeProvider = ({ children }: {children: ReactNode}) => {
   // Carrega o modo inicial do localStorage, padrão é 'light'
@@ -25,15 +25,14 @@ export const ColorModeProvider = ({ children }: {children: ReactNode}) => {
     []
   );
 
-  const theme = useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode,
-        },
-      }),
-    [mode]
-  );
+  const theme = useMemo(() => {
+    // Cria o tema incrementalmente, preservando o padrão
+    return createTheme({
+      palette: {
+        mode,
+      },
+    });
+  }, [mode]);
 
   return (
     <ColorModeContext.Provider value={colorMode}>

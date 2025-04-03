@@ -8,7 +8,9 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
-import {createTokenSchema} from '../../../packages/validators/zod-schemas/create/create-token.validator'
+import { createTokenSchema } from '../../../packages/validators/zod-schemas/create/create-token.validator'
+import { useTheme } from '@mui/material/styles';
+
 
 
 type LoginFormData = z.infer<typeof createTokenSchema>;
@@ -16,6 +18,7 @@ type LoginFormData = z.infer<typeof createTokenSchema>;
 function Login() {
   const { logIn } = useAuth();
   const navigate = useNavigate();
+  const theme = useTheme()
   const [error, setError] = useState(false);
 
   const {
@@ -28,6 +31,7 @@ function Login() {
 
   const onSubmit = async (data: LoginFormData) => {
     const success = await logIn(data.cpf, data.pwd);
+    
     if (success) {
       navigate('/home');
     } else {
@@ -40,15 +44,28 @@ function Login() {
 
   return (
     <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      gap={2}
-      padding={4}
-      maxWidth={400}
-      borderRadius={5}
-      boxShadow="20px 20px 74px #d9d9d9, -20px -20px 74px #ffffff"
+    sx={{
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      flex: 1
+    }}
+    >
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 2,
+        padding: 4,
+        maxWidth: 400,
+        borderRadius: 5,
+        boxShadow: theme.shadows[24],
+        bgcolor: theme.palette.mode === 'light' ? theme.palette.common.white : theme.palette.common.black
+      }}
+
     >
       <h1>Login</h1>
 
@@ -82,6 +99,7 @@ function Login() {
           </Button>
         </Box>
       </form>
+    </Box>
     </Box>
   );
 }

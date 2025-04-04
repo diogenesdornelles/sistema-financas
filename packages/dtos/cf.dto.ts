@@ -16,7 +16,6 @@ export interface UpdateCf {
   // Todos opcionais na atualização
   number?: string;
   type?: string;
-  user?: string;
   balance?: number;
   ag?: string;
   bank?: string;

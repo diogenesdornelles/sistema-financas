@@ -19,8 +19,6 @@ export const updatePartnerSchema = z
         
         type: z.nativeEnum(PartnerType),
         status: z.boolean(),
-        user: z.string().uuid(),
-        
         obs: z
             .string()
             .max(255, "Observação pode ter no máximo 255 caracteres")

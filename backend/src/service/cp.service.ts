@@ -76,7 +76,6 @@ export class CpService extends BaseService<Cp, CpProps, CreateCp, UpdateCp> {
     try {
       const updateData: Partial<Cp> = {
         ...data,
-        user: data.user ? ({ id: data.user } as User) : undefined,
         type: data.type ? ({ id: data.type } as Tcp) : undefined,
         supplier: data.supplier
           ? ({ id: data.supplier } as Partner)

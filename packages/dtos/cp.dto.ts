@@ -23,7 +23,6 @@ export interface UpdateCp {
   due?: Date;
   pdate?: Date;
   obs?: string;
-  user?: string;
   status?: CPStatus;
   tx?: string;
 }

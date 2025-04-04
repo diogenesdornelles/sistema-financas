@@ -14,7 +14,6 @@ export interface UpdatePartner {
   name?: string;
   type?: PartnerType;
   cod?: string;
-  user?: string;
   obs?: string;
   status?: boolean;
 }

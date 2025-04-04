@@ -8,7 +8,6 @@ export interface CreateCat {
 export interface UpdateCat {
   name?: string;
   description?: string;
-  user?: string;
   obs?: string;
   status?: boolean;
 }

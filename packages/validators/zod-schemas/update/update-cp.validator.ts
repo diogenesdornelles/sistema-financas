@@ -10,5 +10,5 @@ export enum CPStatus {
 export const updateCpSchema = createCpSchema
   .extend({
     status: z.nativeEnum(CPStatus).optional(),
-  })
+  }).omit({user: true})
   .partial();

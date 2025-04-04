@@ -20,7 +20,6 @@ export interface UpdateCr {
   customer?: string;
   due?: Date;
   obs?: string;
-  user?: string;
   status?: PaymentStatus;
   tx?: string;
   rdate?: Date;

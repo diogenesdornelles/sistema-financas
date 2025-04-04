@@ -80,8 +80,7 @@ export class PartnerService extends BaseService<
   ): Promise<Partial<PartnerProps> | null> => {
     try {
       const updateData: Partial<Partner> = {
-        ...data,
-        user: data.user ? ({ id: data.user } as User) : undefined,
+        ...data
       };
 
       await this.repository.update({ id }, updateData);

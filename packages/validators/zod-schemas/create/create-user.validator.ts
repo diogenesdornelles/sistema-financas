@@ -21,19 +21,6 @@ export const createUserSchema = z
               Ao menos um caracter especial 
           `,
     }),
-    cpf: z.preprocess(
-      (cpf) => {
-        if (typeof cpf === "string") {
-          return cpf.replace(/\D/g, "");
-        }
-        return cpf;
-      },
-      z
-        .string()
-        .refine((val) => val.length === 11, {
-          message: "CPF deve conter 11 dígitos",
-        })
-        .refine(GeneralValidator.validateCpf, { message: "CPF inválido" }),
-    ),
-  })
-  .strict();
+    cpf: z.string()
+        .refine(GeneralValidator.validateCpf, { message: "CPF inválido" })
+      })

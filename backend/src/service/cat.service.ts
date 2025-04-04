@@ -70,8 +70,7 @@ export class CatService extends BaseService<
   ): Promise<Partial<CatProps> | null> => {
     try {
       const updateData: Partial<Cat> = {
-        ...data,
-        user: data.user ? ({ id: data.user } as User) : undefined,
+        ...data
       };
 
       await this.repository.update({ id }, updateData);

@@ -10,5 +10,5 @@ export enum PaymentStatus {
 export const updateCrSchema = createCrSchema
   .extend({
     status: z.nativeEnum(PaymentStatus).optional(),
-  })
+  }).omit({user: true})
   .partial();

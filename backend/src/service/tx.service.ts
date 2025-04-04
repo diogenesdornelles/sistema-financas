@@ -74,7 +74,6 @@ export class TxService extends BaseService<Tx, TxProps, CreateTx, UpdateTx> {
     try {
       const updateData: Partial<Tx> = {
         ...data,
-        user: data.user ? ({ id: data.user } as User) : undefined,
         category: data.category ? ({ id: data.category } as Cat) : undefined,
         cf: data.cf ? ({ id: data.cf } as Cf) : undefined,
       };

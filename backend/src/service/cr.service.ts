@@ -76,7 +76,6 @@ export class CrService extends BaseService<Cr, CrProps, CreateCr, UpdateCr> {
     try {
       const updateData: Partial<Cr> = {
         ...data,
-        user: data.user ? ({ id: data.user } as User) : undefined,
         type: data.type ? ({ id: data.type } as Tcr) : undefined,
         customer: data.customer
           ? ({ id: data.customer } as Partner)

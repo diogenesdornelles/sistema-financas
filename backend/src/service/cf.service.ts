@@ -72,7 +72,6 @@ export class CfService extends BaseService<Cf, CfProps, CreateCf, UpdateCf> {
     try {
       const updateData: Partial<Cf> = {
         ...data,
-        user: data.user ? ({ id: data.user } as User) : undefined,
         type: data.type ? ({ id: data.type } as Tcf) : undefined,
       };
 

@@ -19,7 +19,6 @@ export interface UpdateTx {
   type?: TransactionType;
   cf?: string;
   description?: string;
-  user?: string;
   category?: string;
   obs?: string;
   status?: boolean;

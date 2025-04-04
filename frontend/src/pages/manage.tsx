@@ -5,6 +5,14 @@ import TcfList from "../components/lists/tcf-list";
 import ManageArea from "../components/manage-area";
 import { TValue } from "../types/form-state";
 import { useFormStore } from "../hooks/use-form-store";
+import { CreateTcrForm, UpdateTcrForm } from "../components/forms/tcr-forms";
+import TcrList from "../components/lists/tcr-list";
+import { CreateTcpForm, UpdateTcpForm } from "../components/forms/tcp-forms";
+import TcpList from "../components/lists/tcp-list";
+import UserList from "../components/lists/user-list";
+import { CreateUserForm, UpdateUserForm } from "../components/forms/user-forms";
+import { CreatePartnerForm, UpdatePartnerForm } from "../components/forms/partner-forms";
+import PartnerList from "../components/lists/partner-list";
 
 
 function Manage() {
@@ -30,19 +38,39 @@ function Manage() {
       case "cr":
         return <Typography>Conteúdo de Contas a Receber</Typography>;
       case "tcr":
-        return <Typography>Conteúdo de Tipos de Conta a Receber</Typography>;
+        return (
+          <ManageArea
+            Form={forms.tcr.type === "create" ? <CreateTcrForm /> : <UpdateTcrForm />}
+            List={<TcrList />}
+          />
+        );
       case "cp":
         return <Typography>Conteúdo de Contas a Pagar</Typography>;
       case "tcp":
-        return <Typography>Conteúdo de Tipos de Conta a Pagar</Typography>;
+        return (
+          <ManageArea
+            Form={forms.tcp.type === "create" ? <CreateTcpForm /> : <UpdateTcpForm />}
+            List={<TcpList />}
+          />
+        );
       case "partner":
-        return <Typography>Conteúdo de Parceiros</Typography>;
+        return (
+          <ManageArea
+            Form={forms.partner.type === "create" ? <CreatePartnerForm /> : <UpdatePartnerForm />}
+            List={<PartnerList />}
+          />
+        );
       case "tx":
         return <Typography>Conteúdo de Transações</Typography>;
       case "cat":
         return <Typography>Conteúdo de Categorias</Typography>;
       case "user":
-        return <Typography>Conteúdo de Usuários</Typography>;
+        return (
+          <ManageArea
+            Form={forms.user.type === "create" ? <CreateUserForm /> : <UpdateUserForm />}
+            List={<UserList />}
+          />
+        );
       default:
         return <Typography>Selecione uma aba</Typography>;
     }
@@ -50,7 +78,7 @@ function Manage() {
 
   return (
     <Box
-      key={forceRender} // Força o re-render ao alterar o estado
+      key={forceRender}
       sx={{
         display: "flex",
         flex: 1,

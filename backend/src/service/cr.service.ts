@@ -82,7 +82,9 @@ export class CrService extends BaseService<Cr, CrProps, CreateCr, UpdateCr> {
           ? ({ id: data.customer } as Partner)
           : undefined,
         tx: data.tx ? ({ id: data.tx } as Tx) : undefined,
-        value: data.value ? parseFloat(data.value.replace(/\./g, "").replace(",", ".")) : undefined
+        value: data.value ? parseFloat(data.value.replace(/\./g, "").replace(",", ".")) : undefined,
+        due: data.due ? new Date(data.due) : undefined,
+        rdate: data.rdate ? new Date(data.rdate) : undefined
       };
 
       await this.repository.update({ id }, updateData);

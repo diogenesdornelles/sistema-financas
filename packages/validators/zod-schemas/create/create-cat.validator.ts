@@ -11,7 +11,7 @@ export const createCatSchema = z
       .string()
       .max(255, "Descrição pode ter no máximo 255 caracteres")
       .optional(),
-    user: z.string().uuid(),
+    user: z.string().uuid("Informar o usuário"),
     obs: z
       .string()
       .max(255, "Observação pode ter no máximo 255 caracteres")

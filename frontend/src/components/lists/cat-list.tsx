@@ -1,5 +1,5 @@
 import { JSX } from 'react';
-import { List, ListItem, IconButton, Box, Chip, Stack, Tooltip } from '@mui/material';
+import { List, ListItem, IconButton, Box, Chip, Tooltip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { CatProps } from '../../../../packages/dtos/cat.dto';
@@ -48,16 +48,13 @@ const CatList = (): JSX.Element | string => {
               background: `${i % 2 === 0 ? (theme.palette.mode === 'light' ? theme.palette.grey[50] : theme.palette.grey[900]) : (theme.palette.mode === 'light' ? theme.palette.common.white : theme.palette.common.black)}`
             }}
           >
-            <Box sx={{ display: 'flex', gap: 2, flexDirection: 'column' }}>
-              <Stack direction="row" spacing={1}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, flexWrap: 'wrap', alignItems: 'baseline' }}>
                 <Chip label={item.name} color="success" />
                 {item.description && (
                   <Tooltip title={item.description}>
                     <Chip label="Descrição" variant="outlined" size="small" />
                   </Tooltip>
                 )}
-              </Stack>
-              <Stack direction="row" spacing={1}>
                 <Chip
                   label={`Status: ${item.status ? 'Ativo' : 'Inativo'}`}
                   color={item.status ? 'primary' : 'error'}
@@ -76,11 +73,8 @@ const CatList = (): JSX.Element | string => {
                   variant="outlined"
                   size="small"
                 />
-              </Stack>
               {item.obs && (
-                <Stack direction="row" spacing={1}>
                   <Chip label={`Obs: ${item.obs}`} variant="outlined" size="small" />
-                </Stack>
               )}
             </Box>
             <Box sx={{ display: 'flex', gap: 1 }}>

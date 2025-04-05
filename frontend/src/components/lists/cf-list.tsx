@@ -1,5 +1,5 @@
 import { JSX } from 'react';
-import { List, ListItem, IconButton, Box, Chip, Stack } from '@mui/material';
+import { List, ListItem, IconButton, Box, Chip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { CfProps } from '../../../../packages/dtos/cf.dto';
@@ -56,36 +56,32 @@ const CfList = (): JSX.Element | string => {
             background: `${i % 2 === 0 ? (theme.palette.mode === 'light' ? theme.palette.grey[50] : theme.palette.grey[900]) : (theme.palette.mode === 'light' ? theme.palette.common.white : theme.palette.common.black)}`
           }}
         >
-          <Box sx={{ display: 'flex', gap: 2, flexDirection: 'column' }}>
-            <Stack direction="row" spacing={1}>
-              <Chip label={`Conta: ${item.number}`} color="success" />
-              <Chip label={`Ag: ${item.ag || '-'}`} variant="outlined" size="small" />
-              <Chip label={`Banco: ${item.bank || '-'}`} variant="outlined" size="small" />
-              <Chip
-                label={`Status: ${item.status ? 'Ativo' : 'Inativo'}`}
-                color={item.status ? 'primary' : 'error'}
-                variant="outlined"
-                size="small"
-              />
-            </Stack>
-            <Stack direction="row" spacing={1}>
-              <Chip label={`Tipo: ${item.type.name}`} variant="outlined" size="small" />
-              <Chip label={`Saldo: R$ ${strToPtBrMoney(String(item.balance))}`} variant="outlined" size="small" />
-              <Chip
-                label={`Criado em: ${new Date(item.createdAt).toLocaleDateString()}`}
-                variant="outlined"
-                size="small"
-              />
-              <Chip
-                label={`Atualizado em: ${new Date(item.updatedAt).toLocaleDateString()}`}
-                variant="outlined"
-                size="small"
-              />
-            </Stack>
+          <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, flexWrap: 'wrap', alignItems: 'baseline' }}>
+
+            <Chip label={`Conta: ${item.number}`} color="success" />
+            <Chip label={`Ag: ${item.ag || '-'}`} variant="outlined" size="small" />
+            <Chip label={`Banco: ${item.bank || '-'}`} variant="outlined" size="small" />
+            <Chip
+              label={`Status: ${item.status ? 'Ativo' : 'Inativo'}`}
+              color={item.status ? 'primary' : 'error'}
+              variant="outlined"
+              size="small"
+            />
+
+            <Chip label={`Tipo: ${item.type.name}`} variant="outlined" size="small" />
+            <Chip label={`Saldo: R$ ${strToPtBrMoney(String(item.balance))}`} variant="outlined" size="small" />
+            <Chip
+              label={`Criado em: ${new Date(item.createdAt).toLocaleDateString()}`}
+              variant="outlined"
+              size="small"
+            />
+            <Chip
+              label={`Atualizado em: ${new Date(item.updatedAt).toLocaleDateString()}`}
+              variant="outlined"
+              size="small"
+            />
             {item.obs && (
-              <Stack direction="row" spacing={1}>
-                <Chip label={`Obs: ${item.obs}`} variant="outlined" size="small" />
-              </Stack>
+              <Chip label={`Obs: ${item.obs}`} variant="outlined" size="small" />
             )}
           </Box>
           <Box sx={{ display: 'flex', gap: 1 }}>

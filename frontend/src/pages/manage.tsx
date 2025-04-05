@@ -17,6 +17,12 @@ import { CreateCatForm, UpdateCatForm } from "../components/forms/cat-forms";
 import CatList from "../components/lists/cat-list";
 import { CreateCfForm, UpdateCfForm } from "../components/forms/cf-forms";
 import CfList from "../components/lists/cf-list";
+import { CreateCpForm, UpdateCpForm } from "../components/forms/cp-forms";
+import CpList from "../components/lists/cp-list";
+import { CreateCrForm, UpdateCrForm } from "../components/forms/cr-forms";
+import CrList from "../components/lists/cr-list";
+import { CreateTxForm, UpdateTxForm } from "../components/forms/tx-forms";
+import TxList from "../components/lists/tx-list";
 
 
 function Manage() {
@@ -45,7 +51,12 @@ function Manage() {
           />
         );
       case "cr":
-        return <Typography>Conteúdo de Contas a Receber</Typography>;
+        return (
+          <ManageArea
+            Form={forms.cr.type === "create" ? <CreateCrForm /> : <UpdateCrForm />}
+            List={<CrList />}
+          />
+        );
       case "tcr":
         return (
           <ManageArea
@@ -54,7 +65,12 @@ function Manage() {
           />
         );
       case "cp":
-        return <Typography>Conteúdo de Contas a Pagar</Typography>;
+        return (
+          <ManageArea
+            Form={forms.cp.type === "create" ? <CreateCpForm /> : <UpdateCpForm />}
+            List={<CpList />}
+          />
+        );
       case "tcp":
         return (
           <ManageArea
@@ -70,7 +86,12 @@ function Manage() {
           />
         );
       case "tx":
-        return <Typography>Conteúdo de Transações</Typography>;
+        return (
+          <ManageArea
+            Form={forms.tx.type === "create" ? <CreateTxForm /> : <UpdateTxForm />}
+            List={<TxList />}
+          />
+        );
       case "cat":
         return (
           <ManageArea

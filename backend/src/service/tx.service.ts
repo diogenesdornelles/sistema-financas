@@ -77,7 +77,8 @@ export class TxService extends BaseService<Tx, TxProps, CreateTx, UpdateTx> {
         ...data,
         category: data.category ? ({ id: data.category } as Cat) : undefined,
         cf: data.cf ? ({ id: data.cf } as Cf) : undefined,
-        value: data.value ? parseFloat(data.value.replace(/\./g, "").replace(",", ".")) : undefined
+        value: data.value ? parseFloat(data.value.replace(/\./g, "").replace(",", ".")) : undefined,
+        tdate: data.tdate ? new Date(data.tdate) : undefined
       };
 
       await this.repository.update({ id }, updateData);

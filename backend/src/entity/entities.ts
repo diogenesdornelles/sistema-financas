@@ -128,7 +128,7 @@ export class Cp extends Base {
   @Column({ type: "date" })
   due!: Date; // Create: required; Update: no required; Response: required
 
-  @Column({ type: "date" })
+  @Column({ type: "date", nullable: true })
   pdate!: Date; // Create: no required; Update: no required; Response: no required
 
   @Column({ type: "text", nullable: true })
@@ -176,7 +176,7 @@ export class Cr extends Base {
   @Column({ type: "date" })
   due!: Date; // Create: required; Update: no required; Response: required
 
-  @Column({ type: "date" })
+  @Column({ type: "date", nullable: true })
   rdate!: Date; // Create: no required; Update: no required; Response: no required
 
   @Column({ type: "text", nullable: true })
@@ -249,8 +249,8 @@ export class Tx extends Base {
   @JoinColumn({ name: "cfId" })
   cf!: Cf; // Create: required; Update: no required; Response: required as Cf
 
-  @Column({ type: "text", nullable: true })
-  description!: string; // Create: no required; Update: no required; Response: required
+  @Column({ type: "varchar", length: 100 })
+  description!: string; // Create: required; Update: no required; Response: required
 
   @ManyToOne(() => User, (user) => user.txs)
   @JoinColumn({ name: "userId" })

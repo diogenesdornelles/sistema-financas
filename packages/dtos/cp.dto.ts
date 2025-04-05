@@ -6,25 +6,24 @@ import { CPStatus } from "./utils/enums";
 
 export interface CreateCp {
   // required na criação
-  value: string;
-  type: string; // Identificador de Tcp
-  supplier: string; // Identificador de Partner
-  due: Date;
-  pdate?: Date;
+  value: string; // monetário como string.
+  type: string; // Identificador de Tcp. É o UUID. Autocomplete input. 
+  supplier: string; // Identificador de Partner. È o UUID. Autocomplete input.
+  due: string; // data do vencimento
   obs?: string;
-  user: string;
-  tx?: string;
+  user: string; // é o UUID de user. Não precisa criar input. Será passado ao defaultValue do form
+  tx?: string; // é o UUID de de tx.id. Campo autocomplete. Deve mostrar tx.description para selação . 
 }
 
 export interface UpdateCp {
   value?: string;
   type?: string;
   supplier?: string;
-  due?: Date;
-  pdate?: Date;
+  due?: string;
+  pdate?: string;
   obs?: string;
   status?: CPStatus;
-  tx?: string;
+  tx?: string; 
 }
 
 export interface CpProps {

@@ -1,5 +1,5 @@
 import { JSX } from 'react';
-import { List, ListItem, IconButton, Box, Chip, Stack } from '@mui/material';
+import { List, ListItem, IconButton, Box, Chip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { CrProps } from '../../../../packages/dtos/cr.dto';
@@ -15,13 +15,16 @@ const CrList = (): JSX.Element | string => {
   const theme = useTheme()
 
   const onEdit = (item: CrProps) => {
+    console.log(item)
     setFormType("cr", "update");
     setUpdateItem("cr", {
         ...item,
         type: item.type.id,
         tx: item.tx ? item.tx.id : undefined,
         customer: item.customer.id,
-        value: String(item.value)
+        value: String(item.value),
+        rdate: String(item.rdate), // Formato yyyy-mm-dd
+        due: String(item.due), // Formato yyyy-mm-dd
     });
   };
 
@@ -70,32 +73,22 @@ const CrList = (): JSX.Element | string => {
             
           }}
         >
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <Stack direction="row" spacing={1}>
+          <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, flexWrap: 'wrap', alignItems: 'baseline' }}>
               <Chip label={`Valor: R$ ${item.value}`} variant="outlined" size="small" />
               <Chip label={`Tipo: ${item.type.name}`} variant="outlined" size="small" />
-            </Stack>
-            <Stack direction="row" spacing={1}>
               <Chip label={`Cliente: ${item.customer.name}`} variant="outlined" size="small" />
               <Chip label={`Vencimento: ${new Date(item.due).toLocaleDateString()}`} variant="outlined" size="small" />
               {item.rdate && (
                 <Chip label={`Recebido em: ${new Date(item.rdate).toLocaleDateString()}`} variant="outlined" size="small" />
               )}
-            </Stack>
-            <Stack direction="row" spacing={1}>
               <Chip label={`Status: ${getPaymentStatusText(item.status)}`} variant="outlined" size="small" />
               <Chip label={`Criado em: ${new Date(item.createdAt).toLocaleDateString()}`} variant="outlined" size="small" />
               <Chip label={`Atualizado em: ${new Date(item.updatedAt).toLocaleDateString()}`} variant="outlined" size="small" />
-            </Stack>
             {item.obs && (
-              <Stack direction="row" spacing={1}>
                 <Chip label={`Obs: ${item.obs}`} variant="outlined" size="small" />
-              </Stack>
             )}
             {item.tx && (
-              <Stack direction="row" spacing={1}>
                 <Chip label={`Transação: ${item.tx.id}`} variant="outlined" size="small" />
-              </Stack>
             )}
           </Box>
           <Box sx={{ display: 'flex', gap: 1 }}>

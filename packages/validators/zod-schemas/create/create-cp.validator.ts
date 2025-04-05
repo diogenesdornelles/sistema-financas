@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { dateSchemaMaj, dateSchemaMin } from "../../utils/date-schema";
 
 
 export const createCpSchema = z
@@ -17,12 +16,20 @@ export const createCpSchema = z
     }, {
       message: "O saldo deve estar no formato monetário brasileiro (ex.: 1.234,56)",
     }),
-    due: dateSchemaMaj,
-    pdate: dateSchemaMin,
-    type: z.string().uuid(),
-    user: z.string().uuid(),
-    supplier: z.string().uuid(),
-    tx: z.string().uuid().optional(),
+    due: z
+    .string()
+    .refine((date) => {
+      const dueDate = new Date(date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return dueDate >= today;
+    }, {
+      message: "A data de vencimento deve ser maior ou igual a data atual.",
+    }),
+    type: z.string().uuid("Informar o tipo"),
+    user: z.string().uuid("Informar o usuário"),
+    supplier: z.string().uuid("Informar o fornecedor"),
+    tx: z.string().uuid("Informar a transação").optional(),
     obs: z
       .string()
       .max(255, "Observação pode ter no máximo 255 caracteres")

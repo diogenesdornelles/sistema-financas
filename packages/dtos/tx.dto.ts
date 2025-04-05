@@ -6,12 +6,12 @@ import { TransactionType } from "./utils/enums";
 export interface CreateTx {
   value: string;
   type: TransactionType;
-  cf: string; // Identificador de Cf
-  description?: string;
-  user: string;
+  cf: string; // Identificador de Cf uuid
+  description: string; 
+  user: string; // uuid de user, não cria campo
   category: string; // Identificador de Cat
   obs?: string;
-  rdate?: Date;
+  tdate?: string; // data da transação
 }
 
 export interface UpdateTx {
@@ -22,7 +22,7 @@ export interface UpdateTx {
   category?: string;
   obs?: string;
   status?: boolean;
-  rdate?: Date;
+  tdate?: string;
 }
 
 export interface TxProps {
@@ -34,7 +34,7 @@ export interface TxProps {
   category: CatProps;
   obs: string;
   status: boolean;
-  rdate?: Date;
+  tdate?: Date;
   createdAt: Date;
   updatedAt: Date;
 }

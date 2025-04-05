@@ -1,5 +1,5 @@
 import { JSX } from 'react';
-import { List, ListItem, IconButton, Box, Chip, Stack } from '@mui/material';
+import { List, ListItem, IconButton, Box, Chip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { TxProps } from '../../../../packages/dtos/tx.dto';
@@ -15,10 +15,11 @@ const TxList = (): JSX.Element | string => {
   const onEdit = (item: TxProps) => {
     setFormType("tx", "update");
     setUpdateItem("tx", {
-        ...item,
-        cf: item.cf.id,
-        category: item.category.id,
-        value: String(item.value)
+      ...item,
+      cf: item.cf.id,
+      category: item.category.id,
+      value: String(item.value),
+      tdate: item.tdate ? item.tdate.toISOString() : '',
     });
   };
 
@@ -35,7 +36,7 @@ const TxList = (): JSX.Element | string => {
   };
 
   if (isPending) return 'Carregando...';
-   if (error) return <ErrorAlert message={error.message}/>
+  if (error) return <ErrorAlert message={error.message} />
 
   return (
     <List sx={{ flex: 1, height: '100%', width: '100%' }}>
@@ -49,63 +50,55 @@ const TxList = (): JSX.Element | string => {
             alignItems: 'center',
           }}
         >
-          <Box sx={{ display: 'flex', gap: 2, flexDirection: 'column' }}>
-            <Stack direction="row" spacing={1}>
-              <Chip 
-                label={`Conta: ${item.cf.id}`} 
-                variant="outlined" 
-                size="small" 
-              />
-              <Chip 
-                label={`Tipo: ${item.type === TransactionType.ENTRY ? 'Entrada' : 'Saída'}`} 
-                color={item.type === TransactionType.ENTRY ? "success" : "error"}
-                variant="outlined" 
-                size="small" 
-              />
-              <Chip 
-                label={`Valor: R$ ${item.value}`} 
-                variant="outlined" 
-                size="small" 
-              />
-            </Stack>
-            <Stack direction="row" spacing={1}>
-              <Chip 
-                label={`Categoria: ${item.category.name}`} 
-                variant="outlined" 
-                size="small" 
-              />
-              <Chip 
-                label={`Descrição: ${item.description}`} 
-                variant="outlined" 
-                size="small" 
-              />
-            </Stack>
-            <Stack direction="row" spacing={1}>
-              <Chip 
-                label={`Status: ${item.status ? 'Ativo' : 'Inativo'}`} 
-                color={item.status ? "primary" : "error"}
-                variant="outlined" 
-                size="small" 
-              />
-              <Chip 
-                label={`Criado em: ${new Date(item.createdAt).toLocaleDateString()}`} 
-                variant="outlined" 
-                size="small" 
-              />
-              <Chip 
-                label={`Atualizado em: ${new Date(item.updatedAt).toLocaleDateString()}`} 
-                variant="outlined" 
-                size="small" 
-              />
-            </Stack>
+          <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, flexWrap: 'wrap', alignItems: 'baseline' }}>
+            <Chip
+              label={`Conta: ${item.cf.id}`}
+              variant="outlined"
+              size="small"
+            />
+            <Chip
+              label={`Tipo: ${item.type === TransactionType.ENTRY ? 'Entrada' : 'Saída'}`}
+              color={item.type === TransactionType.ENTRY ? "success" : "error"}
+              variant="outlined"
+              size="small"
+            />
+            <Chip
+              label={`Valor: R$ ${item.value}`}
+              variant="outlined"
+              size="small"
+            />
+            <Chip
+              label={`Categoria: ${item.category.name}`}
+              variant="outlined"
+              size="small"
+            />
+            <Chip
+              label={`Descrição: ${item.description}`}
+              variant="outlined"
+              size="small"
+            />
+            <Chip
+              label={`Status: ${item.status ? 'Ativo' : 'Inativo'}`}
+              color={item.status ? "primary" : "error"}
+              variant="outlined"
+              size="small"
+            />
+            <Chip
+              label={`Criado em: ${new Date(item.createdAt).toLocaleDateString()}`}
+              variant="outlined"
+              size="small"
+            />
+            <Chip
+              label={`Atualizado em: ${new Date(item.updatedAt).toLocaleDateString()}`}
+              variant="outlined"
+              size="small"
+            />
             {item.obs && (
-              <Stack direction="row" spacing={1}>
-                <Chip 
-                  label={`Obs: ${item.obs}`} 
-                  variant="outlined" 
-                  size="small" 
-                />
-              </Stack>
+              <Chip
+                label={`Obs: ${item.obs}`}
+                variant="outlined"
+                size="small"
+              />
             )}
           </Box>
           <Box sx={{ display: 'flex', gap: 1 }}>

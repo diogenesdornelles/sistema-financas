@@ -27,8 +27,8 @@ export const createCfSchema = z
       }, {
         message: "O saldo deve estar no formato monetário brasileiro (ex.: 1.234,56)",
       }),
-    type: z.string().uuid(),
-    user: z.string().uuid(),
+    type: z.string().uuid("Informar o tipo"),
+    user: z.string().uuid("Informar o usuário"),
     obs: z
       .string()
       .max(255, "Observação pode ter no máximo 255 caracteres")

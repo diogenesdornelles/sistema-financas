@@ -82,7 +82,9 @@ export class CpService extends BaseService<Cp, CpProps, CreateCp, UpdateCp> {
           ? ({ id: data.supplier } as Partner)
           : undefined,
         tx: data.tx ? ({ id: data.tx } as Tx) : undefined,
-        value: data.value ? parseFloat(data.value.replace(/\./g, "").replace(",", ".")) : undefined
+        value: data.value ? parseFloat(data.value.replace(/\./g, "").replace(",", ".")) : undefined,
+        due: data.due ? new Date(data.due) : undefined,
+        pdate: data.pdate ? new Date(data.pdate) : undefined
       };
 
       await this.repository.update({ id }, updateData);

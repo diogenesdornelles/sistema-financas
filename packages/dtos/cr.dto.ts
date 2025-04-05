@@ -4,25 +4,24 @@ import { TxProps } from "./tx.dto";
 import { PaymentStatus } from "./utils/enums";
 
 export interface CreateCr {
-  value: string;
+  value: string; // campo text com valor monetário
   type: string; // Identificador de Tcr
   customer: string; // Identificador de Partner
-  due: Date;
-  rdate?: Date;
+  due: string; // input date
   obs?: string;
-  user: string;
-  tx?: string;
+  user: string; // não deve ser inserido
+  tx?: string; // input autocomplete com uuid
 }
 
 export interface UpdateCr {
   value?: string;
   type?: string;
   customer?: string;
-  due?: Date;
+  due?: string;
   obs?: string;
   status?: PaymentStatus;
   tx?: string;
-  rdate?: Date;
+  rdate?: string;
 }
 
 export interface CrProps {

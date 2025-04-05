@@ -1,5 +1,5 @@
 import { JSX } from 'react';
-import { List, ListItem, IconButton, Box, Chip, Stack } from '@mui/material';
+import { List, ListItem, IconButton, Box, Chip} from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { TcrProps } from '../../../../packages/dtos/tcr.dto';
@@ -51,11 +51,8 @@ const TcrList = (): JSX.Element | string => {
                 
               }}
             >
-              <Box sx={{ display: 'flex', gap: 2, flexDirection: 'column' }}>
-                <Stack direction="row" spacing={1}>
+              <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, flexWrap: 'wrap', alignItems: 'baseline' }}>
                   <Chip label={item.name} color="success" />
-                </Stack>
-                <Stack direction="row" spacing={1}>
                   <Chip
                     label={`Status: ${item.status ? 'Ativo' : 'Inativo'}`}
                     color={item.status ? 'primary' : 'error'}
@@ -74,7 +71,6 @@ const TcrList = (): JSX.Element | string => {
                     variant="outlined"
                     size="small"
                   />
-                </Stack>
               </Box>
               <Box sx={{ display: 'flex', gap: 1 }}>
                 <IconButton

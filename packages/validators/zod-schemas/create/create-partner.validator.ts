@@ -23,7 +23,7 @@ export const createPartnerSchema = z
         
         type: z.nativeEnum(PartnerType),
         
-        user: z.string().uuid(),
+        user: z.string().uuid("Informar o usuário"),
         
         obs: z
             .string()

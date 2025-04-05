@@ -23,17 +23,25 @@ export const createTxSchema = z
       message: "O saldo deve estar no formato monetário brasileiro (ex.: 1.234,56)",
     }),
     type: z.nativeEnum(TransactionType),
-    user: z.string().uuid(),
-    cf: z.string().uuid(),
-    category: z.string().uuid(),
-    tdate: dateSchemaMin,
+    user: z.string().uuid("Informar o usuário"),
+    cf: z.string().uuid("Informar a conta financeira"),
+    category: z.string().uuid("Informar a categoria"),
+    tdate: z
+    .string()
+    .refine((date) => {
+      const paymentDate = new Date(date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return paymentDate <= today;
+    }, {
+      message: "A data de transação deve ser menor ou igual a data atual.",
+    }),
     obs: z
       .string()
       .max(255, "Observação pode ter no máximo 255 caracteres")
       .optional(),
     description: z
     .string()
-    .max(255, "Descrição pode ter no máximo 255 caracteres")
-    .optional(),
+    .max(100, "Descrição pode ter no máximo 100 caracteres")
   })
   .strict();

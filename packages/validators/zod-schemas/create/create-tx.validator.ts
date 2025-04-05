@@ -1,5 +1,4 @@
 import { z } from "zod";
-import GeneralValidator from "../../general.validator";
 import { dateSchemaMin } from "../../utils/date-schema";
 
 
@@ -10,8 +9,18 @@ export enum TransactionType {
 
 export const createTxSchema = z
   .object({
-    value: z.number().refine(GeneralValidator.validateMoney, {
-      message: "Não possui o formato de dinheiro",
+    value: z.string().min(4, "Precisa ter tamanho mínimo 4").regex(/^\d{1,3}(\.\d{3})*(,\d{2})?$/, "Precisa ter formato dinheiro")
+    .refine((valor) => {
+      if (typeof valor !== "string") return false;
+
+      // Remove pontos e substitui vírgula por ponto
+      const normalizado = valor.replace(/\./g, "").replace(",", ".");
+      const convertido = parseFloat(normalizado);
+
+      // Verifica se é um número válido e maior que zero
+      return !isNaN(convertido) && convertido > 0;
+    }, {
+      message: "O saldo deve estar no formato monetário brasileiro (ex.: 1.234,56)",
     }),
     type: z.nativeEnum(TransactionType),
     user: z.string().uuid(),

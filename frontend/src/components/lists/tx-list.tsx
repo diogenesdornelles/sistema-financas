@@ -6,6 +6,7 @@ import { TxProps } from '../../../../packages/dtos/tx.dto';
 import { useGetAllTx, useDeleteTx } from '../../hooks/use-tx';
 import { useFormStore } from '../../hooks/use-form-store';
 import { TransactionType } from '../../../../packages/dtos/utils/enums';
+import ErrorAlert from '../alerts/error-alert';
 
 const TxList = (): JSX.Element | string => {
   const { isPending, error, data } = useGetAllTx();
@@ -16,7 +17,8 @@ const TxList = (): JSX.Element | string => {
     setUpdateItem("tx", {
         ...item,
         cf: item.cf.id,
-        category: item.category.id
+        category: item.category.id,
+        value: String(item.value)
     });
   };
 
@@ -33,7 +35,7 @@ const TxList = (): JSX.Element | string => {
   };
 
   if (isPending) return 'Carregando...';
-  if (error) return 'Ocorreu um erro: ' + error.message;
+   if (error) return <ErrorAlert message={error.message}/>
 
   return (
     <List sx={{ flex: 1, height: '100%', width: '100%' }}>

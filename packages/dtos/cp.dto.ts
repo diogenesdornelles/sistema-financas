@@ -6,7 +6,7 @@ import { CPStatus } from "./utils/enums";
 
 export interface CreateCp {
   // required na criação
-  value: number;
+  value: string;
   type: string; // Identificador de Tcp
   supplier: string; // Identificador de Partner
   due: Date;
@@ -17,7 +17,7 @@ export interface CreateCp {
 }
 
 export interface UpdateCp {
-  value?: number;
+  value?: string;
   type?: string;
   supplier?: string;
   due?: Date;

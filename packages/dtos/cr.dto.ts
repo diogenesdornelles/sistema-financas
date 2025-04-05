@@ -4,7 +4,7 @@ import { TxProps } from "./tx.dto";
 import { PaymentStatus } from "./utils/enums";
 
 export interface CreateCr {
-  value: number;
+  value: string;
   type: string; // Identificador de Tcr
   customer: string; // Identificador de Partner
   due: Date;
@@ -15,7 +15,7 @@ export interface CreateCr {
 }
 
 export interface UpdateCr {
-  value?: number;
+  value?: string;
   type?: string;
   customer?: string;
   due?: Date;

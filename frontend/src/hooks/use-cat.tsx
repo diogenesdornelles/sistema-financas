@@ -8,7 +8,7 @@ export function useGetAllCat() {
     // Chama a função da API para buscar todos os 'cats'
     queryFn: () => Api.cat.getAll(), 
     // Chave de query para identificar esta busca
-    queryKey: ["cat", "getAll"], 
+    queryKey: ["cat", "getAll"],
   });
 }
 

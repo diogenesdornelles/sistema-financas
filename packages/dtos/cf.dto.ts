@@ -3,10 +3,10 @@ import { TcfProps } from "./tcf.dto";
 export interface CreateCf {
   // required na criação
   number: string;
-  type: string; // Identificador de Tcf
-  user: string; // Identificador de User
+  type: string; // Identificador de Tcf. Um UUID. Deve haver um input autocomplete com dados de Tcf da API. Mostrar nome Tcf para colher o id na seleção.
+  user: string; // Identificador de User, um UUID, vem se session, não precisa inserir no formulário.
   // Opcional: balance (default 0.0), ag, bank, obs e status (default true)
-  balance?: number;
+  balance?: string;
   ag?: string;
   bank?: string;
   obs?: string;
@@ -16,7 +16,7 @@ export interface UpdateCf {
   // Todos opcionais na atualização
   number?: string;
   type?: string;
-  balance?: number;
+  balance?: string;
   ag?: string;
   bank?: string;
   obs?: string;

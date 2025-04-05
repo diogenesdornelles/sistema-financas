@@ -12,7 +12,7 @@ export const updatePartnerSchema = z
         
         cod: z
             .string()
-            .regex(/^\d+$/, "Código deve conter apenas números")
+            .transform((str) => str.replace(/\D/g, ""))
             .refine((cod) => cod.length === 11 || cod.length === 14, {
                 message: "Código deve ter 11 dígitos (CPF) ou 14 dígitos (CNPJ)",
             }),

@@ -5,19 +5,19 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
-import { useTheme } from '@mui/material/styles';
-import { Checkbox, FormControlLabel } from '@mui/material';
+import { Checkbox, FormControlLabel, Typography } from '@mui/material';
 import { createTcpSchema } from '../../../../packages/validators/zod-schemas/create/create-tcp.validator';
 import { updateTcpSchema } from '../../../../packages/validators/zod-schemas/update/update-tcp.validator';
 import { usePostTcp, usePutTcp } from '../../hooks/use-tcp';
 import { JSX } from 'react';
 import { useFormStore } from '../../hooks/use-form-store';
+import FormContainer from './templates/form-container';
+import ButtonUpdateForm from './templates/button-update-form';
 
 type CreateTcpFormData = z.infer<typeof createTcpSchema>;
 type UpdateTcpFormData = z.infer<typeof updateTcpSchema>;
 
 export function CreateTcpForm(): JSX.Element | null {
-    const theme = useTheme();
     const mutation = usePostTcp();
     const { forms } = useFormStore();
 
@@ -27,6 +27,9 @@ export function CreateTcpForm(): JSX.Element | null {
         formState: { errors },
     } = useForm<CreateTcpFormData>({
         resolver: zodResolver(createTcpSchema),
+        defaultValues: {
+            name: ''
+          }
     });
 
     // Exibe o formulário de criação somente se o modo não for 'update'
@@ -36,73 +39,49 @@ export function CreateTcpForm(): JSX.Element | null {
         try {
             await mutation.mutateAsync(data);
         } catch (err) {
-            console.error("Erro ao criar TCP:", err);
+            console.error("Erro ao criar Tipo de conta:", err);
         }
     };
 
     return (
-        <Box
-            sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: 3,
-                minHeight: 500,
-            }}
-        >
-            <Box
-                sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 2,
-                    padding: 4,
-                    maxWidth: 400,
-                    borderRadius: 1,
-                    boxShadow: theme.shadows[24],
-                    bgcolor: theme.palette.mode === "light" ? theme.palette.common.white : theme.palette.common.black,
-                }}
-            >
-                <h1>Novo TCP</h1>
+        <FormContainer>
+            <Typography variant="h4">Novo Tipo de conta a pagar</Typography>
+            {mutation.isSuccess && (
+                <Alert severity="success" style={{ width: "100%" }}>
+                    Tipo de conta a paga criado com sucesso!
+                </Alert>
+            )}
 
-                {mutation.isSuccess && (
-                    <Alert severity="success" style={{ width: "100%" }}>
-                        TCP criado com sucesso!
-                    </Alert>
-                )}
+            {mutation.isError && (
+                <Alert severity="error" style={{ width: "100%" }}>
+                    Ocorreu um erro ao criar o Tipo de conta a paga. Tente novamente.
+                </Alert>
+            )}
 
-                {mutation.isError && (
-                    <Alert severity="error" style={{ width: "100%" }}>
-                        Ocorreu um erro ao criar o TCP. Tente novamente.
-                    </Alert>
-                )}
-
-                <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                        <TextField
-                            label="Nome"
-                            {...register("name")}
-                            variant="outlined"
-                            error={!!errors.name}
-                            helperText={errors.name?.message}
-                        />
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            color="primary"
-                            disabled={mutation.isPending}
-                        >
-                            {mutation.isPending ? "Enviando..." : "Criar TCP"}
-                        </Button>
-                    </Box>
-                </form>
-            </Box>
-        </Box>
+            <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                    <TextField
+                        label="Nome"
+                        {...register("name")}
+                        variant="outlined"
+                        error={!!errors.name}
+                        helperText={errors.name?.message}
+                    />
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        disabled={mutation.isPending}
+                    >
+                        {mutation.isPending ? "Enviando..." : "Criar Tipo"}
+                    </Button>
+                </Box>
+            </form>
+        </FormContainer>
     );
 }
 
 export function UpdateTcpForm(): JSX.Element | null {
-    const theme = useTheme();
     const mutation = usePutTcp();
     const { forms } = useFormStore();
 
@@ -122,7 +101,7 @@ export function UpdateTcpForm(): JSX.Element | null {
         try {
             await mutation.mutateAsync(data);
         } catch (err) {
-            console.error("Erro ao atualizar o TCP:", err);
+            console.error("Erro ao atualizar o Tipo de conta a paga:", err);
         }
     };
 
@@ -130,68 +109,46 @@ export function UpdateTcpForm(): JSX.Element | null {
     if (forms.tcp.type === 'create' || !forms.tcp.updateItem) return null;
 
     return (
-        <Box
-            sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: 3,
-                minHeight: 500,
-            }}
-        >
-            <Box
-                sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 2,
-                    padding: 4,
-                    maxWidth: 400,
-                    borderRadius: 1,
-                    boxShadow: theme.shadows[24],
-                    bgcolor: theme.palette.mode === "light" ? theme.palette.common.white : theme.palette.common.black,
-                }}
-            >
-                <h1>Atualizar TCP</h1>
+        <FormContainer>
+            <ButtonUpdateForm title="Atualizar Tipo de conta a paga" name='tcp'/>
 
-                {mutation.isSuccess && (
-                    <Alert severity="success" style={{ width: "100%" }}>
-                        TCP atualizado com sucesso!
-                    </Alert>
-                )}
+            {mutation.isSuccess && (
+                <Alert severity="success" style={{ width: "100%" }}>
+                    Tipo de conta a paga atualizado com sucesso!
+                </Alert>
+            )}
 
-                {mutation.isError && (
-                    <Alert severity="error" style={{ width: "100%" }}>
-                        Ocorreu um erro ao atualizar o TCP. Tente novamente.
-                    </Alert>
-                )}
+            {mutation.isError && (
+                <Alert severity="error" style={{ width: "100%" }}>
+                    Ocorreu um erro ao atualizar o Tipo de conta a paga. Tente novamente.
+                </Alert>
+            )}
 
-                <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                        <TextField
-                            label="Nome"
-                            {...register("name")}
-                            variant="outlined"
-                            error={!!errors.name}
-                            helperText={errors.name?.message}
-                        />
+            <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                    <TextField
+                        label="Nome"
+                        {...register("name")}
+                        variant="outlined"
+                        error={!!errors.name}
+                        helperText={errors.name?.message}
+                    />
 
-                        <FormControlLabel
-                            control={<Checkbox {...register("status")} />}
-                            label={`Status: ${statusValue ? "Ativo" : "Inativo"}`}
-                        />
+                    <FormControlLabel
+                        control={<Checkbox {...register("status")} />}
+                        label={`Status: ${statusValue ? "Ativo" : "Inativo"}`}
+                    />
 
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            color="primary"
-                            disabled={mutation.isPending}
-                        >
-                            {mutation.isPending ? "Atualizando..." : "Atualizar TCP"}
-                        </Button>
-                    </Box>
-                </form>
-            </Box>
-        </Box>
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        disabled={mutation.isPending}
+                    >
+                        {mutation.isPending ? "Atualizando..." : "Atualizar Tipo"}
+                    </Button>
+                </Box>
+            </form>
+        </FormContainer>
     );
 }

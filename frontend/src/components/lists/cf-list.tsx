@@ -5,19 +5,25 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { CfProps } from '../../../../packages/dtos/cf.dto';
 import { useGetAllCf, useDeleteCf } from '../../hooks/use-cf';
 import { useFormStore } from '../../hooks/use-form-store';
+import ErrorAlert from '../alerts/error-alert';
+import { useTheme } from '@mui/material/styles'
+import { strToPtBrMoney } from '../../utils/strToPtBrMoney';
+
 
 const CfList = (): JSX.Element | string => {
   const { isPending, error, data } = useGetAllCf();
   const { setFormType, setUpdateItem } = useFormStore();
+  const theme = useTheme()
 
   const onEdit = (item: CfProps) => {
     setFormType("cf", "update");
     setUpdateItem("cf", {
-        ...item,
-        type: item.type.id,
-        ag: item.ag ? item.ag : undefined,
-        bank: item.bank ? item.bank : undefined,
-        obs: item.obs ? item.obs : undefined,
+      ...item,
+      type: item.type.id,
+      ag: item.ag ? item.ag : undefined,
+      bank: item.bank ? item.bank : undefined,
+      obs: item.obs ? item.obs : undefined,
+      balance: strToPtBrMoney(String(item.balance))
     });
   };
 
@@ -34,27 +40,25 @@ const CfList = (): JSX.Element | string => {
   };
 
   if (isPending) return 'Carregando...';
-  if (error) return 'Ocorreu um erro: ' + error.message;
+  if (error) return <ErrorAlert message={error.message} />
 
   return (
     <List sx={{ flex: 1, height: '100%', width: '100%' }}>
-      {data && data.map((item: CfProps) => (
+      {data && data.map((item: CfProps, i: number) => (
         <ListItem
           key={item.id}
           divider
           sx={{
             display: 'flex',
+            padding: 2,
             justifyContent: 'space-between',
             alignItems: 'center',
+            background: `${i % 2 === 0 ? (theme.palette.mode === 'light' ? theme.palette.grey[50] : theme.palette.grey[900]) : (theme.palette.mode === 'light' ? theme.palette.common.white : theme.palette.common.black)}`
           }}
         >
           <Box sx={{ display: 'flex', gap: 2, flexDirection: 'column' }}>
             <Stack direction="row" spacing={1}>
               <Chip label={`Conta: ${item.number}`} color="success" />
-              <Chip label={`Tipo: ${item.type.name}`} variant="outlined" size="small" />
-              <Chip label={`Saldo: ${item.balance}`} variant="outlined" size="small" />
-            </Stack>
-            <Stack direction="row" spacing={1}>
               <Chip label={`Ag: ${item.ag || '-'}`} variant="outlined" size="small" />
               <Chip label={`Banco: ${item.bank || '-'}`} variant="outlined" size="small" />
               <Chip
@@ -65,6 +69,8 @@ const CfList = (): JSX.Element | string => {
               />
             </Stack>
             <Stack direction="row" spacing={1}>
+              <Chip label={`Tipo: ${item.type.name}`} variant="outlined" size="small" />
+              <Chip label={`Saldo: R$ ${strToPtBrMoney(String(item.balance))}`} variant="outlined" size="small" />
               <Chip
                 label={`Criado em: ${new Date(item.createdAt).toLocaleDateString()}`}
                 variant="outlined"

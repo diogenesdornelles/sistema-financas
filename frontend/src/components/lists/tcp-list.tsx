@@ -5,10 +5,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { TcpProps } from '../../../../packages/dtos/tcp.dto';
 import { useGetAllTcp, useDeleteTcp } from '../../hooks/use-tcp';
 import { useFormStore } from '../../hooks/use-form-store';
+import ErrorAlert from '../alerts/error-alert';
+import { useTheme } from '@mui/material/styles'
 
 const TcpList = (): JSX.Element | string => {
   const { isPending, error, data } = useGetAllTcp();
   const { setFormType, setUpdateItem } = useFormStore();
+  const theme = useTheme()
 
   const onEdit = (item: TcpProps) => {
     setFormType("tcp", "update");
@@ -29,20 +32,23 @@ const TcpList = (): JSX.Element | string => {
 
   if (isPending) return 'Carregando...';
 
-  if (error) return 'Ocorreu um erro: ' + error.message;
+   if (error) return <ErrorAlert message={error.message}/>
 
   return (
     <>
       <List sx={{ flex: 1, height: '100%', width: '100%' }}>
         {data &&
-          data.map((item) => (
+          data.map((item: TcpProps, i: number) => (
             <ListItem
               key={item.id}
               divider
               sx={{
                 display: 'flex',
+                padding: 2,
                 justifyContent: 'space-between',
                 alignItems: 'center',
+                background: `${i % 2 === 0 ? (theme.palette.mode === 'light' ? theme.palette.grey[50] : theme.palette.grey[900]) : (theme.palette.mode === 'light' ? theme.palette.common.white : theme.palette.common.black)}`
+                
               }}
             >
               <Box sx={{ display: 'flex', gap: 2, flexDirection: 'column' }}>

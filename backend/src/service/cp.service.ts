@@ -50,6 +50,7 @@ export class CpService extends BaseService<Cp, CpProps, CreateCp, UpdateCp> {
         type: { id: data.type } as Tcp,
         supplier: { id: data.supplier } as Partner,
         tx: { id: data.tx } as Tx,
+        value: data.value ? parseFloat(data.value.replace(/\./g, "").replace(",", ".")) : undefined
       });
 
       const createdCp = await this.repository.save(newCp);
@@ -81,6 +82,7 @@ export class CpService extends BaseService<Cp, CpProps, CreateCp, UpdateCp> {
           ? ({ id: data.supplier } as Partner)
           : undefined,
         tx: data.tx ? ({ id: data.tx } as Tx) : undefined,
+        value: data.value ? parseFloat(data.value.replace(/\./g, "").replace(",", ".")) : undefined
       };
 
       await this.repository.update({ id }, updateData);

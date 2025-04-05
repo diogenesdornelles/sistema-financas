@@ -50,6 +50,7 @@ export class CrService extends BaseService<Cr, CrProps, CreateCr, UpdateCr> {
         type: { id: data.type } as Tcr,
         customer: { id: data.customer } as Partner,
         tx: { id: data.tx } as Tx,
+        value: data.value ? parseFloat(data.value.replace(/\./g, "").replace(",", ".")) : undefined
       });
 
       const createdCr = await this.repository.save(newCr);
@@ -81,6 +82,7 @@ export class CrService extends BaseService<Cr, CrProps, CreateCr, UpdateCr> {
           ? ({ id: data.customer } as Partner)
           : undefined,
         tx: data.tx ? ({ id: data.tx } as Tx) : undefined,
+        value: data.value ? parseFloat(data.value.replace(/\./g, "").replace(",", ".")) : undefined
       };
 
       await this.repository.update({ id }, updateData);

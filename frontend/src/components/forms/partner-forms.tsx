@@ -1,136 +1,120 @@
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useTheme } from '@mui/material/styles';
-import { TextField, Button, Box, Alert, Select, MenuItem, InputLabel, FormControl, Checkbox, FormControlLabel } from '@mui/material';
+import { TextField, Button, Box, Alert, Select, MenuItem, InputLabel, FormControl, Checkbox, FormControlLabel, Typography } from '@mui/material';
 import { JSX } from 'react';
 import { useFormStore } from '../../hooks/use-form-store';
 import { createPartnerSchema } from '../../../../packages/validators/zod-schemas/create/create-partner.validator';
 import { updatePartnerSchema } from '../../../../packages/validators/zod-schemas/update/update-partner.validator';
 import { usePostPartner, usePutPartner } from '../../hooks/use-partner';
 import { useAuth } from '../../hooks/use-auth';
-
+import FormContainer from './templates/form-container';
+import ButtonUpdateForm from './templates/button-update-form';
 
 type CreatePartnerFormData = z.infer<typeof createPartnerSchema>;
 type UpdatePartnerFormData = z.infer<typeof updatePartnerSchema>;
 
 
 export function CreatePartnerForm(): JSX.Element | null {
-    const theme = useTheme();
     const mutation = usePostPartner();
     const { forms } = useFormStore();
     const { session } = useAuth()
 
     const { register, handleSubmit, formState: { errors } } = useForm<CreatePartnerFormData>({
         resolver: zodResolver(createPartnerSchema),
+        defaultValues: {
+            name: '',
+            cod: '',
+            user: session ? session?.user.id : '',
+            obs: undefined,
+            type: undefined
+        }
+        
     });
 
     const onSubmit = async (data: CreatePartnerFormData) => {
         try {
             await mutation.mutateAsync({ ...data, user: session ? session?.user.id : '' });
         } catch (err) {
-            console.error("Erro ao criar Partner:", err);
+            console.error("Erro ao criar parceiro:", err);
         }
     };
 
     if (forms.partner.type === 'update') return null;
 
     return (
-        <Box
-            sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: 3,
-                minHeight: 500,
-            }}
-        >
-            <Box
-                sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 2,
-                    padding: 4,
-                    maxWidth: 400,
-                    borderRadius: 1,
-                    boxShadow: theme.shadows[24],
-                    bgcolor: theme.palette.mode === "light" ? theme.palette.common.white : theme.palette.common.black,
-                }}
-            >
-                <h1>Novo Partner</h1>
+        <FormContainer>
+            <Typography variant="h4">Novo Parceiro</Typography>
 
-                {mutation.isSuccess && (
-                    <Alert severity="success" style={{ width: "100%" }}>
-                        Partner criado com sucesso!
-                    </Alert>
-                )}
+            {mutation.isSuccess && (
+                <Alert severity="success" style={{ width: "100%" }}>
+                    Parceiro criado com sucesso!
+                </Alert>
+            )}
 
-                {mutation.isError && (
-                    <Alert severity="error" style={{ width: "100%" }}>
-                        Ocorreu um erro ao criar o Partner. Tente novamente.
-                    </Alert>
-                )}
+            {mutation.isError && (
+                <Alert severity="error" style={{ width: "100%" }}>
+                    Ocorreu um erro ao criar o Parceiro. Tente novamente.
+                </Alert>
+            )}
 
-                <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                        <TextField
-                            label="Nome"
-                            {...register("name")}
-                            variant="outlined"
-                            error={!!errors.name}
-                            helperText={errors.name?.message}
-                        />
+            <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                    <TextField
+                        label="Nome"
+                        {...register("name")}
+                        variant="outlined"
+                        error={!!errors.name}
+                        helperText={errors.name?.message}
+                    />
 
-                        <FormControl variant="outlined" error={!!errors.type}>
-                            <InputLabel id="partner-type-label">Tipo</InputLabel>
-                            <Select
-                                labelId="partner-type-label"
-                                label="Tipo"
-                                defaultValue=""
-                                {...register("type")}
-                            >
-                                <MenuItem value="PF">PF</MenuItem>
-                                <MenuItem value="PJ">PJ</MenuItem>
-                            </Select>
-                            {errors.type && (
-                                <p style={{ color: '#d32f2f', fontSize: '0.75rem', margin: '3px 14px 0' }}>
-                                    {errors.type.message}
-                                </p>
-                            )}
-                        </FormControl>
+                    <FormControl variant="outlined" error={!!errors.type}>
+                        <InputLabel id="partner-type-label">Tipo</InputLabel>
+                        <Select
+                            labelId="partner-type-label"
+                            label="Tipo"
+                            defaultValue=""
+                            {...register("type")}
+                        >
+                            <MenuItem value="PF">PF</MenuItem>
+                            <MenuItem value="PJ">PJ</MenuItem>
+                        </Select>
+                        {errors.type && (
+                            <p style={{ color: '#d32f2f', fontSize: '0.75rem', margin: '3px 14px 0' }}>
+                                {errors.type.message}
+                            </p>
+                        )}
+                    </FormControl>
 
-                        <TextField
-                            label="Código (CPF/CNPJ)"
-                            {...register("cod")}
-                            variant="outlined"
-                            error={!!errors.cod}
-                            helperText={errors.cod?.message}
-                        />
+                    <TextField
+                        label="Código (CPF/CNPJ)"
+                        {...register("cod")}
+                        variant="outlined"
+                        error={!!errors.cod}
+                        helperText={errors.cod?.message}
+                    />
 
-                        <TextField
-                            label="Observações"
-                            {...register("obs")}
-                            variant="outlined"
-                            error={!!errors.obs}
-                            helperText={errors.obs?.message}
-                            multiline
-                            rows={3}
-                        />
+                    <TextField
+                        label="Observações"
+                        {...register("obs")}
+                        variant="outlined"
+                        error={!!errors.obs}
+                        helperText={errors.obs?.message}
+                        multiline
+                        rows={3}
+                    />
 
-                        <Button type="submit" variant="contained" color="primary" disabled={mutation.isPending}>
-                            {mutation.isPending ? "Enviando..." : "Criar Partner"}
-                        </Button>
-                    </Box>
-                </form>
-            </Box>
-        </Box>
+                    <Button type="submit" variant="contained" color="primary" disabled={mutation.isPending}>
+                        {mutation.isPending ? "Enviando..." : "Criar Parceiro"}
+                    </Button>
+                </Box>
+            </form>
+        </FormContainer>
     );
 }
 
 
 export function UpdatePartnerForm(): JSX.Element | null {
-    const theme = useTheme();
     const mutation = usePutPartner();
     const { forms } = useFormStore();
 
@@ -147,106 +131,84 @@ export function UpdatePartnerForm(): JSX.Element | null {
         try {
             await mutation.mutateAsync(data);
         } catch (err) {
-            console.error("Erro ao atualizar Partner:", err);
+            console.error("Erro ao atualizar Parceiro:", err);
         }
     };
 
     if (forms.partner.type === 'create' || !forms.partner.updateItem) return null;
 
     return (
-        <Box
-            sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: 3,
-                minHeight: 500,
-            }}
-        >
-            <Box
-                sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 2,
-                    padding: 4,
-                    maxWidth: 400,
-                    borderRadius: 1,
-                    boxShadow: theme.shadows[24],
-                    bgcolor: theme.palette.mode === "light" ? theme.palette.common.white : theme.palette.common.black,
-                }}
-            >
-                <h1>Atualizar Partner</h1>
+        <FormContainer>
+            <ButtonUpdateForm title='Atualizar Parceiro' name='partner'/>
 
-                {mutation.isSuccess && (
-                    <Alert severity="success" style={{ width: "100%" }}>
-                        Partner atualizado com sucesso!
-                    </Alert>
-                )}
+            {mutation.isSuccess && (
+                <Alert severity="success" style={{ width: "100%" }}>
+                    Parceiro atualizado com sucesso!
+                </Alert>
+            )}
 
-                {mutation.isError && (
-                    <Alert severity="error" style={{ width: "100%" }}>
-                        Ocorreu um erro ao atualizar o Partner. Tente novamente.
-                    </Alert>
-                )}
+            {mutation.isError && (
+                <Alert severity="error" style={{ width: "100%" }}>
+                    Ocorreu um erro ao atualizar o Parceiro. Tente novamente.
+                </Alert>
+            )}
 
-                <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                        <TextField
-                            label="Nome"
-                            {...register("name")}
-                            variant="outlined"
-                            error={!!errors.name}
-                            helperText={errors.name?.message}
-                        />
+            <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                    <TextField
+                        label="Nome"
+                        {...register("name")}
+                        variant="outlined"
+                        error={!!errors.name}
+                        helperText={errors.name?.message}
+                    />
 
-                        <FormControl variant="outlined" error={!!errors.type}>
-                            <InputLabel id="partner-type-label-update">Tipo</InputLabel>
-                            <Select
-                                labelId="partner-type-label-update"
-                                label="Tipo"
-                                defaultValue=""
-                                {...register("type")}
-                            >
-                                <MenuItem value="PF">PF</MenuItem>
-                                <MenuItem value="PJ">PJ</MenuItem>
-                            </Select>
-                            {errors.type && (
-                                <p style={{ color: '#d32f2f', fontSize: '0.75rem', margin: '3px 14px 0' }}>
-                                    {errors.type.message}
-                                </p>
-                            )}
-                        </FormControl>
+                    <FormControl variant="outlined" error={!!errors.type}>
+                        <InputLabel id="partner-type-label-update">Tipo</InputLabel>
+                        <Select
+                            labelId="partner-type-label-update"
+                            label="Tipo"
+                            defaultValue=""
+                            {...register("type")}
+                        >
+                            <MenuItem value="PF">PF</MenuItem>
+                            <MenuItem value="PJ">PJ</MenuItem>
+                        </Select>
+                        {errors.type && (
+                            <p style={{ color: '#d32f2f', fontSize: '0.75rem', margin: '3px 14px 0' }}>
+                                {errors.type.message}
+                            </p>
+                        )}
+                    </FormControl>
 
-                        <TextField
-                            label="Código"
-                            {...register("cod")}
-                            variant="outlined"
-                            error={!!errors.cod}
-                            helperText={errors.cod?.message}
-                        />
+                    <TextField
+                        label="Código"
+                        {...register("cod")}
+                        variant="outlined"
+                        error={!!errors.cod}
+                        helperText={errors.cod?.message}
+                    />
 
-                        <TextField
-                            label="Observações"
-                            {...register("obs")}
-                            variant="outlined"
-                            error={!!errors.obs}
-                            helperText={errors.obs?.message}
-                            multiline
-                            rows={3}
-                        />
+                    <TextField
+                        label="Observações"
+                        {...register("obs")}
+                        variant="outlined"
+                        error={!!errors.obs}
+                        helperText={errors.obs?.message}
+                        multiline
+                        rows={3}
+                    />
 
-                        <FormControlLabel
-                            control={<Checkbox {...register("status")} />}
-                            label={`Status: ${statusValue ? "Ativo" : "Inativo"}`}
-                        />
+                    <FormControlLabel
+                        control={<Checkbox {...register("status")} />}
+                        label={`Status: ${statusValue ? "Ativo" : "Inativo"}`}
+                    />
 
-                        <Button type="submit" variant="contained" color="primary" disabled={mutation.isPending}>
-                            {mutation.isPending ? "Atualizando..." : "Atualizar Partner"}
-                        </Button>
-                    </Box>
-                </form>
-            </Box>
-        </Box>
+                    <Button type="submit" variant="contained" color="primary" disabled={mutation.isPending}>
+                        {mutation.isPending ? "Atualizando..." : "Atualizar Parceiro"}
+                    </Button>
+                </Box>
+            </form>
+        </FormContainer>
     );
 }

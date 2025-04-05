@@ -47,6 +47,7 @@ export class CfService extends BaseService<Cf, CfProps, CreateCf, UpdateCf> {
         ...data,
         user: { id: data.user } as User,
         type: { id: data.type } as Tcf,
+        balance: data.balance ? parseFloat(data.balance.replace(/\./g, "").replace(",", ".")) : 0.0
       });
       const createdCf = await this.repository.save(cf);
 
@@ -73,6 +74,7 @@ export class CfService extends BaseService<Cf, CfProps, CreateCf, UpdateCf> {
       const updateData: Partial<Cf> = {
         ...data,
         type: data.type ? ({ id: data.type } as Tcf) : undefined,
+        balance: data.balance ? parseFloat(data.balance.replace(/\./g, "").replace(",", ".")) : undefined
       };
 
       await this.repository.update({ id }, updateData);

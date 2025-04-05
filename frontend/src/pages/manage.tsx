@@ -13,6 +13,10 @@ import UserList from "../components/lists/user-list";
 import { CreateUserForm, UpdateUserForm } from "../components/forms/user-forms";
 import { CreatePartnerForm, UpdatePartnerForm } from "../components/forms/partner-forms";
 import PartnerList from "../components/lists/partner-list";
+import { CreateCatForm, UpdateCatForm } from "../components/forms/cat-forms";
+import CatList from "../components/lists/cat-list";
+import { CreateCfForm, UpdateCfForm } from "../components/forms/cf-forms";
+import CfList from "../components/lists/cf-list";
 
 
 function Manage() {
@@ -27,7 +31,12 @@ function Manage() {
   const renderContent = () => {
     switch (value) {
       case "cf":
-        return <Typography>Conteúdo de Contas financeiras</Typography>;
+        return (
+          <ManageArea
+            Form={forms.cf.type === "create" ? <CreateCfForm /> : <UpdateCfForm />}
+            List={<CfList />}
+          />
+        );
       case "tcf":
         return (
           <ManageArea
@@ -63,7 +72,12 @@ function Manage() {
       case "tx":
         return <Typography>Conteúdo de Transações</Typography>;
       case "cat":
-        return <Typography>Conteúdo de Categorias</Typography>;
+        return (
+          <ManageArea
+            Form={forms.cat.type === "create" ? <CreateCatForm /> : <UpdateCatForm />}
+            List={<CatList />}
+          />
+        );
       case "user":
         return (
           <ManageArea

@@ -5,9 +5,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { PartnerProps } from '../../../../packages/dtos/partner.dto';
 import { useGetAllPartner, useDeletePartner } from '../../hooks/use-partner';
 import { useFormStore } from '../../hooks/use-form-store';
+import ErrorAlert from '../alerts/error-alert';
+import { PartnerType } from '../../../../packages/dtos/utils/enums';
+import { useTheme } from '@mui/material/styles'
 
 const PartnerList = (): JSX.Element | string => {
   const { isPending, error, data } = useGetAllPartner();
+  const theme = useTheme()
   const { setFormType, setUpdateItem } = useFormStore();
 
   const onEdit = (item: PartnerProps) => {
@@ -28,26 +32,28 @@ const PartnerList = (): JSX.Element | string => {
   };
 
   if (isPending) return 'Carregando...';
-  if (error) return 'Ocorreu um erro: ' + error.message;
+   if (error) return <ErrorAlert message={error.message}/>
 
   return (
     <List sx={{ flex: 1, height: '100%', width: '100%' }}>
       {data &&
-        data.map((item: PartnerProps) => (
+        data.map((item: PartnerProps, i : number) => (
           <ListItem
             key={item.id}
             divider
             sx={{
               display: 'flex',
+              padding: 2,
               justifyContent: 'space-between',
               alignItems: 'center',
+              background: `${i % 2 === 0 ? (theme.palette.mode === 'light' ? theme.palette.grey[50] : theme.palette.grey[900]) : (theme.palette.mode === 'light' ? theme.palette.common.white : theme.palette.common.black)}`
             }}
           >
-            <Box sx={{ display: 'flex', gap: 2, flexDirection: 'column' }}>
+            <Box sx={{ display: 'flex', width: '100%', gap: 2, flexDirection: 'column', justifyContent: 'center', alignItems: 'baseline' }}>
               <Stack direction="row" spacing={1}>
-                <Chip label={item.name} color="success" />
+                <Chip label={item.name.toLocaleUpperCase()} color="success" />
                 <Chip label={item.type} variant="outlined" size="small" />
-                <Chip label={`Código: ${item.cod}`} variant="outlined" size="small" />
+                <Chip label={item.type === PartnerType.PF ? `Cod(CPF): ${item.cod}` : `Cod(CNPJ): ${item.cod}`} variant="outlined" size="small" />
               </Stack>
               <Stack direction="row" spacing={1}>
                 <Chip

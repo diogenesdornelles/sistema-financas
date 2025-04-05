@@ -1,6 +1,4 @@
 import { z } from "zod";
-import GeneralValidator from "../../general.validator";
-
 
 export const createCfSchema = z
   .object({
@@ -10,17 +8,25 @@ export const createCfSchema = z
       .max(10, "Número precisa ter no máximo 10 caracteres"),
     ag: z
       .string()
-      .min(1, "Agência precisa ter ao menos 1 caracter")
       .max(10, "Agência precisa ter no máximo 10 caracteres")
       .optional(),
     bank: z
       .string()
-      .min(1, "Banco precisa ter ao menos 1 caracter")
       .max(30, "Banco precisa ter no máximo 30 caracteres")
       .optional(),
-    balance: z.number().refine(GeneralValidator.validateMoney, {
-      message: "Não possui o formato de dinheiro",
-    }),
+    balance: z.string().min(4, "Precisa ter tamanho mínimo 4").regex(/^\d{1,3}(\.\d{3})*(,\d{2})?$/, "Precisa ter formato dinheiro")
+      .refine((valor) => {
+        if (typeof valor !== "string") return false;
+
+        // Remove pontos e substitui vírgula por ponto
+        const normalizado = valor.replace(/\./g, "").replace(",", ".");
+        const convertido = parseFloat(normalizado);
+
+        // Verifica se é um número válido e maior que zero
+        return !isNaN(convertido) && convertido > 0;
+      }, {
+        message: "O saldo deve estar no formato monetário brasileiro (ex.: 1.234,56)",
+      }),
     type: z.string().uuid(),
     user: z.string().uuid(),
     obs: z

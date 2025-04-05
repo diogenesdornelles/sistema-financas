@@ -48,6 +48,7 @@ export class TxService extends BaseService<Tx, TxProps, CreateTx, UpdateTx> {
         user: { id: data.user } as User,
         category: { id: data.category } as Cat,
         cf: { id: data.cf } as Cf,
+        value: data.value ? parseFloat(data.value.replace(/\./g, "").replace(",", ".")) : undefined
       });
 
       const createdTx = await this.repository.save(newTx);
@@ -76,6 +77,7 @@ export class TxService extends BaseService<Tx, TxProps, CreateTx, UpdateTx> {
         ...data,
         category: data.category ? ({ id: data.category } as Cat) : undefined,
         cf: data.cf ? ({ id: data.cf } as Cf) : undefined,
+        value: data.value ? parseFloat(data.value.replace(/\./g, "").replace(",", ".")) : undefined
       };
 
       await this.repository.update({ id }, updateData);

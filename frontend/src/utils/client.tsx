@@ -35,4 +35,17 @@ restClient.interceptors.request.use(
   }
 );
 
+
+restClient.interceptors.response.use(
+  (response) => response, // Retorna a resposta normalmente se não houver erro
+  (error) => {
+    if (error.response) {
+      const { status, data } = error.response;
+
+      console.error(`Erro ${status}:`, data.message || "Erro desconhecido");
+      return Promise.reject(data);
+    }
+  }
+);
+
 export { queryClient, restClient };

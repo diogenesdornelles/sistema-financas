@@ -22,5 +22,6 @@ export const createUserSchema = z
           `,
     }),
     cpf: z.string()
-        .refine(GeneralValidator.validateCpf, { message: "CPF inválido" })
-      })
+      .transform((str) => str.replace(/\D/g, ""))
+      .refine(GeneralValidator.validateCpf, { message: "CPF inválido" })
+  })

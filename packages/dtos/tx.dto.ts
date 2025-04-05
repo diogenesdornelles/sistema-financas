@@ -4,7 +4,7 @@ import { TransactionType } from "./utils/enums";
 
 
 export interface CreateTx {
-  value: number;
+  value: string;
   type: TransactionType;
   cf: string; // Identificador de Cf
   description?: string;
@@ -15,7 +15,7 @@ export interface CreateTx {
 }
 
 export interface UpdateTx {
-  value?: number;
+  value?: string;
   type?: TransactionType;
   cf?: string;
   description?: string;

@@ -28,6 +28,11 @@ export abstract class BaseService<
   public abstract getAll(): Promise<ResponseDTO[]>;
 
   /**
+   * Retorna 10 registros com skip.
+   */
+  public abstract getMany(skip: number): Promise<ResponseDTO[]>;
+
+  /**
    * Retorna um registro pelo identificador.
    *
    * @param id - Identificador do registro.

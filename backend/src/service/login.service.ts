@@ -65,6 +65,10 @@ export default class LoginService extends BaseService<
   public getAll(): Promise<TokenProps[]> {
     throw new Error("Method not implemented.");
   }
+
+  public getMany(skip: number): Promise<TokenProps[]> {
+    throw new Error("Method not implemented.");
+  }
   public getOne(pk: string): Promise<TokenProps | null> {
     throw new Error("Method not implemented.");
   }

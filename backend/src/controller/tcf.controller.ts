@@ -1,7 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import { TcfService } from "../service/tcf.service";
 import { BaseController } from "./base.controller";
-import { TcfProps, UpdateTcf, CreateTcf, QueryTcf } from "../../../packages/dtos/tcf.dto";
+import {
+  TcfProps,
+  UpdateTcf,
+  CreateTcf,
+  QueryTcf,
+} from "../../../packages/dtos/tcf.dto";
 import { createTcfSchema } from "../../../packages/validators/zod-schemas/create/create-tcf.validator";
 import { updateTcfSchema } from "../../../packages/validators/zod-schemas/update/update-tcf.validator";
 import { queryTcfSchema } from "../../../packages/validators/zod-schemas/query/query-tcf.validator";
@@ -19,6 +24,34 @@ export default class TcfController extends BaseController<TcfService> {
     try {
       const items: TcfProps[] = await this.service.getAll();
       res.status(200).json(items);
+      return;
+    } catch (error) {
+      next(error);
+      return;
+    }
+  };
+
+  public getMany = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const { skip } = req.params;
+      const skipInt = parseInt(skip);
+      if (skipInt >= 0) {
+        const items: TcfProps[] | null = await this.service.getMany(skipInt);
+        if (!items) {
+          res.status(404).json({ message: "Tipo de contas não encontradas" });
+          return;
+        }
+        res.status(200).json(items);
+      } else {
+        res
+          .status(404)
+          .json({ message: "Skip deve ser um número inteiro positivo" });
+        return;
+      }
       return;
     } catch (error) {
       next(error);
@@ -105,19 +138,19 @@ export default class TcfController extends BaseController<TcfService> {
       return;
     }
   };
-    public query = async (
-      req: Request,
-      res: Response,
-      next: NextFunction,
-    ): Promise<void> => {
-      try {
-        const validatedData: QueryTcf = queryTcfSchema.parse(req.body);
-        const item: TcfProps[] = await this.service.query(validatedData);
-        res.status(201).json(item);
-        return;
-      } catch (error) {
-        next(error);
-        return;
-      }
-    };
+  public query = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const validatedData: QueryTcf = queryTcfSchema.parse(req.body);
+      const item: TcfProps[] = await this.service.query(validatedData);
+      res.status(201).json(item);
+      return;
+    } catch (error) {
+      next(error);
+      return;
+    }
+  };
 }

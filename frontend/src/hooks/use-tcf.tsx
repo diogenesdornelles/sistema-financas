@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CreateTcf, UpdateTcf } from "../../../packages/dtos/tcf.dto";
+import { CreateTcf, QueryTcf, UpdateTcf } from "../../../packages/dtos/tcf.dto";
 import { Api } from "../api/api";
 
 export function useGetAllTcf() {
@@ -8,6 +8,21 @@ export function useGetAllTcf() {
     queryKey: ["tcf", "getAll"],
   });
 }
+
+// Hook para buscar muitas Tcf
+export function useGetManyTcf(skip: number) {
+  return useQuery({
+    queryFn: () => Api.tcf.getMany(skip), 
+    queryKey: ["tcf", "getMany"], 
+  });
+}
+
+
+// Hook para criar uma consulta via POST
+export function useQueryTcf() {
+  return useMutation({
+    mutationFn: (data: QueryTcf) => Api.tcf.query(data),
+})}
 
 export function useGetTcf(id: string) {
   return useQuery({
@@ -22,7 +37,7 @@ export function usePostTcf() {
   return useMutation({
     mutationFn: (data: CreateTcf) => Api.tcf.post(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tcf", "getAll"] });
+      queryClient.invalidateQueries({ queryKey: ["tcf", "getMany"] });
     },
   });
 }
@@ -33,7 +48,7 @@ export function usePutTcf() {
   return useMutation({
     mutationFn: (data: UpdateTcf) => Api.tcf.put(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tcf", "getAll"]});
+      queryClient.invalidateQueries({ queryKey: ["tcf", "getMany"]});
     },
   });
 }
@@ -44,7 +59,7 @@ export function useDeleteTcf() {
   return useMutation({
     mutationFn: (id: string) => Api.tcf.delete(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tcf", "getAll"]});
+      queryClient.invalidateQueries({ queryKey: ["tcf", "getMany"]});
     },
   });
 }

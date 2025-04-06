@@ -34,6 +34,21 @@ export class CrService extends BaseService<
   };
 
   /**
+   * Recupera todas as contas.
+   */
+  public getMany = async (skip: number): Promise<CrProps[]> => {
+    try {
+      return await this.repository.find({
+        skip,
+        take: 10,
+        relations: ["type", "customer", "tx"],
+      });
+    } catch (error) {
+      throw new Error(`Erro ao recuperar contas: ${error}`);
+    }
+  };
+
+  /**
    * Recupera uma conta pelo identificador.
    *
    * @param id - Identificador.
@@ -148,11 +163,11 @@ export class CrService extends BaseService<
       }
 
       if (data.type) {
-        where.type = { name: data.type };
+        where.type = { name: Like(`%${data.type}%`) };
       }
 
       if (data.customer) {
-        where.customer = { name: data.customer };
+        where.customer = { name: Like(`%${data.customer}%`) };
       }
 
       if (data.due) {
@@ -174,7 +189,7 @@ export class CrService extends BaseService<
       }
 
       if (data.tx) {
-        where.tx = { id: data.tx };
+        where.tx = { id: Like(`%${data.tx}%`) };
       }
 
       if (data.createdAt) {

@@ -32,6 +32,22 @@ export class CfService extends BaseService<
   };
 
   /**
+   * Recupera 10 com skip.
+   */
+  public getMany = async (skip: number): Promise<CfProps[]> => {
+    try {
+      const cfs = await this.repository.find({
+        skip,
+        take: 10,
+        relations: ["type"],
+      });
+      return cfs;
+    } catch (error) {
+      throw new Error(`Erro ao recuperar contas: ${error}`);
+    }
+  };
+
+  /**
    * Recupera uma conta  pelo identificador.
    *
    * @param id - Identificador.
@@ -142,7 +158,7 @@ export class CfService extends BaseService<
       }
 
       if (data.type) {
-        where.type = { name: data.type };
+        where.type = { name: Like(`%${data.type}%`) };
       }
 
       if (data.ag) {

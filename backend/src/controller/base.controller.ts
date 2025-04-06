@@ -50,6 +50,22 @@ export abstract class BaseController<
   ): Promise<void>;
 
   /**
+   * Retrieves 10 records, with skip.
+   *
+   * Subclasses must implement this method to handle retrieving all records.
+   *
+   * @param {Request} req - The Express Request object.
+   * @param {Response} res - The Express Response object.
+   * @param {NextFunction} next - The next middleware function.
+   * @returns {Promise<void>}
+   */
+  public abstract getMany(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void>;
+
+  /**
    * Retrieves a single record.
    *
    * Subclasses must implement this method to handle retrieving a single record.

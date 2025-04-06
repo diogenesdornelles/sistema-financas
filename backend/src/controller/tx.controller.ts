@@ -1,7 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import { TxService } from "../service/tx.service";
 import { BaseController } from "./base.controller";
-import { TxProps, UpdateTx, CreateTx, QueryTx } from "../../../packages/dtos/tx.dto";
+import {
+  TxProps,
+  UpdateTx,
+  CreateTx,
+  QueryTx,
+} from "../../../packages/dtos/tx.dto";
 import { createTxSchema } from "../../../packages/validators/zod-schemas/create/create-tx.validator";
 import { updateTxSchema } from "../../../packages/validators/zod-schemas/update/update-tx.validator";
 import { queryTxSchema } from "../../../packages/validators/zod-schemas/query/query-tx.validator";
@@ -19,6 +24,34 @@ export default class TxController extends BaseController<TxService> {
     try {
       const items: TxProps[] = await this.service.getAll();
       res.status(200).json(items);
+      return;
+    } catch (error) {
+      next(error);
+      return;
+    }
+  };
+
+  public getMany = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const { skip } = req.params;
+      const skipInt = parseInt(skip);
+      if (skipInt >= 0) {
+        const items: TxProps[] | null = await this.service.getMany(skipInt);
+        if (!items) {
+          res.status(404).json({ message: "transações não encontradas" });
+          return;
+        }
+        res.status(200).json(items);
+      } else {
+        res
+          .status(404)
+          .json({ message: "Skip deve ser um número inteiro positivo" });
+        return;
+      }
       return;
     } catch (error) {
       next(error);
@@ -105,19 +138,19 @@ export default class TxController extends BaseController<TxService> {
       return;
     }
   };
-        public query = async (
-          req: Request,
-          res: Response,
-          next: NextFunction,
-        ): Promise<void> => {
-          try {
-            const validatedData: QueryTx = queryTxSchema.parse(req.body);
-            const item: TxProps[] = await this.service.query(validatedData);
-            res.status(201).json(item);
-            return;
-          } catch (error) {
-            next(error);
-            return;
-          }
-        };
+  public query = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const validatedData: QueryTx = queryTxSchema.parse(req.body);
+      const item: TxProps[] = await this.service.query(validatedData);
+      res.status(201).json(item);
+      return;
+    } catch (error) {
+      next(error);
+      return;
+    }
+  };
 }

@@ -1,14 +1,20 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CreateCat, UpdateCat } from "../../../packages/dtos/cat.dto"; 
+import { CreateCat, QueryCat, UpdateCat } from "../../../packages/dtos/cat.dto"; 
 import { Api } from "../api/api"; 
 
 // Hook para buscar todos os 'cats'
 export function useGetAllCat() {
   return useQuery({
-    // Chama a função da API para buscar todos os 'cats'
     queryFn: () => Api.cat.getAll(), 
-    // Chave de query para identificar esta busca
     queryKey: ["cat", "getAll"],
+  });
+}
+
+// Hook para buscar 'cats'
+export function useGetManyCat(skip: number) {
+  return useQuery({
+    queryFn: () => Api.cat.getMany(skip), 
+    queryKey: ["cat", "getMany"],
   });
 }
 
@@ -27,10 +33,16 @@ export function usePostCat() {
   return useMutation({
     mutationFn: (data: CreateCat) => Api.cat.post(data), 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cat", "getAll"] }); 
+      queryClient.invalidateQueries({ queryKey: ["cat", "getMany"] }); 
     },
   });
 }
+
+// Hook para criar uma consulta via POST
+export function useQueryCat() {
+  return useMutation({
+    mutationFn: (data: QueryCat) => Api.cat.query(data),
+})}
 
 // Hook para atualizar um 'cat' existente (PUT)
 export function usePutCat() {
@@ -40,7 +52,7 @@ export function usePutCat() {
     mutationFn: (data: UpdateCat) => Api.cat.put(data), 
     onSuccess: (data) => { 
       console.log(data)
-      queryClient.invalidateQueries({ queryKey: ["cat", "getAll"] }); 
+      queryClient.invalidateQueries({ queryKey: ["cat", "getMany"] }); 
     },
   });
 }
@@ -52,7 +64,7 @@ export function useDeleteCat() {
   return useMutation({
     mutationFn: (id: string) => Api.cat.delete(id), 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cat", "getAll"] }); 
+      queryClient.invalidateQueries({ queryKey: ["cat", "getMany"] }); 
     },
   });
 }

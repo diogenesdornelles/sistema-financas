@@ -1,18 +1,33 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CreateTx, UpdateTx } from "../../../packages/dtos/tx.dto";
+import { CreateTx, QueryTx, UpdateTx } from "../../../packages/dtos/tx.dto";
 import { Api } from "../api/api";
 
 export function useGetAllTx() {
   return useQuery({
     queryFn: () => Api.tx.getAll(),
-    queryKey: ["Tx", "getAll"],
+    queryKey: ["tx", "getAll"],
+  });
+}
+
+// Hook para criar uma consulta via POST
+export function useQueryTx() {
+  return useMutation({
+    mutationFn: (data: QueryTx) => Api.tx.query(data),
+})}
+
+
+// Hook para buscar muitas Tx
+export function useGetManyTx(skip: number) {
+  return useQuery({
+    queryFn: () => Api.tx.getMany(skip), 
+    queryKey: ["tx", "getMany"], 
   });
 }
 
 export function useGetTx(id: string) {
   return useQuery({
     queryFn: () => Api.tx.get(id),
-    queryKey: ["Tx", "get", id],
+    queryKey: ["tx", "get", id],
   });
 }
 
@@ -22,7 +37,7 @@ export function usePostTx() {
   return useMutation({
     mutationFn: (data: CreateTx) => Api.tx.post(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["Tx", "getAll"] });
+      queryClient.invalidateQueries({ queryKey: ["tx", "getMany"] });
     },
   });
 }
@@ -33,7 +48,7 @@ export function usePutTx() {
   return useMutation({
     mutationFn: (data: UpdateTx) => Api.tx.put(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["Tx", "getAll"]});
+      queryClient.invalidateQueries({ queryKey: ["tx", "getMany"]});
     },
   });
 }
@@ -44,7 +59,7 @@ export function useDeleteTx() {
   return useMutation({
     mutationFn: (id: string) => Api.tx.delete(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["Tx", "getAll"]});
+      queryClient.invalidateQueries({ queryKey: ["tx", "getMany"]});
     },
   });
 }

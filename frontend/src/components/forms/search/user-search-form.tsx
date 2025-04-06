@@ -1,0 +1,133 @@
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  TextField,
+  Button,
+  Box,
+  FormControlLabel,
+  Switch,
+} from '@mui/material';
+import { queryUserSchema } from '../../../../../packages/validators/zod-schemas/query/query-user.validator';
+import { JSX } from 'react';
+
+type QueryUserFormData = z.infer<typeof queryUserSchema>;
+
+interface UserSearchFormProps {
+  onSearch: (data: QueryUserFormData) => void;
+}
+
+const UserSearchForm = ({ onSearch }: UserSearchFormProps): JSX.Element => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm<QueryUserFormData>({
+    resolver: zodResolver(queryUserSchema),
+    defaultValues: {
+      name: '',
+      surname: '',
+      cpf: '',
+      status: undefined,
+      createdAt: '',
+      updatedAt: '',
+    },
+  });
+
+  const showInactives = watch('status');
+
+  const onSubmit = (data: QueryUserFormData) => {
+    const cleanedData: Partial<QueryUserFormData> = { ...data };
+    (['name', 'surname', 'cpf', 'createdAt', 'updatedAt'] as const).forEach((key) => {
+      if (!cleanedData[key]) {
+        delete cleanedData[key];
+      }
+    });
+    onSearch(cleanedData);
+  };
+
+  const handleReset = () => {
+    reset({
+      name: '',
+      surname: '',
+      cpf: '',
+      status: undefined,
+      createdAt: '',
+      updatedAt: '',
+    });
+    onSearch({} as QueryUserFormData); // Envia filtro limpo
+  };
+
+  return (
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          gap: 16,
+          alignItems: 'center',
+        }}
+      >
+        <TextField
+          label="Nome"
+          {...register('name')}
+          variant="outlined"
+          error={!!errors.name}
+          helperText={errors.name?.message}
+        />
+        <TextField
+          label="Sobrenome"
+          {...register('surname')}
+          variant="outlined"
+          error={!!errors.surname}
+          helperText={errors.surname?.message}
+        />
+        <TextField
+          label="CPF"
+          {...register('cpf')}
+          variant="outlined"
+          error={!!errors.cpf}
+          helperText={errors.cpf?.message}
+        />
+        <TextField
+          label="Criação"
+          {...register('createdAt')}
+          variant="outlined"
+          type="date"
+          slotProps={{
+            inputLabel: { shrink: true },
+          }}
+          error={!!errors.createdAt}
+          helperText={errors.createdAt?.message}
+        />
+        <TextField
+          label="Alteração"
+          {...register('updatedAt')}
+          variant="outlined"
+          type="date"
+          slotProps={{
+            inputLabel: { shrink: true },
+          }}
+          error={!!errors.updatedAt}
+          helperText={errors.updatedAt?.message}
+        />
+        <FormControlLabel
+          control={<Switch {...register('status')} checked={!!showInactives} />}
+          label="Mostrar Inativos"
+        />
+        <Button type="submit" variant="contained" color="primary">
+          Buscar
+        </Button>
+        <Button type="button" variant="outlined" color="secondary" onClick={handleReset}>
+          Limpar
+        </Button>
+      </form>
+    </Box>
+  );
+};
+
+export default UserSearchForm;

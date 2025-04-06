@@ -1,7 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import { CpService } from "../service/cp.service";
 import { BaseController } from "./base.controller";
-import { CpProps, UpdateCp, CreateCp, QueryCp } from "../../../packages/dtos/cp.dto";
+import {
+  CpProps,
+  UpdateCp,
+  CreateCp,
+  QueryCp,
+} from "../../../packages/dtos/cp.dto";
 import { createCpSchema } from "../../../packages/validators/zod-schemas/create/create-cp.validator";
 import { updateCpSchema } from "../../../packages/validators/zod-schemas/update/update-cp.validator";
 import { queryCpSchema } from "../../../packages/validators/zod-schemas/query/query-cp.validator";
@@ -19,6 +24,34 @@ export default class CpController extends BaseController<CpService> {
     try {
       const items: CpProps[] = await this.service.getAll();
       res.status(200).json(items);
+      return;
+    } catch (error) {
+      next(error);
+      return;
+    }
+  };
+
+  public getMany = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const { skip } = req.params;
+      const skipInt = parseInt(skip);
+      if (skipInt >= 0) {
+        const items: CpProps[] | null = await this.service.getMany(skipInt);
+        if (!items) {
+          res.status(404).json({ message: "Contas não encontradas" });
+          return;
+        }
+        res.status(200).json(items);
+      } else {
+        res
+          .status(404)
+          .json({ message: "Skip deve ser um número inteiro positivo" });
+        return;
+      }
       return;
     } catch (error) {
       next(error);
@@ -106,19 +139,19 @@ export default class CpController extends BaseController<CpService> {
     }
   };
 
-      public query = async (
-        req: Request,
-        res: Response,
-        next: NextFunction,
-      ): Promise<void> => {
-        try {
-          const validatedData: QueryCp = queryCpSchema.parse(req.body);
-          const item: CpProps[] = await this.service.query(validatedData);
-          res.status(201).json(item);
-          return;
-        } catch (error) {
-          next(error);
-          return;
-        }
-      };
+  public query = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const validatedData: QueryCp = queryCpSchema.parse(req.body);
+      const item: CpProps[] = await this.service.query(validatedData);
+      res.status(201).json(item);
+      return;
+    } catch (error) {
+      next(error);
+      return;
+    }
+  };
 }

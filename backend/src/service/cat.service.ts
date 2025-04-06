@@ -31,6 +31,19 @@ export class CatService extends BaseService<
     }
   };
 
+  public getMany = async (skip = 0): Promise<CatProps[]> => {
+    try {
+      const cats = await this.repository.find({
+        skip,
+        take: 10,
+        relations: [],
+      });
+      return cats;
+    } catch (error) {
+      throw new Error(`Erro ao recuperar categorias: ${error}`);
+    }
+  };
+
   /**
    * Recupera um pelo identificador.
    *

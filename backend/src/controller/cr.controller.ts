@@ -1,7 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import { CrService } from "../service/cr.service";
 import { BaseController } from "./base.controller";
-import { CrProps, UpdateCr, CreateCr, QueryCr } from "../../../packages/dtos/cr.dto";
+import {
+  CrProps,
+  UpdateCr,
+  CreateCr,
+  QueryCr,
+} from "../../../packages/dtos/cr.dto";
 import { createCrSchema } from "../../../packages/validators/zod-schemas/create/create-cr.validator";
 import { updateCrSchema } from "../../../packages/validators/zod-schemas/update/update-cr.validator";
 import { queryCrSchema } from "../../../packages/validators/zod-schemas/query/query-cr.validator";
@@ -19,6 +24,34 @@ export default class CrController extends BaseController<CrService> {
     try {
       const items: CrProps[] = await this.service.getAll();
       res.status(200).json(items);
+      return;
+    } catch (error) {
+      next(error);
+      return;
+    }
+  };
+
+  public getMany = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const { skip } = req.params;
+      const skipInt = parseInt(skip);
+      if (skipInt >= 0) {
+        const items: CrProps[] | null = await this.service.getMany(skipInt);
+        if (!items) {
+          res.status(404).json({ message: "Contas não encontradas" });
+          return;
+        }
+        res.status(200).json(items);
+      } else {
+        res
+          .status(404)
+          .json({ message: "Skip deve ser um número inteiro positivo" });
+        return;
+      }
       return;
     } catch (error) {
       next(error);
@@ -106,19 +139,19 @@ export default class CrController extends BaseController<CrService> {
     }
   };
 
-        public query = async (
-          req: Request,
-          res: Response,
-          next: NextFunction,
-        ): Promise<void> => {
-          try {
-            const validatedData: QueryCr = queryCrSchema.parse(req.body);
-            const item: CrProps[] = await this.service.query(validatedData);
-            res.status(201).json(item);
-            return;
-          } catch (error) {
-            next(error);
-            return;
-          }
-        };
+  public query = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const validatedData: QueryCr = queryCrSchema.parse(req.body);
+      const item: CrProps[] = await this.service.query(validatedData);
+      res.status(201).json(item);
+      return;
+    } catch (error) {
+      next(error);
+      return;
+    }
+  };
 }

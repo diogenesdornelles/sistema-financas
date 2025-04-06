@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CreateCp, UpdateCp } from "../../../packages/dtos/cp.dto"; 
+import { CreateCp, QueryCp, UpdateCp } from "../../../packages/dtos/cp.dto"; 
 import { Api } from "../api/api"; 
 
 // Hook para buscar todos os 'cp'
@@ -7,6 +7,19 @@ export function useGetAllCp() {
   return useQuery({
     queryFn: () => Api.cp.getAll(), 
     queryKey: ["cp", "getAll"], 
+  });
+}
+// Hook para criar uma consulta via POST
+export function useQueryCp() {
+  return useMutation({
+    mutationFn: (data: QueryCp) => Api.cp.query(data),
+})}
+
+// Hook para buscar muitas Cp
+export function useGetManyCp(skip: number) {
+  return useQuery({
+    queryFn: () => Api.cp.getMany(skip), 
+    queryKey: ["cp", "getMany"], 
   });
 }
 
@@ -25,7 +38,7 @@ export function usePostCp() {
   return useMutation({
     mutationFn: (data: CreateCp) => Api.cp.post(data), 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cp", "getAll"] }); 
+      queryClient.invalidateQueries({ queryKey: ["cp", "getMany"] }); 
     },
   });
 }
@@ -36,8 +49,8 @@ export function usePutCp() {
 
   return useMutation({
     mutationFn: (data: UpdateCp) => Api.cp.put(data), 
-    onSuccess: (/* data */) => { 
-      queryClient.invalidateQueries({ queryKey: ["cp", "getAll"] }); 
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cp", "getMany"] }); 
     },
   });
 }
@@ -49,7 +62,7 @@ export function useDeleteCp() {
   return useMutation({
     mutationFn: (id: string) => Api.cp.delete(id), 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cp", "getAll"] }); 
+      queryClient.invalidateQueries({ queryKey: ["cp", "getMany"] }); 
     },
   });
 }

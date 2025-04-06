@@ -31,6 +31,17 @@ export class TcfService extends BaseService<
   };
 
   /**
+   * Recupera todos os tipos de contas.
+   */
+  public getMany = async (skip: number): Promise<TcfProps[]> => {
+    try {
+      return await this.repository.find({ skip, take: 10 });
+    } catch (error) {
+      throw new Error(`Erro ao recuperar tipos de conta financeira: ${error}`);
+    }
+  };
+
+  /**
    * Recupera um tipo de conta pelo identificador.
    *
    * @param id - Identificador.

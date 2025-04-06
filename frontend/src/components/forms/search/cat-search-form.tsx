@@ -1,0 +1,133 @@
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  TextField,
+  Button,
+  Box,
+  FormControlLabel,
+  Switch,
+} from '@mui/material';
+import { queryCatSchema } from '../../../../../packages/validators/zod-schemas/query/query-cat.validator';
+import { JSX } from 'react';
+
+type QueryCatFormData = z.infer<typeof queryCatSchema>;
+
+interface CatSearchFormProps {
+  onSearch: (data: QueryCatFormData) => void;
+}
+
+const CatSearchForm = ({ onSearch }: CatSearchFormProps): JSX.Element => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm<QueryCatFormData>({
+    resolver: zodResolver(queryCatSchema),
+    defaultValues: {
+      name: '',
+      description: '',
+      obs: '',
+      createdAt: '',
+      updatedAt: '',
+      status: undefined,
+    },
+  });
+
+  const showInactives = watch('status');
+
+  const onSubmit = (data: QueryCatFormData) => {
+    const cleanedData: Partial<QueryCatFormData> = { ...data };
+    (['name', 'description', 'obs', 'createdAt', 'updatedAt'] as const).forEach((key) => {
+      if (!cleanedData[key]) {
+        delete cleanedData[key];
+      }
+    });
+    onSearch(cleanedData);
+  };
+
+  const handleReset = () => {
+    reset({
+      name: '',
+      description: '',
+      obs: '',
+      createdAt: '',
+      updatedAt: '',
+      status: undefined,
+    });
+    onSearch({} as QueryCatFormData); // envia filtro limpo
+  };
+
+  return (
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          gap: 16,
+          alignItems: 'center',
+        }}
+      >
+        <TextField
+          label="Buscar por nome"
+          {...register('name')}
+          variant="outlined"
+          error={!!errors.name}
+          helperText={errors.name?.message}
+        />
+        <TextField
+          label="Buscar por descrição"
+          {...register('description')}
+          variant="outlined"
+          error={!!errors.description}
+          helperText={errors.description?.message}
+        />
+        <TextField
+          label="Buscar por observação"
+          {...register('obs')}
+          variant="outlined"
+          error={!!errors.obs}
+          helperText={errors.obs?.message}
+        />
+        <TextField
+          label="Criação"
+          {...register('createdAt')}
+          variant="outlined"
+          type="date"
+          slotProps={{
+            inputLabel: { shrink: true },
+          }}
+          error={!!errors.createdAt}
+          helperText={errors.createdAt?.message}
+        />
+        <TextField
+          label="Alteração"
+          {...register('updatedAt')}
+          variant="outlined"
+          type="date"
+          slotProps={{
+            inputLabel: { shrink: true },
+          }}
+          error={!!errors.updatedAt}
+          helperText={errors.updatedAt?.message}
+        />
+        <FormControlLabel
+          control={<Switch {...register('status')} checked={!!showInactives} />}
+          label="Mostrar Inativos"
+        />
+        <Button type="submit" variant="contained" color="primary">
+          Buscar
+        </Button>
+        <Button type="button" variant="outlined" color="secondary" onClick={handleReset}>
+          Limpar
+        </Button>
+      </form>
+    </Box>
+  );
+};
+
+export default CatSearchForm;

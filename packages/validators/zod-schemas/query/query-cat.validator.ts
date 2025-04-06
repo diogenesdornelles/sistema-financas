@@ -1,11 +1,22 @@
 import { z } from "zod";
-import { createCatSchema } from "../create/create-cat.validator";
 
 export const queryCatSchema = z.object({
-  name: z.string(),
-  description: z.string(),
-  status: z.coerce.boolean(),
-  obs: z.string(),
-  createdAt: z.string().date(),
-  updatedAt: z.string().date()
-}).partial();
+  name: z.string().optional(),
+  description: z.string().optional(),
+  status: z.coerce.boolean().optional(),
+  obs: z.string().optional(),
+  createdAt: z
+    .string()
+    .transform((value) => (value === "" ? undefined : value))
+    .optional()
+    .refine((value) => !value || !isNaN(Date.parse(value)), {
+      message: "Data inválida",
+    }),
+  updatedAt: z
+    .string()
+    .transform((value) => (value === "" ? undefined : value))
+    .optional()
+    .refine((value) => !value || !isNaN(Date.parse(value)), {
+      message: "Data inválida",
+    }),
+});

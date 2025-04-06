@@ -31,6 +31,17 @@ export class TcpService extends BaseService<
   };
 
   /**
+   * Recupera 10 tipos de contas, com skip.
+   */
+  public getMany = async (skip: number): Promise<TcpProps[]> => {
+    try {
+      return await this.repository.find({ skip, take: 10 });
+    } catch (error) {
+      throw new Error(`Erro ao recuperar tipos de conta: ${error}`);
+    }
+  };
+
+  /**
    * Recupera um tipo de conta pelo identificador.
    *
    * @param id - Identificador.

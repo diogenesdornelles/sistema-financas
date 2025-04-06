@@ -1,7 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import { TcrService } from "../service/tcr.service";
 import { BaseController } from "./base.controller";
-import { TcrProps, UpdateTcr, CreateTcr, QueryTcr } from "../../../packages/dtos/tcr.dto";
+import {
+  TcrProps,
+  UpdateTcr,
+  CreateTcr,
+  QueryTcr,
+} from "../../../packages/dtos/tcr.dto";
 import { createTcrSchema } from "../../../packages/validators/zod-schemas/create/create-tcr.validator";
 import { updateTcrSchema } from "../../../packages/validators/zod-schemas/update/update-tcr.validator";
 import { queryTcrSchema } from "../../../packages/validators/zod-schemas/query/query-tcr.validator";
@@ -19,6 +24,34 @@ export default class TcrController extends BaseController<TcrService> {
     try {
       const items: TcrProps[] = await this.service.getAll();
       res.status(200).json(items);
+      return;
+    } catch (error) {
+      next(error);
+      return;
+    }
+  };
+
+  public getMany = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const { skip } = req.params;
+      const skipInt = parseInt(skip);
+      if (skipInt >= 0) {
+        const items: TcrProps[] | null = await this.service.getMany(skipInt);
+        if (!items) {
+          res.status(404).json({ message: "Tipo de contas não encontradas" });
+          return;
+        }
+        res.status(200).json(items);
+      } else {
+        res
+          .status(404)
+          .json({ message: "Skip deve ser um número inteiro positivo" });
+        return;
+      }
       return;
     } catch (error) {
       next(error);
@@ -105,19 +138,19 @@ export default class TcrController extends BaseController<TcrService> {
       return;
     }
   };
-        public query = async (
-          req: Request,
-          res: Response,
-          next: NextFunction,
-        ): Promise<void> => {
-          try {
-            const validatedData: QueryTcr = queryTcrSchema.parse(req.body);
-            const item: TcrProps[] = await this.service.query(validatedData);
-            res.status(201).json(item);
-            return;
-          } catch (error) {
-            next(error);
-            return;
-          }
-        };
+  public query = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const validatedData: QueryTcr = queryTcrSchema.parse(req.body);
+      const item: TcrProps[] = await this.service.query(validatedData);
+      res.status(201).json(item);
+      return;
+    } catch (error) {
+      next(error);
+      return;
+    }
+  };
 }

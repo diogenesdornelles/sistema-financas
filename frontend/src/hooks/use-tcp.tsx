@@ -1,18 +1,32 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CreateTcp, UpdateTcp } from "../../../packages/dtos/tcp.dto";
+import { CreateTcp, QueryTcp, UpdateTcp } from "../../../packages/dtos/tcp.dto";
 import { Api } from "../api/api";
 
 export function useGetAllTcp() {
   return useQuery({
     queryFn: () => Api.tcp.getAll(),
-    queryKey: ["Tcp", "getAll"],
+    queryKey: ["tcp", "getAll"],
   });
 }
+
+// Hook para buscar muitas Tcp
+export function useGetManyTcp(skip: number) {
+  return useQuery({
+    queryFn: () => Api.tcp.getMany(skip), 
+    queryKey: ["tcp", "getMany"], 
+  });
+}
+
+// Hook para criar uma consulta via POST
+export function useQueryTcp() {
+  return useMutation({
+    mutationFn: (data: QueryTcp) => Api.tcp.query(data),
+})}
 
 export function useGetTcp(id: string) {
   return useQuery({
     queryFn: () => Api.tcp.get(id),
-    queryKey: ["Tcp", "get", id],
+    queryKey: ["tcp", "get", id],
   });
 }
 
@@ -22,7 +36,7 @@ export function usePostTcp() {
   return useMutation({
     mutationFn: (data: CreateTcp) => Api.tcp.post(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["Tcp", "getAll"] });
+      queryClient.invalidateQueries({ queryKey: ["tcp", "getMany"] });
     },
   });
 }
@@ -33,7 +47,7 @@ export function usePutTcp() {
   return useMutation({
     mutationFn: (data: UpdateTcp) => Api.tcp.put(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["Tcp", "getAll"]});
+      queryClient.invalidateQueries({ queryKey: ["tcp", "getMany"]});
     },
   });
 }
@@ -44,7 +58,7 @@ export function useDeleteTcp() {
   return useMutation({
     mutationFn: (id: string) => Api.tcp.delete(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["Tcp", "getAll"]});
+      queryClient.invalidateQueries({ queryKey: ["tcp", "getMany"]});
     },
   });
 }

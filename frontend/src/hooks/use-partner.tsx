@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CreatePartner, UpdatePartner } from "../../../packages/dtos/partner.dto"; 
+import { CreatePartner, QueryPartner, UpdatePartner } from "../../../packages/dtos/partner.dto"; 
 import { Api } from "../api/api"; 
 
 // Hook para buscar todos os 'partners'
@@ -9,6 +9,20 @@ export function useGetAllPartner() {
     queryKey: ["partner", "getAll"], 
   });
 }
+
+// Hook para buscar muitas Partners
+export function useGetManyPartner(skip: number) {
+  return useQuery({
+    queryFn: () => Api.partner.getMany(skip), 
+    queryKey: ["partner", "getMany"], 
+  });
+}
+
+// Hook para criar uma consulta via POST
+export function useQueryPartner() {
+  return useMutation({
+    mutationFn: (data: QueryPartner) => Api.partner.query(data),
+})}
 
 // Hook para buscar um 'partner' específico pelo ID
 export function useGetPartner(id: string) {
@@ -25,7 +39,7 @@ export function usePostPartner() {
   return useMutation({
     mutationFn: (data: CreatePartner) => Api.partner.post(data), 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["partner", "getAll"] }); 
+      queryClient.invalidateQueries({ queryKey: ["partner", "getMany"] }); 
     },
   });
 }
@@ -37,7 +51,7 @@ export function usePutPartner() {
   return useMutation({
     mutationFn: (data: UpdatePartner) => Api.partner.put(data), 
     onSuccess: () => { 
-      queryClient.invalidateQueries({ queryKey: ["partner", "getAll"] }); 
+      queryClient.invalidateQueries({ queryKey: ["partner", "getMany"] }); 
     },
   });
 }
@@ -49,7 +63,7 @@ export function useDeletePartner() {
   return useMutation({
     mutationFn: (id: string) => Api.partner.delete(id), 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["partner", "getAll"] }); 
+      queryClient.invalidateQueries({ queryKey: ["partner", "getMany"] }); 
     },
   });
 }

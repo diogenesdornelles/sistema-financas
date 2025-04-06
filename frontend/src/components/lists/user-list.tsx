@@ -1,88 +1,47 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { JSX, useEffect, useState } from 'react';
-import { List, ListItem, IconButton, Box, Chip, FormGroup, FormControlLabel, Switch, TextField, Typography, Button } from '@mui/material';
+import {
+  List,
+  ListItem,
+  IconButton,
+  Box,
+  Chip,
+  Typography,
+  ButtonGroup,
+  Button,
+  Divider,
+} from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { UserProps } from '../../../../packages/dtos/user.dto';
-import { useGetAllUser, useDeleteUser } from '../../hooks/use-user';
+import { useDeleteUser, useGetManyUser, useQueryUser } from '../../hooks/use-user';
 import { useFormStore } from '../../hooks/use-form-store';
 import ErrorAlert from '../alerts/error-alert';
-import { useTheme } from '@mui/material/styles'
+import { useTheme } from '@mui/material/styles';
+import UserSearchForm from '../forms/search/user-search-form';
+import { queryUserSchema } from '../../../../packages/validators/zod-schemas/query/query-user.validator';
+import { z } from 'zod';
+
+type QueryUserFormData = z.infer<typeof queryUserSchema>;
 
 const UserList = (): JSX.Element | string => {
-  const { isPending, error, data } = useGetAllUser();
+  const SKIP = 10;
+  const [page, setPage] = useState(1);
+  const [items, setItems] = useState<UserProps[] | null>(null);
+  const { isPending, error, data } = useGetManyUser((page - 1) * SKIP);
+  const queryUserMutation = useQueryUser();
   const { setFormType, setUpdateItem } = useFormStore();
-  const [items, setItems] = useState<null | UserProps[]>([])
-  const theme = useTheme()
-  const [showInactives, setShowInactives] = useState<boolean>(false)
-  const [searchParams, setSearchParams] = useState<{
-    name: string;
-    cpf: string;
-    created: Date | null;
-    updated: Date | null;
-  }>({
-    name: '',
-    cpf: '',
-    created: null,
-    updated: null,
-  });
+  const theme = useTheme();
 
   const onEdit = (item: UserProps) => {
-    setFormType("user", "update");
-    setUpdateItem("user", item);
+    setFormType('user', 'update');
+    setUpdateItem('user', item);
   };
-
-
-  useEffect(() => {
-    if (data) {
-      setItems(data);
-    }
-  }, [data]);
-
 
   const delMutation = useDeleteUser();
 
-  const filterItems = () => {
-    if (!data) return;
-
-    let filtered = data;
-
-    if (searchParams.name.trim() !== "") {
-      filtered = filtered.filter(item =>
-        item.name.toLowerCase().includes(searchParams.name.toLowerCase())
-      );
-    }
-
-    if (searchParams.cpf.trim() !== "") {
-      filtered = filtered.filter(item =>
-        item.cpf.includes(searchParams.cpf)
-      );
-    }
-
-    if (searchParams.created) {
-      const createdDateStr = new Date(searchParams.created).toDateString();
-      filtered = filtered.filter(item =>
-        new Date(item.createdAt).toDateString() === createdDateStr
-      );
-    }
-
-    if (searchParams.updated) {
-      const updatedDateStr = new Date(searchParams.updated).toDateString();
-      filtered = filtered.filter(item =>
-        new Date(item.updatedAt).toDateString() === updatedDateStr
-      );
-    }
-
-    if (!showInactives) {
-      filtered = filtered.filter(item => item.status);
-    }
-
-    setItems(filtered);
+  const handleSearch = (data: QueryUserFormData) => {
+    queryUserMutation.mutate(data);
   };
-
-  useEffect(() => {
-    filterItems();
-  }, [data, searchParams, showInactives]);
 
   const onDelete = async (id: string) => {
     if (confirm('Deseja deletar?')) {
@@ -94,72 +53,34 @@ const UserList = (): JSX.Element | string => {
     }
   };
 
+  const handleChangePage = (direction: number) => {
+    setPage((prev) => {
+      const nextPage = prev + direction;
+      if (nextPage < 1) return prev;
+      if (direction > 0 && (!data || data.length === 0)) return prev;
+
+      return nextPage;
+    });
+  };
+
+  useEffect(() => {
+    if (queryUserMutation.data) {
+      setItems(queryUserMutation.data);
+    } else if (data) {
+      setItems(data);
+    }
+  }, [queryUserMutation.data, data]);
+
   if (isPending) return 'Carregando...';
-  if (error) return <ErrorAlert message={error.message} />
+  if (error) return <ErrorAlert message={error.message} />;
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, marginLeft: 2 }}>
-      <Typography variant='h4'>Filtro</Typography>
-      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 3 }}>
-        <TextField
-          label="Buscar por nome"
-          value={searchParams.name}
-          variant="outlined"
-          onChange={(e) => setSearchParams(prev => ({ ...prev, name: e.target.value }))}
-          slotProps={{
-            inputLabel: { shrink: true },
-          }}
-        />
-        <TextField
-          label="Buscar por CPF"
-          value={searchParams.cpf}
-          variant="outlined"
-          onChange={(e) => setSearchParams(prev => ({ ...prev, cpf: e.target.value }))}
-          slotProps={{
-            inputLabel: { shrink: true },
-          }}
-        />
-        <TextField
-          label="Criação"
-          variant="outlined"
-          type="date"
-          onChange={(e) => setSearchParams(prev => ({ ...prev, created: e.target.value ? new Date(e.target.value) : null }))}
-          slotProps={{
-            inputLabel: { shrink: true },
-          }}
-        />
-        <TextField
-          label="Alteração"
-          variant="outlined"
-          type="date"
-          onChange={(e) => setSearchParams(prev => ({ ...prev, updated: e.target.value ? new Date(e.target.value) : null }))}
-          slotProps={{
-            inputLabel: { shrink: true },
-          }}
-        />
-        <FormGroup>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={showInactives}
-                onChange={() => setShowInactives(prev => !prev)}
-              />
-            }
-            label="Mostrar Inativos"
-          />
-        </FormGroup>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            setSearchParams({ name: '', cpf: '', created: null, updated: null });
-            setShowInactives(false);
-          }}
-        >
-          Limpar
-        </Button>
-      </Box>
-      <List sx={{ flex: 1, height: '100%', width: '100%' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
+      <Typography variant="h4">Filtro</Typography>
+      <UserSearchForm onSearch={handleSearch} />
+      <Divider />
+      <Typography variant="h4">Usuários</Typography>
+      <List sx={{ flex: 1, width: '100%', maxHeight: 400, overflow: 'auto' }}>
         {items &&
           items.map((item: UserProps, i: number) => (
             <ListItem
@@ -167,20 +88,22 @@ const UserList = (): JSX.Element | string => {
               divider
               sx={{
                 display: 'flex',
-                padding: 2,
+                p: 2,
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                background: `${i % 2 === 0 ? (theme.palette.mode === 'light' ? theme.palette.grey[50] : theme.palette.grey[900]) : (theme.palette.mode === 'light' ? theme.palette.common.white : theme.palette.common.black)}`
-
+                background: i % 2 === 0
+                  ? theme.palette.mode === 'light'
+                    ? theme.palette.grey[50]
+                    : theme.palette.grey[900]
+                  : theme.palette.mode === 'light'
+                  ? theme.palette.common.white
+                  : theme.palette.common.black,
               }}
             >
               <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, flexWrap: 'wrap', alignItems: 'baseline' }}>
-                <Chip label={`${item.name} ${item.surname}`} color="success" />
-                <Chip
-                  label={`CPF: ${item.cpf}`}
-                  variant="outlined"
-                  size="small"
-                />
+                <Chip label={`Nome: ${item.name}`} color="success" />
+                <Chip label={`Sobrenome: ${item.surname}`} variant="outlined" size="small" />
+                <Chip label={`CPF: ${item.cpf}`} variant="outlined" size="small" />
                 <Chip
                   label={`Status: ${item.status ? 'Ativo' : 'Inativo'}`}
                   color={item.status ? 'primary' : 'error'}
@@ -209,6 +132,20 @@ const UserList = (): JSX.Element | string => {
             </ListItem>
           ))}
       </List>
+      {data && data.length > 0 && (
+        <ButtonGroup
+          variant="contained"
+          aria-label="Basic button group"
+          sx={{ marginBottom: 2, flex: 0, width: 'fit-content', alignSelf: 'center' }}
+        >
+          <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
+            Anterior
+          </Button>
+          <Button onClick={() => handleChangePage(1)} disabled={!data || data.length === 0}>
+            Próximo
+          </Button>
+        </ButtonGroup>
+      )}
     </Box>
   );
 };

@@ -13,8 +13,20 @@ export const queryPartnerSchema = z
             .refine((cod) => cod.length === 11 || cod.length === 14, {
                 message: "Código deve ter 11 dígitos (CPF) ou 14 dígitos (CNPJ)",
             }),
-        createdAt: z.string().date(),
-        updatedAt: z.string().date(),
+        createdAt: z
+            .string()
+            .transform((value) => (value === "" ? undefined : value))
+            .optional()
+            .refine((value) => !value || !isNaN(Date.parse(value)), {
+                message: "Data inválida",
+            }),
+        updatedAt: z
+            .string()
+            .transform((value) => (value === "" ? undefined : value))
+            .optional()
+            .refine((value) => !value || !isNaN(Date.parse(value)), {
+                message: "Data inválida",
+            }),
         type: z.nativeEnum(PartnerType),
         status: z.boolean(),
         obs: z

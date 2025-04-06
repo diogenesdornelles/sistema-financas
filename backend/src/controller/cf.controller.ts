@@ -27,6 +27,34 @@ export default class CfController extends BaseController<CfService> {
     }
   };
 
+  public getMany = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const { skip } = req.params;
+      const skipInt = parseInt(skip);
+      if (skipInt >= 0) {
+        const items: CfProps[] | null = await this.service.getMany(skipInt);
+        if (!items) {
+          res.status(404).json({ message: "Contas não encontradas" });
+          return;
+        }
+        res.status(200).json(items);
+      } else {
+        res
+          .status(404)
+          .json({ message: "Skip deve ser um número inteiro positivo" });
+        return;
+      }
+      return;
+    } catch (error) {
+      next(error);
+      return;
+    }
+  };
+
   public getOne = async (
     req: Request,
     res: Response,
@@ -106,19 +134,19 @@ export default class CfController extends BaseController<CfService> {
       return;
     }
   };
-    public query = async (
-      req: Request,
-      res: Response,
-      next: NextFunction,
-    ): Promise<void> => {
-      try {
-        const validatedData: QueryCat = queryCfSchema.parse(req.body);
-        const item: CfProps[] = await this.service.query(validatedData);
-        res.status(201).json(item);
-        return;
-      } catch (error) {
-        next(error);
-        return;
-      }
-    };
+  public query = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const validatedData: QueryCat = queryCfSchema.parse(req.body);
+      const item: CfProps[] = await this.service.query(validatedData);
+      res.status(201).json(item);
+      return;
+    } catch (error) {
+      next(error);
+      return;
+    }
+  };
 }

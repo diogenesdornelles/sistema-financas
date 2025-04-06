@@ -40,6 +40,21 @@ export class CpService extends BaseService<
   };
 
   /**
+   * Recupera 10 contas com skip.
+   */
+  public getMany = async (skip: number): Promise<CpProps[]> => {
+    try {
+      return await this.repository.find({
+        skip,
+        take: 10,
+        relations: ["type", "supplier", "tx"],
+      });
+    } catch (error) {
+      throw new Error(`Erro ao recuperar contas: ${error}`);
+    }
+  };
+
+  /**
    * Recupera uma conta pelo identificador.
    *
    * @param id - Identificador.
@@ -154,11 +169,11 @@ export class CpService extends BaseService<
       }
 
       if (data.type) {
-        where.type = { name: data.type };
+        where.type = { name: Like(`%${data.type}%`) };
       }
 
       if (data.supplier) {
-        where.supplier = { name: data.supplier };
+        where.supplier = Like(`%${data.supplier}%`);
       }
 
       if (data.due) {
@@ -180,7 +195,7 @@ export class CpService extends BaseService<
       }
 
       if (data.tx) {
-        where.tx = { id: data.tx };
+        where.tx = { id: Like(`%${data.tx}%`) };
       }
 
       if (data.createdAt) {

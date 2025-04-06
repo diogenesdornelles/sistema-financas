@@ -33,6 +33,21 @@ export class PartnerService extends BaseService<
   };
 
   /**
+   * Recupera 10 parceiros, com skip.
+   */
+  public getMany = async (skip: number): Promise<PartnerProps[]> => {
+    try {
+      return await this.repository.find({
+        skip,
+        take: 10,
+        relations: [],
+      });
+    } catch (error) {
+      throw new Error(`Erro ao recuperar parceiros: ${error}`);
+    }
+  };
+
+  /**
    * Recupera um parceiro pelo id.
    *
    * @param id - Identificador.

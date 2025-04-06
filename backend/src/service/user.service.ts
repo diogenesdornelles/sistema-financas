@@ -36,6 +36,23 @@ export class UserService extends BaseService<
   };
 
   /**
+   * Recupera 10 usuários, com skip.
+   */
+  public getMany = async (skip: number): Promise<UserProps[]> => {
+    try {
+      const users = await this.repository.find({
+        select: ["id", "name", "status", "surname", "createdAt", "updatedAt"],
+        skip,
+        take: 10,
+        relations: [],
+      });
+      return users;
+    } catch (error) {
+      throw new Error(`Erro ao obter usuários: ${error}`);
+    }
+  };
+
+  /**
    * Recupera um usuário pelo identificador.
    *
    * @param id - Identificador do usuário.

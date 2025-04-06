@@ -31,6 +31,34 @@ export default class UserController extends BaseController<UserService> {
     }
   };
 
+  public getMany = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const { skip } = req.params;
+      const skipInt = parseInt(skip);
+      if (skipInt >= 0) {
+        const items: UserProps[] | null = await this.service.getMany(skipInt);
+        if (!items) {
+          res.status(404).json({ message: "Usuários não encontrados" });
+          return;
+        }
+        res.status(200).json(items);
+      } else {
+        res
+          .status(404)
+          .json({ message: "Skip deve ser um número inteiro positivo" });
+        return;
+      }
+      return;
+    } catch (error) {
+      next(error);
+      return;
+    }
+  };
+
   public getOne = async (
     req: Request,
     res: Response,

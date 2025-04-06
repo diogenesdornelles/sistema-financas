@@ -1,6 +1,16 @@
-export type TValue = "cf" | "tcf" | "cr" | "tcr" | "cp" | "tcp" | "partner" | "tx" | "cat" | "user";
+export type TValue =
+  | "cf"
+  | "tcf"
+  | "cr"
+  | "tcr"
+  | "cp"
+  | "tcp"
+  | "partner"
+  | "tx"
+  | "cat"
+  | "user";
 
-export type TOpType = 'update' | 'create'
+export type TOpType = "update" | "create";
 
 import { UpdateCf } from "../../../packages/dtos/cf.dto";
 import { UpdateTcf } from "../../../packages/dtos/tcf.dto";
@@ -15,25 +25,26 @@ import { UpdateTx } from "../../../packages/dtos/tx.dto";
 import { UpdateUser } from "../../../packages/dtos/user.dto";
 import { UpdateCat } from "../../../packages/dtos/cat.dto";
 
-
 type UpdateItemMap = {
-    cf: UpdateCf; 
-    tcf: UpdateTcf 
-    cr: UpdateCr; 
-    tcr: UpdateTcr; 
-    cp: UpdateCp; 
-    tcp: UpdateTcp; 
-    partner: UpdatePartner; 
-    tx: UpdateTx; 
-    cat: UpdateCat; 
-    user: UpdateUser; 
+  cf: UpdateCf;
+  tcf: UpdateTcf;
+  cr: UpdateCr;
+  tcr: UpdateTcr;
+  cp: UpdateCp;
+  tcp: UpdateTcp;
+  partner: UpdatePartner;
+  tx: UpdateTx;
+  cat: UpdateCat;
+  user: UpdateUser;
+};
+
+export type FormsState = {
+  forms: {
+    [K in TValue]: { type: TOpType; updateItem: UpdateItemMap[K] | null };
   };
-  
-  
-  export type FormsState = {
-    forms: {
-      [K in TValue]: { type: TOpType; updateItem: UpdateItemMap[K] | null };
-    };
-    setFormType: (key: TValue, type: TOpType) => void;
-    setUpdateItem: <K extends TValue>(key: K, item: UpdateItemMap[K] | null) => void;
-  };
+  setFormType: (key: TValue, type: TOpType) => void;
+  setUpdateItem: <K extends TValue>(
+    key: K,
+    item: UpdateItemMap[K] | null,
+  ) => void;
+};

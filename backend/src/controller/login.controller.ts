@@ -34,6 +34,14 @@ export default class LoginController extends BaseController<LoginService> {
   ): Promise<void> {
     throw new Error("Method not implemented.");
   }
+
+  public getMany(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
   public getOne(
     req: Request,
     res: Response,
@@ -55,11 +63,7 @@ export default class LoginController extends BaseController<LoginService> {
   ): Promise<void> {
     throw new Error("Method not implemented.");
   }
-  public query(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> {
+  public query(req: Request, res: Response, next: NextFunction): Promise<void> {
     throw new Error("Method not implemented.");
   }
 }

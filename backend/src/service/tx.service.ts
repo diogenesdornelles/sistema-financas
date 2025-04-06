@@ -33,6 +33,21 @@ export class TxService extends BaseService<
   };
 
   /**
+   * Recupera 10 transações, com skip.
+   */
+  public getMany = async (skip: number): Promise<TxProps[]> => {
+    try {
+      return await this.repository.find({
+        skip,
+        take: 10,
+        relations: ["category", "cf"],
+      });
+    } catch (error) {
+      throw new Error(`Erro ao recuperar transações: ${error}`);
+    }
+  };
+
+  /**
    * Recupera uma transação pelo identificador.
    *
    * @param id - Identificador da transação.
@@ -145,7 +160,7 @@ export class TxService extends BaseService<
       }
 
       if (data.cf) {
-        where.cf = { id: data.cf };
+        where.cf = { id: Like(`%${data.cf}%`) };
       }
 
       if (data.description) {
@@ -153,7 +168,7 @@ export class TxService extends BaseService<
       }
 
       if (data.category) {
-        where.category = { id: data.category };
+        where.category = { name: Like(`%${data.category}%`) };
       }
 
       if (data.obs) {

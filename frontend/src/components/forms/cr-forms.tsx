@@ -53,7 +53,7 @@ export function CreateCrForm(): JSX.Element | null | string {
             value: "",
             type: "",
             customer: "",
-            due: "", // data no formato ISO
+            due: "",
             obs: "",
             user: session ? session.user.id : "",
             tx: undefined,

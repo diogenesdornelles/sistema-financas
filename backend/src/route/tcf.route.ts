@@ -16,6 +16,13 @@ export default class TcfRouter extends BaseRouter<TcfController> {
     );
 
     this.router.get(
+      "/many/:skip",
+      GeneralMiddleware.authentication,
+      this.controller.getMany,
+      GeneralMiddleware.errorHandler,
+    );
+
+    this.router.get(
       "/:id",
       GeneralMiddleware.authentication,
       GeneralMiddleware.validateUUID,

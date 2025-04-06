@@ -15,3 +15,11 @@ export interface TcfProps {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface QueryTcf {
+  name?: string;
+  status?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+

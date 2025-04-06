@@ -1,9 +1,15 @@
 import { Request, Response, NextFunction } from "express";
 import { CatService } from "../service/cat.service";
 import { BaseController } from "./base.controller";
-import { CatProps, UpdateCat, CreateCat } from "../../../packages/dtos/cat.dto";
+import {
+  CatProps,
+  UpdateCat,
+  CreateCat,
+  QueryCat,
+} from "../../../packages/dtos/cat.dto";
 import { createCatSchema } from "../../../packages/validators/zod-schemas/create/create-cat.validator";
 import { updateCatSchema } from "../../../packages/validators/zod-schemas/update/update-cat.validator";
+import { queryCatSchema } from "../../../packages/validators/zod-schemas/query/query-cat.validator";
 
 export default class CatController extends BaseController<CatService> {
   constructor() {
@@ -98,6 +104,21 @@ export default class CatController extends BaseController<CatService> {
         return;
       }
       res.status(200).json({ message: "Categoria deletada!" });
+      return;
+    } catch (error) {
+      next(error);
+      return;
+    }
+  };
+  public query = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const validatedData: QueryCat = queryCatSchema.parse(req.body);
+      const item: CatProps[] = await this.service.query(validatedData);
+      res.status(201).json(item);
       return;
     } catch (error) {
       next(error);

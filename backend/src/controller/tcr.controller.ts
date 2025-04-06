@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { TcrService } from "../service/tcr.service";
 import { BaseController } from "./base.controller";
-import { TcrProps, UpdateTcr, CreateTcr } from "../../../packages/dtos/tcr.dto";
+import { TcrProps, UpdateTcr, CreateTcr, QueryTcr } from "../../../packages/dtos/tcr.dto";
 import { createTcrSchema } from "../../../packages/validators/zod-schemas/create/create-tcr.validator";
 import { updateTcrSchema } from "../../../packages/validators/zod-schemas/update/update-tcr.validator";
+import { queryTcrSchema } from "../../../packages/validators/zod-schemas/query/query-tcr.validator";
 
 export default class TcrController extends BaseController<TcrService> {
   constructor() {
@@ -104,4 +105,19 @@ export default class TcrController extends BaseController<TcrService> {
       return;
     }
   };
+        public query = async (
+          req: Request,
+          res: Response,
+          next: NextFunction,
+        ): Promise<void> => {
+          try {
+            const validatedData: QueryTcr = queryTcrSchema.parse(req.body);
+            const item: TcrProps[] = await this.service.query(validatedData);
+            res.status(201).json(item);
+            return;
+          } catch (error) {
+            next(error);
+            return;
+          }
+        };
 }

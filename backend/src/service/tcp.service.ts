@@ -1,12 +1,19 @@
 import { BaseService } from "./base.service";
 import { Tcp } from "../entity/entities";
-import { CreateTcp, UpdateTcp, TcpProps } from "../../../packages/dtos/tcp.dto";
+import {
+  CreateTcp,
+  UpdateTcp,
+  TcpProps,
+  QueryTcp,
+} from "../../../packages/dtos/tcp.dto";
+import { FindOptionsWhere, Like } from "typeorm";
 
 export class TcpService extends BaseService<
   Tcp,
   TcpProps,
   CreateTcp,
-  UpdateTcp
+  UpdateTcp,
+  QueryTcp
 > {
   constructor() {
     super(Tcp);
@@ -82,6 +89,42 @@ export class TcpService extends BaseService<
       return !!updated && updated.status === false;
     } catch (error) {
       throw new Error(`Erro ao remover tipo de conta com ID ${id}: ${error}`);
+    }
+  };
+
+  /**
+   * Realiza um filtro.
+   *
+   * @param data - Dados para busca.
+   */
+  public query = async (data: QueryTcp): Promise<TcpProps[]> => {
+    try {
+      const where: FindOptionsWhere<Tcp> = {};
+
+      if (data.name) {
+        where.name = Like(`%${data.name}%`);
+      }
+
+      if (data.status !== undefined) {
+        where.status = data.status;
+      }
+
+      if (data.createdAt) {
+        const updatedDate = new Date(data.createdAt);
+        where.updatedAt = updatedDate;
+      }
+
+      if (data.updatedAt) {
+        const updatedDate = new Date(data.updatedAt);
+        where.updatedAt = updatedDate;
+      }
+
+      return await this.repository.find({
+        where,
+        relations: [],
+      });
+    } catch (error) {
+      throw new Error(`Erro ao filtrar tipos: ${error}`);
     }
   };
 }

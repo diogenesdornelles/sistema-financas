@@ -1,15 +1,15 @@
 import { restClient } from '../utils/client';
 import { CreateToken, TokenProps } from '../../../packages/dtos/token.dto';
-import { CreateUser, UpdateUser, UserProps } from '../../../packages/dtos/user.dto';
-import { TcfProps, CreateTcf, UpdateTcf } from '../../../packages/dtos/tcf.dto';
-import { CfProps, CreateCf, UpdateCf } from '../../../packages/dtos/cf.dto';
-import { CpProps, CreateCp, UpdateCp } from '../../../packages/dtos/cp.dto';
-import { CrProps, CreateCr, UpdateCr} from '../../../packages/dtos/cr.dto';
-import { TcrProps, CreateTcr, UpdateTcr } from '../../../packages/dtos/tcr.dto';
-import { TcpProps, CreateTcp, UpdateTcp } from '../../../packages/dtos/tcp.dto';
-import { PartnerProps, CreatePartner, UpdatePartner } from '../../../packages/dtos/partner.dto';
-import { TxProps, CreateTx, UpdateTx } from '../../../packages/dtos/tx.dto';
-import { CatProps, CreateCat, UpdateCat} from '../../../packages/dtos/cat.dto';
+import { CreateUser, QueryUser, UpdateUser, UserProps } from '../../../packages/dtos/user.dto';
+import { TcfProps, CreateTcf, UpdateTcf, QueryTcf } from '../../../packages/dtos/tcf.dto';
+import { CfProps, CreateCf, QueryCf, UpdateCf } from '../../../packages/dtos/cf.dto';
+import { CpProps, CreateCp, QueryCp, UpdateCp } from '../../../packages/dtos/cp.dto';
+import { CrProps, CreateCr, QueryCr, UpdateCr} from '../../../packages/dtos/cr.dto';
+import { TcrProps, CreateTcr, UpdateTcr, QueryTcr } from '../../../packages/dtos/tcr.dto';
+import { TcpProps, CreateTcp, UpdateTcp, QueryTcp } from '../../../packages/dtos/tcp.dto';
+import { PartnerProps, CreatePartner, UpdatePartner, QueryPartner } from '../../../packages/dtos/partner.dto';
+import { TxProps, CreateTx, UpdateTx, QueryTx } from '../../../packages/dtos/tx.dto';
+import { CatProps, CreateCat, QueryCat, UpdateCat} from '../../../packages/dtos/cat.dto';
 
 export const Api = {
   // Operações para TCF
@@ -32,6 +32,10 @@ export const Api = {
     },
     delete: async (id: string): Promise<void> => {
       await restClient.delete(`tcf/${id}`);
+    },
+    query: async (tcf: QueryTcf): Promise<TcfProps[]> => {
+      const { data } = await restClient.post('tcf/query', tcf);
+      return data;
     },
   },
 
@@ -56,6 +60,10 @@ export const Api = {
     delete: async (id: string): Promise<void> => {
       await restClient.delete(`cf/${id}`);
     },
+    query: async (cf: QueryCf): Promise<CfProps[]> => {
+      const { data } = await restClient.post('cf/query', cf);
+      return data;
+    },
   },
 
   // Operações para CP
@@ -78,6 +86,10 @@ export const Api = {
     },
     delete: async (id: string): Promise<void> => {
       await restClient.delete(`cp/${id}`);
+    },
+    query: async (cp: QueryCp): Promise<CpProps[]> => {
+      const { data } = await restClient.post('cp/query', cp);
+      return data;
     },
   },
 
@@ -102,6 +114,10 @@ export const Api = {
     delete: async (id: string): Promise<void> => {
       await restClient.delete(`cr/${id}`);
     },
+    query: async (cr: QueryCr): Promise<CrProps[]> => {
+      const { data } = await restClient.post('cr/query', cr);
+      return data;
+    },
   },
 
   // Operações para TCR
@@ -124,6 +140,10 @@ export const Api = {
     },
     delete: async (id: string): Promise<void> => {
       await restClient.delete(`tcr/${id}`);
+    },
+    query: async (tcr: QueryTcr): Promise<TcrProps[]> => {
+      const { data } = await restClient.post('tcr/query', tcr);
+      return data;
     },
   },
 
@@ -148,6 +168,10 @@ export const Api = {
     delete: async (id: string): Promise<void> => {
       await restClient.delete(`tcp/${id}`);
     },
+    query: async (tcp: QueryTcp): Promise<TcpProps[]> => {
+      const { data } = await restClient.post('tcp/query', tcp);
+      return data;
+    },
   },
 
   // Operações para Partner
@@ -170,6 +194,10 @@ export const Api = {
     },
     delete: async (id: string): Promise<void> => {
       await restClient.delete(`partner/${id}`);
+    },
+    query: async (partner: QueryPartner): Promise<TcpProps[]> => {
+      const { data } = await restClient.post('partner/query', partner);
+      return data;
     },
   },
 
@@ -194,6 +222,10 @@ export const Api = {
     delete: async (id: string): Promise<void> => {
       await restClient.delete(`tx/${id}`);
     },
+    query: async (tx: QueryTx): Promise<TxProps[]> => {
+      const { data } = await restClient.post('tx/query', tx);
+      return data;
+    },
   },
 
   // Operações para CAT
@@ -217,6 +249,10 @@ export const Api = {
     delete: async (id: string): Promise<void> => {
       await restClient.delete(`cat/${id}`);
     },
+    query: async (cat: QueryCat): Promise<CatProps[]> => {
+      const { data } = await restClient.post('cat/query', cat);
+      return data;
+    },
   },
 
   // Operações para USER
@@ -239,6 +275,10 @@ export const Api = {
     },
     delete: async (id: string): Promise<void> => {
       await restClient.delete(`user/${id}`);
+    },
+    query: async (user: QueryUser): Promise<UserProps[]> => {
+      const { data } = await restClient.post('user/query', user);
+      return data;
     },
   },
 

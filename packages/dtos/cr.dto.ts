@@ -37,3 +37,17 @@ export interface CrProps {
   createdAt: Date;
   updatedAt: Date;
 }
+
+
+export interface QueryCr {
+  value?: string;
+  type?: string;
+  customer?: string;
+  due?: string;
+  obs?: string;
+  tx?: string;
+  rdate?: string;
+  status?: PaymentStatus;
+  createdAt?: string;
+  updatedAt?: string;
+}

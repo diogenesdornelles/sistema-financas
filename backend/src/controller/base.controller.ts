@@ -17,6 +17,7 @@ export abstract class BaseController<
     Base,
     Record<string, any>,
     Record<string, any>,
+    Record<string, any>,
     Record<string, any>
   >,
 > {
@@ -107,6 +108,22 @@ export abstract class BaseController<
    * @returns {Promise<void>}
    */
   public abstract delete(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void>;
+
+  /**
+   * Query records.
+   *
+   * Subclasses must implement this method to handle the query.
+   *
+   * @param {Request} req - The Express Request object.
+   * @param {Response} res - The Express Response object.
+   * @param {NextFunction} next - The next middleware function.
+   * @returns {Promise<void>}
+   */
+  public abstract query(
     req: Request,
     res: Response,
     next: NextFunction,

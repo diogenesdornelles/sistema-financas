@@ -5,9 +5,11 @@ import {
   UserProps,
   UpdateUser,
   CreateUser,
+  QueryUser,
 } from "../../../packages/dtos/user.dto";
 import { createUserSchema } from "../../../packages/validators/zod-schemas/create/create-user.validator";
 import { updateUserSchema } from "../../../packages/validators/zod-schemas/update/update-user.validator";
+import { queryUserSchema } from "../../../packages/validators/zod-schemas/query/query-user.validator";
 
 export default class UserController extends BaseController<UserService> {
   constructor() {
@@ -102,6 +104,21 @@ export default class UserController extends BaseController<UserService> {
         return;
       }
       res.status(200).json({ message: "Usuário deletado!" });
+      return;
+    } catch (error) {
+      next(error);
+      return;
+    }
+  };
+  public query = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const validatedData: QueryUser = queryUserSchema.parse(req.body);
+      const item: UserProps[] = await this.service.query(validatedData);
+      res.status(201).json(item);
       return;
     } catch (error) {
       next(error);

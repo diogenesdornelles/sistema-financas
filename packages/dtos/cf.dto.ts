@@ -37,3 +37,16 @@ export interface CfProps {
   createdAt: Date;
   updatedAt: Date;
 }
+
+
+export interface QueryCf {
+  number?: string;
+  balance?: string;
+  type?: string;
+  ag?: string;
+  bank?: string;
+  obs?: string;
+  status?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}

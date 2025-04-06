@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { TxService } from "../service/tx.service";
 import { BaseController } from "./base.controller";
-import { TxProps, UpdateTx, CreateTx } from "../../../packages/dtos/tx.dto";
+import { TxProps, UpdateTx, CreateTx, QueryTx } from "../../../packages/dtos/tx.dto";
 import { createTxSchema } from "../../../packages/validators/zod-schemas/create/create-tx.validator";
 import { updateTxSchema } from "../../../packages/validators/zod-schemas/update/update-tx.validator";
+import { queryTxSchema } from "../../../packages/validators/zod-schemas/query/query-tx.validator";
 
 export default class TxController extends BaseController<TxService> {
   constructor() {
@@ -104,4 +105,19 @@ export default class TxController extends BaseController<TxService> {
       return;
     }
   };
+        public query = async (
+          req: Request,
+          res: Response,
+          next: NextFunction,
+        ): Promise<void> => {
+          try {
+            const validatedData: QueryTx = queryTxSchema.parse(req.body);
+            const item: TxProps[] = await this.service.query(validatedData);
+            res.status(201).json(item);
+            return;
+          } catch (error) {
+            next(error);
+            return;
+          }
+        };
 }

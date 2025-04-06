@@ -2,16 +2,19 @@ import { BaseService } from "./base.service";
 import { User } from "../entity/entities";
 import {
   CreateUser,
+  QueryUser,
   UpdateUser,
   UserProps,
 } from "../../../packages/dtos/user.dto";
 import hashPassword from "../utils/hash-pwd.util";
+import { FindOptionsWhere, Like } from "typeorm";
 
 export class UserService extends BaseService<
   User,
   UserProps,
   CreateUser,
-  UpdateUser
+  UpdateUser,
+  QueryUser
 > {
   constructor() {
     super(User);
@@ -107,6 +110,48 @@ export class UserService extends BaseService<
       return !!updatedUser && !updatedUser.status;
     } catch (error) {
       throw new Error(`Erro ao remover usuário com ID ${id}: ${error}`);
+    }
+  };
+  /**
+   * Realiza um filtro.
+   *
+   * @param data - Dados para busca.
+   */
+  public query = async (data: QueryUser): Promise<UserProps[]> => {
+    try {
+      const where: FindOptionsWhere<User> = {};
+
+      if (data.name) {
+        where.name = Like(`%${data.name}%`);
+      }
+
+      if (data.surname) {
+        where.surname = Like(`%${data.surname}%`);
+      }
+
+      if (data.cpf) {
+        where.cpf = Like(`%${data.cpf}%`);
+      }
+
+      if (data.status !== undefined) {
+        where.status = data.status;
+      }
+
+      if (data.updatedAt) {
+        const updatedDate = new Date(data.updatedAt);
+        where.updatedAt = updatedDate;
+      }
+
+      if (data.createdAt) {
+        const updatedDate = new Date(data.createdAt);
+        where.updatedAt = updatedDate;
+      }
+
+      return await this.repository.find({
+        where,
+      });
+    } catch (error) {
+      throw new Error(`Erro ao filtrar usuários: ${error}`);
     }
   };
 }

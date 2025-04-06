@@ -1,12 +1,19 @@
 import { BaseService } from "./base.service";
 import { Tcf } from "../entity/entities";
-import { CreateTcf, UpdateTcf, TcfProps } from "../../../packages/dtos/tcf.dto";
+import {
+  CreateTcf,
+  UpdateTcf,
+  TcfProps,
+  QueryTcf,
+} from "../../../packages/dtos/tcf.dto";
+import { FindOptionsWhere, Like } from "typeorm";
 
 export class TcfService extends BaseService<
   Tcf,
   TcfProps,
   CreateTcf,
-  UpdateTcf
+  UpdateTcf,
+  QueryTcf
 > {
   constructor() {
     super(Tcf);
@@ -88,6 +95,42 @@ export class TcfService extends BaseService<
       throw new Error(
         `Erro ao remover tipo de conta financeira com ID ${id}: ${error}`,
       );
+    }
+  };
+
+  /**
+   * Realiza um filtro.
+   *
+   * @param data - Dados para busca.
+   */
+  public query = async (data: QueryTcf): Promise<TcfProps[]> => {
+    try {
+      const where: FindOptionsWhere<Tcf> = {};
+
+      if (data.name) {
+        where.name = Like(`%${data.name}%`);
+      }
+
+      if (data.status !== undefined) {
+        where.status = data.status;
+      }
+
+      if (data.createdAt) {
+        const updatedDate = new Date(data.createdAt);
+        where.updatedAt = updatedDate;
+      }
+
+      if (data.updatedAt) {
+        const updatedDate = new Date(data.updatedAt);
+        where.updatedAt = updatedDate;
+      }
+
+      return await this.repository.find({
+        where,
+        relations: [],
+      });
+    } catch (error) {
+      throw new Error(`Erro ao filtrar tipos: ${error}`);
     }
   };
 }

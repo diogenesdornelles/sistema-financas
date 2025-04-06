@@ -1,8 +1,20 @@
 import { BaseService } from "./base.service";
 import { Cat, Cf, Tx, User } from "../entity/entities";
-import { CreateTx, TxProps, UpdateTx } from "../../../packages/dtos/tx.dto";
+import {
+  CreateTx,
+  QueryTx,
+  TxProps,
+  UpdateTx,
+} from "../../../packages/dtos/tx.dto";
+import { FindOptionsWhere, Like, MoreThanOrEqual } from "typeorm";
 
-export class TxService extends BaseService<Tx, TxProps, CreateTx, UpdateTx> {
+export class TxService extends BaseService<
+  Tx,
+  TxProps,
+  CreateTx,
+  UpdateTx,
+  QueryTx
+> {
   constructor() {
     super(Tx);
   }
@@ -48,7 +60,9 @@ export class TxService extends BaseService<Tx, TxProps, CreateTx, UpdateTx> {
         user: { id: data.user } as User,
         category: { id: data.category } as Cat,
         cf: { id: data.cf } as Cf,
-        value: data.value ? parseFloat(data.value.replace(/\./g, "").replace(",", ".")) : undefined
+        value: data.value
+          ? parseFloat(data.value.replace(/\./g, "").replace(",", "."))
+          : undefined,
       });
 
       const createdTx = await this.repository.save(newTx);
@@ -77,8 +91,10 @@ export class TxService extends BaseService<Tx, TxProps, CreateTx, UpdateTx> {
         ...data,
         category: data.category ? ({ id: data.category } as Cat) : undefined,
         cf: data.cf ? ({ id: data.cf } as Cf) : undefined,
-        value: data.value ? parseFloat(data.value.replace(/\./g, "").replace(",", ".")) : undefined,
-        tdate: data.tdate ? new Date(data.tdate) : undefined
+        value: data.value
+          ? parseFloat(data.value.replace(/\./g, "").replace(",", "."))
+          : undefined,
+        tdate: data.tdate ? new Date(data.tdate) : undefined,
       };
 
       await this.repository.update({ id }, updateData);
@@ -104,6 +120,71 @@ export class TxService extends BaseService<Tx, TxProps, CreateTx, UpdateTx> {
       return updatedTx?.status === false;
     } catch (error) {
       throw new Error(`Erro ao remover transação com ID ${id}: ${error}`);
+    }
+  };
+  /**
+   * Realiza um filtro.
+   *
+   * @param data - Dados para busca.
+   */
+  public query = async (data: QueryTx): Promise<TxProps[]> => {
+    try {
+      const where: FindOptionsWhere<Tx> = {};
+
+      if (data.value) {
+        const value = parseFloat(
+          data.value.replace(/\./g, "").replace(",", "."),
+        );
+        if (!isNaN(value)) {
+          where.value = MoreThanOrEqual(value);
+        }
+      }
+
+      if (data.type) {
+        where.type = data.type;
+      }
+
+      if (data.cf) {
+        where.cf = { id: data.cf };
+      }
+
+      if (data.description) {
+        where.description = Like(`%${data.description}%`);
+      }
+
+      if (data.category) {
+        where.category = { id: data.category };
+      }
+
+      if (data.obs) {
+        where.obs = Like(`%${data.obs}%`);
+      }
+
+      if (data.status !== undefined) {
+        where.status = data.status;
+      }
+
+      if (data.tdate) {
+        const updatedDate = new Date(data.tdate);
+        where.updatedAt = updatedDate;
+      }
+
+      if (data.updatedAt) {
+        const updatedDate = new Date(data.updatedAt);
+        where.updatedAt = updatedDate;
+      }
+
+      if (data.createdAt) {
+        const updatedDate = new Date(data.createdAt);
+        where.updatedAt = updatedDate;
+      }
+
+      return await this.repository.find({
+        where,
+        relations: ["category", "cf"],
+      });
+    } catch (error) {
+      throw new Error(`Erro ao filtrar transações: ${error}`);
     }
   };
 }

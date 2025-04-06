@@ -28,3 +28,15 @@ export interface PartnerProps {
   createdAt: Date;
   updatedAt: Date;
 }
+
+
+export interface QueryPartner {
+  name?: string;
+  type?: PartnerType;
+  cod?: string;
+  status?: boolean;
+  obs?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+

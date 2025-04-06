@@ -14,3 +14,11 @@ export interface TcpProps {
   createdAt: Date;
   updatedAt: Date;
 }
+
+
+export interface QueryTcp {
+  name?: string;
+  status?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}

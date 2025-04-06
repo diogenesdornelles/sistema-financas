@@ -1,12 +1,20 @@
 import { BaseService } from "./base.service";
 import { Tcr } from "../entity/entities";
-import { CreateTcr, UpdateTcr, TcrProps } from "../../../packages/dtos/tcr.dto";
+import {
+  CreateTcr,
+  UpdateTcr,
+  TcrProps,
+  QueryTcr,
+} from "../../../packages/dtos/tcr.dto";
+import { Query } from "mysql2/typings/mysql/lib/protocol/sequences/Query";
+import { FindOptionsWhere, Like } from "typeorm";
 
 export class TcrService extends BaseService<
   Tcr,
   TcrProps,
   CreateTcr,
-  UpdateTcr
+  UpdateTcr,
+  QueryTcr
 > {
   constructor() {
     super(Tcr);
@@ -82,6 +90,42 @@ export class TcrService extends BaseService<
       return !!updated && updated.status === false;
     } catch (error) {
       throw new Error(`Erro ao remover tipo de conta com ID ${id}: ${error}`);
+    }
+  };
+
+  /**
+   * Realiza um filtro.
+   *
+   * @param data - Dados para busca.
+   */
+  public query = async (data: QueryTcr): Promise<TcrProps[]> => {
+    try {
+      const where: FindOptionsWhere<Tcr> = {};
+
+      if (data.name) {
+        where.name = Like(`%${data.name}%`);
+      }
+
+      if (data.status !== undefined) {
+        where.status = data.status;
+      }
+
+      if (data.createdAt) {
+        const updatedDate = new Date(data.createdAt);
+        where.updatedAt = updatedDate;
+      }
+
+      if (data.updatedAt) {
+        const updatedDate = new Date(data.updatedAt);
+        where.updatedAt = updatedDate;
+      }
+
+      return await this.repository.find({
+        where,
+        relations: [],
+      });
+    } catch (error) {
+      throw new Error(`Erro ao filtrar tipos: ${error}`);
     }
   };
 }

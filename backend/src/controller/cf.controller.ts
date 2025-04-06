@@ -4,6 +4,8 @@ import { BaseController } from "./base.controller";
 import { CfProps, UpdateCf, CreateCf } from "../../../packages/dtos/cf.dto";
 import { createCfSchema } from "../../../packages/validators/zod-schemas/create/create-cf.validator";
 import { updateCfSchema } from "../../../packages/validators/zod-schemas/update/update-cf.validator";
+import { QueryCat } from "../../../packages/dtos/cat.dto";
+import { queryCfSchema } from "../../../packages/validators/zod-schemas/query/query-cf.validator";
 
 export default class CfController extends BaseController<CfService> {
   constructor() {
@@ -104,4 +106,19 @@ export default class CfController extends BaseController<CfService> {
       return;
     }
   };
+    public query = async (
+      req: Request,
+      res: Response,
+      next: NextFunction,
+    ): Promise<void> => {
+      try {
+        const validatedData: QueryCat = queryCfSchema.parse(req.body);
+        const item: CfProps[] = await this.service.query(validatedData);
+        res.status(201).json(item);
+        return;
+      } catch (error) {
+        next(error);
+        return;
+      }
+    };
 }

@@ -5,9 +5,11 @@ import {
   PartnerProps,
   UpdatePartner,
   CreatePartner,
+  QueryPartner,
 } from "../../../packages/dtos/partner.dto";
 import { createPartnerSchema } from "../../../packages/validators/zod-schemas/create/create-partner.validator";
 import { updatePartnerSchema } from "../../../packages/validators/zod-schemas/update/update-partner.validator";
+import { queryPartnerSchema } from "../../../packages/validators/zod-schemas/query/query-partner.validator";
 
 export default class PartnerController extends BaseController<PartnerService> {
   constructor() {
@@ -100,6 +102,22 @@ export default class PartnerController extends BaseController<PartnerService> {
         return;
       }
       res.status(200).json({ message: "Parceiro deletado!" });
+      return;
+    } catch (error) {
+      next(error);
+      return;
+    }
+  };
+
+  public query = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      const validatedData: QueryPartner = queryPartnerSchema.parse(req.body);
+      const item: PartnerProps[] = await this.service.query(validatedData);
+      res.status(201).json(item);
       return;
     } catch (error) {
       next(error);

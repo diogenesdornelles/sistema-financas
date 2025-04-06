@@ -39,3 +39,17 @@ export interface CpProps {
   createdAt: Date;
   updatedAt: Date;
 }
+
+
+export interface QueryCp {
+  value?: string;
+  type?: string;
+  supplier?: string;
+  due?: string;
+  obs?: string;
+  pdate?: string;
+  status?: CPStatus;
+  tx?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}

@@ -10,6 +10,7 @@ export type BaseRouterType = BaseRouter<
       Base,
       Record<string, any>,
       Record<string, any>,
+      Record<string, any>,
       Record<string, any>
     >
   >

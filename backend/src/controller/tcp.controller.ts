@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { TcpService } from "../service/tcp.service";
 import { BaseController } from "./base.controller";
-import { TcpProps, UpdateTcp, CreateTcp } from "../../../packages/dtos/tcp.dto";
+import { TcpProps, UpdateTcp, CreateTcp, QueryTcp } from "../../../packages/dtos/tcp.dto";
 import { createTcpSchema } from "../../../packages/validators/zod-schemas/create/create-tcp.validator";
 import { updateTcpSchema } from "../../../packages/validators/zod-schemas/update/update-tcp.validator";
+import { queryTcpSchema } from "../../../packages/validators/zod-schemas/query/query-tcp.validator";
 
 export default class TcpController extends BaseController<TcpService> {
   constructor() {
@@ -104,4 +105,19 @@ export default class TcpController extends BaseController<TcpService> {
       return;
     }
   };
+      public query = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+      ): Promise<void> => {
+        try {
+          const validatedData: QueryTcp = queryTcpSchema.parse(req.body);
+          const item: TcpProps[] = await this.service.query(validatedData);
+          res.status(201).json(item);
+          return;
+        } catch (error) {
+          next(error);
+          return;
+        }
+      };
 }

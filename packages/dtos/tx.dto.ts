@@ -38,3 +38,18 @@ export interface TxProps {
   createdAt: Date;
   updatedAt: Date;
 }
+
+
+export interface QueryTx {
+  value?: string;
+  type?: TransactionType;
+  cf?: string;
+  description?: string;
+  category?: string;
+  obs?: string;
+  status?: boolean;
+  tdate?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+

@@ -14,6 +14,7 @@ export abstract class BaseService<
   ResponseDTO,
   CreateDTO,
   UpdateDTO,
+  QueryDTO,
 > {
   protected repository: Repository<T>;
 
@@ -57,4 +58,11 @@ export abstract class BaseService<
    * @param id - Identificador do registro.
    */
   public abstract delete(id: string): Promise<boolean>;
+
+  /**
+   * Realiza um filtro.
+   *
+   * @param data - Dados para filtragem.
+   */
+  public abstract query(data: QueryDTO): Promise<ResponseDTO[] | null>;
 }

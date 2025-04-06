@@ -1,9 +1,21 @@
 import { BaseService } from "./base.service";
 import { Cr, Partner, Tcr, Tx, User } from "../entity/entities";
-import { CreateCr, UpdateCr, CrProps } from "../../../packages/dtos/cr.dto";
+import {
+  CreateCr,
+  UpdateCr,
+  CrProps,
+  QueryCr,
+} from "../../../packages/dtos/cr.dto";
 import { PaymentStatus } from "../../../packages/dtos/utils/enums";
+import { FindOptionsWhere, Like, MoreThanOrEqual } from "typeorm";
 
-export class CrService extends BaseService<Cr, CrProps, CreateCr, UpdateCr> {
+export class CrService extends BaseService<
+  Cr,
+  CrProps,
+  CreateCr,
+  UpdateCr,
+  QueryCr
+> {
   constructor() {
     super(Cr);
   }
@@ -50,7 +62,9 @@ export class CrService extends BaseService<Cr, CrProps, CreateCr, UpdateCr> {
         type: { id: data.type } as Tcr,
         customer: { id: data.customer } as Partner,
         tx: { id: data.tx } as Tx,
-        value: data.value ? parseFloat(data.value.replace(/\./g, "").replace(",", ".")) : undefined
+        value: data.value
+          ? parseFloat(data.value.replace(/\./g, "").replace(",", "."))
+          : undefined,
       });
 
       const createdCr = await this.repository.save(newCr);
@@ -82,9 +96,11 @@ export class CrService extends BaseService<Cr, CrProps, CreateCr, UpdateCr> {
           ? ({ id: data.customer } as Partner)
           : undefined,
         tx: data.tx ? ({ id: data.tx } as Tx) : undefined,
-        value: data.value ? parseFloat(data.value.replace(/\./g, "").replace(",", ".")) : undefined,
+        value: data.value
+          ? parseFloat(data.value.replace(/\./g, "").replace(",", "."))
+          : undefined,
         due: data.due ? new Date(data.due) : undefined,
-        rdate: data.rdate ? new Date(data.rdate) : undefined
+        rdate: data.rdate ? new Date(data.rdate) : undefined,
       };
 
       await this.repository.update({ id }, updateData);
@@ -110,6 +126,73 @@ export class CrService extends BaseService<Cr, CrProps, CreateCr, UpdateCr> {
       return updatedCr?.status === PaymentStatus.CANCELLED;
     } catch (error) {
       throw new Error(`Erro ao remover conta com ID ${id}: ${error}`);
+    }
+  };
+
+  /**
+   * Realiza um filtro.
+   *
+   * @param data - Dados para busca.
+   */
+  public query = async (data: QueryCr): Promise<CrProps[]> => {
+    try {
+      const where: FindOptionsWhere<Cr> = {};
+
+      if (data.value) {
+        const value = parseFloat(
+          data.value.replace(/\./g, "").replace(",", "."),
+        );
+        if (!isNaN(value)) {
+          where.value = MoreThanOrEqual(value);
+        }
+      }
+
+      if (data.type) {
+        where.type = { name: data.type };
+      }
+
+      if (data.customer) {
+        where.customer = { name: data.customer };
+      }
+
+      if (data.due) {
+        const updatedDate = new Date(data.due);
+        where.updatedAt = updatedDate;
+      }
+
+      if (data.rdate) {
+        const updatedDate = new Date(data.rdate);
+        where.updatedAt = updatedDate;
+      }
+
+      if (data.obs) {
+        where.obs = Like(`%${data.obs}%`);
+      }
+
+      if (data.status !== undefined) {
+        where.status = data.status;
+      }
+
+      if (data.tx) {
+        where.tx = { id: data.tx };
+      }
+
+      if (data.createdAt) {
+        const updatedDate = new Date(data.createdAt);
+        where.updatedAt = updatedDate;
+      }
+
+      if (data.updatedAt) {
+        const updatedDate = new Date(data.updatedAt);
+        where.updatedAt = updatedDate;
+      }
+
+      return await this.repository.find({
+        where,
+        relations: ["type", "supplier", "tx"],
+      });
+    } catch (error) {
+      throw new Error(`Erro ao filtrar contas a pagar: ${error}`);
     }
   };
 }

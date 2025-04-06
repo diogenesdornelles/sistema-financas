@@ -47,5 +47,12 @@ export default class TxRouter extends BaseRouter<TxController> {
       this.controller.delete,
       GeneralMiddleware.errorHandler,
     );
+    this.router.post(
+      "/query",
+      GeneralMiddleware.authentication,
+      GeneralMiddleware.validateBodyRequest,
+      this.controller.query,
+      GeneralMiddleware.errorHandler,
+    );
   }
 }

@@ -21,3 +21,13 @@ export interface CatProps {
   createdAt: Date;
   updatedAt: Date;
 }
+
+
+export interface QueryCat {
+  name?: string;
+  description?: string;
+  status?: boolean;
+  obs?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}

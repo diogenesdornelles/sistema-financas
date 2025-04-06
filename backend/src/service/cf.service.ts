@@ -1,8 +1,20 @@
 import { BaseService } from "./base.service";
 import { Cf, Tcf, User } from "../entity/entities";
-import { CreateCf, UpdateCf, CfProps } from "../../../packages/dtos/cf.dto";
+import {
+  CreateCf,
+  UpdateCf,
+  CfProps,
+  QueryCf,
+} from "../../../packages/dtos/cf.dto";
+import { FindOptionsWhere, Like, MoreThanOrEqual } from "typeorm";
 
-export class CfService extends BaseService<Cf, CfProps, CreateCf, UpdateCf> {
+export class CfService extends BaseService<
+  Cf,
+  CfProps,
+  CreateCf,
+  UpdateCf,
+  QueryCf
+> {
   constructor() {
     super(Cf);
   }
@@ -47,7 +59,9 @@ export class CfService extends BaseService<Cf, CfProps, CreateCf, UpdateCf> {
         ...data,
         user: { id: data.user } as User,
         type: { id: data.type } as Tcf,
-        balance: data.balance ? parseFloat(data.balance.replace(/\./g, "").replace(",", ".")) : 0.0
+        balance: data.balance
+          ? parseFloat(data.balance.replace(/\./g, "").replace(",", "."))
+          : 0.0,
       });
       const createdCf = await this.repository.save(cf);
 
@@ -74,7 +88,9 @@ export class CfService extends BaseService<Cf, CfProps, CreateCf, UpdateCf> {
       const updateData: Partial<Cf> = {
         ...data,
         type: data.type ? ({ id: data.type } as Tcf) : undefined,
-        balance: data.balance ? parseFloat(data.balance.replace(/\./g, "").replace(",", ".")) : undefined
+        balance: data.balance
+          ? parseFloat(data.balance.replace(/\./g, "").replace(",", "."))
+          : undefined,
       };
 
       await this.repository.update({ id }, updateData);
@@ -100,6 +116,67 @@ export class CfService extends BaseService<Cf, CfProps, CreateCf, UpdateCf> {
       return !!updatedCf && !updatedCf.status;
     } catch (error) {
       throw new Error(`Erro ao remover conta  com ID ${id}: ${error}`);
+    }
+  };
+
+  /**
+   * Realiza um filtro.
+   *
+   * @param data - Dados para busca.
+   */
+  public query = async (data: QueryCf): Promise<CfProps[]> => {
+    try {
+      const where: FindOptionsWhere<Cf> = {};
+
+      if (data.number) {
+        where.number = Like(`%${data.number}%`);
+      }
+
+      if (data.balance) {
+        const balanceValue = parseFloat(
+          data.balance.replace(/\./g, "").replace(",", "."),
+        );
+        if (!isNaN(balanceValue)) {
+          where.balance = MoreThanOrEqual(balanceValue);
+        }
+      }
+
+      if (data.type) {
+        where.type = { name: data.type };
+      }
+
+      if (data.ag) {
+        where.ag = Like(`%${data.ag}%`);
+      }
+
+      if (data.bank) {
+        where.bank = Like(`%${data.bank}%`);
+      }
+
+      if (data.obs) {
+        where.obs = Like(`%${data.obs}%`);
+      }
+
+      if (data.status !== undefined) {
+        where.status = data.status;
+      }
+
+      if (data.createdAt) {
+        const createdDate = new Date(data.createdAt);
+        where.createdAt = createdDate;
+      }
+
+      if (data.updatedAt) {
+        const updatedDate = new Date(data.updatedAt);
+        where.updatedAt = updatedDate;
+      }
+
+      return await this.repository.find({
+        where,
+        relations: ["type"],
+      });
+    } catch (error) {
+      throw new Error(`Erro ao filtrar contas financeiras: ${error}`);
     }
   };
 }

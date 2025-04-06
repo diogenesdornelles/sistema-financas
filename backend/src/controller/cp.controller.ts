@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { CpService } from "../service/cp.service";
 import { BaseController } from "./base.controller";
-import { CpProps, UpdateCp, CreateCp } from "../../../packages/dtos/cp.dto";
+import { CpProps, UpdateCp, CreateCp, QueryCp } from "../../../packages/dtos/cp.dto";
 import { createCpSchema } from "../../../packages/validators/zod-schemas/create/create-cp.validator";
 import { updateCpSchema } from "../../../packages/validators/zod-schemas/update/update-cp.validator";
+import { queryCpSchema } from "../../../packages/validators/zod-schemas/query/query-cp.validator";
 
 export default class CpController extends BaseController<CpService> {
   constructor() {
@@ -104,4 +105,20 @@ export default class CpController extends BaseController<CpService> {
       return;
     }
   };
+
+      public query = async (
+        req: Request,
+        res: Response,
+        next: NextFunction,
+      ): Promise<void> => {
+        try {
+          const validatedData: QueryCp = queryCpSchema.parse(req.body);
+          const item: CpProps[] = await this.service.query(validatedData);
+          res.status(201).json(item);
+          return;
+        } catch (error) {
+          next(error);
+          return;
+        }
+      };
 }

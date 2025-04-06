@@ -47,5 +47,12 @@ export default class CfRouter extends BaseRouter<CfController> {
       this.controller.delete,
       GeneralMiddleware.errorHandler,
     );
+    this.router.post(
+      "/query",
+      GeneralMiddleware.authentication,
+      GeneralMiddleware.validateBodyRequest,
+      this.controller.query,
+      GeneralMiddleware.errorHandler,
+    );
   }
 }

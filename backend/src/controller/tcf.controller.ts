@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { TcfService } from "../service/tcf.service";
 import { BaseController } from "./base.controller";
-import { TcfProps, UpdateTcf, CreateTcf } from "../../../packages/dtos/tcf.dto";
+import { TcfProps, UpdateTcf, CreateTcf, QueryTcf } from "../../../packages/dtos/tcf.dto";
 import { createTcfSchema } from "../../../packages/validators/zod-schemas/create/create-tcf.validator";
 import { updateTcfSchema } from "../../../packages/validators/zod-schemas/update/update-tcf.validator";
+import { queryTcfSchema } from "../../../packages/validators/zod-schemas/query/query-tcf.validator";
 
 export default class TcfController extends BaseController<TcfService> {
   constructor() {
@@ -104,4 +105,19 @@ export default class TcfController extends BaseController<TcfService> {
       return;
     }
   };
+    public query = async (
+      req: Request,
+      res: Response,
+      next: NextFunction,
+    ): Promise<void> => {
+      try {
+        const validatedData: QueryTcf = queryTcfSchema.parse(req.body);
+        const item: TcfProps[] = await this.service.query(validatedData);
+        res.status(201).json(item);
+        return;
+      } catch (error) {
+        next(error);
+        return;
+      }
+    };
 }

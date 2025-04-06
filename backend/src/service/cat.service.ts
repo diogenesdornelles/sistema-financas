@@ -1,12 +1,19 @@
 import { BaseService } from "./base.service";
-import { Cat, User } from "../entity/entities";
-import { CreateCat, UpdateCat, CatProps } from "../../../packages/dtos/cat.dto";
+import { Cat } from "../entity/entities";
+import {
+  CreateCat,
+  UpdateCat,
+  CatProps,
+  QueryCat,
+} from "../../../packages/dtos/cat.dto";
+import { FindOptionsWhere, Like } from "typeorm";
 
 export class CatService extends BaseService<
   Cat,
   CatProps,
   CreateCat,
-  UpdateCat
+  UpdateCat,
+  QueryCat
 > {
   constructor() {
     super(Cat);
@@ -70,7 +77,7 @@ export class CatService extends BaseService<
   ): Promise<Partial<CatProps> | null> => {
     try {
       const updateData: Partial<Cat> = {
-        ...data
+        ...data,
       };
 
       await this.repository.update({ id }, updateData);
@@ -92,6 +99,47 @@ export class CatService extends BaseService<
       return !!updatedCat && !updatedCat.status;
     } catch (error) {
       throw new Error(`Erro ao remover categoria com ID ${id}: ${error}`);
+    }
+  };
+
+  /**
+   * Realiza um filtro.
+   *
+   * @param data - Dados para busca.
+   */
+  public query = async (data: QueryCat): Promise<CatProps[]> => {
+    try {
+      const where: FindOptionsWhere<Cat> = {};
+
+      if (data.name) {
+        where.name = Like(`%${data.name}%`);
+      }
+
+      if (data.description) {
+        where.description = Like(`%${data.description}%`);
+      }
+
+      if (data.obs) {
+        where.obs = Like(`%${data.obs}%`);
+      }
+
+      if (data.status !== undefined) {
+        where.status = data.status;
+      }
+
+      if (data.createdAt) {
+        const createdDate = new Date(data.createdAt);
+        where.createdAt = createdDate;
+      }
+
+      if (data.updatedAt) {
+        const updatedDate = new Date(data.updatedAt);
+        where.updatedAt = updatedDate;
+      }
+
+      return await this.repository.find({ where });
+    } catch (error) {
+      throw new Error(`Erro ao filtrar categorias: ${error}`);
     }
   };
 }

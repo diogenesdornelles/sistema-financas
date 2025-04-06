@@ -21,7 +21,8 @@ export default class LoginService extends BaseService<
   User,
   TokenProps,
   CreateToken,
-  UpdateToken
+  UpdateToken,
+  Record<any, any>
 > {
   constructor() {
     super(User);
@@ -72,5 +73,9 @@ export default class LoginService extends BaseService<
   }
   public delete(pk: string): Promise<boolean> {
     throw new Error("Method not implemented.");
+  }
+
+  public query(data: Record<any, any>): Promise<TokenProps[] | null> {
+    return Promise.resolve(null);
   }
 }

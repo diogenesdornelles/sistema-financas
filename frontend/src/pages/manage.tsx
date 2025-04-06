@@ -120,8 +120,9 @@ function Manage() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "flex-start",
-        marginTop: 2,
+        marginTop: 1,
         height: "100%",
+        padding: null
       }}
     >
       <Tabs
@@ -132,6 +133,12 @@ function Manage() {
         scrollButtons={true}
         indicatorColor="primary"
         aria-label="Tabs de gerenciamento"
+        sx={{
+          bgcolor: (theme) =>
+            theme.palette.mode === "light"
+              ? theme.palette.grey[100]
+              : theme.palette.common.black,
+        }}
       >
         <Tab value="cf" label="Contas financeiras" sx={{ fontWeight: 800 }} />
         <Tab value="tcf" label="Tipos de conta financeira" sx={{ fontWeight: 800 }} />

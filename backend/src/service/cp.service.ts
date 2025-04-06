@@ -1,9 +1,27 @@
 import { BaseService } from "./base.service";
 import { Cp, Partner, Tcp, Tx, User } from "../entity/entities";
-import { CreateCp, UpdateCp, CpProps } from "../../../packages/dtos/cp.dto";
+import {
+  CreateCp,
+  UpdateCp,
+  CpProps,
+  QueryCp,
+} from "../../../packages/dtos/cp.dto";
 import { CPStatus } from "../../../packages/dtos/utils/enums";
+import {
+  Between,
+  FindOptionsWhere,
+  LessThanOrEqual,
+  Like,
+  MoreThanOrEqual,
+} from "typeorm";
 
-export class CpService extends BaseService<Cp, CpProps, CreateCp, UpdateCp> {
+export class CpService extends BaseService<
+  Cp,
+  CpProps,
+  CreateCp,
+  UpdateCp,
+  QueryCp
+> {
   constructor() {
     super(Cp);
   }
@@ -50,7 +68,9 @@ export class CpService extends BaseService<Cp, CpProps, CreateCp, UpdateCp> {
         type: { id: data.type } as Tcp,
         supplier: { id: data.supplier } as Partner,
         tx: { id: data.tx } as Tx,
-        value: data.value ? parseFloat(data.value.replace(/\./g, "").replace(",", ".")) : undefined
+        value: data.value
+          ? parseFloat(data.value.replace(/\./g, "").replace(",", "."))
+          : undefined,
       });
 
       const createdCp = await this.repository.save(newCp);
@@ -82,9 +102,11 @@ export class CpService extends BaseService<Cp, CpProps, CreateCp, UpdateCp> {
           ? ({ id: data.supplier } as Partner)
           : undefined,
         tx: data.tx ? ({ id: data.tx } as Tx) : undefined,
-        value: data.value ? parseFloat(data.value.replace(/\./g, "").replace(",", ".")) : undefined,
+        value: data.value
+          ? parseFloat(data.value.replace(/\./g, "").replace(",", "."))
+          : undefined,
         due: data.due ? new Date(data.due) : undefined,
-        pdate: data.pdate ? new Date(data.pdate) : undefined
+        pdate: data.pdate ? new Date(data.pdate) : undefined,
       };
 
       await this.repository.update({ id }, updateData);
@@ -110,6 +132,73 @@ export class CpService extends BaseService<Cp, CpProps, CreateCp, UpdateCp> {
       return updatedCp?.status === CPStatus.CANCELLED;
     } catch (error) {
       throw new Error(`Erro ao remover conta com ID ${id}: ${error}`);
+    }
+  };
+
+  /**
+   * Realiza um filtro.
+   *
+   * @param data - Dados para busca.
+   */
+  public query = async (data: QueryCp): Promise<CpProps[]> => {
+    try {
+      const where: FindOptionsWhere<Cp> = {};
+
+      if (data.value) {
+        const value = parseFloat(
+          data.value.replace(/\./g, "").replace(",", "."),
+        );
+        if (!isNaN(value)) {
+          where.value = MoreThanOrEqual(value);
+        }
+      }
+
+      if (data.type) {
+        where.type = { name: data.type };
+      }
+
+      if (data.supplier) {
+        where.supplier = { name: data.supplier };
+      }
+
+      if (data.due) {
+        const updatedDate = new Date(data.due);
+        where.updatedAt = updatedDate;
+      }
+
+      if (data.pdate) {
+        const updatedDate = new Date(data.pdate);
+        where.updatedAt = updatedDate;
+      }
+
+      if (data.obs) {
+        where.obs = Like(`%${data.obs}%`);
+      }
+
+      if (data.status !== undefined) {
+        where.status = data.status;
+      }
+
+      if (data.tx) {
+        where.tx = { id: data.tx };
+      }
+
+      if (data.createdAt) {
+        const updatedDate = new Date(data.createdAt);
+        where.updatedAt = updatedDate;
+      }
+
+      if (data.updatedAt) {
+        const updatedDate = new Date(data.updatedAt);
+        where.updatedAt = updatedDate;
+      }
+
+      return await this.repository.find({
+        where,
+        relations: ["type", "supplier", "tx"],
+      });
+    } catch (error) {
+      throw new Error(`Erro ao filtrar contas a pagar: ${error}`);
     }
   };
 }

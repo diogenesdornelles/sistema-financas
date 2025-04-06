@@ -14,3 +14,11 @@ export interface TcrProps {
   createdAt: Date;
   updatedAt: Date;
 }
+
+
+export interface QueryTcr {
+  name?: string;
+  status?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}

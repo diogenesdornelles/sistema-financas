@@ -3,14 +3,17 @@ import { Partner, User } from "../entity/entities";
 import {
   CreatePartner,
   PartnerProps,
+  QueryPartner,
   UpdatePartner,
 } from "../../../packages/dtos/partner.dto";
+import { FindOptionsWhere, Like } from "typeorm";
 
 export class PartnerService extends BaseService<
   Partner,
   PartnerProps,
   CreatePartner,
-  UpdatePartner
+  UpdatePartner,
+  QueryPartner
 > {
   constructor() {
     super(Partner);
@@ -80,7 +83,7 @@ export class PartnerService extends BaseService<
   ): Promise<Partial<PartnerProps> | null> => {
     try {
       const updateData: Partial<Partner> = {
-        ...data
+        ...data,
       };
 
       await this.repository.update({ id }, updateData);
@@ -106,6 +109,54 @@ export class PartnerService extends BaseService<
       return updatedPartner?.status === false;
     } catch (error) {
       throw new Error(`Erro ao remover parceiro com ID ${id}: ${error}`);
+    }
+  };
+
+  /**
+   * Realiza um filtro.
+   *
+   * @param data - Dados para busca.
+   */
+  public query = async (data: QueryPartner): Promise<PartnerProps[]> => {
+    try {
+      const where: FindOptionsWhere<Partner> = {};
+
+      if (data.name) {
+        where.name = Like(`%${data.name}%`);
+      }
+
+      if (data.type) {
+        where.type = data.type;
+      }
+
+      if (data.cod) {
+        where.cod = Like(`%${data.cod}%`);
+      }
+
+      if (data.obs) {
+        where.obs = Like(`%${data.obs}%`);
+      }
+
+      if (data.status !== undefined) {
+        where.status = data.status;
+      }
+
+      if (data.createdAt) {
+        const updatedDate = new Date(data.createdAt);
+        where.updatedAt = updatedDate;
+      }
+
+      if (data.updatedAt) {
+        const updatedDate = new Date(data.updatedAt);
+        where.updatedAt = updatedDate;
+      }
+
+      return await this.repository.find({
+        where,
+        relations: [],
+      });
+    } catch (error) {
+      throw new Error(`Erro ao filtrar contas a pagar: ${error}`);
     }
   };
 }

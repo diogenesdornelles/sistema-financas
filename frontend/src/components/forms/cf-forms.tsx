@@ -88,13 +88,34 @@ export function CreateCfForm(): JSX.Element | null | string {
 
             <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-                    <TextField
-                        label="Número"
-                        {...register("number")}
-                        variant="outlined"
-                        error={!!errors.number}
-                        helperText={errors.number?.message}
-                    />
+                    <Box sx={{ display: 'flex', columnGap: 2 }}>
+                        <TextField
+                            label="Número"
+                            {...register("number")}
+                            variant="outlined"
+                            error={!!errors.number}
+                            helperText={errors.number?.message}
+                        />
+                        <Controller
+                            name="balance"
+                            control={control}
+                            render={({ field }) => (
+                                <TextField
+                                    {...field}
+                                    // type="number"     
+                                    label="Saldo(R$)"
+                                    variant="outlined"
+                                    error={!!errors.balance}
+                                    helperText={errors.balance?.message}
+                                    onChange={(e) => {
+                                        const formatedValue = strToPtBrMoney(e.target.value);
+                                        field.onChange(formatedValue);
+                                    }}
+                                />
+                            )}
+                        />
+
+                    </Box>
 
                     <Controller
                         name="type"
@@ -119,40 +140,24 @@ export function CreateCfForm(): JSX.Element | null | string {
                         )}
                     />
 
-                    <Controller
-                        name="balance"
-                        control={control}
-                        render={({ field }) => (
-                            <TextField
-                                {...field}
-                                // type="number"     
-                                label="Saldo(R$)"
-                                variant="outlined"
-                                error={!!errors.balance}
-                                helperText={errors.balance?.message}
-                                onChange={(e) => {
-                                    const formatedValue = strToPtBrMoney(e.target.value);
-                                    field.onChange(formatedValue);
-                                }}
-                            />
-                        )}
-                    />
 
-                    <TextField
-                        label="Agência"
-                        {...register("ag")}
-                        variant="outlined"
-                        error={!!errors.ag}
-                        helperText={errors.ag?.message}
-                    />
+                    <Box sx={{ display: 'flex', columnGap: 2 }}>
+                        <TextField
+                            label="Agência"
+                            {...register("ag")}
+                            variant="outlined"
+                            error={!!errors.ag}
+                            helperText={errors.ag?.message}
+                        />
 
-                    <TextField
-                        label="Banco"
-                        {...register("bank")}
-                        variant="outlined"
-                        error={!!errors.bank}
-                        helperText={errors.bank?.message}
-                    />
+                        <TextField
+                            label="Banco"
+                            {...register("bank")}
+                            variant="outlined"
+                            error={!!errors.bank}
+                            helperText={errors.bank?.message}
+                        />
+                    </Box>
 
                     <TextField
                         label="Observações"
@@ -238,14 +243,25 @@ export function UpdateCfForm(): JSX.Element | null | string {
 
             <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-                    <TextField
-                        label="Número"
-                        {...register("number")}
-                        variant="outlined"
-                        error={!!errors.number}
-                        helperText={errors.number?.message}
-                    />
-
+                    <Box sx={{ display: 'flex', columnGap: 2 }}>
+                        <TextField
+                            label="Número"
+                            {...register("number")}
+                            variant="outlined"
+                            error={!!errors.number}
+                            helperText={errors.number?.message}
+                            sx={{ width: '100%' }}
+                        />
+                        <TextField
+                            label="Saldo(R$)"
+                            {...register("balance")}
+                            variant="outlined"
+                            error={!!errors.balance}
+                            helperText={errors.balance?.message}
+                            type="text"
+                            sx={{ width: '100%' }}
+                        />
+                    </Box>
                     <Controller
                         name="type"
                         control={control}
@@ -275,31 +291,27 @@ export function UpdateCfForm(): JSX.Element | null | string {
                         )}
                     />
 
-                    <TextField
-                        label="Saldo(R$)"
-                        {...register("balance")}
-                        variant="outlined"
-                        error={!!errors.balance}
-                        helperText={errors.balance?.message}
-                        type="text"
-                    />
 
 
-                    <TextField
-                        label="Agência"
-                        {...register("ag")}
-                        variant="outlined"
-                        error={!!errors.ag}
-                        helperText={errors.ag?.message}
-                    />
+                    <Box sx={{ display: 'flex', columnGap: 2 }}>
+                        <TextField
+                            label="Agência"
+                            {...register("ag")}
+                            variant="outlined"
+                            error={!!errors.ag}
+                            helperText={errors.ag?.message}
+                            sx={{ width: '100%' }}
+                        />
 
-                    <TextField
-                        label="Banco"
-                        {...register("bank")}
-                        variant="outlined"
-                        error={!!errors.bank}
-                        helperText={errors.bank?.message}
-                    />
+                        <TextField
+                            label="Banco"
+                            {...register("bank")}
+                            variant="outlined"
+                            error={!!errors.bank}
+                            helperText={errors.bank?.message}
+                            sx={{ width: '100%' }}
+                        />
+                    </Box>
 
                     <TextField
                         label="Observações"

@@ -16,7 +16,6 @@ export interface UpdateUser {
 }
 
 export interface UserProps {
-  // Campos gerados e obrigatórios na resposta
   id: string;
   name: string;
   surname: string;
@@ -24,4 +23,13 @@ export interface UserProps {
   status: boolean;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface QueryUser {
+  name?: string;
+  surname?: string;
+  cpf?: string;
+  status?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }

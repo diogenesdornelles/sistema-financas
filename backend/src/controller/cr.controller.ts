@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { CrService } from "../service/cr.service";
 import { BaseController } from "./base.controller";
-import { CrProps, UpdateCr, CreateCr } from "../../../packages/dtos/cr.dto";
+import { CrProps, UpdateCr, CreateCr, QueryCr } from "../../../packages/dtos/cr.dto";
 import { createCrSchema } from "../../../packages/validators/zod-schemas/create/create-cr.validator";
 import { updateCrSchema } from "../../../packages/validators/zod-schemas/update/update-cr.validator";
+import { queryCrSchema } from "../../../packages/validators/zod-schemas/query/query-cr.validator";
 
 export default class CrController extends BaseController<CrService> {
   constructor() {
@@ -104,4 +105,20 @@ export default class CrController extends BaseController<CrService> {
       return;
     }
   };
+
+        public query = async (
+          req: Request,
+          res: Response,
+          next: NextFunction,
+        ): Promise<void> => {
+          try {
+            const validatedData: QueryCr = queryCrSchema.parse(req.body);
+            const item: CrProps[] = await this.service.query(validatedData);
+            res.status(201).json(item);
+            return;
+          } catch (error) {
+            next(error);
+            return;
+          }
+        };
 }

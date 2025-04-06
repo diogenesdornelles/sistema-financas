@@ -9,7 +9,7 @@ export default function ManageArea({ Form, List }: { Form: JSX.Element, List: JS
     )
     return (
         <Box sx={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
-            <Box sx={{ display: 'flex', flexGrow: 0, flexShrink: 0, height: '100%', bgcolor: theme.palette.mode === 'light' ? theme.palette.primary.dark : theme.palette.grey[700] }}>{Form}</Box>
+            <Box sx={{ display: 'flex', flexGrow: 0, flexShrink: 1, height: '100%', bgcolor: theme.palette.mode === 'light' ? theme.palette.primary.dark : theme.palette.grey[700] }}>{Form}</Box>
             <Box sx={{ display: 'flex', flexGrow: 1, flexShrink: 1, height: '100%', bgcolor: theme.palette.mode === 'light' ? theme.palette.common.white : theme.palette.grey[900]}}>{List}</Box>
         </Box>
     )

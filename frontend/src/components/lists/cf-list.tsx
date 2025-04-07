@@ -37,11 +37,13 @@ const CfList = (): JSX.Element | string => {
     setFormType('cf', 'update');
     setUpdateItem('cf', {
       ...item,
+      number: item.number,
       type: item.type.id,
       ag: item.ag || undefined,
       bank: item.bank || undefined,
       obs: item.obs || undefined,
-      balance: strToPtBrMoney(String(item.balance)),
+      status: item.status,
+      balance: String(item.balance)
     });
   };
 

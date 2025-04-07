@@ -80,6 +80,7 @@ const PartnerSearchForm = ({ onSearch }: PartnerSearchFormProps): JSX.Element =>
           variant="outlined"
           error={!!errors.name}
           helperText={errors.name?.message}
+          size="small"
         />
         <TextField
           label="Código (CPF/CNPJ)"
@@ -87,6 +88,7 @@ const PartnerSearchForm = ({ onSearch }: PartnerSearchFormProps): JSX.Element =>
           variant="outlined"
           error={!!errors.cod}
           helperText={errors.cod?.message}
+          size="small"
         />
         <TextField
           label="Tipo"
@@ -94,6 +96,7 @@ const PartnerSearchForm = ({ onSearch }: PartnerSearchFormProps): JSX.Element =>
           variant="outlined"
           error={!!errors.type}
           helperText={errors.type?.message}
+          size="small"
         />
         <TextField
           label="Observações"
@@ -101,6 +104,7 @@ const PartnerSearchForm = ({ onSearch }: PartnerSearchFormProps): JSX.Element =>
           variant="outlined"
           error={!!errors.obs}
           helperText={errors.obs?.message}
+          size="small"
         />
         <TextField
           label="Criação"
@@ -112,6 +116,7 @@ const PartnerSearchForm = ({ onSearch }: PartnerSearchFormProps): JSX.Element =>
           }}
           error={!!errors.createdAt}
           helperText={errors.createdAt?.message}
+          size="small"
         />
         <TextField
           label="Alteração"
@@ -123,6 +128,7 @@ const PartnerSearchForm = ({ onSearch }: PartnerSearchFormProps): JSX.Element =>
           }}
           error={!!errors.updatedAt}
           helperText={errors.updatedAt?.message}
+          size="small"
         />
         <FormControlLabel
           control={<Switch {...register('status')} checked={!!showInactives} />}

@@ -10,7 +10,7 @@ import { FindOptionsWhere, Like } from "typeorm";
 
 export class CatService extends BaseService<
   Cat,
-  CatProps,
+  Cat,
   CreateCat,
   UpdateCat,
   QueryCat
@@ -22,7 +22,7 @@ export class CatService extends BaseService<
   /**
    * Recupera todos.
    */
-  public getAll = async (): Promise<CatProps[]> => {
+  public getAll = async (): Promise<Cat[]> => {
     try {
       const cats = await this.repository.find({ relations: [] });
       return cats;
@@ -31,7 +31,7 @@ export class CatService extends BaseService<
     }
   };
 
-  public getMany = async (skip = 0): Promise<CatProps[]> => {
+  public getMany = async (skip = 0): Promise<Cat[]> => {
     try {
       const cats = await this.repository.find({
         skip,
@@ -49,7 +49,7 @@ export class CatService extends BaseService<
    *
    * @param id - Identificador.
    */
-  public getOne = async (id: string): Promise<CatProps | null> => {
+  public getOne = async (id: string): Promise<Cat | null> => {
     try {
       const cat = await this.repository.findOne({
         where: { id },
@@ -66,7 +66,7 @@ export class CatService extends BaseService<
    *
    * @param data - Dados para criação.
    */
-  public create = async (data: CreateCat): Promise<CatProps> => {
+  public create = async (data: CreateCat): Promise<Cat> => {
     try {
       const cat = this.repository.create({
         ...data,
@@ -87,7 +87,7 @@ export class CatService extends BaseService<
   public update = async (
     id: string,
     data: UpdateCat,
-  ): Promise<Partial<CatProps> | null> => {
+  ): Promise<Partial<Cat> | null> => {
     try {
       const updateData: Partial<Cat> = {
         ...data,
@@ -120,7 +120,7 @@ export class CatService extends BaseService<
    *
    * @param data - Dados para busca.
    */
-  public query = async (data: QueryCat): Promise<CatProps[]> => {
+  public query = async (data: QueryCat): Promise<Cat[]> => {
     try {
       const where: FindOptionsWhere<Cat> = {};
 

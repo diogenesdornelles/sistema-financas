@@ -7,9 +7,10 @@ import {
     Box,
     Alert,
     Autocomplete,
-    Checkbox,
-    FormControlLabel,
     Typography,
+    InputLabel,
+    Select,
+    MenuItem,
 } from "@mui/material";
 import { JSX } from "react";
 import { useFormStore } from "../../hooks/use-form-store";
@@ -56,7 +57,7 @@ export function CreateCpForm(): JSX.Element | null | string {
             due: "", // data atual
             obs: "",
             user: session ? session.user.id : "",
-            tx: undefined,
+            tx: "",
         },
     });
 
@@ -69,7 +70,9 @@ export function CreateCpForm(): JSX.Element | null | string {
     };
 
     if (forms.cp.type === "update") return null;
+
     if (isPendingTcp || isPendingPartner || isPendingTx) return "Carregando...";
+
     if (errorTcp || errorPartner || errorTx) {
         const errorMessage = errorTcp?.message || errorPartner?.message || errorTx?.message;
         return <ErrorAlert message={errorMessage ? errorMessage : 'Ocorreu um erro!'} />;
@@ -101,8 +104,9 @@ export function CreateCpForm(): JSX.Element | null | string {
                                 <TextField
                                     {...field}
                                     label="Valor (R$)"
+                                    size="small"
                                     variant="outlined"
-                                    sx={{width: '100%'}}
+                                    sx={{ width: '100%' }}
                                     error={!!errors.value}
                                     helperText={errors.value?.message}
                                     onChange={(e) => {
@@ -115,8 +119,9 @@ export function CreateCpForm(): JSX.Element | null | string {
                         <TextField
                             label="Vencimento"
                             {...register("due")}
+                            size="small"
                             variant="outlined"
-                            sx={{width: '100%'}}
+                            sx={{ width: '100%' }}
                             error={!!errors.due}
                             helperText={errors.due?.message}
                             type="date"
@@ -137,6 +142,7 @@ export function CreateCpForm(): JSX.Element | null | string {
                                     <TextField
                                         {...params}
                                         label="Tipo"
+                                        size="small"
                                         variant="outlined"
                                         error={!!errors.type}
                                         helperText={errors.type?.message}
@@ -159,6 +165,7 @@ export function CreateCpForm(): JSX.Element | null | string {
                                     <TextField
                                         {...params}
                                         label="Fornecedor"
+                                        size="small"
                                         variant="outlined"
                                         error={!!errors.supplier}
                                         helperText={errors.supplier?.message}
@@ -176,6 +183,7 @@ export function CreateCpForm(): JSX.Element | null | string {
                         label="Observações"
                         {...register("obs")}
                         variant="outlined"
+                        size="small"
                         error={!!errors.obs}
                         helperText={errors.obs?.message}
                         multiline
@@ -195,6 +203,7 @@ export function CreateCpForm(): JSX.Element | null | string {
                                     <TextField
                                         {...params}
                                         label="Transação"
+                                        size="small"
                                         variant="outlined"
                                         error={!!errors.tx}
                                         helperText={errors.tx?.message}
@@ -223,8 +232,9 @@ export function CreateCpForm(): JSX.Element | null | string {
   Exibido quando o contexto indicar o modo "update" e houver item para atualizar
 */
 export function UpdateCpForm(): JSX.Element | null | string {
-    const mutation = usePutCp();
+
     const { forms } = useFormStore();
+    const mutation = usePutCp(forms.cp.updateItem ? forms.cp.updateItem.id : '');
     const { isPending: isPendingTcp, error: errorTcp, data: tcpData } = useGetAllTcp();
     const { isPending: isPendingPartner, error: errorPartner, data: partnerData } = useGetAllPartner();
     const { isPending: isPendingTx, error: errorTx, data: txData } = useGetAllTx();
@@ -237,10 +247,14 @@ export function UpdateCpForm(): JSX.Element | null | string {
         formState: { errors },
     } = useForm<UpdateCpFormData>({
         resolver: zodResolver(updateCpSchema),
-        defaultValues: {
-            ...forms.cp.updateItem,
+        defaultValues: forms.cp.updateItem ? {
+            type: forms.cp.updateItem.type,
+            supplier: forms.cp.updateItem.supplier,
+            tx: forms.cp.updateItem.tx ? forms.cp.updateItem.tx : undefined,
+            due: String(forms.cp.updateItem.due),
+            pdate: forms.cp.updateItem.pdate ? String(forms.cp.updateItem.pdate) : '',
             value: strToPtBrMoney(forms.cp.updateItem?.value || ""),
-        },
+        } : {},
     });
 
     const statusValue = watch("status");
@@ -283,6 +297,7 @@ export function UpdateCpForm(): JSX.Element | null | string {
                                 {...field}
                                 label="Valor (R$)"
                                 variant="outlined"
+                                size="small"
                                 error={!!errors.value}
                                 helperText={errors.value?.message}
                                 onChange={(e) => {
@@ -309,6 +324,7 @@ export function UpdateCpForm(): JSX.Element | null | string {
                                     <TextField
                                         {...params}
                                         label="Tipo"
+                                        size="small"
                                         variant="outlined"
                                         error={!!errors.type}
                                         helperText={errors.type?.message}
@@ -334,6 +350,7 @@ export function UpdateCpForm(): JSX.Element | null | string {
                                     <TextField
                                         {...params}
                                         label="Fornecedor"
+                                        size="small"
                                         variant="outlined"
                                         error={!!errors.supplier}
                                         helperText={errors.supplier?.message}
@@ -345,6 +362,7 @@ export function UpdateCpForm(): JSX.Element | null | string {
                     <TextField
                         label="Vencimento"
                         {...register("due")}
+                        size="small"
                         variant="outlined"
                         error={!!errors.due}
                         helperText={errors.due?.message}
@@ -357,6 +375,7 @@ export function UpdateCpForm(): JSX.Element | null | string {
                         label="Data de Pagamento"
                         {...register("pdate")}
                         variant="outlined"
+                        size="small"
                         error={!!errors.pdate}
                         helperText={errors.pdate?.message}
                         type="date"
@@ -369,6 +388,7 @@ export function UpdateCpForm(): JSX.Element | null | string {
                         {...register("obs")}
                         variant="outlined"
                         error={!!errors.obs}
+                        size="small"
                         helperText={errors.obs?.message}
                         multiline
                         rows={3}
@@ -391,6 +411,7 @@ export function UpdateCpForm(): JSX.Element | null | string {
                                         {...params}
                                         label="Transação"
                                         variant="outlined"
+                                        size="small"
                                         error={!!errors.tx}
                                         helperText={errors.tx?.message}
                                     />
@@ -398,17 +419,25 @@ export function UpdateCpForm(): JSX.Element | null | string {
                             />
                         )}
                     />
-                    <FormControlLabel
-                        control={<Checkbox {...register("status")} />}
-                        label={`Status: ${statusValue ? "Ativo" : "Inativo"}`}
-                    />
+                    <InputLabel id="cp-status-label-update">Tipo</InputLabel>
+                    <Select
+                        labelId="cp-status-label-update"
+                        label="Status"
+                        size="small"
+                        defaultValue={statusValue}
+                        {...register("status")}
+                    >
+                        <MenuItem value="pending">Pendente</MenuItem>
+                        <MenuItem value="paid">Pago</MenuItem>
+                        <MenuItem value="cancelled">Cancelado</MenuItem>
+                    </Select>
                     <Button
                         type="submit"
                         variant="contained"
                         color="primary"
                         disabled={mutation.isPending}
                     >
-                        {mutation.isPending ? "Atualizando..." : "Atualizar Cp"}
+                        {mutation.isPending ? "Atualizando..." : "Atualizar Conta"}
                     </Button>
                 </Box>
             </form>

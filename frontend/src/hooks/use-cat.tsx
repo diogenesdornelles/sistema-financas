@@ -45,11 +45,11 @@ export function useQueryCat() {
 })}
 
 // Hook para atualizar um 'cat' existente (PUT)
-export function usePutCat() {
+export function usePutCat(id: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: UpdateCat) => Api.cat.put(data), 
+    mutationFn: (data: UpdateCat) => Api.cat.put(data, id), 
     onSuccess: (data) => { 
       console.log(data)
       queryClient.invalidateQueries({ queryKey: ["cat", "getMany"] }); 

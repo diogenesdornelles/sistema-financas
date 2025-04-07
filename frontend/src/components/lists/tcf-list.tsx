@@ -34,7 +34,11 @@ export const TcfList = (): JSX.Element | string => {
 
   const onEdit = (item: TcfProps) => {
     setFormType('tcf', 'update');
-    setUpdateItem('tcf', item);
+    setUpdateItem('tcf', {
+      ...item,
+      name: item.name,
+      status: item.status ? item.status : undefined
+    });
   };
 
   const delMutation = useDeleteTcf();

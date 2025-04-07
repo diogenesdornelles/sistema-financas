@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { CpService } from "../service/cp.service";
 import { BaseController } from "./base.controller";
 import {
-  CpProps,
   UpdateCp,
   CreateCp,
   QueryCp,
@@ -10,6 +9,7 @@ import {
 import { createCpSchema } from "../../../packages/validators/zod-schemas/create/create-cp.validator";
 import { updateCpSchema } from "../../../packages/validators/zod-schemas/update/update-cp.validator";
 import { queryCpSchema } from "../../../packages/validators/zod-schemas/query/query-cp.validator";
+import { Cp } from "../entity/entities";
 
 export default class CpController extends BaseController<CpService> {
   constructor() {
@@ -22,7 +22,7 @@ export default class CpController extends BaseController<CpService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const items: CpProps[] = await this.service.getAll();
+      const items: Cp[] = await this.service.getAll();
       res.status(200).json(items);
       return;
     } catch (error) {
@@ -40,7 +40,7 @@ export default class CpController extends BaseController<CpService> {
       const { skip } = req.params;
       const skipInt = parseInt(skip);
       if (skipInt >= 0) {
-        const items: CpProps[] | null = await this.service.getMany(skipInt);
+        const items: Cp[] | null = await this.service.getMany(skipInt);
         if (!items) {
           res.status(404).json({ message: "Contas não encontradas" });
           return;
@@ -66,7 +66,7 @@ export default class CpController extends BaseController<CpService> {
   ): Promise<void> => {
     try {
       const { id } = req.params;
-      const item: CpProps | null = await this.service.getOne(id);
+      const item: Cp | null = await this.service.getOne(id);
       if (!item) {
         res.status(404).json({ message: "Conta não encontrada" });
         return;
@@ -86,7 +86,7 @@ export default class CpController extends BaseController<CpService> {
   ): Promise<void> => {
     try {
       const validatedData: CreateCp = createCpSchema.parse(req.body);
-      const item: CpProps = await this.service.create(validatedData);
+      const item: Cp = await this.service.create(validatedData);
       res.status(201).json(item);
       return;
     } catch (error) {
@@ -103,7 +103,7 @@ export default class CpController extends BaseController<CpService> {
     try {
       const { id } = req.params;
       const validatedData: UpdateCp = updateCpSchema.parse(req.body);
-      const updateditem: Partial<CpProps> | null = await this.service.update(
+      const updateditem: Partial<Cp> | null = await this.service.update(
         id,
         validatedData,
       );
@@ -146,7 +146,7 @@ export default class CpController extends BaseController<CpService> {
   ): Promise<void> => {
     try {
       const validatedData: QueryCp = queryCpSchema.parse(req.body);
-      const item: CpProps[] = await this.service.query(validatedData);
+      const item: Cp[] = await this.service.query(validatedData);
       res.status(201).json(item);
       return;
     } catch (error) {

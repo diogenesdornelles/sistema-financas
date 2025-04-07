@@ -42,11 +42,11 @@ export function usePostUser() {
   });
 }
 
-export function usePutUser() {
+export function usePutUser(id: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: UpdateUser) => Api.user.put(data),
+    mutationFn: (data: UpdateUser) => Api.user.put(data, id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user", "getMany"]});
     },

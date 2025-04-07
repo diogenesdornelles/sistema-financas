@@ -3,14 +3,13 @@ import { Tcf } from "../entity/entities";
 import {
   CreateTcf,
   UpdateTcf,
-  TcfProps,
   QueryTcf,
 } from "../../../packages/dtos/tcf.dto";
 import { FindOptionsWhere, Like } from "typeorm";
 
 export class TcfService extends BaseService<
   Tcf,
-  TcfProps,
+  Tcf,
   CreateTcf,
   UpdateTcf,
   QueryTcf
@@ -22,7 +21,7 @@ export class TcfService extends BaseService<
   /**
    * Recupera todos os tipos de contas.
    */
-  public getAll = async (): Promise<TcfProps[]> => {
+  public getAll = async (): Promise<Tcf[]> => {
     try {
       return await this.repository.find();
     } catch (error) {
@@ -33,7 +32,7 @@ export class TcfService extends BaseService<
   /**
    * Recupera todos os tipos de contas.
    */
-  public getMany = async (skip: number): Promise<TcfProps[]> => {
+  public getMany = async (skip: number): Promise<Tcf[]> => {
     try {
       return await this.repository.find({ skip, take: 10 });
     } catch (error) {
@@ -46,7 +45,7 @@ export class TcfService extends BaseService<
    *
    * @param id - Identificador.
    */
-  public getOne = async (id: string): Promise<TcfProps | null> => {
+  public getOne = async (id: string): Promise<Tcf | null> => {
     try {
       return await this.repository.findOne({ where: { id } });
     } catch (error) {
@@ -61,7 +60,7 @@ export class TcfService extends BaseService<
    *
    * @param data - Dados para criação.
    */
-  public create = async (data: CreateTcf): Promise<TcfProps> => {
+  public create = async (data: CreateTcf): Promise<Tcf> => {
     try {
       const createdTcf = await this.repository.save(
         this.repository.create(data),
@@ -81,7 +80,7 @@ export class TcfService extends BaseService<
   public update = async (
     id: string,
     data: UpdateTcf,
-  ): Promise<Partial<TcfProps> | null> => {
+  ): Promise<Partial<Tcf> | null> => {
     try {
       await this.repository.update({ id }, data);
       return await this.repository.findOne({ where: { id } });
@@ -114,7 +113,7 @@ export class TcfService extends BaseService<
    *
    * @param data - Dados para busca.
    */
-  public query = async (data: QueryTcf): Promise<TcfProps[]> => {
+  public query = async (data: QueryTcf): Promise<Tcf[]> => {
     try {
       const where: FindOptionsWhere<Tcf> = {};
 

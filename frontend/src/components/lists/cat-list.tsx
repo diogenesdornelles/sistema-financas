@@ -35,7 +35,13 @@ const CatList = (): JSX.Element | string => {
 
   const onEdit = (item: CatProps) => {
     setFormType('cat', 'update');
-    setUpdateItem('cat', item);
+    setUpdateItem('cat', {
+      ...item,
+      name: item.name,
+      obs: item.obs,
+      description: item.description,
+      status: item.status
+    });
   };
 
   const delMutation = useDeleteCat();

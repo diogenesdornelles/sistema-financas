@@ -41,11 +41,11 @@ export function usePostTcp() {
   });
 }
 
-export function usePutTcp() {
+export function usePutTcp(id: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: UpdateTcp) => Api.tcp.put(data),
+    mutationFn: (data: UpdateTcp) => Api.tcp.put(data, id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tcp", "getMany"]});
     },

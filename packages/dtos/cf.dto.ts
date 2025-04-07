@@ -34,8 +34,8 @@ export interface CfProps {
   bank: string | null;
   obs: string;
   status: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 

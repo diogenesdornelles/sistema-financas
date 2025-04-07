@@ -40,11 +40,11 @@ export function usePostCf() {
 }
 
 // Hook para atualizar um 'cf' existente (PUT)
-export function usePutCf() { 
+export function usePutCf(id: string) { 
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: UpdateCf) => Api.cf.put(data),
+    mutationFn: (data: UpdateCf) => Api.cf.put(data, id),
     onSuccess: () => { 
       queryClient.invalidateQueries({ queryKey: ["cf", "getMany"] }); 
     },

@@ -3,14 +3,13 @@ import { Tcp } from "../entity/entities";
 import {
   CreateTcp,
   UpdateTcp,
-  TcpProps,
   QueryTcp,
 } from "../../../packages/dtos/tcp.dto";
 import { FindOptionsWhere, Like } from "typeorm";
 
 export class TcpService extends BaseService<
   Tcp,
-  TcpProps,
+  Tcp,
   CreateTcp,
   UpdateTcp,
   QueryTcp
@@ -22,7 +21,7 @@ export class TcpService extends BaseService<
   /**
    * Recupera todos os tipos de contas.
    */
-  public getAll = async (): Promise<TcpProps[]> => {
+  public getAll = async (): Promise<Tcp[]> => {
     try {
       return await this.repository.find();
     } catch (error) {
@@ -33,7 +32,7 @@ export class TcpService extends BaseService<
   /**
    * Recupera 10 tipos de contas, com skip.
    */
-  public getMany = async (skip: number): Promise<TcpProps[]> => {
+  public getMany = async (skip: number): Promise<Tcp[]> => {
     try {
       return await this.repository.find({ skip, take: 10 });
     } catch (error) {
@@ -46,7 +45,7 @@ export class TcpService extends BaseService<
    *
    * @param id - Identificador.
    */
-  public getOne = async (id: string): Promise<TcpProps | null> => {
+  public getOne = async (id: string): Promise<Tcp | null> => {
     try {
       return await this.repository.findOne({ where: { id } });
     } catch (error) {
@@ -59,7 +58,7 @@ export class TcpService extends BaseService<
    *
    * @param data - Dados para criação.
    */
-  public create = async (data: CreateTcp): Promise<TcpProps> => {
+  public create = async (data: CreateTcp): Promise<Tcp> => {
     try {
       const createdTcf = await this.repository.save(
         this.repository.create(data),
@@ -79,7 +78,7 @@ export class TcpService extends BaseService<
   public update = async (
     id: string,
     data: UpdateTcp,
-  ): Promise<Partial<TcpProps> | null> => {
+  ): Promise<Partial<Tcp> | null> => {
     try {
       await this.repository.update({ id }, data);
       return await this.repository.findOne({ where: { id } });
@@ -108,7 +107,7 @@ export class TcpService extends BaseService<
    *
    * @param data - Dados para busca.
    */
-  public query = async (data: QueryTcp): Promise<TcpProps[]> => {
+  public query = async (data: QueryTcp): Promise<Tcp[]> => {
     try {
       const where: FindOptionsWhere<Tcp> = {};
 

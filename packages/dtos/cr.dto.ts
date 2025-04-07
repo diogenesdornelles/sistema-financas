@@ -29,13 +29,13 @@ export interface CrProps {
   value: number;
   type: TcrProps;
   customer: PartnerProps;
-  due: Date;
+  due: string;
   obs: string;
   tx?: TxProps;
-  rdate?: Date;
+  rdate?: string;
   status: PaymentStatus;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 

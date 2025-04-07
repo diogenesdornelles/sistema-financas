@@ -34,7 +34,11 @@ const TcpList = (): JSX.Element | string => {
 
   const onEdit = (item: TcpProps) => {
     setFormType('tcp', 'update');
-    setUpdateItem('tcp', item);
+    setUpdateItem('tcp', {
+      ...item,
+      name: item.name,
+      status: item.status ? item.status : undefined
+    });
   };
 
   const delMutation = useDeleteTcp();

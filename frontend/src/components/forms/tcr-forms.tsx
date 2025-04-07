@@ -30,7 +30,7 @@ export function CreateTcrForm(): JSX.Element | null {
         resolver: zodResolver(createTcrSchema),
         defaultValues: {
             name: ''
-          }
+        }
     });
 
     const onSubmit = async (data: CreateTcrFormData) => {
@@ -65,6 +65,7 @@ export function CreateTcrForm(): JSX.Element | null {
                     <TextField
                         label="Nome"
                         {...register("name")}
+                        size="small"
                         variant="outlined"
                         error={!!errors.name}
                         helperText={errors.name?.message}
@@ -84,10 +85,10 @@ export function CreateTcrForm(): JSX.Element | null {
 }
 
 export function UpdateTcrForm(): JSX.Element | null {
-    const mutation = usePutTcr();
+    
     const { forms } = useFormStore();
 
-
+    const mutation = usePutTcr(forms.tcr.updateItem ? forms.tcr.updateItem.id : '');
 
     const {
         register,
@@ -96,8 +97,11 @@ export function UpdateTcrForm(): JSX.Element | null {
         formState: { errors },
     } = useForm<UpdateTcrFormData>({
         resolver: zodResolver(updateTcrSchema),
-        defaultValues: forms.tcr.updateItem || {},
-    });
+        defaultValues: forms.tcr.updateItem ? {
+            name: forms.tcr.updateItem.name,
+            status: forms.tcr.updateItem.status ? forms.tcr.updateItem.status : undefined
+          } : { },
+        });
 
     const statusValue = watch("status");
 
@@ -113,7 +117,7 @@ export function UpdateTcrForm(): JSX.Element | null {
 
     return (
         <FormContainer>
-            <ButtonUpdateForm title="Atualizar Tipo de conta a receber" name='tcr'/>
+            <ButtonUpdateForm title="Atualizar Tipo de conta a receber" name='tcr' />
 
             {mutation.isSuccess && (
                 <Alert severity="success" style={{ width: "100%" }}>
@@ -135,10 +139,10 @@ export function UpdateTcrForm(): JSX.Element | null {
                         variant="outlined"
                         error={!!errors.name}
                         helperText={errors.name?.message}
+                        size="small"
                     />
-
                     <FormControlLabel
-                        control={<Checkbox {...register("status")} />}
+                        control={<Checkbox size="small" checked={statusValue} {...register("status")} />}
                         label={`Status: ${statusValue ? "Ativo" : "Inativo"}`}
                     />
 

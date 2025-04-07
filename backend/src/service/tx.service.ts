@@ -3,14 +3,13 @@ import { Cat, Cf, Tx, User } from "../entity/entities";
 import {
   CreateTx,
   QueryTx,
-  TxProps,
   UpdateTx,
 } from "../../../packages/dtos/tx.dto";
 import { FindOptionsWhere, Like, MoreThanOrEqual } from "typeorm";
 
 export class TxService extends BaseService<
   Tx,
-  TxProps,
+  Tx,
   CreateTx,
   UpdateTx,
   QueryTx
@@ -22,7 +21,7 @@ export class TxService extends BaseService<
   /**
    * Recupera todas as transações.
    */
-  public getAll = async (): Promise<TxProps[]> => {
+  public getAll = async (): Promise<Tx[]> => {
     try {
       return await this.repository.find({
         relations: ["category", "cf"],
@@ -35,7 +34,7 @@ export class TxService extends BaseService<
   /**
    * Recupera 10 transações, com skip.
    */
-  public getMany = async (skip: number): Promise<TxProps[]> => {
+  public getMany = async (skip: number): Promise<Tx[]> => {
     try {
       return await this.repository.find({
         skip,
@@ -52,7 +51,7 @@ export class TxService extends BaseService<
    *
    * @param id - Identificador da transação.
    */
-  public getOne = async (id: string): Promise<TxProps | null> => {
+  public getOne = async (id: string): Promise<Tx | null> => {
     try {
       return await this.repository.findOne({
         where: { id },
@@ -68,7 +67,7 @@ export class TxService extends BaseService<
    *
    * @param data - Dados para criação.
    */
-  public create = async (data: CreateTx): Promise<TxProps> => {
+  public create = async (data: CreateTx): Promise<Tx> => {
     try {
       const newTx = this.repository.create({
         ...data,
@@ -100,7 +99,7 @@ export class TxService extends BaseService<
   public update = async (
     id: string,
     data: UpdateTx,
-  ): Promise<Partial<TxProps> | null> => {
+  ): Promise<Partial<Tx> | null> => {
     try {
       const updateData: Partial<Tx> = {
         ...data,
@@ -142,7 +141,7 @@ export class TxService extends BaseService<
    *
    * @param data - Dados para busca.
    */
-  public query = async (data: QueryTx): Promise<TxProps[]> => {
+  public query = async (data: QueryTx): Promise<Tx[]> => {
     try {
       const where: FindOptionsWhere<Tx> = {};
 

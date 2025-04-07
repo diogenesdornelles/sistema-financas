@@ -86,6 +86,7 @@ const CpSearchForm = ({ onSearch }: CpSearchFormProps): JSX.Element => {
           variant="outlined"
           error={!!errors.value}
           helperText={errors.value?.message}
+          size="small"
         />
         <TextField
           label="Tipo"
@@ -93,6 +94,7 @@ const CpSearchForm = ({ onSearch }: CpSearchFormProps): JSX.Element => {
           variant="outlined"
           error={!!errors.type}
           helperText={errors.type?.message}
+          size="small"
         />
         <TextField
           label="Fornecedor"
@@ -100,6 +102,7 @@ const CpSearchForm = ({ onSearch }: CpSearchFormProps): JSX.Element => {
           variant="outlined"
           error={!!errors.supplier}
           helperText={errors.supplier?.message}
+          size="small"
         />
         <TextField
           label="Vencimento"
@@ -111,6 +114,7 @@ const CpSearchForm = ({ onSearch }: CpSearchFormProps): JSX.Element => {
           }}
           error={!!errors.due}
           helperText={errors.due?.message}
+          size="small"
         />
         <TextField
           label="Pagamento"
@@ -122,6 +126,7 @@ const CpSearchForm = ({ onSearch }: CpSearchFormProps): JSX.Element => {
           }}
           error={!!errors.pdate}
           helperText={errors.pdate?.message}
+          size="small"
         />
         <TextField
           label="Observações"
@@ -129,6 +134,7 @@ const CpSearchForm = ({ onSearch }: CpSearchFormProps): JSX.Element => {
           variant="outlined"
           error={!!errors.obs}
           helperText={errors.obs?.message}
+          size="small"
         />
         <TextField
           label="Transação"
@@ -136,11 +142,13 @@ const CpSearchForm = ({ onSearch }: CpSearchFormProps): JSX.Element => {
           variant="outlined"
           error={!!errors.tx}
           helperText={errors.tx?.message}
+          size="small"
         />
         <TextField
           label="Criação"
           {...register('createdAt')}
           variant="outlined"
+          size="small"
           type="date"
           slotProps={{
             inputLabel: { shrink: true },
@@ -158,6 +166,7 @@ const CpSearchForm = ({ onSearch }: CpSearchFormProps): JSX.Element => {
           }}
           error={!!errors.updatedAt}
           helperText={errors.updatedAt?.message}
+          size="small"
         />
         <FormControlLabel
           control={<Switch {...register('status')} checked={!!showInactives} />}

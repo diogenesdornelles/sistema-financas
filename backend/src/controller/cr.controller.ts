@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { CrService } from "../service/cr.service";
 import { BaseController } from "./base.controller";
 import {
-  CrProps,
   UpdateCr,
   CreateCr,
   QueryCr,
@@ -10,6 +9,7 @@ import {
 import { createCrSchema } from "../../../packages/validators/zod-schemas/create/create-cr.validator";
 import { updateCrSchema } from "../../../packages/validators/zod-schemas/update/update-cr.validator";
 import { queryCrSchema } from "../../../packages/validators/zod-schemas/query/query-cr.validator";
+import { Cr } from "../entity/entities";
 
 export default class CrController extends BaseController<CrService> {
   constructor() {
@@ -22,7 +22,7 @@ export default class CrController extends BaseController<CrService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const items: CrProps[] = await this.service.getAll();
+      const items: Cr[] = await this.service.getAll();
       res.status(200).json(items);
       return;
     } catch (error) {
@@ -40,7 +40,7 @@ export default class CrController extends BaseController<CrService> {
       const { skip } = req.params;
       const skipInt = parseInt(skip);
       if (skipInt >= 0) {
-        const items: CrProps[] | null = await this.service.getMany(skipInt);
+        const items: Cr[] | null = await this.service.getMany(skipInt);
         if (!items) {
           res.status(404).json({ message: "Contas não encontradas" });
           return;
@@ -66,7 +66,7 @@ export default class CrController extends BaseController<CrService> {
   ): Promise<void> => {
     try {
       const { id } = req.params;
-      const item: CrProps | null = await this.service.getOne(id);
+      const item: Cr | null = await this.service.getOne(id);
       if (!item) {
         res.status(404).json({ message: "Conta não encontrada" });
         return;
@@ -86,7 +86,7 @@ export default class CrController extends BaseController<CrService> {
   ): Promise<void> => {
     try {
       const validatedData: CreateCr = createCrSchema.parse(req.body);
-      const item: CrProps = await this.service.create(validatedData);
+      const item: Cr = await this.service.create(validatedData);
       res.status(201).json(item);
       return;
     } catch (error) {
@@ -103,7 +103,7 @@ export default class CrController extends BaseController<CrService> {
     try {
       const { id } = req.params;
       const validatedData: UpdateCr = updateCrSchema.parse(req.body);
-      const updatedItem: Partial<CrProps> | null = await this.service.update(
+      const updatedItem: Partial<Cr> | null = await this.service.update(
         id,
         validatedData,
       );
@@ -146,7 +146,7 @@ export default class CrController extends BaseController<CrService> {
   ): Promise<void> => {
     try {
       const validatedData: QueryCr = queryCrSchema.parse(req.body);
-      const item: CrProps[] = await this.service.query(validatedData);
+      const item: Cr[] = await this.service.query(validatedData);
       res.status(201).json(item);
       return;
     } catch (error) {

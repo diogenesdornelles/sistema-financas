@@ -111,6 +111,7 @@ export function CreateTxForm(): JSX.Element | null | string {
                                     {...field}
                                     label="Valor (R$)"
                                     variant="outlined"
+                                    size="small"
                                     sx={{width: '100%'}}
                                     error={!!errors.value}
                                     helperText={errors.value?.message}
@@ -126,6 +127,7 @@ export function CreateTxForm(): JSX.Element | null | string {
                             {...register("tdate")}
                             sx={{width: '100%'}}
                             variant="outlined"
+                            size="small"
                             error={!!errors.tdate}
                             helperText={errors.tdate?.message}
                             type="date"
@@ -150,6 +152,7 @@ export function CreateTxForm(): JSX.Element | null | string {
                                             {...params}
                                             label="Tipo"
                                             variant="outlined"
+                                            size="small"
                                             error={!!errors.type}
                                             helperText={errors.type?.message}
                                         />
@@ -170,6 +173,7 @@ export function CreateTxForm(): JSX.Element | null | string {
                                         <TextField
                                             {...params}
                                             label="Categoria"
+                                            size="small"
                                             variant="outlined"
                                             error={!!errors.category}
                                             helperText={errors.category?.message}
@@ -193,6 +197,7 @@ export function CreateTxForm(): JSX.Element | null | string {
                                         {...params}
                                         label="Conta"
                                         variant="outlined"
+                                        size="small"
                                         error={!!errors.cf}
                                         helperText={errors.cf?.message}
                                     />
@@ -205,6 +210,7 @@ export function CreateTxForm(): JSX.Element | null | string {
                         label="Descrição"
                         {...register("description")}
                         variant="outlined"
+                        size="small"
                         error={!!errors.description}
                         helperText={errors.description?.message}
                     />
@@ -212,6 +218,7 @@ export function CreateTxForm(): JSX.Element | null | string {
                     <TextField
                         label="Observações"
                         {...register("obs")}
+                        size="small"
                         variant="outlined"
                         error={!!errors.obs}
                         helperText={errors.obs?.message}
@@ -238,8 +245,9 @@ export function CreateTxForm(): JSX.Element | null | string {
   Exibido quando o contexto indicar o modo "update" e houver item para atualizar
 */
 export function UpdateTxForm(): JSX.Element | null | string {
-    const mutation = usePutTx();
+
     const { forms } = useFormStore();
+    const mutation = usePutTx(forms.tx.updateItem ? forms.tx.updateItem.id : '');
     const { isPending: isPendingCf, error: errorCf, data: cfData } = useGetAllCf();
     const { isPending: isPendingCat, error: errorCat, data: catData } = useGetAllCat();
 
@@ -256,10 +264,16 @@ export function UpdateTxForm(): JSX.Element | null | string {
         formState: { errors },
     } = useForm<UpdateTxFormData>({
         resolver: zodResolver(updateTxSchema),
-        defaultValues: {
-            ...forms.tx.updateItem,
+        defaultValues: forms.tx.updateItem ? {
             value: strToPtBrMoney(forms.tx.updateItem?.value || ""),
-        },
+            type: forms.tx.updateItem.type ? forms.tx.updateItem.type : undefined,
+            cf: forms.tx.updateItem.cf ? forms.tx.updateItem.cf : undefined,
+            description: forms.tx.updateItem.description ? forms.tx.updateItem.description : '',
+            category: forms.tx.updateItem.category  ? forms.tx.updateItem.category : undefined,
+            obs: forms.tx.updateItem.obs ? forms.tx.updateItem.obs : undefined,
+            status: forms.tx.updateItem.status,
+            tdate: forms.tx.updateItem.tdate ? String(forms.tx.updateItem.tdate) : '',
+        } : {},
     });
 
     const statusValue = watch("status");
@@ -421,7 +435,7 @@ export function UpdateTxForm(): JSX.Element | null | string {
                         rows={3}
                     />
                     <FormControlLabel
-                        control={<Checkbox {...register("status")} />}
+                        control={<Checkbox size="small" checked={statusValue} {...register("status")} />}
                         label={`Status: ${statusValue ? "Ativo" : "Inativo"}`}
                     />
                     <Button

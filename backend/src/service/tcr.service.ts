@@ -3,7 +3,6 @@ import { Tcr } from "../entity/entities";
 import {
   CreateTcr,
   UpdateTcr,
-  TcrProps,
   QueryTcr,
 } from "../../../packages/dtos/tcr.dto";
 import { Query } from "mysql2/typings/mysql/lib/protocol/sequences/Query";
@@ -11,7 +10,7 @@ import { FindOptionsWhere, Like } from "typeorm";
 
 export class TcrService extends BaseService<
   Tcr,
-  TcrProps,
+  Tcr,
   CreateTcr,
   UpdateTcr,
   QueryTcr
@@ -23,7 +22,7 @@ export class TcrService extends BaseService<
   /**
    * Recupera todos os tipos de contas.
    */
-  public getAll = async (): Promise<TcrProps[]> => {
+  public getAll = async (): Promise<Tcr[]> => {
     try {
       return await this.repository.find();
     } catch (error) {
@@ -34,7 +33,7 @@ export class TcrService extends BaseService<
   /**
    * Recupera 10 tipos de contas, com skip.
    */
-  public getMany = async (skip: number): Promise<TcrProps[]> => {
+  public getMany = async (skip: number): Promise<Tcr[]> => {
     try {
       return await this.repository.find({ skip, take: 10 });
     } catch (error) {
@@ -47,7 +46,7 @@ export class TcrService extends BaseService<
    *
    * @param id - Identificador.
    */
-  public getOne = async (id: string): Promise<TcrProps | null> => {
+  public getOne = async (id: string): Promise<Tcr | null> => {
     try {
       return await this.repository.findOne({ where: { id } });
     } catch (error) {
@@ -60,7 +59,7 @@ export class TcrService extends BaseService<
    *
    * @param data - Dados para criação.
    */
-  public create = async (data: CreateTcr): Promise<TcrProps> => {
+  public create = async (data: CreateTcr): Promise<Tcr> => {
     try {
       const createdTcf = await this.repository.save(
         this.repository.create(data),
@@ -80,7 +79,7 @@ export class TcrService extends BaseService<
   public update = async (
     id: string,
     data: UpdateTcr,
-  ): Promise<Partial<TcrProps> | null> => {
+  ): Promise<Partial<Tcr> | null> => {
     try {
       await this.repository.update({ id }, data);
       return await this.repository.findOne({ where: { id } });
@@ -109,7 +108,7 @@ export class TcrService extends BaseService<
    *
    * @param data - Dados para busca.
    */
-  public query = async (data: QueryTcr): Promise<TcrProps[]> => {
+  public query = async (data: QueryTcr): Promise<Tcr[]> => {
     try {
       const where: FindOptionsWhere<Tcr> = {};
 

@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { TcrService } from "../service/tcr.service";
 import { BaseController } from "./base.controller";
 import {
-  TcrProps,
   UpdateTcr,
   CreateTcr,
   QueryTcr,
@@ -10,6 +9,7 @@ import {
 import { createTcrSchema } from "../../../packages/validators/zod-schemas/create/create-tcr.validator";
 import { updateTcrSchema } from "../../../packages/validators/zod-schemas/update/update-tcr.validator";
 import { queryTcrSchema } from "../../../packages/validators/zod-schemas/query/query-tcr.validator";
+import { Tcr } from "../entity/entities";
 
 export default class TcrController extends BaseController<TcrService> {
   constructor() {
@@ -22,7 +22,7 @@ export default class TcrController extends BaseController<TcrService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const items: TcrProps[] = await this.service.getAll();
+      const items: Tcr[] = await this.service.getAll();
       res.status(200).json(items);
       return;
     } catch (error) {
@@ -40,7 +40,7 @@ export default class TcrController extends BaseController<TcrService> {
       const { skip } = req.params;
       const skipInt = parseInt(skip);
       if (skipInt >= 0) {
-        const items: TcrProps[] | null = await this.service.getMany(skipInt);
+        const items: Tcr[] | null = await this.service.getMany(skipInt);
         if (!items) {
           res.status(404).json({ message: "Tipo de contas não encontradas" });
           return;
@@ -66,7 +66,7 @@ export default class TcrController extends BaseController<TcrService> {
   ): Promise<void> => {
     try {
       const { id } = req.params;
-      const item: TcrProps | null = await this.service.getOne(id);
+      const item: Tcr | null = await this.service.getOne(id);
       if (!item) {
         res.status(404).json({ message: "Tipo conta não encontrada" });
         return;
@@ -86,7 +86,7 @@ export default class TcrController extends BaseController<TcrService> {
   ): Promise<void> => {
     try {
       const validatedData: CreateTcr = createTcrSchema.parse(req.body);
-      const item: TcrProps = await this.service.create(validatedData);
+      const item: Tcr = await this.service.create(validatedData);
       res.status(201).json(item);
       return;
     } catch (error) {
@@ -103,7 +103,7 @@ export default class TcrController extends BaseController<TcrService> {
     try {
       const { id } = req.params;
       const validatedData: UpdateTcr = updateTcrSchema.parse(req.body);
-      const updatedItem: Partial<TcrProps> | null = await this.service.update(
+      const updatedItem: Partial<Tcr> | null = await this.service.update(
         id,
         validatedData,
       );
@@ -145,7 +145,7 @@ export default class TcrController extends BaseController<TcrService> {
   ): Promise<void> => {
     try {
       const validatedData: QueryTcr = queryTcrSchema.parse(req.body);
-      const item: TcrProps[] = await this.service.query(validatedData);
+      const item: Tcr[] = await this.service.query(validatedData);
       res.status(201).json(item);
       return;
     } catch (error) {

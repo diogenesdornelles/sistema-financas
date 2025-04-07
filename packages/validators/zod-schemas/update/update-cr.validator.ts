@@ -12,6 +12,8 @@ export const updateCrSchema = createCrSchema
     status: z.nativeEnum(PaymentStatus).optional(),
     rdate: z
     .string()
+    .transform((value) => (value.trim() === "" ? undefined : value))
+    .optional()
     .refine((date) => {
       if (date && date.length > 0) {
         const paymentDate = new Date(date);
@@ -23,4 +25,7 @@ export const updateCrSchema = createCrSchema
       message: "A data de recebimento deve ser menor ou igual a data atual.",
     })
   }).omit({user: true})
-  .partial();
+  .partial().superRefine((data, ctx) => {
+    console.log(data)
+    console.log(ctx)
+  });

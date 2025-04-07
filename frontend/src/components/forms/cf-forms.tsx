@@ -47,12 +47,12 @@ export function CreateCfForm(): JSX.Element | null | string {
         mode: 'onSubmit',
         defaultValues: {
             number: '',
-            balance: '0.0',
+            balance: '',
             user: session ? session?.user.id : '',
-            bank: undefined,
-            ag: undefined,
-            type: undefined,
-            obs: undefined
+            bank: '',
+            ag: '',
+            type: '',
+            obs: ''
         }
     });
 
@@ -95,6 +95,7 @@ export function CreateCfForm(): JSX.Element | null | string {
                             variant="outlined"
                             error={!!errors.number}
                             helperText={errors.number?.message}
+                            size="small"
                         />
                         <Controller
                             name="balance"
@@ -104,6 +105,7 @@ export function CreateCfForm(): JSX.Element | null | string {
                                     {...field}
                                     // type="number"     
                                     label="Saldo(R$)"
+                                    size="small"
                                     variant="outlined"
                                     error={!!errors.balance}
                                     helperText={errors.balance?.message}
@@ -132,6 +134,7 @@ export function CreateCfForm(): JSX.Element | null | string {
                                         {...params}
                                         label="Tipo"
                                         variant="outlined"
+                                        size="small"
                                         error={!!errors.type}
                                         helperText={errors.type?.message}
                                     />
@@ -144,6 +147,7 @@ export function CreateCfForm(): JSX.Element | null | string {
                     <Box sx={{ display: 'flex', columnGap: 2 }}>
                         <TextField
                             label="Agência"
+                            size="small"
                             {...register("ag")}
                             variant="outlined"
                             error={!!errors.ag}
@@ -152,6 +156,7 @@ export function CreateCfForm(): JSX.Element | null | string {
 
                         <TextField
                             label="Banco"
+                            size="small"
                             {...register("bank")}
                             variant="outlined"
                             error={!!errors.bank}
@@ -162,6 +167,7 @@ export function CreateCfForm(): JSX.Element | null | string {
                     <TextField
                         label="Observações"
                         {...register("obs")}
+                        size="small"
                         variant="outlined"
                         error={!!errors.obs}
                         helperText={errors.obs?.message}
@@ -188,8 +194,8 @@ export function CreateCfForm(): JSX.Element | null | string {
   Exibido quando o contexto indicar o modo "update" e houver dados para atualização
 */
 export function UpdateCfForm(): JSX.Element | null | string {
-    const mutation = usePutCf();
     const { forms } = useFormStore();
+    const mutation = usePutCf(forms.cf.updateItem ? forms.cf.updateItem.id : '');
     const { isPending, error, data } = useGetAllTcf();
 
 
@@ -202,15 +208,21 @@ export function UpdateCfForm(): JSX.Element | null | string {
         formState: { errors },
     } = useForm<UpdateCfFormData>({
         resolver: zodResolver(updateCfSchema),
-        defaultValues: {
-            ...forms.cf.updateItem,
+        defaultValues: forms.cf.updateItem ? {
+            number: forms.cf.updateItem.number,
+            type: forms.cf.updateItem.type,
+            ag: forms.cf.updateItem.ag || undefined,
+            bank: forms.cf.updateItem.bank || undefined,
+            obs: forms.cf.updateItem.obs || undefined,
+            status: forms.cf.updateItem.status,
             balance: strToPtBrMoney(forms.cf.updateItem?.balance ?? '0.00')
-        },
+        } : {},
     });
 
     const statusValue = watch("status");
 
     const onSubmit = async (data: UpdateCfFormData) => {
+        console.log(data)
         try {
             await mutation.mutateAsync(data);
         } catch (err) {
@@ -324,7 +336,7 @@ export function UpdateCfForm(): JSX.Element | null | string {
                     />
 
                     <FormControlLabel
-                        control={<Checkbox {...register("status")} />}
+                        control={<Checkbox size="small" checked={statusValue} {...register("status")} />}
                         label={`Status: ${statusValue ? "Ativo" : "Inativo"}`}
                     />
 

@@ -42,11 +42,11 @@ export function usePostTcr() {
   });
 }
 
-export function usePutTcr() {
+export function usePutTcr(id: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: UpdateTcr) => Api.tcr.put(data),
+    mutationFn: (data: UpdateTcr) => Api.tcr.put(data, id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["Tcr", "getMany"]});
     },

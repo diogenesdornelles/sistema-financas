@@ -36,32 +36,33 @@ export const queryCpSchema = z.object({
   obs: z.string(),
   tx: z.string(), // procura por id de tx
   due: z
-    .string()
-    .transform((value) => (value === "" ? undefined : value))
-    .optional()
-    .refine((value) => !value || !isNaN(Date.parse(value)), {
-      message: "Data inválida",
-    }),
+  .string()
+  .transform((value) => (value.trim() === "" ? undefined : value))
+  .optional()
+  .refine((value) => !value || !isNaN(Date.parse(value)), {
+    message: "Data inválida",
+  }),
   pdate: z
-    .string()
-    .transform((value) => (value === "" ? undefined : value))
-    .optional()
-    .refine((value) => !value || !isNaN(Date.parse(value)), {
-      message: "Data inválida",
-    }),
-  createdAt: z
-    .string()
-    .transform((value) => (value === "" ? undefined : value))
-    .optional()
-    .refine((value) => !value || !isNaN(Date.parse(value)), {
-      message: "Data inválida",
-    }),
-  updatedAt: z
-    .string()
-    .transform((value) => (value === "" ? undefined : value))
-    .optional()
-    .refine((value) => !value || !isNaN(Date.parse(value)), {
-      message: "Data inválida",
-    }),
+  .string()
+  .transform((value) => (value.trim() === "" ? undefined : value))
+  .optional()
+  .refine((value) => !value || !isNaN(Date.parse(value)), {
+    message: "Data inválida",
+  }),
+    createdAt: z
+      .string()
+      .transform((value) => (value.trim() === "" ? undefined : value))
+      .optional()
+      .refine((value) => !value || !isNaN(Date.parse(value)), {
+        message: "Data inválida",
+      }),
+
+    updatedAt: z
+      .string()
+      .transform((value) => (value.trim() === "" ? undefined : value))
+      .optional()
+      .refine((value) => !value || !isNaN(Date.parse(value)), {
+        message: "Data inválida",
+      }),
 }).partial();
 

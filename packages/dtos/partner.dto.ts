@@ -25,8 +25,8 @@ export interface PartnerProps {
   cod: string;
   status: boolean;
   obs: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 

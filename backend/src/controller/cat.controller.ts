@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { CatService } from "../service/cat.service";
 import { BaseController } from "./base.controller";
 import {
-  CatProps,
   UpdateCat,
   CreateCat,
   QueryCat,
@@ -10,6 +9,7 @@ import {
 import { createCatSchema } from "../../../packages/validators/zod-schemas/create/create-cat.validator";
 import { updateCatSchema } from "../../../packages/validators/zod-schemas/update/update-cat.validator";
 import { queryCatSchema } from "../../../packages/validators/zod-schemas/query/query-cat.validator";
+import { Cat } from "../entity/entities";
 
 export default class CatController extends BaseController<CatService> {
   constructor() {
@@ -22,7 +22,7 @@ export default class CatController extends BaseController<CatService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const items: CatProps[] = await this.service.getAll();
+      const items: Cat[] = await this.service.getAll();
       res.status(200).json(items);
       return;
     } catch (error) {
@@ -40,7 +40,7 @@ export default class CatController extends BaseController<CatService> {
       const { skip } = req.params;
       const skipInt = parseInt(skip);
       if (skipInt >= 0) {
-        const items: CatProps[] | null = await this.service.getMany(skipInt);
+        const items: Cat[] | null = await this.service.getMany(skipInt);
         if (!items) {
           res.status(404).json({ message: "Categorias não encontradas" });
           return;
@@ -66,7 +66,7 @@ export default class CatController extends BaseController<CatService> {
   ): Promise<void> => {
     try {
       const { id } = req.params;
-      const item: CatProps | null = await this.service.getOne(id);
+      const item: Cat | null = await this.service.getOne(id);
       if (!item) {
         res.status(404).json({ message: "Categoria não encontrada" });
         return;
@@ -86,7 +86,7 @@ export default class CatController extends BaseController<CatService> {
   ): Promise<void> => {
     try {
       const validatedData: CreateCat = createCatSchema.parse(req.body);
-      const item: CatProps = await this.service.create(validatedData);
+      const item: Cat = await this.service.create(validatedData);
       res.status(201).json(item);
       return;
     } catch (error) {
@@ -103,7 +103,7 @@ export default class CatController extends BaseController<CatService> {
     try {
       const { id } = req.params;
       const validatedData: UpdateCat = updateCatSchema.parse(req.body);
-      const updatedItem: Partial<CatProps> | null = await this.service.update(
+      const updatedItem: Partial<Cat> | null = await this.service.update(
         id,
         validatedData,
       );
@@ -145,7 +145,7 @@ export default class CatController extends BaseController<CatService> {
   ): Promise<void> => {
     try {
       const validatedData: QueryCat = queryCatSchema.parse(req.body);
-      const item: CatProps[] = await this.service.query(validatedData);
+      const item: Cat[] = await this.service.query(validatedData);
       res.status(201).json(item);
       return;
     } catch (error) {

@@ -23,8 +23,8 @@ export function CreateCatForm(): JSX.Element | null {
         resolver: zodResolver(createCatSchema),
         defaultValues: {
             name: '',
-            obs: undefined,
-            description: undefined,
+            obs: '',
+            description: '',
             user: session ? session?.user.id : ''
         }
     });
@@ -63,6 +63,7 @@ export function CreateCatForm(): JSX.Element | null {
                         variant="outlined"
                         error={!!errors.name}
                         helperText={errors.name?.message}
+                        size="small"
                     />
 
                     <TextField
@@ -73,6 +74,7 @@ export function CreateCatForm(): JSX.Element | null {
                         helperText={errors.description?.message}
                         multiline
                         rows={3}
+                        size="small"
                     />
 
                     <TextField
@@ -83,6 +85,7 @@ export function CreateCatForm(): JSX.Element | null {
                         helperText={errors.obs?.message}
                         multiline
                         rows={3}
+                        size="small"
                     />
                     <Button
                         type="submit"
@@ -99,12 +102,17 @@ export function CreateCatForm(): JSX.Element | null {
 }
 
 export function UpdateCatForm(): JSX.Element | null {
-    const mutation = usePutCat();
     const { forms } = useFormStore();
+    const mutation = usePutCat(forms.cat.updateItem ? forms.cat.updateItem.id : '');
 
     const { register, handleSubmit, watch, formState: { errors } } = useForm<UpdateCatFormData>({
         resolver: zodResolver(updateCatSchema),
-        defaultValues: forms.cat.updateItem || {},
+        defaultValues: forms.cat.updateItem ? {
+            name: forms.cat.updateItem.name,
+            obs: forms.cat.updateItem.obs,
+            description: forms.cat.updateItem.description,
+            status: forms.cat.updateItem.status
+        } : {},
     });
 
     const statusValue = watch("status");
@@ -143,6 +151,7 @@ export function UpdateCatForm(): JSX.Element | null {
                         variant="outlined"
                         error={!!errors.name}
                         helperText={errors.name?.message}
+                        size="small"
                     />
 
                     <TextField
@@ -152,6 +161,7 @@ export function UpdateCatForm(): JSX.Element | null {
                         error={!!errors.description}
                         helperText={errors.description?.message}
                         multiline
+                        size="small"
                         rows={3}
                     />
 
@@ -162,14 +172,14 @@ export function UpdateCatForm(): JSX.Element | null {
                         error={!!errors.obs}
                         helperText={errors.obs?.message}
                         multiline
+                        size="small"
                         rows={3}
                     />
 
                     <FormControlLabel
-                        control={<Checkbox {...register("status")} />}
+                        control={<Checkbox size="small" checked={statusValue} {...register("status")} />}
                         label={`Status: ${statusValue ? "Ativo" : "Inativo"}`}
                     />
-
                     <Button
                         type="submit"
                         variant="contained"

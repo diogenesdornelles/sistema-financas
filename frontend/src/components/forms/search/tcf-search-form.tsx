@@ -74,6 +74,7 @@ const TcfSearchForm = ({ onSearch }: TcfSearchFormProps): JSX.Element => {
           variant="outlined"
           error={!!errors.name}
           helperText={errors.name?.message}
+          size="small"
         />
         <TextField
           label="Criação"
@@ -84,6 +85,7 @@ const TcfSearchForm = ({ onSearch }: TcfSearchFormProps): JSX.Element => {
             inputLabel: { shrink: true },
           }}
           error={!!errors.createdAt}
+          size="small"
           helperText={errors.createdAt?.message}
         />
         <TextField
@@ -96,6 +98,7 @@ const TcfSearchForm = ({ onSearch }: TcfSearchFormProps): JSX.Element => {
           }}
           error={!!errors.updatedAt}
           helperText={errors.updatedAt?.message}
+          size="small"
         />
         <FormControlLabel
           control={<Switch {...register('status')} checked={!!showInactives} />}

@@ -8,6 +8,8 @@ export const updateCpSchema = createCpSchema
     status: z.nativeEnum(CPStatus).optional(),
     pdate: z
     .string()
+    .transform((value) => (value.trim() === "" ? undefined : value))
+    .optional()
     .refine((date) => {
       if (date && date.length > 0) {
         const paymentDate = new Date(date);

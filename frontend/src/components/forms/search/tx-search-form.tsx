@@ -86,6 +86,7 @@ const TxSearchForm = ({ onSearch }: TxSearchFormProps): JSX.Element => {
           variant="outlined"
           error={!!errors.value}
           helperText={errors.value?.message}
+          size="small"
         />
         <TextField
           label="Tipo"
@@ -93,6 +94,7 @@ const TxSearchForm = ({ onSearch }: TxSearchFormProps): JSX.Element => {
           variant="outlined"
           error={!!errors.type}
           helperText={errors.type?.message}
+          size="small"
         />
         <TextField
           label="Conta Financeira"
@@ -100,6 +102,7 @@ const TxSearchForm = ({ onSearch }: TxSearchFormProps): JSX.Element => {
           variant="outlined"
           error={!!errors.cf}
           helperText={errors.cf?.message}
+          size="small"
         />
         <TextField
           label="Descrição"
@@ -107,6 +110,7 @@ const TxSearchForm = ({ onSearch }: TxSearchFormProps): JSX.Element => {
           variant="outlined"
           error={!!errors.description}
           helperText={errors.description?.message}
+          size="small"
         />
         <TextField
           label="Categoria"
@@ -114,6 +118,7 @@ const TxSearchForm = ({ onSearch }: TxSearchFormProps): JSX.Element => {
           variant="outlined"
           error={!!errors.category}
           helperText={errors.category?.message}
+          size="small"
         />
         <TextField
           label="Observações"
@@ -121,6 +126,7 @@ const TxSearchForm = ({ onSearch }: TxSearchFormProps): JSX.Element => {
           variant="outlined"
           error={!!errors.obs}
           helperText={errors.obs?.message}
+          size="small"
         />
         <TextField
           label="Data da Transação"
@@ -132,6 +138,7 @@ const TxSearchForm = ({ onSearch }: TxSearchFormProps): JSX.Element => {
           }}
           error={!!errors.tdate}
           helperText={errors.tdate?.message}
+          size="small"
         />
         <TextField
           label="Criação"
@@ -143,6 +150,7 @@ const TxSearchForm = ({ onSearch }: TxSearchFormProps): JSX.Element => {
           }}
           error={!!errors.createdAt}
           helperText={errors.createdAt?.message}
+          size="small"
         />
         <TextField
           label="Alteração"
@@ -154,6 +162,7 @@ const TxSearchForm = ({ onSearch }: TxSearchFormProps): JSX.Element => {
           }}
           error={!!errors.updatedAt}
           helperText={errors.updatedAt?.message}
+          size="small"
         />
         <FormControlLabel
           control={<Switch {...register('status')} checked={!!showInactives} />}

@@ -3,14 +3,13 @@ import { Cf, Tcf, User } from "../entity/entities";
 import {
   CreateCf,
   UpdateCf,
-  CfProps,
   QueryCf,
 } from "../../../packages/dtos/cf.dto";
 import { FindOptionsWhere, Like, MoreThanOrEqual } from "typeorm";
 
 export class CfService extends BaseService<
   Cf,
-  CfProps,
+  Cf,
   CreateCf,
   UpdateCf,
   QueryCf
@@ -22,7 +21,7 @@ export class CfService extends BaseService<
   /**
    * Recupera todas as contas.
    */
-  public getAll = async (): Promise<CfProps[]> => {
+  public getAll = async (): Promise<Cf[]> => {
     try {
       const cfs = await this.repository.find({ relations: ["type"] });
       return cfs;
@@ -34,7 +33,7 @@ export class CfService extends BaseService<
   /**
    * Recupera 10 com skip.
    */
-  public getMany = async (skip: number): Promise<CfProps[]> => {
+  public getMany = async (skip: number): Promise<Cf[]> => {
     try {
       const cfs = await this.repository.find({
         skip,
@@ -52,7 +51,7 @@ export class CfService extends BaseService<
    *
    * @param id - Identificador.
    */
-  public getOne = async (id: string): Promise<CfProps | null> => {
+  public getOne = async (id: string): Promise<Cf | null> => {
     try {
       const cf = await this.repository.findOne({
         where: { id },
@@ -69,7 +68,7 @@ export class CfService extends BaseService<
    *
    * @param data - Dados para criação.
    */
-  public create = async (data: CreateCf): Promise<CfProps> => {
+  public create = async (data: CreateCf): Promise<Cf> => {
     try {
       const cf = this.repository.create({
         ...data,
@@ -99,7 +98,7 @@ export class CfService extends BaseService<
   public update = async (
     id: string,
     data: UpdateCf,
-  ): Promise<Partial<CfProps> | null> => {
+  ): Promise<Partial<Cf> | null> => {
     try {
       const updateData: Partial<Cf> = {
         ...data,
@@ -140,7 +139,7 @@ export class CfService extends BaseService<
    *
    * @param data - Dados para busca.
    */
-  public query = async (data: QueryCf): Promise<CfProps[]> => {
+  public query = async (data: QueryCf): Promise<Cf[]> => {
     try {
       const where: FindOptionsWhere<Cf> = {};
 

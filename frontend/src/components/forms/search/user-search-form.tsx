@@ -78,6 +78,7 @@ const UserSearchForm = ({ onSearch }: UserSearchFormProps): JSX.Element => {
           variant="outlined"
           error={!!errors.name}
           helperText={errors.name?.message}
+          size="small"
         />
         <TextField
           label="Sobrenome"
@@ -85,6 +86,7 @@ const UserSearchForm = ({ onSearch }: UserSearchFormProps): JSX.Element => {
           variant="outlined"
           error={!!errors.surname}
           helperText={errors.surname?.message}
+          size="small"
         />
         <TextField
           label="CPF"
@@ -92,6 +94,7 @@ const UserSearchForm = ({ onSearch }: UserSearchFormProps): JSX.Element => {
           variant="outlined"
           error={!!errors.cpf}
           helperText={errors.cpf?.message}
+          size="small"
         />
         <TextField
           label="Criação"
@@ -103,6 +106,7 @@ const UserSearchForm = ({ onSearch }: UserSearchFormProps): JSX.Element => {
           }}
           error={!!errors.createdAt}
           helperText={errors.createdAt?.message}
+          size="small"
         />
         <TextField
           label="Alteração"
@@ -114,6 +118,7 @@ const UserSearchForm = ({ onSearch }: UserSearchFormProps): JSX.Element => {
           }}
           error={!!errors.updatedAt}
           helperText={errors.updatedAt?.message}
+          size="small"
         />
         <FormControlLabel
           control={<Switch {...register('status')} checked={!!showInactives} />}

@@ -21,6 +21,7 @@ import TxSearchForm from '../forms/search/tx-search-form';
 import { queryTxSchema } from '../../../../packages/validators/zod-schemas/query/query-tx.validator';
 import { z } from 'zod';
 import { TransactionType } from '../../../../packages/dtos/utils/enums';
+import { strToPtBrMoney } from '../../utils/strToPtBrMoney';
 
 type QueryTxFormData = z.infer<typeof queryTxSchema>;
 
@@ -37,10 +38,14 @@ const TxList = (): JSX.Element | string => {
     setFormType('tx', 'update');
     setUpdateItem('tx', {
       ...item,
-      cf: item.cf.id,
-      category: item.category.id,
-      value: String(item.value),
-      tdate: item.tdate ? item.tdate.toISOString().split('T')[0] : '',
+      value: item.value ? String(item.value) : '',
+      type: item.type ? item.type : undefined,
+      cf: item.cf ? item.cf.id : undefined,
+      description: item.description ? item.description : '',
+      category: item.category  ? item.category.id : undefined,
+      obs: item.obs ? item.obs : undefined,
+      status: item.status,
+      tdate: item.tdate ? String(item.tdate) : '',
     });
   };
 
@@ -115,7 +120,7 @@ const TxList = (): JSX.Element | string => {
                   variant="outlined"
                   size="small"
                 />
-                <Chip label={`Valor: R$ ${item.value}`} variant="outlined" size="small" />
+                <Chip label={`Valor: R$ ${strToPtBrMoney(String(item.value))}`} variant="outlined" size="small" />
                 <Chip label={`Categoria: ${item.category.name}`} variant="outlined" size="small" />
                 <Chip label={`Descrição: ${item.description}`} variant="outlined" size="small" />
                 <Chip

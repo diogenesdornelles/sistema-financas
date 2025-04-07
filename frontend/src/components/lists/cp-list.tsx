@@ -20,6 +20,7 @@ import { useTheme } from '@mui/material/styles';
 import CpSearchForm from '../forms/search/cp-search-form';
 import { queryCpSchema } from '../../../../packages/validators/zod-schemas/query/query-cp.validator';
 import { z } from 'zod';
+import { strToPtBrMoney } from '../../utils/strToPtBrMoney';
 
 type QueryCpFormData = z.infer<typeof queryCpSchema>;
 
@@ -40,9 +41,10 @@ const CpList = (): JSX.Element | string => {
       supplier: item.supplier.id,
       tx: item.tx ? item.tx.id : undefined,
       value: String(item.value),
-      due: item.due.toISOString().split('T')[0],
-      pdate: item.pdate ? item.pdate.toISOString().split('T')[0] : undefined,
-    });
+      due: String(item.due),
+      pdate: item.pdate ? String(item.pdate) : '',
+    }
+    );
   };
 
   const delMutation = useDeleteCp();
@@ -109,7 +111,7 @@ const CpList = (): JSX.Element | string => {
               }}
             >
               <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, flexWrap: 'wrap', alignItems: 'baseline' }}>
-                <Chip label={`Valor: R$ ${item.value}`} variant="outlined" size="small" />
+                <Chip label={`Valor: R$ ${strToPtBrMoney(String(item.value))}`} variant="outlined" size="small" />
                 <Chip label={`Tipo: ${item.type.name}`} variant="outlined" size="small" />
                 <Chip label={`Fornecedor: ${item.supplier.name}`} variant="outlined" size="small" />
                 <Chip label={`Vencimento: ${new Date(item.due).toLocaleDateString()}`} variant="outlined" size="small" />

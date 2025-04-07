@@ -3,21 +3,18 @@ import { Cp, Partner, Tcp, Tx, User } from "../entity/entities";
 import {
   CreateCp,
   UpdateCp,
-  CpProps,
   QueryCp,
 } from "../../../packages/dtos/cp.dto";
 import { CPStatus } from "../../../packages/dtos/utils/enums";
 import {
-  Between,
   FindOptionsWhere,
-  LessThanOrEqual,
   Like,
   MoreThanOrEqual,
 } from "typeorm";
 
 export class CpService extends BaseService<
   Cp,
-  CpProps,
+  Cp,
   CreateCp,
   UpdateCp,
   QueryCp
@@ -29,7 +26,7 @@ export class CpService extends BaseService<
   /**
    * Recupera todas as contas.
    */
-  public getAll = async (): Promise<CpProps[]> => {
+  public getAll = async (): Promise<Cp[]> => {
     try {
       return await this.repository.find({
         relations: ["type", "supplier", "tx"],
@@ -42,7 +39,7 @@ export class CpService extends BaseService<
   /**
    * Recupera 10 contas com skip.
    */
-  public getMany = async (skip: number): Promise<CpProps[]> => {
+  public getMany = async (skip: number): Promise<Cp[]> => {
     try {
       return await this.repository.find({
         skip,
@@ -59,7 +56,7 @@ export class CpService extends BaseService<
    *
    * @param id - Identificador.
    */
-  public getOne = async (id: string): Promise<CpProps | null> => {
+  public getOne = async (id: string): Promise<Cp | null> => {
     try {
       return await this.repository.findOne({
         where: { id },
@@ -75,7 +72,7 @@ export class CpService extends BaseService<
    *
    * @param data - Dados para criação.
    */
-  public create = async (data: CreateCp): Promise<CpProps> => {
+  public create = async (data: CreateCp): Promise<Cp> => {
     try {
       const newCp = this.repository.create({
         ...data,
@@ -108,7 +105,7 @@ export class CpService extends BaseService<
   public update = async (
     id: string,
     data: UpdateCp,
-  ): Promise<Partial<CpProps> | null> => {
+  ): Promise<Partial<Cp> | null> => {
     try {
       const updateData: Partial<Cp> = {
         ...data,
@@ -155,7 +152,7 @@ export class CpService extends BaseService<
    *
    * @param data - Dados para busca.
    */
-  public query = async (data: QueryCp): Promise<CpProps[]> => {
+  public query = async (data: QueryCp): Promise<Cp[]> => {
     try {
       const where: FindOptionsWhere<Cp> = {};
 

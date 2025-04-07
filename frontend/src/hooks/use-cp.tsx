@@ -44,11 +44,11 @@ export function usePostCp() {
 }
 
 // Hook para atualizar um 'cp' existente (PUT)
-export function usePutCp() {
+export function usePutCp(id: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: UpdateCp) => Api.cp.put(data), 
+    mutationFn: (data: UpdateCp) => Api.cp.put(data, id), 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cp", "getMany"] }); 
     },

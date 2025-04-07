@@ -34,9 +34,9 @@ export interface TxProps {
   category: CatProps;
   obs: string;
   status: boolean;
-  tdate?: Date;
-  createdAt: Date;
-  updatedAt: Date;
+  tdate?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 

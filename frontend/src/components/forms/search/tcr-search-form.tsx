@@ -74,6 +74,7 @@ const TcrSearchForm = ({ onSearch }: TcrSearchFormProps): JSX.Element => {
           variant="outlined"
           error={!!errors.name}
           helperText={errors.name?.message}
+          size="small"
         />
         <TextField
           label="Criação"
@@ -85,6 +86,7 @@ const TcrSearchForm = ({ onSearch }: TcrSearchFormProps): JSX.Element => {
           }}
           error={!!errors.createdAt}
           helperText={errors.createdAt?.message}
+          size="small"
         />
         <TextField
           label="Alteração"
@@ -96,6 +98,7 @@ const TcrSearchForm = ({ onSearch }: TcrSearchFormProps): JSX.Element => {
           }}
           error={!!errors.updatedAt}
           helperText={errors.updatedAt?.message}
+          size="small"
         />
         <FormControlLabel
           control={<Switch {...register('status')} checked={!!showInactives} />}

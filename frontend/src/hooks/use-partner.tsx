@@ -45,11 +45,11 @@ export function usePostPartner() {
 }
 
 // Hook para atualizar um 'partner' existente (PUT)
-export function usePutPartner() {
+export function usePutPartner(id: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: UpdatePartner) => Api.partner.put(data), 
+    mutationFn: (data: UpdatePartner) => Api.partner.put(data, id), 
     onSuccess: () => { 
       queryClient.invalidateQueries({ queryKey: ["partner", "getMany"] }); 
     },

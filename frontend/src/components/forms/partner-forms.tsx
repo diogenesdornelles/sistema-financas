@@ -26,10 +26,10 @@ export function CreatePartnerForm(): JSX.Element | null {
             name: '',
             cod: '',
             user: session ? session?.user.id : '',
-            obs: undefined,
+            obs: "",
             type: undefined
         }
-        
+
     });
 
     const onSubmit = async (data: CreatePartnerFormData) => {
@@ -66,11 +66,13 @@ export function CreatePartnerForm(): JSX.Element | null {
                         variant="outlined"
                         error={!!errors.name}
                         helperText={errors.name?.message}
+                        size="small"
                     />
 
                     <FormControl variant="outlined" error={!!errors.type}>
                         <InputLabel id="partner-type-label">Tipo</InputLabel>
                         <Select
+                            size="small"
                             labelId="partner-type-label"
                             label="Tipo"
                             defaultValue=""
@@ -91,6 +93,7 @@ export function CreatePartnerForm(): JSX.Element | null {
                         {...register("cod")}
                         variant="outlined"
                         error={!!errors.cod}
+                        size="small"
                         helperText={errors.cod?.message}
                     />
 
@@ -101,6 +104,7 @@ export function CreatePartnerForm(): JSX.Element | null {
                         error={!!errors.obs}
                         helperText={errors.obs?.message}
                         multiline
+                        size="small"
                         rows={3}
                     />
 
@@ -115,14 +119,21 @@ export function CreatePartnerForm(): JSX.Element | null {
 
 
 export function UpdatePartnerForm(): JSX.Element | null {
-    const mutation = usePutPartner();
+
     const { forms } = useFormStore();
+    const mutation = usePutPartner(forms.partner.updateItem ? forms.partner.updateItem.id : '');
 
 
 
     const { register, handleSubmit, watch, formState: { errors } } = useForm<UpdatePartnerFormData>({
         resolver: zodResolver(updatePartnerSchema),
-        defaultValues: forms.partner.updateItem || {},
+        defaultValues: forms.partner.updateItem ?  {
+            name: forms.partner.updateItem.name,
+            type: forms.partner.updateItem.type ? forms.partner.updateItem.type : undefined,
+            cod: forms.partner.updateItem.cod,
+            obs: forms.partner.updateItem.obs ? forms.partner.updateItem.obs : '',
+            status: forms.partner.updateItem.status ? forms.partner.updateItem.status: undefined
+        }: {},
     });
 
     const statusValue = watch("status");
@@ -139,7 +150,7 @@ export function UpdatePartnerForm(): JSX.Element | null {
 
     return (
         <FormContainer>
-            <ButtonUpdateForm title='Atualizar Parceiro' name='partner'/>
+            <ButtonUpdateForm title='Atualizar Parceiro' name='partner' />
 
             {mutation.isSuccess && (
                 <Alert severity="success" style={{ width: "100%" }}>
@@ -161,6 +172,7 @@ export function UpdatePartnerForm(): JSX.Element | null {
                         variant="outlined"
                         error={!!errors.name}
                         helperText={errors.name?.message}
+                        size="small"
                     />
 
                     <FormControl variant="outlined" error={!!errors.type}>
@@ -168,6 +180,7 @@ export function UpdatePartnerForm(): JSX.Element | null {
                         <Select
                             labelId="partner-type-label-update"
                             label="Tipo"
+                            size="small"
                             defaultValue=""
                             {...register("type")}
                         >
@@ -187,6 +200,7 @@ export function UpdatePartnerForm(): JSX.Element | null {
                         variant="outlined"
                         error={!!errors.cod}
                         helperText={errors.cod?.message}
+                        size="small"
                     />
 
                     <TextField
@@ -197,10 +211,11 @@ export function UpdatePartnerForm(): JSX.Element | null {
                         helperText={errors.obs?.message}
                         multiline
                         rows={3}
+                        size="small"
                     />
 
                     <FormControlLabel
-                        control={<Checkbox {...register("status")} />}
+                        control={<Checkbox size="small" checked={statusValue} {...register("status")} />}
                         label={`Status: ${statusValue ? "Ativo" : "Inativo"}`}
                     />
 

@@ -84,6 +84,7 @@ const CfSearchForm = ({ onSearch }: CfSearchFormProps): JSX.Element => {
           variant="outlined"
           error={!!errors.number}
           helperText={errors.number?.message}
+          size="small"
         />
         <TextField
           label="Saldo"
@@ -91,6 +92,7 @@ const CfSearchForm = ({ onSearch }: CfSearchFormProps): JSX.Element => {
           variant="outlined"
           error={!!errors.balance}
           helperText={errors.balance?.message}
+          size="small"
         />
         <TextField
           label="Tipo"
@@ -98,6 +100,7 @@ const CfSearchForm = ({ onSearch }: CfSearchFormProps): JSX.Element => {
           variant="outlined"
           error={!!errors.type}
           helperText={errors.type?.message}
+          size="small"
         />
         <TextField
           label="Agência"
@@ -105,6 +108,7 @@ const CfSearchForm = ({ onSearch }: CfSearchFormProps): JSX.Element => {
           variant="outlined"
           error={!!errors.ag}
           helperText={errors.ag?.message}
+          size="small"
         />
         <TextField
           label="Banco"
@@ -112,6 +116,7 @@ const CfSearchForm = ({ onSearch }: CfSearchFormProps): JSX.Element => {
           variant="outlined"
           error={!!errors.bank}
           helperText={errors.bank?.message}
+          size="small"
         />
         <TextField
           label="Observações"
@@ -119,9 +124,11 @@ const CfSearchForm = ({ onSearch }: CfSearchFormProps): JSX.Element => {
           variant="outlined"
           error={!!errors.obs}
           helperText={errors.obs?.message}
+          size="small"
         />
         <TextField
           label="Criação"
+          size="small"
           {...register('createdAt')}
           variant="outlined"
           type="date"
@@ -136,6 +143,7 @@ const CfSearchForm = ({ onSearch }: CfSearchFormProps): JSX.Element => {
           {...register('updatedAt')}
           variant="outlined"
           type="date"
+          size="small"
           slotProps={{
             inputLabel: { shrink: true },
           }}

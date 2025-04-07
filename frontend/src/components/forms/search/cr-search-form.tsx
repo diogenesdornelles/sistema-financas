@@ -86,6 +86,7 @@ const CrSearchForm = ({ onSearch }: CrSearchFormProps): JSX.Element => {
           variant="outlined"
           error={!!errors.value}
           helperText={errors.value?.message}
+          size="small"
         />
         <TextField
           label="Tipo"
@@ -93,6 +94,7 @@ const CrSearchForm = ({ onSearch }: CrSearchFormProps): JSX.Element => {
           variant="outlined"
           error={!!errors.type}
           helperText={errors.type?.message}
+          size="small"
         />
         <TextField
           label="Cliente"
@@ -100,6 +102,7 @@ const CrSearchForm = ({ onSearch }: CrSearchFormProps): JSX.Element => {
           variant="outlined"
           error={!!errors.customer}
           helperText={errors.customer?.message}
+          size="small"
         />
         <TextField
           label="Vencimento"
@@ -111,6 +114,7 @@ const CrSearchForm = ({ onSearch }: CrSearchFormProps): JSX.Element => {
           }}
           error={!!errors.due}
           helperText={errors.due?.message}
+          size="small"
         />
         <TextField
           label="Recebimento"
@@ -122,6 +126,7 @@ const CrSearchForm = ({ onSearch }: CrSearchFormProps): JSX.Element => {
           }}
           error={!!errors.rdate}
           helperText={errors.rdate?.message}
+          size="small"
         />
         <TextField
           label="Observações"
@@ -129,6 +134,7 @@ const CrSearchForm = ({ onSearch }: CrSearchFormProps): JSX.Element => {
           variant="outlined"
           error={!!errors.obs}
           helperText={errors.obs?.message}
+          size="small"
         />
         <TextField
           label="Transação"
@@ -136,6 +142,7 @@ const CrSearchForm = ({ onSearch }: CrSearchFormProps): JSX.Element => {
           variant="outlined"
           error={!!errors.tx}
           helperText={errors.tx?.message}
+          size="small"
         />
         <TextField
           label="Criação"
@@ -147,6 +154,7 @@ const CrSearchForm = ({ onSearch }: CrSearchFormProps): JSX.Element => {
           }}
           error={!!errors.createdAt}
           helperText={errors.createdAt?.message}
+          size="small"
         />
         <TextField
           label="Alteração"
@@ -158,6 +166,7 @@ const CrSearchForm = ({ onSearch }: CrSearchFormProps): JSX.Element => {
           }}
           error={!!errors.updatedAt}
           helperText={errors.updatedAt?.message}
+          size="small"
         />
         <FormControlLabel
           control={<Switch {...register('status')} checked={!!showInactives} />}

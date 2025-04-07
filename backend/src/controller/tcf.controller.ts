@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { TcfService } from "../service/tcf.service";
 import { BaseController } from "./base.controller";
 import {
-  TcfProps,
   UpdateTcf,
   CreateTcf,
   QueryTcf,
@@ -10,6 +9,7 @@ import {
 import { createTcfSchema } from "../../../packages/validators/zod-schemas/create/create-tcf.validator";
 import { updateTcfSchema } from "../../../packages/validators/zod-schemas/update/update-tcf.validator";
 import { queryTcfSchema } from "../../../packages/validators/zod-schemas/query/query-tcf.validator";
+import { Tcf } from "../entity/entities";
 
 export default class TcfController extends BaseController<TcfService> {
   constructor() {
@@ -22,7 +22,7 @@ export default class TcfController extends BaseController<TcfService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const items: TcfProps[] = await this.service.getAll();
+      const items: Tcf[] = await this.service.getAll();
       res.status(200).json(items);
       return;
     } catch (error) {
@@ -40,7 +40,7 @@ export default class TcfController extends BaseController<TcfService> {
       const { skip } = req.params;
       const skipInt = parseInt(skip);
       if (skipInt >= 0) {
-        const items: TcfProps[] | null = await this.service.getMany(skipInt);
+        const items: Tcf[] | null = await this.service.getMany(skipInt);
         if (!items) {
           res.status(404).json({ message: "Tipo de contas não encontradas" });
           return;
@@ -66,7 +66,7 @@ export default class TcfController extends BaseController<TcfService> {
   ): Promise<void> => {
     try {
       const { id } = req.params;
-      const item: TcfProps | null = await this.service.getOne(id);
+      const item: Tcf | null = await this.service.getOne(id);
       if (!item) {
         res.status(404).json({ message: "Tipo conta não encontrada" });
         return;
@@ -86,7 +86,7 @@ export default class TcfController extends BaseController<TcfService> {
   ): Promise<void> => {
     try {
       const validatedData: CreateTcf = createTcfSchema.parse(req.body);
-      const item: TcfProps = await this.service.create(validatedData);
+      const item: Tcf = await this.service.create(validatedData);
       res.status(201).json(item);
       return;
     } catch (error) {
@@ -103,7 +103,7 @@ export default class TcfController extends BaseController<TcfService> {
     try {
       const { id } = req.params;
       const validatedData: UpdateTcf = updateTcfSchema.parse(req.body);
-      const updatedItem: Partial<TcfProps> | null = await this.service.update(
+      const updatedItem: Partial<Tcf> | null = await this.service.update(
         id,
         validatedData,
       );
@@ -145,7 +145,7 @@ export default class TcfController extends BaseController<TcfService> {
   ): Promise<void> => {
     try {
       const validatedData: QueryTcf = queryTcfSchema.parse(req.body);
-      const item: TcfProps[] = await this.service.query(validatedData);
+      const item: Tcf[] = await this.service.query(validatedData);
       res.status(201).json(item);
       return;
     } catch (error) {

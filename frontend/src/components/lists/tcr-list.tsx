@@ -34,7 +34,11 @@ const TcrList = (): JSX.Element | string => {
 
   const onEdit = (item: TcrProps) => {
     setFormType('tcr', 'update');
-    setUpdateItem('tcr', item);
+    setUpdateItem('tcr', {
+      ...item,
+      name: item.name,
+      status: item.status ? item.status : undefined
+    });
   };
 
   const delMutation = useDeleteTcr();

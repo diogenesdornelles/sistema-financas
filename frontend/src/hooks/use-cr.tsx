@@ -45,10 +45,10 @@ export function usePostCr() {
 }
 
 // Hook para atualizar um 'cr' existente (PUT)
-export function usePutCr() {
+export function usePutCr(id: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: UpdateCr) => Api.cr.put(data), 
+    mutationFn: (data: UpdateCr) => Api.cr.put(data, id), 
     onSuccess: (/* data */) => { 
       queryClient.invalidateQueries({ queryKey: ["cr", "getMany"] }); 
 

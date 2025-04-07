@@ -42,11 +42,11 @@ export function usePostTx() {
   });
 }
 
-export function usePutTx() {
+export function usePutTx(id: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: UpdateTx) => Api.tx.put(data),
+    mutationFn: (data: UpdateTx) => Api.tx.put(data, id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tx", "getMany"]});
     },

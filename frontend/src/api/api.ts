@@ -80,8 +80,8 @@ export const Api = {
       const { data } = await restClient.post("tcf", tcf);
       return data;
     },
-    put: async (tcf: UpdateTcf): Promise<TcfProps> => {
-      const { data } = await restClient.put("tcf", tcf);
+    put: async (tcf: UpdateTcf, id: string): Promise<TcfProps> => {
+      const { data } = await restClient.put(`tcf/${id}`, tcf);
       return data;
     },
     delete: async (id: string): Promise<void> => {
@@ -111,8 +111,8 @@ export const Api = {
       const { data } = await restClient.post("cf", cf);
       return data;
     },
-    put: async (cf: UpdateCf): Promise<CfProps> => {
-      const { data } = await restClient.put("cf", cf);
+    put: async (cf: UpdateCf, id: string): Promise<CfProps> => {
+      const { data } = await restClient.put(`cf/${id}`, cf);
       return data;
     },
     delete: async (id: string): Promise<void> => {
@@ -142,8 +142,8 @@ export const Api = {
       const { data } = await restClient.post("cp", cp);
       return data;
     },
-    put: async (cp: UpdateCp): Promise<CpProps> => {
-      const { data } = await restClient.put("cp", cp);
+    put: async (cp: UpdateCp, id: string): Promise<CpProps> => {
+      const { data } = await restClient.put(`cp/${id}`, cp);
       return data;
     },
     delete: async (id: string): Promise<void> => {
@@ -173,8 +173,8 @@ export const Api = {
       const { data } = await restClient.post("cr", cr);
       return data;
     },
-    put: async (cr: UpdateCr): Promise<CrProps> => {
-      const { data } = await restClient.put("cr", cr);
+    put: async (cr: UpdateCr, id: string): Promise<CrProps> => {
+      const { data } = await restClient.put(`cr/${id}`, cr);
       return data;
     },
     delete: async (id: string): Promise<void> => {
@@ -204,8 +204,8 @@ export const Api = {
       const { data } = await restClient.post("tcr", tcr);
       return data;
     },
-    put: async (tcr: UpdateTcr): Promise<TcrProps> => {
-      const { data } = await restClient.put("tcr", tcr);
+    put: async (tcr: UpdateTcr, id: string): Promise<TcrProps> => {
+      const { data } = await restClient.put(`tcr/${id}`, tcr);
       return data;
     },
     delete: async (id: string): Promise<void> => {
@@ -235,8 +235,8 @@ export const Api = {
       const { data } = await restClient.post("tcp", tcp);
       return data;
     },
-    put: async (tcp: UpdateTcp): Promise<TcpProps> => {
-      const { data } = await restClient.put("tcp", tcp);
+    put: async (tcp: UpdateTcp, id: string): Promise<TcpProps> => {
+      const { data } = await restClient.put(`tcp/${id}`, tcp);
       return data;
     },
     delete: async (id: string): Promise<void> => {
@@ -266,8 +266,8 @@ export const Api = {
       const { data } = await restClient.post("partner", partner);
       return data;
     },
-    put: async (partner: UpdatePartner): Promise<PartnerProps> => {
-      const { data } = await restClient.put("partner", partner);
+    put: async (partner: UpdatePartner, id: string): Promise<PartnerProps> => {
+      const { data } = await restClient.put(`partner/${id}`, partner);
       return data;
     },
     delete: async (id: string): Promise<void> => {
@@ -297,8 +297,8 @@ export const Api = {
       const { data } = await restClient.post("tx", tx);
       return data;
     },
-    put: async (tx: UpdateTx): Promise<TxProps> => {
-      const { data } = await restClient.put("tx", tx);
+    put: async (tx: UpdateTx, id: string): Promise<TxProps> => {
+      const { data } = await restClient.put(`tx/${id}`, tx);
       return data;
     },
     delete: async (id: string): Promise<void> => {
@@ -328,8 +328,8 @@ export const Api = {
       const { data } = await restClient.post("cat", cat);
       return data;
     },
-    put: async (cat: UpdateCat): Promise<CatProps> => {
-      const { data } = await restClient.put("cat", cat);
+    put: async (cat: UpdateCat, id: string): Promise<CatProps> => {
+      const { data } = await restClient.put(`cat/${id}`, cat);
       return data;
     },
     delete: async (id: string): Promise<void> => {
@@ -359,8 +359,8 @@ export const Api = {
       const { data } = await restClient.post("user", user);
       return data;
     },
-    put: async (user: UpdateUser): Promise<UserProps> => {
-      const { data } = await restClient.put("user", user);
+    put: async (user: UpdateUser, id: string): Promise<UserProps> => {
+      const { data } = await restClient.put(`user/${id}`, user);
       return data;
     },
     delete: async (id: string): Promise<void> => {

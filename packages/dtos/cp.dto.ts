@@ -31,13 +31,13 @@ export interface CpProps {
   value: number;
   type: TcpProps;
   supplier: PartnerProps;
-  due: Date;
+  due: string;
   obs: string;
-  pdate?: Date;
+  pdate?: string;
   status: CPStatus;
   tx?: TxProps;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 

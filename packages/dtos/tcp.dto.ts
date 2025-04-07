@@ -11,8 +11,8 @@ export interface TcpProps {
   id: string;
   name: string;
   status: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 

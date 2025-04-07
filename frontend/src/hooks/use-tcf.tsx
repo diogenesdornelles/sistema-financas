@@ -42,11 +42,11 @@ export function usePostTcf() {
   });
 }
 
-export function usePutTcf() {
+export function usePutTcf(id: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: UpdateTcf) => Api.tcf.put(data),
+    mutationFn: (data: UpdateTcf) => Api.tcf.put(data, id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tcf", "getMany"]});
     },

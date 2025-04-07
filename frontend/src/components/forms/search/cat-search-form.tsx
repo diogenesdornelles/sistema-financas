@@ -70,31 +70,35 @@ const CatSearchForm = ({ onSearch }: CatSearchFormProps): JSX.Element => {
           flexWrap: 'wrap',
           gap: 16,
           alignItems: 'center',
+          
         }}
       >
         <TextField
-          label="Buscar por nome"
+          label="Por nome"
           {...register('name')}
           variant="outlined"
           error={!!errors.name}
           helperText={errors.name?.message}
+          size="small"
         />
         <TextField
-          label="Buscar por descrição"
+          label="Por descrição"
           {...register('description')}
           variant="outlined"
           error={!!errors.description}
           helperText={errors.description?.message}
+          size="small"
         />
         <TextField
-          label="Buscar por observação"
+          label="Por observação"
           {...register('obs')}
           variant="outlined"
           error={!!errors.obs}
           helperText={errors.obs?.message}
+          size="small"
         />
         <TextField
-          label="Criação"
+          label="Por criação"
           {...register('createdAt')}
           variant="outlined"
           type="date"
@@ -103,9 +107,10 @@ const CatSearchForm = ({ onSearch }: CatSearchFormProps): JSX.Element => {
           }}
           error={!!errors.createdAt}
           helperText={errors.createdAt?.message}
+          size="small"
         />
         <TextField
-          label="Alteração"
+          label="Por alteração"
           {...register('updatedAt')}
           variant="outlined"
           type="date"
@@ -114,6 +119,7 @@ const CatSearchForm = ({ onSearch }: CatSearchFormProps): JSX.Element => {
           }}
           error={!!errors.updatedAt}
           helperText={errors.updatedAt?.message}
+          size="small"
         />
         <FormControlLabel
           control={<Switch {...register('status')} checked={!!showInactives} />}

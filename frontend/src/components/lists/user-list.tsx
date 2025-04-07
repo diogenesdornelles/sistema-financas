@@ -34,7 +34,13 @@ const UserList = (): JSX.Element | string => {
 
   const onEdit = (item: UserProps) => {
     setFormType('user', 'update');
-    setUpdateItem('user', item);
+    setUpdateItem('user', {
+      ...item,
+      name: item.name,
+      surname: item.surname,
+      cpf: item.cpf,
+      status: item.status
+    });
   };
 
   const delMutation = useDeleteUser();

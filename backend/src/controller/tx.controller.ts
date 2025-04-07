@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { TxService } from "../service/tx.service";
 import { BaseController } from "./base.controller";
 import {
-  TxProps,
   UpdateTx,
   CreateTx,
   QueryTx,
@@ -10,6 +9,7 @@ import {
 import { createTxSchema } from "../../../packages/validators/zod-schemas/create/create-tx.validator";
 import { updateTxSchema } from "../../../packages/validators/zod-schemas/update/update-tx.validator";
 import { queryTxSchema } from "../../../packages/validators/zod-schemas/query/query-tx.validator";
+import { Tx } from "../entity/entities";
 
 export default class TxController extends BaseController<TxService> {
   constructor() {
@@ -22,7 +22,7 @@ export default class TxController extends BaseController<TxService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const items: TxProps[] = await this.service.getAll();
+      const items: Tx[] = await this.service.getAll();
       res.status(200).json(items);
       return;
     } catch (error) {
@@ -40,7 +40,7 @@ export default class TxController extends BaseController<TxService> {
       const { skip } = req.params;
       const skipInt = parseInt(skip);
       if (skipInt >= 0) {
-        const items: TxProps[] | null = await this.service.getMany(skipInt);
+        const items: Tx[] | null = await this.service.getMany(skipInt);
         if (!items) {
           res.status(404).json({ message: "transações não encontradas" });
           return;
@@ -66,7 +66,7 @@ export default class TxController extends BaseController<TxService> {
   ): Promise<void> => {
     try {
       const { id } = req.params;
-      const item: TxProps | null = await this.service.getOne(id);
+      const item: Tx | null = await this.service.getOne(id);
       if (!item) {
         res.status(404).json({ message: "Transação não encontrada" });
         return;
@@ -86,7 +86,7 @@ export default class TxController extends BaseController<TxService> {
   ): Promise<void> => {
     try {
       const validatedData: CreateTx = createTxSchema.parse(req.body);
-      const item: TxProps = await this.service.create(validatedData);
+      const item: Tx = await this.service.create(validatedData);
       res.status(201).json(item);
       return;
     } catch (error) {
@@ -103,7 +103,7 @@ export default class TxController extends BaseController<TxService> {
     try {
       const { id } = req.params;
       const validatedData: UpdateTx = updateTxSchema.parse(req.body);
-      const updatedItem: Partial<TxProps> | null = await this.service.update(
+      const updatedItem: Partial<Tx> | null = await this.service.update(
         id,
         validatedData,
       );
@@ -145,7 +145,7 @@ export default class TxController extends BaseController<TxService> {
   ): Promise<void> => {
     try {
       const validatedData: QueryTx = queryTxSchema.parse(req.body);
-      const item: TxProps[] = await this.service.query(validatedData);
+      const item: Tx[] = await this.service.query(validatedData);
       res.status(201).json(item);
       return;
     } catch (error) {

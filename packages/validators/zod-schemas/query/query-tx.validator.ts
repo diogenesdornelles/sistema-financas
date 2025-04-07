@@ -38,24 +38,25 @@ export const queryTxSchema = z.object({
   cf: z.string(),
   category: z.string(),
   tdate: z
-    .string()
-    .transform((value) => (value === "" ? undefined : value))
-    .optional()
-    .refine((value) => !value || !isNaN(Date.parse(value)), {
-      message: "Data inválida",
-    }),
-  createdAt: z
-    .string()
-    .transform((value) => (value === "" ? undefined : value))
-    .optional()
-    .refine((value) => !value || !isNaN(Date.parse(value)), {
-      message: "Data inválida",
-    }),
-  updatedAt: z
-    .string()
-    .transform((value) => (value === "" ? undefined : value))
-    .optional()
-    .refine((value) => !value || !isNaN(Date.parse(value)), {
-      message: "Data inválida",
-    }),
+  .string()
+  .transform((value) => (value.trim() === "" ? undefined : value))
+  .optional()
+  .refine((value) => !value || !isNaN(Date.parse(value)), {
+    message: "Data inválida",
+  }),
+    createdAt: z
+      .string()
+      .transform((value) => (value.trim() === "" ? undefined : value))
+      .optional()
+      .refine((value) => !value || !isNaN(Date.parse(value)), {
+        message: "Data inválida",
+      }),
+
+    updatedAt: z
+      .string()
+      .transform((value) => (value.trim() === "" ? undefined : value))
+      .optional()
+      .refine((value) => !value || !isNaN(Date.parse(value)), {
+        message: "Data inválida",
+      }),
 }).partial();

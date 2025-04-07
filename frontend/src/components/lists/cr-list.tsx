@@ -21,6 +21,7 @@ import CrSearchForm from '../forms/search/cr-search-form';
 import { queryCrSchema } from '../../../../packages/validators/zod-schemas/query/query-cr.validator';
 import { z } from 'zod';
 import { PaymentStatus } from '../../../../packages/dtos/utils/enums';
+import { strToPtBrMoney } from '../../utils/strToPtBrMoney';
 
 type QueryCrFormData = z.infer<typeof queryCrSchema>;
 
@@ -38,10 +39,12 @@ const CrList = (): JSX.Element | string => {
       ...item,
       type: item.type.id,
       customer: item.customer.id,
-      tx: item.tx ? item.tx.id : undefined,
+      tx: item.tx ? item.tx.id : "",
       value: String(item.value),
-      due: item.due.toISOString().split('T')[0],
-      rdate: item.rdate ? item.rdate.toISOString().split('T')[0] : undefined,
+      due: item.due ? String(item.due) : "",
+      rdate: item.rdate ? String(item.rdate) : "",
+      obs: item.obs ? item.obs : "",
+      status: item.status ? item.status : undefined
     });
   };
 
@@ -122,7 +125,7 @@ const CrList = (): JSX.Element | string => {
               }}
             >
               <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, flexWrap: 'wrap', alignItems: 'baseline' }}>
-                <Chip label={`Valor: R$ ${item.value}`} variant="outlined" size="small" />
+                <Chip label={`Valor: R$ ${strToPtBrMoney(String(item.value))}`} variant="outlined" size="small" />
                 <Chip label={`Tipo: ${item.type.name}`} variant="outlined" size="small" />
                 <Chip label={`Cliente: ${item.customer.name}`} variant="outlined" size="small" />
                 <Chip label={`Vencimento: ${new Date(item.due).toLocaleDateString()}`} variant="outlined" size="small" />

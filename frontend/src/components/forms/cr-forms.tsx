@@ -7,9 +7,10 @@ import {
     Box,
     Alert,
     Autocomplete,
-    Checkbox,
-    FormControlLabel,
     Typography,
+    InputLabel,
+    Select,
+    MenuItem,
 } from "@mui/material";
 import { JSX } from "react";
 import { useFormStore } from "../../hooks/use-form-store";
@@ -56,7 +57,7 @@ export function CreateCrForm(): JSX.Element | null | string {
             due: "",
             obs: "",
             user: session ? session.user.id : "",
-            tx: undefined,
+            tx: "",
         },
     });
 
@@ -104,8 +105,9 @@ export function CreateCrForm(): JSX.Element | null | string {
                                 <TextField
                                     {...field}
                                     label="Valor (R$)"
-                                    sx={{width: '100%'}}
+                                    sx={{ width: '100%' }}
                                     variant="outlined"
+                                    size="small"
                                     error={!!errors.value}
                                     helperText={errors.value?.message}
                                     onChange={(e) => {
@@ -120,7 +122,8 @@ export function CreateCrForm(): JSX.Element | null | string {
                             {...register("due")}
                             variant="outlined"
                             error={!!errors.due}
-                            sx={{width: '100%'}}
+                            size="small"
+                            sx={{ width: '100%' }}
                             helperText={errors.due?.message}
                             type="date"
                             slotProps={{
@@ -143,6 +146,7 @@ export function CreateCrForm(): JSX.Element | null | string {
                                             {...params}
                                             label="Tipo (Tcr)"
                                             variant="outlined"
+                                            size="small"
                                             error={!!errors.type}
                                             helperText={errors.type?.message}
                                         />
@@ -164,6 +168,7 @@ export function CreateCrForm(): JSX.Element | null | string {
                                             {...params}
                                             label="Transação"
                                             variant="outlined"
+                                            size="small"
                                             error={!!errors.tx}
                                             helperText={errors.tx?.message}
                                         />
@@ -184,6 +189,7 @@ export function CreateCrForm(): JSX.Element | null | string {
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
+                                        size="small"
                                         label="Cliente"
                                         variant="outlined"
                                         error={!!errors.customer}
@@ -196,6 +202,7 @@ export function CreateCrForm(): JSX.Element | null | string {
 
                     <TextField
                         label="Observações"
+                        size="small"
                         {...register("obs")}
                         variant="outlined"
                         error={!!errors.obs}
@@ -223,8 +230,9 @@ export function CreateCrForm(): JSX.Element | null | string {
   Exibido quando o contexto indicar o modo "update" e houver item para atualizar
 */
 export function UpdateCrForm(): JSX.Element | null | string {
-    const mutation = usePutCr();
     const { forms } = useFormStore();
+
+    const mutation = usePutCr(forms.cr.updateItem ? forms.cr.updateItem.id : '');
     const { isPending: isPendingTcr, error: errorTcr, data: tcrData } = useGetAllTcr();
     const { isPending: isPendingPartner, error: errorPartner, data: partnerData } = useGetAllPartner();
     const { isPending: isPendingTx, error: errorTx, data: txData } = useGetAllTx();
@@ -237,10 +245,16 @@ export function UpdateCrForm(): JSX.Element | null | string {
         formState: { errors },
     } = useForm<UpdateCrFormData>({
         resolver: zodResolver(updateCrSchema),
-        defaultValues: {
-            ...forms.cr.updateItem,
+        defaultValues: forms.cr.updateItem ? {
+            type: forms.cr.updateItem.type,
+            customer: forms.cr.updateItem.customer,
+            tx: forms.cr.updateItem.tx ? forms.cr.updateItem.tx : "",
+            due: forms.cr.updateItem.due ? String(forms.cr.updateItem.due) : "",
+            rdate: forms.cr.updateItem.rdate ? String(forms.cr.updateItem.rdate) : "",
+            obs: forms.cr.updateItem.obs ? forms.cr.updateItem.obs : "",
+            status: forms.cr.updateItem.status ? forms.cr.updateItem.status : undefined,
             value: strToPtBrMoney(forms.cr.updateItem?.value || ""),
-        },
+        } : {},
     });
 
     const statusValue = watch("status");
@@ -285,6 +299,7 @@ export function UpdateCrForm(): JSX.Element | null | string {
                             <TextField
                                 {...field}
                                 label="Valor (R$)"
+                                size="small"
                                 variant="outlined"
                                 error={!!errors.value}
                                 helperText={errors.value?.message}
@@ -311,6 +326,7 @@ export function UpdateCrForm(): JSX.Element | null | string {
                                         {...params}
                                         label="Tipo (Tcr)"
                                         variant="outlined"
+                                        size="small"
                                         error={!!errors.type}
                                         helperText={errors.type?.message}
                                     />
@@ -334,6 +350,7 @@ export function UpdateCrForm(): JSX.Element | null | string {
                                         {...params}
                                         label="Cliente"
                                         variant="outlined"
+                                        size="small"
                                         error={!!errors.customer}
                                         helperText={errors.customer?.message}
                                     />
@@ -345,6 +362,7 @@ export function UpdateCrForm(): JSX.Element | null | string {
                         label="Vencimento"
                         {...register("due")}
                         variant="outlined"
+                        size="small"
                         error={!!errors.due}
                         helperText={errors.due?.message}
                         type="date"
@@ -357,6 +375,7 @@ export function UpdateCrForm(): JSX.Element | null | string {
                         label="Data de Recebimento"
                         {...register("rdate")}
                         variant="outlined"
+                        size="small"
                         error={!!errors.rdate}
                         helperText={errors.rdate?.message}
                         type="date"
@@ -368,6 +387,7 @@ export function UpdateCrForm(): JSX.Element | null | string {
                         label="Observações"
                         {...register("obs")}
                         variant="outlined"
+                        size="small"
                         error={!!errors.obs}
                         helperText={errors.obs?.message}
                         multiline
@@ -396,10 +416,19 @@ export function UpdateCrForm(): JSX.Element | null | string {
                             />
                         )}
                     />
-                    <FormControlLabel
-                        control={<Checkbox {...register("status")} />}
-                        label={`Status: ${statusValue ? "Ativo" : "Inativo"}`}
-                    />
+
+                    <InputLabel id="cr-status-label-update">Tipo</InputLabel>
+                    <Select
+                        labelId="cr-status-label-update"
+                        label="Status"
+                        size="small"
+                        defaultValue={statusValue}
+                        {...register("status")}
+                    >
+                        <MenuItem value="pending">Pendente</MenuItem>
+                        <MenuItem value="paid">Pago</MenuItem>
+                        <MenuItem value="cancelled">Cancelado</MenuItem>
+                    </Select>
                     <Button
                         type="submit"
                         variant="contained"

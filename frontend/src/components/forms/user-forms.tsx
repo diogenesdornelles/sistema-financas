@@ -72,6 +72,7 @@ export function CreateUserForm(): JSX.Element | null {
                         variant="outlined"
                         error={!!errors.name}
                         helperText={errors.name?.message}
+                        size="small"
                     />
                     <TextField
                         label="Sobrenome"
@@ -79,6 +80,7 @@ export function CreateUserForm(): JSX.Element | null {
                         variant="outlined"
                         error={!!errors.surname}
                         helperText={errors.surname?.message}
+                        size="small"
                     />
                     <TextField
                         label="CPF"
@@ -86,6 +88,7 @@ export function CreateUserForm(): JSX.Element | null {
                         variant="outlined"
                         error={!!errors.cpf}
                         helperText={errors.cpf?.message}
+                        size="small"
                     />
                     <TextField
                         label="Senha"
@@ -93,6 +96,7 @@ export function CreateUserForm(): JSX.Element | null {
                         {...register("pwd")}
                         variant="outlined"
                         error={!!errors.pwd}
+                        size="small"
                         helperText={errors.pwd?.message}
                     />
                     <TextField
@@ -102,6 +106,7 @@ export function CreateUserForm(): JSX.Element | null {
                         variant="outlined"
                         error={!!errors.confirmPwd}
                         helperText={errors.confirmPwd?.message}
+                        size="small"
                     />
                     <Button
                         type="submit"
@@ -118,9 +123,9 @@ export function CreateUserForm(): JSX.Element | null {
 }
 
 export function UpdateUserForm(): JSX.Element | null {
-    const mutation = usePutUser();
+    
     const { forms } = useFormStore();
-
+    const mutation = usePutUser(forms.user.updateItem ? forms.user.updateItem.id : '');
 
 
     const {
@@ -130,7 +135,13 @@ export function UpdateUserForm(): JSX.Element | null {
         formState: { errors },
     } = useForm<UpdateUserFormData>({
         resolver: zodResolver(updateUserSchema),
-        defaultValues: forms.user.updateItem || {},
+        defaultValues: forms.user.updateItem ? {
+            name: forms.user.updateItem.name,
+            surname: forms.user.updateItem.surname,
+            cpf: forms.user.updateItem.cpf,
+            status: forms.user.updateItem.status,
+            pwd: ''
+        } : {},
     });
 
     const statusValue = watch("status");
@@ -168,12 +179,14 @@ export function UpdateUserForm(): JSX.Element | null {
                         label="Nome"
                         {...register("name")}
                         variant="outlined"
+                        size="small"
                         error={!!errors.name}
                         helperText={errors.name?.message}
                     />
                     <TextField
                         label="Sobrenome"
                         {...register("surname")}
+                        size="small"
                         variant="outlined"
                         error={!!errors.surname}
                         helperText={errors.surname?.message}
@@ -181,6 +194,7 @@ export function UpdateUserForm(): JSX.Element | null {
                     <TextField
                         label="CPF"
                         {...register("cpf")}
+                        size="small"
                         variant="outlined"
                         error={!!errors.cpf}
                         helperText={errors.cpf?.message}
@@ -189,12 +203,13 @@ export function UpdateUserForm(): JSX.Element | null {
                         label="Senha"
                         type="password"
                         {...register("pwd")}
+                        size="small"
                         variant="outlined"
                         error={!!errors.pwd}
                         helperText={errors.pwd?.message}
                     />
                     <FormControlLabel
-                        control={<Checkbox {...register("status")} />}
+                        control={<Checkbox size="small" checked={statusValue} {...register("status")} />}
                         label={`Status: ${statusValue ? "Ativo" : "Inativo"}`}
                     />
                     <Button

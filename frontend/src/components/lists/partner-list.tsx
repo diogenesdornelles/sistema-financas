@@ -35,7 +35,14 @@ const PartnerList = (): JSX.Element | string => {
 
   const onEdit = (item: PartnerProps) => {
     setFormType('partner', 'update');
-    setUpdateItem('partner', item);
+    setUpdateItem('partner', {
+      ...item,
+      name: item.name,
+      type: item.type ? item.type : undefined,
+      cod: item.cod,
+      obs: item.obs ? item.obs : '',
+      status: item.status ? item.status: undefined
+    });
   };
 
   const delMutation = useDeletePartner();

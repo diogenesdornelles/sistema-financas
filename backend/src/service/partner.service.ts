@@ -2,7 +2,6 @@ import { BaseService } from "./base.service";
 import { Partner, User } from "../entity/entities";
 import {
   CreatePartner,
-  PartnerProps,
   QueryPartner,
   UpdatePartner,
 } from "../../../packages/dtos/partner.dto";
@@ -10,7 +9,7 @@ import { FindOptionsWhere, Like } from "typeorm";
 
 export class PartnerService extends BaseService<
   Partner,
-  PartnerProps,
+  Partner,
   CreatePartner,
   UpdatePartner,
   QueryPartner
@@ -22,7 +21,7 @@ export class PartnerService extends BaseService<
   /**
    * Recupera todos os parceiros.
    */
-  public getAll = async (): Promise<PartnerProps[]> => {
+  public getAll = async (): Promise<Partner[]> => {
     try {
       return await this.repository.find({
         relations: [],
@@ -35,7 +34,7 @@ export class PartnerService extends BaseService<
   /**
    * Recupera 10 parceiros, com skip.
    */
-  public getMany = async (skip: number): Promise<PartnerProps[]> => {
+  public getMany = async (skip: number): Promise<Partner[]> => {
     try {
       return await this.repository.find({
         skip,
@@ -52,7 +51,7 @@ export class PartnerService extends BaseService<
    *
    * @param id - Identificador.
    */
-  public getOne = async (id: string): Promise<PartnerProps | null> => {
+  public getOne = async (id: string): Promise<Partner | null> => {
     try {
       return await this.repository.findOne({
         where: { id },
@@ -68,7 +67,7 @@ export class PartnerService extends BaseService<
    *
    * @param data - Dados para criação.
    */
-  public create = async (data: CreatePartner): Promise<PartnerProps> => {
+  public create = async (data: CreatePartner): Promise<Partner> => {
     try {
       const newPartner = this.repository.create({
         ...data,
@@ -95,7 +94,7 @@ export class PartnerService extends BaseService<
   public update = async (
     id: string,
     data: UpdatePartner,
-  ): Promise<Partial<PartnerProps> | null> => {
+  ): Promise<Partial<Partner> | null> => {
     try {
       const updateData: Partial<Partner> = {
         ...data,
@@ -132,7 +131,7 @@ export class PartnerService extends BaseService<
    *
    * @param data - Dados para busca.
    */
-  public query = async (data: QueryPartner): Promise<PartnerProps[]> => {
+  public query = async (data: QueryPartner): Promise<Partner[]> => {
     try {
       const where: FindOptionsWhere<Partner> = {};
 

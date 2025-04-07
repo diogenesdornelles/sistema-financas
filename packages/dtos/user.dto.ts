@@ -21,8 +21,8 @@ export interface UserProps {
   surname: string;
   cpf: string;
   status: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface QueryUser {

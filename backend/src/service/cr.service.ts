@@ -3,7 +3,6 @@ import { Cr, Partner, Tcr, Tx, User } from "../entity/entities";
 import {
   CreateCr,
   UpdateCr,
-  CrProps,
   QueryCr,
 } from "../../../packages/dtos/cr.dto";
 import { PaymentStatus } from "../../../packages/dtos/utils/enums";
@@ -11,7 +10,7 @@ import { FindOptionsWhere, Like, MoreThanOrEqual } from "typeorm";
 
 export class CrService extends BaseService<
   Cr,
-  CrProps,
+  Cr,
   CreateCr,
   UpdateCr,
   QueryCr
@@ -23,7 +22,7 @@ export class CrService extends BaseService<
   /**
    * Recupera todas as contas.
    */
-  public getAll = async (): Promise<CrProps[]> => {
+  public getAll = async (): Promise<Cr[]> => {
     try {
       return await this.repository.find({
         relations: ["type", "customer", "tx"],
@@ -36,7 +35,7 @@ export class CrService extends BaseService<
   /**
    * Recupera todas as contas.
    */
-  public getMany = async (skip: number): Promise<CrProps[]> => {
+  public getMany = async (skip: number): Promise<Cr[]> => {
     try {
       return await this.repository.find({
         skip,
@@ -53,7 +52,7 @@ export class CrService extends BaseService<
    *
    * @param id - Identificador.
    */
-  public getOne = async (id: string): Promise<CrProps | null> => {
+  public getOne = async (id: string): Promise<Cr | null> => {
     try {
       return await this.repository.findOne({
         where: { id },
@@ -69,7 +68,7 @@ export class CrService extends BaseService<
    *
    * @param data - Dados para criação.
    */
-  public create = async (data: CreateCr): Promise<CrProps> => {
+  public create = async (data: CreateCr): Promise<Cr> => {
     try {
       const newCr = this.repository.create({
         ...data,
@@ -102,7 +101,7 @@ export class CrService extends BaseService<
   public update = async (
     id: string,
     data: UpdateCr,
-  ): Promise<Partial<CrProps> | null> => {
+  ): Promise<Partial<Cr> | null> => {
     try {
       const updateData: Partial<Cr> = {
         ...data,
@@ -149,7 +148,7 @@ export class CrService extends BaseService<
    *
    * @param data - Dados para busca.
    */
-  public query = async (data: QueryCr): Promise<CrProps[]> => {
+  public query = async (data: QueryCr): Promise<Cr[]> => {
     try {
       const where: FindOptionsWhere<Cr> = {};
 

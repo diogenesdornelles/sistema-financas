@@ -66,6 +66,7 @@ export function CreateTcpForm(): JSX.Element | null {
                         variant="outlined"
                         error={!!errors.name}
                         helperText={errors.name?.message}
+                        size="small"
                     />
                     <Button
                         type="submit"
@@ -82,8 +83,10 @@ export function CreateTcpForm(): JSX.Element | null {
 }
 
 export function UpdateTcpForm(): JSX.Element | null {
-    const mutation = usePutTcp();
+
     const { forms } = useFormStore();
+
+    const mutation = usePutTcp(forms.tcp.updateItem ? forms.tcp.updateItem.id : '');
 
     const {
         register,
@@ -92,8 +95,11 @@ export function UpdateTcpForm(): JSX.Element | null {
         formState: { errors },
     } = useForm<UpdateTcpFormData>({
         resolver: zodResolver(updateTcpSchema),
-        defaultValues: forms.tcp.updateItem || {},
-    });
+        defaultValues: forms.tcp.updateItem ? {
+            name: forms.tcp.updateItem.name,
+            status: forms.tcp.updateItem.status ? forms.tcp.updateItem.status : undefined
+          } : { },
+        });
 
     const statusValue = watch("status");
 
@@ -132,10 +138,10 @@ export function UpdateTcpForm(): JSX.Element | null {
                         variant="outlined"
                         error={!!errors.name}
                         helperText={errors.name?.message}
+                        size="small"
                     />
-
                     <FormControlLabel
-                        control={<Checkbox {...register("status")} />}
+                        control={<Checkbox size="small" checked={statusValue} {...register("status")} />}
                         label={`Status: ${statusValue ? "Ativo" : "Inativo"}`}
                     />
 

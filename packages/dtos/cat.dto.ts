@@ -18,8 +18,8 @@ export interface CatProps {
   description: string;
   status: boolean;
   obs: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 

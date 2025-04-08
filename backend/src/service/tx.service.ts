@@ -24,7 +24,7 @@ export class TxService extends BaseService<
   public getAll = async (): Promise<Tx[]> => {
     try {
       return await this.repository.find({
-        relations: ["category", "cf"],
+        relations: ["category", "cf"], where: {status: true}
       });
     } catch (error) {
       throw new Error(`Erro ao recuperar transações: ${error}`);
@@ -39,6 +39,7 @@ export class TxService extends BaseService<
       return await this.repository.find({
         skip,
         take: 10,
+        where: {status: true},
         relations: ["category", "cf"],
       });
     } catch (error) {

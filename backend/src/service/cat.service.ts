@@ -24,7 +24,7 @@ export class CatService extends BaseService<
    */
   public getAll = async (): Promise<Cat[]> => {
     try {
-      const cats = await this.repository.find({ relations: [] });
+      const cats = await this.repository.find({ relations: [], where: {status: true}, });
       return cats;
     } catch (error) {
       throw new Error(`Erro ao recuperar categorias: ${error}`);
@@ -34,6 +34,7 @@ export class CatService extends BaseService<
   public getMany = async (skip = 0): Promise<Cat[]> => {
     try {
       const cats = await this.repository.find({
+        where: {status: true},
         skip,
         take: 10,
         relations: [],

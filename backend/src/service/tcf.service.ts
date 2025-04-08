@@ -23,7 +23,7 @@ export class TcfService extends BaseService<
    */
   public getAll = async (): Promise<Tcf[]> => {
     try {
-      return await this.repository.find();
+      return await this.repository.find({where: {status: true}});
     } catch (error) {
       throw new Error(`Erro ao recuperar tipos de conta financeira: ${error}`);
     }
@@ -34,7 +34,7 @@ export class TcfService extends BaseService<
    */
   public getMany = async (skip: number): Promise<Tcf[]> => {
     try {
-      return await this.repository.find({ skip, take: 10 });
+      return await this.repository.find({ skip, take: 10, where: {status: true} });
     } catch (error) {
       throw new Error(`Erro ao recuperar tipos de conta financeira: ${error}`);
     }

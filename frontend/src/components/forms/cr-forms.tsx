@@ -144,7 +144,7 @@ export function CreateCrForm(): JSX.Element | null | string {
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
-                                            label="Tipo (Tcr)"
+                                            label="Tipo"
                                             variant="outlined"
                                             size="small"
                                             error={!!errors.type}

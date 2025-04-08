@@ -107,7 +107,7 @@ const UserList = (): JSX.Element | string => {
               }}
             >
               <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, flexWrap: 'wrap', alignItems: 'baseline' }}>
-                <Chip label={`Nome: ${item.name}`} color="success" />
+                <Chip label={`Nome: ${item.name}`} color="secondary" />
                 <Chip label={`Sobrenome: ${item.surname}`} variant="outlined" size="small" />
                 <Chip label={`CPF: ${item.cpf}`} variant="outlined" size="small" />
                 <Chip

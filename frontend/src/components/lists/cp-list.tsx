@@ -111,7 +111,7 @@ const CpList = (): JSX.Element | string => {
               }}
             >
               <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, flexWrap: 'wrap', alignItems: 'baseline' }}>
-                <Chip label={`Valor: R$ ${strToPtBrMoney(String(item.value))}`} variant="outlined" size="small" />
+                <Chip label={`Valor: R$ ${strToPtBrMoney(String(item.value))}`} variant="filled" size="medium" color="error"  />
                 <Chip label={`Tipo: ${item.type.name}`} variant="outlined" size="small" />
                 <Chip label={`Fornecedor: ${item.supplier.name}`} variant="outlined" size="small" />
                 <Chip label={`Vencimento: ${new Date(item.due).toLocaleDateString()}`} variant="outlined" size="small" />

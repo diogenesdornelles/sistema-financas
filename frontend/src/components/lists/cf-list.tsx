@@ -74,8 +74,6 @@ const CfList = (): JSX.Element | string => {
     });
   };
 
-  console.log(queryCfMutation.data)
-
   useEffect(() => {
     if (queryCfMutation.data) {
       setItems(queryCfMutation.data);

@@ -23,7 +23,7 @@ export class CfService extends BaseService<
    */
   public getAll = async (): Promise<Cf[]> => {
     try {
-      const cfs = await this.repository.find({ relations: ["type"] });
+      const cfs = await this.repository.find({ relations: ["type"], where: {status: true} });
       return cfs;
     } catch (error) {
       throw new Error(`Erro ao recuperar contas: ${error}`);
@@ -36,6 +36,7 @@ export class CfService extends BaseService<
   public getMany = async (skip: number): Promise<Cf[]> => {
     try {
       const cfs = await this.repository.find({
+        where: {status: true},
         skip,
         take: 10,
         relations: ["type"],

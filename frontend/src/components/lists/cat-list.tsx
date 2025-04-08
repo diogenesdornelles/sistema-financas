@@ -92,7 +92,7 @@ const CatList = (): JSX.Element | string => {
       <CatSearchForm onSearch={handleSearch} />
       <Divider />
       <Typography variant="h4">Categorias</Typography>
-      <List sx={{padding: 2, flex: 1, width: '100%', maxHeight: 400, overflow: 'auto', cursor: "all-scroll" }}>
+      <List sx={{flex: 1, width: '100%', maxHeight: 400, overflow: 'auto', cursor: "all-scroll" }}>
         {items &&
           items.map((item: CatProps, i: number) => (
             <ListItem

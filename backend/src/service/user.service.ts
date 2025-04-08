@@ -26,6 +26,7 @@ export class UserService extends BaseService<
     try {
       const users = await this.repository.find({
         select: ["id", "name", "status", "surname", "createdAt", "updatedAt", "cpf"],
+        where: {status: true},
         relations: [],
       });
       return users;
@@ -40,6 +41,7 @@ export class UserService extends BaseService<
   public getMany = async (skip: number): Promise<User[]> => {
     try {
       const users = await this.repository.find({
+        where: {status: true},
         select: ["id", "name", "status", "surname", "createdAt", "updatedAt", "cpf"],
         skip,
         take: 10,

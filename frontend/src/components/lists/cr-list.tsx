@@ -125,7 +125,7 @@ const CrList = (): JSX.Element | string => {
               }}
             >
               <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, flexWrap: 'wrap', alignItems: 'baseline' }}>
-                <Chip label={`Valor: R$ ${strToPtBrMoney(String(item.value))}`} variant="outlined" size="small" />
+                <Chip label={`Valor: R$ ${strToPtBrMoney(String(item.value))}`} variant="filled" size="medium" color="primary" />
                 <Chip label={`Tipo: ${item.type.name}`} variant="outlined" size="small" />
                 <Chip label={`Cliente: ${item.customer.name}`} variant="outlined" size="small" />
                 <Chip label={`Vencimento: ${new Date(item.due).toLocaleDateString()}`} variant="outlined" size="small" />

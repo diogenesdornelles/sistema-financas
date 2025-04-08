@@ -6,7 +6,7 @@ import {
   QueryCr,
 } from "../../../packages/dtos/cr.dto";
 import { PaymentStatus } from "../../../packages/dtos/utils/enums";
-import { FindOptionsWhere, Like, MoreThanOrEqual } from "typeorm";
+import { FindOptionsWhere, Like, MoreThanOrEqual, Not } from "typeorm";
 
 export class CrService extends BaseService<
   Cr,
@@ -25,6 +25,7 @@ export class CrService extends BaseService<
   public getAll = async (): Promise<Cr[]> => {
     try {
       return await this.repository.find({
+        where: {status: Not(PaymentStatus.CANCELLED)},
         relations: ["type", "customer", "tx"],
       });
     } catch (error) {
@@ -38,6 +39,7 @@ export class CrService extends BaseService<
   public getMany = async (skip: number): Promise<Cr[]> => {
     try {
       return await this.repository.find({
+        where: {status: Not(PaymentStatus.CANCELLED)},
         skip,
         take: 10,
         relations: ["type", "customer", "tx"],

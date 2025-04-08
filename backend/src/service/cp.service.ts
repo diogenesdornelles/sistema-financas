@@ -10,6 +10,7 @@ import {
   FindOptionsWhere,
   Like,
   MoreThanOrEqual,
+  Not
 } from "typeorm";
 
 export class CpService extends BaseService<
@@ -29,8 +30,9 @@ export class CpService extends BaseService<
   public getAll = async (): Promise<Cp[]> => {
     try {
       return await this.repository.find({
-        relations: ["type", "supplier", "tx"],
-      });
+        
+        relations: ["type", "supplier", "tx"], where: {status: Not(CPStatus.CANCELLED)}
+      } );
     } catch (error) {
       throw new Error(`Erro ao recuperar contas: ${error}`);
     }
@@ -42,6 +44,7 @@ export class CpService extends BaseService<
   public getMany = async (skip: number): Promise<Cp[]> => {
     try {
       return await this.repository.find({
+        where: {status: Not(CPStatus.CANCELLED)},
         skip,
         take: 10,
         relations: ["type", "supplier", "tx"],

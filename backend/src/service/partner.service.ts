@@ -25,6 +25,7 @@ export class PartnerService extends BaseService<
   public getAll = async (): Promise<Partner[]> => {
     try {
       return await this.repository.find({
+        where: {status: true},
         relations: [],
       });
     } catch (error) {
@@ -38,6 +39,7 @@ export class PartnerService extends BaseService<
   public getMany = async (skip: number): Promise<Partner[]> => {
     try {
       return await this.repository.find({
+        where: {status: true},
         skip,
         take: 10,
         relations: [],

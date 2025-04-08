@@ -47,7 +47,7 @@ export function CreateCfForm(): JSX.Element | null | string {
         mode: 'onSubmit',
         defaultValues: {
             number: '',
-            balance: '',
+            balance: '0,00',
             user: session ? session?.user.id : '',
             bank: '',
             ag: '',

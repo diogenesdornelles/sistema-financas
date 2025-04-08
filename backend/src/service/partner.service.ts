@@ -6,6 +6,7 @@ import {
   UpdatePartner,
 } from "../../../packages/dtos/partner.dto";
 import { FindOptionsWhere, Like } from "typeorm";
+import { PartnerSearchType, PartnerType } from "../../../packages/dtos/utils/enums";
 
 export class PartnerService extends BaseService<
   Partner,
@@ -139,8 +140,8 @@ export class PartnerService extends BaseService<
         where.name = Like(`%${data.name}%`);
       }
 
-      if (data.type) {
-        where.type = data.type;
+      if (data.type && data.type !== PartnerSearchType.PFPJ) {
+        where.type = data.type as unknown as PartnerType;
       }
 
       if (data.cod) {
@@ -151,7 +152,7 @@ export class PartnerService extends BaseService<
         where.obs = Like(`%${data.obs}%`);
       }
 
-      if (data.status !== undefined) {
+      if (data.status) {
         where.status = data.status;
       }
 

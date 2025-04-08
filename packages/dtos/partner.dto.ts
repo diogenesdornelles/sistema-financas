@@ -1,4 +1,4 @@
-import { PartnerType } from "./utils/enums";
+import { PartnerSearchType, PartnerType } from "./utils/enums";
 
 
 // Enum para o tipo de Parceiro
@@ -32,7 +32,7 @@ export interface PartnerProps {
 
 export interface QueryPartner {
   name?: string;
-  type?: PartnerType;
+  type?: PartnerSearchType;
   cod?: string;
   status?: boolean;
   obs?: string;

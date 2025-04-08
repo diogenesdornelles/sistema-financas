@@ -50,6 +50,7 @@ const CfList = (): JSX.Element | string => {
   const delMutation = useDeleteCf();
 
   const handleSearch = (data: QueryCfFormData) => {
+    console.log(data)
     queryCfMutation.mutate(data);
   };
 
@@ -72,6 +73,8 @@ const CfList = (): JSX.Element | string => {
       return nextPage;
     });
   };
+
+  console.log(queryCfMutation.data)
 
   useEffect(() => {
     if (queryCfMutation.data) {

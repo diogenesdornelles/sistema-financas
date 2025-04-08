@@ -15,6 +15,12 @@ export enum CPStatus {
     PF = "PF",
     PJ = "PJ",
   }
+
+  export enum PartnerSearchType {
+    PF = "PF",
+    PJ = "PJ",
+    PFPJ = "PFPJ",
+  }
   
   export enum TransactionType {
     ENTRY = "E",

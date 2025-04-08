@@ -70,7 +70,7 @@ export function CreatePartnerForm(): JSX.Element | null {
                     />
 
                     <FormControl variant="outlined" error={!!errors.type}>
-                        <InputLabel id="partner-type-label">Tipo</InputLabel>
+                        <InputLabel size="small" id="partner-type-label">Tipo</InputLabel>
                         <Select
                             size="small"
                             labelId="partner-type-label"

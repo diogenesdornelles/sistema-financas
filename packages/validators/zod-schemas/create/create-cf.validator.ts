@@ -14,7 +14,7 @@ export const createCfSchema = z
       .string()
       .max(30, "Banco precisa ter no máximo 30 caracteres")
       .optional(),
-    balance: z.string().min(4, "Precisa ter tamanho mínimo 4").regex(/^\d{1,3}(\.\d{3})*(,\d{2})?$/, "Precisa ter formato dinheiro")
+    balance: z.string().min(4, "Precisa informar um valor").regex(/^\d{1,3}(\.\d{3})*(,\d{2})?$/, "Precisa ter formato dinheiro")
       .refine((valor) => {
         if (typeof valor !== "string") return false;
 

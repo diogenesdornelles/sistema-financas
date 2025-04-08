@@ -113,13 +113,13 @@ const TxList = (): JSX.Element | string => {
               }}
             >
               <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, flexWrap: 'wrap', alignItems: 'baseline' }}>
-                <Chip label={`Conta: ${item.cf.number}`} variant="outlined" size="small" />
-                <Chip
+              <Chip
                   label={`Tipo: ${item.type === TransactionType.ENTRY ? 'Entrada' : 'Saída'}`}
                   color={item.type === TransactionType.ENTRY ? 'success' : 'error'}
-                  variant="outlined"
-                  size="small"
+                  variant="filled"
+                  size="medium"
                 />
+                <Chip label={`Conta: ${item.cf.number}`} variant="outlined" size="small" />
                 <Chip label={`Valor: R$ ${strToPtBrMoney(String(item.value))}`} variant="outlined" size="small" />
                 <Chip label={`Categoria: ${item.category.name}`} variant="outlined" size="small" />
                 <Chip label={`Descrição: ${item.description}`} variant="outlined" size="small" />

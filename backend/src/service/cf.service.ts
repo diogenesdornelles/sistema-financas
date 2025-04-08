@@ -172,7 +172,7 @@ export class CfService extends BaseService<
         where.obs = Like(`%${data.obs}%`);
       }
 
-      if (data.status !== undefined) {
+      if (data.status) {
         where.status = data.status;
       }
 

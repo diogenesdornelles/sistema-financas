@@ -149,7 +149,7 @@ export class UserService extends BaseService<
         where.cpf = Like(`%${data.cpf}%`);
       }
 
-      if (data.status !== undefined) {
+      if (data.status) {
         where.status = data.status;
       }
 

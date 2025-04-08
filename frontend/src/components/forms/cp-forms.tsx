@@ -51,7 +51,7 @@ export function CreateCpForm(): JSX.Element | null | string {
         resolver: zodResolver(createCpSchema),
         mode: "onSubmit",
         defaultValues: {
-            value: "",
+            value: "0,00",
             type: "",
             supplier: "",
             due: "", // data atual

@@ -7,9 +7,14 @@ import {
   Box,
   FormControlLabel,
   Switch,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material';
 import { queryPartnerSchema } from '../../../../../packages/validators/zod-schemas/query/query-partner.validator';
 import { JSX } from 'react';
+import { PartnerSearchType } from '../../../../../packages/dtos/utils/enums';
 
 type QueryPartnerFormData = z.infer<typeof queryPartnerSchema>;
 
@@ -29,7 +34,7 @@ const PartnerSearchForm = ({ onSearch }: PartnerSearchFormProps): JSX.Element =>
     defaultValues: {
       name: '',
       cod: '',
-      type: undefined,
+      type: PartnerSearchType.PFPJ,
       status: undefined,
       obs: '',
       createdAt: '',
@@ -41,7 +46,7 @@ const PartnerSearchForm = ({ onSearch }: PartnerSearchFormProps): JSX.Element =>
 
   const onSubmit = (data: QueryPartnerFormData) => {
     const cleanedData: Partial<QueryPartnerFormData> = { ...data };
-    (['name', 'cod', 'obs', 'createdAt', 'updatedAt'] as const).forEach((key) => {
+    (['name', 'cod', 'obs', 'createdAt', 'updatedAt', 'type'] as const).forEach((key) => {
       if (!cleanedData[key]) {
         delete cleanedData[key];
       }
@@ -90,14 +95,26 @@ const PartnerSearchForm = ({ onSearch }: PartnerSearchFormProps): JSX.Element =>
           helperText={errors.cod?.message}
           size="small"
         />
-        <TextField
-          label="Tipo"
-          {...register('type')}
-          variant="outlined"
-          error={!!errors.type}
-          helperText={errors.type?.message}
-          size="small"
-        />
+        <FormControl variant="outlined" error={!!errors.type}>
+          <InputLabel id="partner-type-label-search" size='small'>Tipo</InputLabel>
+          <Select
+            sx={{width: 100}}
+            labelId="partner-type-label-search"
+            label="Tipo"
+            size="small"
+            defaultValue={PartnerSearchType.PFPJ}
+            {...register("type")}
+          >
+            <MenuItem value="PF">PF</MenuItem>
+            <MenuItem value="PJ">PJ</MenuItem>
+            <MenuItem value="PFPJ">Ambos</MenuItem>
+          </Select>
+          {errors.type && (
+            <p style={{ color: '#d32f2f', fontSize: '0.75rem', margin: '3px 14px 0' }}>
+              {errors.type.message}
+            </p>
+          )}
+        </FormControl>
         <TextField
           label="Observações"
           {...register('obs')}

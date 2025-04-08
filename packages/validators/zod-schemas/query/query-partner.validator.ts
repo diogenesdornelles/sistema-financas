@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { PartnerType } from "../create/create-partner.validator";
-import GeneralValidator from "../../general.validator";
+import { PartnerSearchType } from "../../../dtos/utils/enums";
+
 
 
 export const queryPartnerSchema = z
@@ -9,60 +10,27 @@ export const queryPartnerSchema = z
             .string(),
         cod: z
             .string()
-            .transform((str) => str.replace(/\D/g, ""))
-            .refine((cod) => cod.length === 11 || cod.length === 14, {
-                message: "Código deve ter 11 dígitos (CPF) ou 14 dígitos (CNPJ)",
-            }),
-            createdAt: z
+            .transform((str) => str.replace(/\D/g, "")),
+        createdAt: z
             .string()
             .transform((value) => (value.trim() === "" ? undefined : value))
             .optional()
             .refine((value) => !value || !isNaN(Date.parse(value)), {
-              message: "Data inválida",
+                message: "Data inválida",
             }),
-      
-          updatedAt: z
+
+        updatedAt: z
             .string()
             .transform((value) => (value.trim() === "" ? undefined : value))
             .optional()
             .refine((value) => !value || !isNaN(Date.parse(value)), {
-              message: "Data inválida",
+                message: "Data inválida",
             }),
-        type: z.nativeEnum(PartnerType),
+        type: z.nativeEnum(PartnerSearchType).optional(),
         status: z.boolean(),
-        obs: z
-            .string()
-    }).strict().partial()
-    .superRefine((data, ctx) => {
-        if (data.type === PartnerType.PF) {
-            if (data.cod && data.cod.length !== 11) {
-                ctx.addIssue({
-                    code: z.ZodIssueCode.custom,
-                    path: ["cod"],
-                    message: "CPF deve ter exatamente 11 dígitos.",
-                });
-            } else if (data.cod && !GeneralValidator.validateCpf(data.cod)) {
-                ctx.addIssue({
-                    code: z.ZodIssueCode.custom,
-                    path: ["cod"],
-                    message: "CPF inválido.",
-                });
-            }
-        } else if (data.type === PartnerType.PJ) {
-            if (data.cod && data.cod.length !== 14) {
-                ctx.addIssue({
-                    code: z.ZodIssueCode.custom,
-                    path: ["cod"],
-                    message: "CNPJ deve ter exatamente 14 dígitos.",
-                });
-            } else if (data.cod && !GeneralValidator.validateCNPJ(data.cod)) {
-                ctx.addIssue({
-                    code: z.ZodIssueCode.custom,
-                    path: ["cod"],
-                    message: "CNPJ inválido.",
-                });
-            }
-        }
+        obs: z.string()
+    }).strict().partial().superRefine((data, ctx) => {
+        console.log(data)
     });
 
 

@@ -121,9 +121,10 @@ export class TcfService extends BaseService<
         where.name = Like(`%${data.name}%`);
       }
 
-      if (data.status !== undefined) {
+      if (data.status) {
         where.status = data.status;
       }
+
 
       if (data.createdAt) {
         const updatedDate = new Date(data.createdAt);

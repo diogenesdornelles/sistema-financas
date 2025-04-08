@@ -51,7 +51,7 @@ export function CreateCrForm(): JSX.Element | null | string {
         resolver: zodResolver(createCrSchema),
         mode: "onSubmit",
         defaultValues: {
-            value: "",
+            value: "0,00",
             type: "",
             customer: "",
             due: "",

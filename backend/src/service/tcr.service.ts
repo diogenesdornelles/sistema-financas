@@ -116,7 +116,7 @@ export class TcrService extends BaseService<
         where.name = Like(`%${data.name}%`);
       }
 
-      if (data.status !== undefined) {
+      if (data.status) {
         where.status = data.status;
       }
 

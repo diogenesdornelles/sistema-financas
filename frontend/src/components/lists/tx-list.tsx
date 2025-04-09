@@ -26,10 +26,11 @@ import { queryTxSchema } from '../../../../packages/validators/zod-schemas/query
 import { z } from 'zod';
 import { TransactionType } from '../../../../packages/dtos/utils/enums';
 import { strToPtBrMoney } from '../../utils/strToPtBrMoney';
+import CustomBackdrop from '../customBackdrop';
 
 type QueryTxFormData = z.infer<typeof queryTxSchema>;
 
-const TxList = (): JSX.Element | string => {
+const TxList = (): JSX.Element => {
   const SKIP = 10;
   const [page, setPage] = useState(1);
   const [items, setItems] = useState<TxProps[] | null>(null);
@@ -86,19 +87,20 @@ const TxList = (): JSX.Element | string => {
     }
   }, [queryTxMutation.data, data]);
 
-  if (isPending) return 'Carregando...';
   if (error) return <ErrorAlert message={error.message} />;
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
+      {(isPending) && <CustomBackdrop isOpen={isPending} />}
       <Typography variant="h4">Filtro</Typography>
       <TxSearchForm onSearch={handleSearch} />
       <Divider />
       <Typography variant="h4">Transações</Typography>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} sx={{ height: '100%' }}>
         <Table sx={{ minWidth: 650 }} size="small" aria-label="tabela de transações">
           <TableHead>
             <TableRow>
+            <TableCell align='left' sx={{ fontWeight: 800 }}></TableCell>
               <TableCell align='left' sx={{ fontWeight: 800 }}>Tipo</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Conta</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Valor</TableCell>
@@ -127,6 +129,9 @@ const TxList = (): JSX.Element | string => {
                         : theme.palette.common.black,
                   }}
                 >
+                                    <TableCell scope="row" align='left' sx={{ fontWeight: 900 }}>
+                    {i + 1}
+                  </TableCell>
                   <TableCell align='left'>
                     {item.type === TransactionType.ENTRY ? 'Entrada' : 'Saída'}
                   </TableCell>
@@ -153,18 +158,18 @@ const TxList = (): JSX.Element | string => {
       </TableContainer>
       {data && data.length > 0 && (
         <ButtonGroup
-          variant="contained"
-          aria-label="grupo de botões"
-          sx={{ marginBottom: 2, flex: 0, width: 'fit-content', alignSelf: 'center' }}
-        >
-          <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
-            Anterior
-          </Button>
-          <Button onClick={() => handleChangePage(1)} disabled={!data || data.length === 0}>
-            Próximo
-          </Button>
-        </ButtonGroup>
-      )}
+        variant="contained"
+        aria-label="basic button group"
+        sx={{ display: 'flex', marginBottom: 2, flex: 0, width: 'fit-content', height: '100%', alignSelf: 'center' }}
+      >
+        <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
+          Anterior
+        </Button>
+        <Button onClick={() => handleChangePage(1)} disabled={!data || data.length === 0}>
+          Próximo
+        </Button>
+      </ButtonGroup>
+    )}
     </Box>
   );
 };

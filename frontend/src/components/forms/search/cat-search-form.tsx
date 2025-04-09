@@ -74,7 +74,7 @@ const CatSearchForm = ({ onSearch }: CatSearchFormProps): JSX.Element => {
         }}
       >
         <TextField
-          label="Por nome"
+          label="Nome"
           {...register('name')}
           variant="outlined"
           error={!!errors.name}
@@ -82,7 +82,7 @@ const CatSearchForm = ({ onSearch }: CatSearchFormProps): JSX.Element => {
           size="small"
         />
         <TextField
-          label="Por descrição"
+          label="Descrição"
           {...register('description')}
           variant="outlined"
           error={!!errors.description}
@@ -90,7 +90,7 @@ const CatSearchForm = ({ onSearch }: CatSearchFormProps): JSX.Element => {
           size="small"
         />
         <TextField
-          label="Por observação"
+          label="Observação"
           {...register('obs')}
           variant="outlined"
           error={!!errors.obs}
@@ -98,7 +98,7 @@ const CatSearchForm = ({ onSearch }: CatSearchFormProps): JSX.Element => {
           size="small"
         />
         <TextField
-          label="Por criação"
+          label="Criado em"
           {...register('createdAt')}
           variant="outlined"
           type="date"
@@ -110,7 +110,7 @@ const CatSearchForm = ({ onSearch }: CatSearchFormProps): JSX.Element => {
           size="small"
         />
         <TextField
-          label="Por alteração"
+          label="Alterado em"
           {...register('updatedAt')}
           variant="outlined"
           type="date"

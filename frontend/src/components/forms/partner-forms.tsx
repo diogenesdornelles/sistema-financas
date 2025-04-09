@@ -10,6 +10,7 @@ import { usePostPartner, usePutPartner } from '../../hooks/use-partner';
 import { useAuth } from '../../hooks/use-auth';
 import FormContainer from './templates/form-container';
 import ButtonUpdateForm from './templates/button-update-form';
+import CustomBackdrop from '../customBackdrop';
 
 type CreatePartnerFormData = z.infer<typeof createPartnerSchema>;
 type UpdatePartnerFormData = z.infer<typeof updatePartnerSchema>;
@@ -57,6 +58,8 @@ export function CreatePartnerForm(): JSX.Element | null {
                     Ocorreu um erro ao criar o Parceiro. Tente novamente.
                 </Alert>
             )}
+
+            {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
 
             <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", minWidth: 500 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
@@ -163,6 +166,8 @@ export function UpdatePartnerForm(): JSX.Element | null {
                     Ocorreu um erro ao atualizar o Parceiro. Tente novamente.
                 </Alert>
             )}
+
+            {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
 
             <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", minWidth: 500 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>

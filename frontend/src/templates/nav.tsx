@@ -8,7 +8,6 @@ import { Box } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import HomeIcon from '@mui/icons-material/Home';
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
-import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ToggleThemeButton from '../components/toggle-theme-button';
@@ -18,8 +17,6 @@ function Nav() {
     const { session, logOut } = useAuth();
     const navigate = useNavigate();
 
-
-
     const handleLogout = () => {
         logOut();
         navigate('/login');
@@ -28,7 +25,6 @@ function Nav() {
     const navItems = [
         { label: 'Home', icon: <HomeIcon />, path: '/' },
         { label: 'Gerenciar', icon: <AppRegistrationIcon />, path: '/gerenciar' },
-        { label: 'Consultas', icon: <ManageSearchIcon />, path: '/consultas' },
         { label: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
     ];
 

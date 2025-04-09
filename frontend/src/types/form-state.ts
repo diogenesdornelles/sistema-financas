@@ -40,7 +40,10 @@ type UpdateItemMap = {
 
 export type FormsState = {
   forms: {
-    [K in TValue]: { type: TOpType; updateItem: (UpdateItemMap[K] & { id: string }) | null };
+    [K in TValue]: {
+      type: TOpType;
+      updateItem: (UpdateItemMap[K] & { id: string }) | null;
+    };
   };
   setFormType: (key: TValue, type: TOpType) => void;
   setUpdateItem: <K extends TValue>(

@@ -25,10 +25,11 @@ import CfSearchForm from '../forms/search/cf-search-form';
 import { queryCfSchema } from '../../../../packages/validators/zod-schemas/query/query-cf.validator';
 import { z } from 'zod';
 import { strToPtBrMoney } from '../../utils/strToPtBrMoney';
+import CustomBackdrop from '../customBackdrop';
 
 type QueryCfFormData = z.infer<typeof queryCfSchema>;
 
-const CfList = (): JSX.Element | string => {
+const CfList = (): JSX.Element => {
   const SKIP = 10;
   const [page, setPage] = useState(1);
   const [items, setItems] = useState<CfProps[] | null>(null);
@@ -85,21 +86,22 @@ const CfList = (): JSX.Element | string => {
     }
   }, [queryCfMutation.data, data]);
 
-  if (isPending) return 'Carregando...';
   if (error) return <ErrorAlert message={error.message} />;
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
+      {(isPending) && <CustomBackdrop isOpen={isPending} />}
       <Typography variant="h4">Filtro</Typography>
       <CfSearchForm onSearch={handleSearch} />
       <Divider />
       <Typography variant="h4" sx={{ marginTop: 0 }}>
         Contas financeiras
       </Typography>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+      <TableContainer component={Paper} sx={{ height: '100%' }}>
+        <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table" >
           <TableHead>
             <TableRow>
+            <TableCell align='left' sx={{ fontWeight: 800 }}></TableCell>
               <TableCell align='left' sx={{ fontWeight: 800 }}>Número</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Agência</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Banco</TableCell>
@@ -123,11 +125,14 @@ const CfList = (): JSX.Element | string => {
                           ? theme.palette.grey[50]
                           : theme.palette.grey[900]
                         : theme.palette.mode === 'light'
-                        ? theme.palette.common.white
-                        : theme.palette.common.black,
+                          ? theme.palette.common.white
+                          : theme.palette.common.black,
                   }}
                 >
-                  <TableCell component="th" scope="row" align='left'>
+                  <TableCell scope="row" align='left' sx={{ fontWeight: 900 }}>
+                    {i + 1}
+                  </TableCell>
+                  <TableCell scope="row" align='left'>
                     {item.number}
                   </TableCell>
                   <TableCell align="right">{item.ag || '-'}</TableCell>
@@ -153,8 +158,8 @@ const CfList = (): JSX.Element | string => {
       {data && data.length > 0 && (
         <ButtonGroup
           variant="contained"
-          aria-label="Basic button group"
-          sx={{ marginBottom: 2, flex: 0, width: 'fit-content', alignSelf: 'center' }}
+          aria-label="basic button group"
+          sx={{ display: 'flex', marginBottom: 2, flex: 0, width: 'fit-content', height: '100%', alignSelf: 'center' }}
         >
           <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
             Anterior

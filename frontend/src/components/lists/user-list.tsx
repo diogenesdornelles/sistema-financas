@@ -24,10 +24,11 @@ import { useTheme } from '@mui/material/styles';
 import UserSearchForm from '../forms/search/user-search-form';
 import { queryUserSchema } from '../../../../packages/validators/zod-schemas/query/query-user.validator';
 import { z } from 'zod';
+import CustomBackdrop from '../customBackdrop';
 
 type QueryUserFormData = z.infer<typeof queryUserSchema>;
 
-const UserList = (): JSX.Element | string => {
+const UserList = (): JSX.Element => {
   const SKIP = 10;
   const [page, setPage] = useState(1);
   const [items, setItems] = useState<UserProps[] | null>(null);
@@ -80,19 +81,20 @@ const UserList = (): JSX.Element | string => {
     }
   }, [queryUserMutation.data, data]);
 
-  if (isPending) return 'Carregando...';
   if (error) return <ErrorAlert message={error.message} />;
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
+      {(isPending) && <CustomBackdrop isOpen={isPending} />}
       <Typography variant="h4">Filtro</Typography>
       <UserSearchForm onSearch={handleSearch} />
       <Divider />
       <Typography variant="h4">Usuários</Typography>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} sx={{ height: '100%' }}>
         <Table sx={{ minWidth: 650 }} size="small" aria-label="tabela de usuários">
           <TableHead>
             <TableRow>
+            <TableCell align='left' sx={{ fontWeight: 800 }}></TableCell>
               <TableCell align='left' sx={{ fontWeight: 800 }}>Nome</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Sobrenome</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>CPF</TableCell>
@@ -118,6 +120,9 @@ const UserList = (): JSX.Element | string => {
                         : theme.palette.common.black,
                   }}
                 >
+                                    <TableCell scope="row" align='left' sx={{ fontWeight: 900 }}>
+                    {i + 1}
+                  </TableCell>
                   <TableCell align='left'>{item.name}</TableCell>
                   <TableCell align="right">{item.surname}</TableCell>
                   <TableCell align="right">{item.cpf}</TableCell>
@@ -139,18 +144,18 @@ const UserList = (): JSX.Element | string => {
       </TableContainer>
       {data && data.length > 0 && (
         <ButtonGroup
-          variant="contained"
-          aria-label="grupo de botões"
-          sx={{ marginBottom: 2, flex: 0, width: 'fit-content', alignSelf: 'center' }}
-        >
-          <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
-            Anterior
-          </Button>
-          <Button onClick={() => handleChangePage(1)} disabled={!data || data.length === 0}>
-            Próximo
-          </Button>
-        </ButtonGroup>
-      )}
+        variant="contained"
+        aria-label="basic button group"
+        sx={{ display: 'flex', marginBottom: 2, flex: 0, width: 'fit-content', height: '100%', alignSelf: 'center' }}
+      >
+        <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
+          Anterior
+        </Button>
+        <Button onClick={() => handleChangePage(1)} disabled={!data || data.length === 0}>
+          Próximo
+        </Button>
+      </ButtonGroup>
+    )}
     </Box>
   );
 };

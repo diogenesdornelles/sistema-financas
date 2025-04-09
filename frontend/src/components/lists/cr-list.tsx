@@ -26,10 +26,11 @@ import { queryCrSchema } from '../../../../packages/validators/zod-schemas/query
 import { z } from 'zod';
 import { PaymentStatus } from '../../../../packages/dtos/utils/enums';
 import { strToPtBrMoney } from '../../utils/strToPtBrMoney';
+import CustomBackdrop from '../customBackdrop';
 
 type QueryCrFormData = z.infer<typeof queryCrSchema>;
 
-const CrList = (): JSX.Element | string => {
+const CrList = (): JSX.Element => {
   const SKIP = 10;
   const [page, setPage] = useState(1);
   const [items, setItems] = useState<CrProps[] | null>(null);
@@ -99,19 +100,20 @@ const CrList = (): JSX.Element | string => {
     }
   }, [queryCrMutation.data, data]);
 
-  if (isPending) return 'Carregando...';
   if (error) return <ErrorAlert message={error.message} />;
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
+      {(isPending) && <CustomBackdrop isOpen={isPending} />}
       <Typography variant="h4">Filtro</Typography>
       <CrSearchForm onSearch={handleSearch} />
       <Divider />
       <Typography variant="h4">Contas a receber</Typography>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} sx={{ height: '100%' }}>
         <Table sx={{ minWidth: 650 }} size="small" aria-label="tabela de contas a receber">
           <TableHead>
             <TableRow>
+            <TableCell align='left' sx={{ fontWeight: 800 }}></TableCell>
               <TableCell align='left' sx={{ fontWeight: 800 }}>Valor</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Tipo</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Cliente</TableCell>
@@ -141,6 +143,10 @@ const CrList = (): JSX.Element | string => {
                         : theme.palette.common.black,
                   }}
                 >
+
+<TableCell scope="row" align='left' sx={{ fontWeight: 900 }}>
+                    {i + 1}
+                  </TableCell>
                   <TableCell align='left'>R$ {strToPtBrMoney(String(item.value))}</TableCell>
                   <TableCell align="right">{item.type.name}</TableCell>
                   <TableCell align="right">{item.customer.name}</TableCell>
@@ -168,18 +174,18 @@ const CrList = (): JSX.Element | string => {
       </TableContainer>
       {data && data.length > 0 && (
         <ButtonGroup
-          variant="contained"
-          aria-label="grupo de botões"
-          sx={{ marginBottom: 2, flex: 0, width: 'fit-content', alignSelf: 'center' }}
-        >
-          <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
-            Anterior
-          </Button>
-          <Button onClick={() => handleChangePage(1)} disabled={!data || data.length === 0}>
-            Próximo
-          </Button>
-        </ButtonGroup>
-      )}
+        variant="contained"
+        aria-label="basic button group"
+        sx={{ display: 'flex', marginBottom: 2, flex: 0, width: 'fit-content', height: '100%', alignSelf: 'center' }}
+      >
+        <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
+          Anterior
+        </Button>
+        <Button onClick={() => handleChangePage(1)} disabled={!data || data.length === 0}>
+          Próximo
+        </Button>
+      </ButtonGroup>
+    )}
     </Box>
   );
 };

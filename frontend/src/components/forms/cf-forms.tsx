@@ -22,6 +22,7 @@ import { useAuth } from "../../hooks/use-auth";
 import FormContainer from './templates/form-container';
 import ButtonUpdateForm from "./templates/button-update-form";
 import { strToPtBrMoney } from '../../utils/strToPtBrMoney'
+import CustomBackdrop from "../customBackdrop";
 
 // Tipos inferidos dos schemas
 type CreateCfFormData = z.infer<typeof createCfSchema>;
@@ -31,7 +32,7 @@ type UpdateCfFormData = z.infer<typeof updateCfSchema>;
   Formulário de Criação de Cf 
   Exibido quando o contexto indicar o modo "create"
 */
-export function CreateCfForm(): JSX.Element | null | string {
+export function CreateCfForm(): JSX.Element | null {
     const mutation = usePostCf();
     const { forms } = useFormStore();
     const { isPending, error, data } = useGetAllTcf();
@@ -66,13 +67,13 @@ export function CreateCfForm(): JSX.Element | null | string {
 
     if (forms.cf.type === "update") return null;
 
-    if (isPending) return 'Carregando...';
-
     if (error) return <ErrorAlert message={error.message} />
 
     return (
         <FormContainer>
             <Typography variant="h4">Nova Conta Financeira</Typography>
+
+            {isPending && <CustomBackdrop isOpen={mutation.isPending} />}
 
             {mutation.isSuccess && (
                 <Alert severity="success" style={{ width: "100%" }}>
@@ -85,6 +86,8 @@ export function CreateCfForm(): JSX.Element | null | string {
                     Ocorreu um erro ao criar o Conta. Tente novamente.
                 </Alert>
             )}
+
+            {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
 
             <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", minWidth: 500 }}>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
@@ -126,7 +129,7 @@ export function CreateCfForm(): JSX.Element | null | string {
                         control={control}
                         render={({ field }) => (
                             <Autocomplete
-                                options={data}
+                                options={data ? data : []}
                                 getOptionLabel={(option) => option.name || ""}
                                 onChange={(_, data) =>
                                     field.onChange(data ? data.id : "")
@@ -195,7 +198,7 @@ export function CreateCfForm(): JSX.Element | null | string {
   Formulário de Atualização de Cf 
   Exibido quando o contexto indicar o modo "update" e houver dados para atualização
 */
-export function UpdateCfForm(): JSX.Element | null | string {
+export function UpdateCfForm(): JSX.Element | null {
     const { forms } = useFormStore();
     const mutation = usePutCf(forms.cf.updateItem ? forms.cf.updateItem.id : '');
     const { isPending, error, data } = useGetAllTcf();
@@ -235,14 +238,18 @@ export function UpdateCfForm(): JSX.Element | null | string {
     // Exibe apenas se o formStore estiver em modo update e houver item para atualizar
     if (forms.cf.type === "create" || !forms.cf.updateItem) return null;
 
-
-    if (isPending) return 'Carregando...';
-
-    if (error) return 'Ocorreu um erro: ' + error.message;
+    if (error) return (
+        <Alert severity="error" style={{ width: "100%" }}>
+            {`'Ocorreu um erro: ' + ${error.message}`}
+        </Alert>
+    )
 
     return (
         <FormContainer>
             <ButtonUpdateForm name="cf" title="Atualizar Conta Financeira" />
+
+            {isPending && <CustomBackdrop isOpen={mutation.isPending} />}
+            
             {mutation.isSuccess && (
                 <Alert severity="success" style={{ width: "100%" }}>
                     Conta atualizado com sucesso!
@@ -257,7 +264,7 @@ export function UpdateCfForm(): JSX.Element | null | string {
 
             <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", minWidth: 500 }}>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-                <Box sx={{ display: 'flex', gap: 2, justifyContent: 'space-between' }}>
+                    <Box sx={{ display: 'flex', gap: 2, justifyContent: 'space-between' }}>
                         <TextField
                             label="Número"
                             {...register("number")}
@@ -283,13 +290,13 @@ export function UpdateCfForm(): JSX.Element | null | string {
                         control={control}
                         render={({ field }) => (
                             <Autocomplete
-                                options={data}
+                                options={data ? data : []}
                                 getOptionLabel={(option) => option.name || ""}
                                 onChange={(_, data) =>
                                     field.onChange(data ? data.id : "")
                                 }
                                 defaultValue={
-                                    data.find(
+                                    data && data.find(
                                         (option) =>
                                             option.id === forms.cf.updateItem?.type
                                     ) || null

@@ -139,7 +139,7 @@ const CfSearchForm = ({ onSearch }: CfSearchFormProps): JSX.Element => {
           helperText={errors.createdAt?.message}
         />
         <TextField
-          label="Alteração"
+          label="Alterado em"
           {...register('updatedAt')}
           variant="outlined"
           type="date"

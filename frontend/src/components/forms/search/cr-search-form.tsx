@@ -157,7 +157,7 @@ const CrSearchForm = ({ onSearch }: CrSearchFormProps): JSX.Element => {
           size="small"
         />
         <TextField
-          label="Alteração"
+          label="Alterado em"
           {...register('updatedAt')}
           variant="outlined"
           type="date"

@@ -38,14 +38,6 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/consultas",
-        element: (
-          <RequireAuth>
-            <Home />
-          </RequireAuth>
-        ),
-      },
-      {
         path: "/dashboard",
         element: (
           <RequireAuth>

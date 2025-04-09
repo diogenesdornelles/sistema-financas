@@ -109,7 +109,7 @@ const UserSearchForm = ({ onSearch }: UserSearchFormProps): JSX.Element => {
           size="small"
         />
         <TextField
-          label="Alteração"
+          label="Alterado em"
           {...register('updatedAt')}
           variant="outlined"
           type="date"

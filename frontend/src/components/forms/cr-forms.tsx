@@ -25,6 +25,7 @@ import { useAuth } from "../../hooks/use-auth";
 import FormContainer from "./templates/form-container";
 import ButtonUpdateForm from "./templates/button-update-form";
 import { strToPtBrMoney } from "../../utils/strToPtBrMoney";
+import CustomBackdrop from "../customBackdrop";
 
 // Tipos inferidos dos schemas
 type CreateCrFormData = z.infer<typeof createCrSchema>;
@@ -34,7 +35,7 @@ type UpdateCrFormData = z.infer<typeof updateCrSchema>;
   Formulário de Criação de Cr
   Exibido quando o contexto indicar o modo "create"
 */
-export function CreateCrForm(): JSX.Element | null | string {
+export function CreateCrForm(): JSX.Element | null {
     const mutation = usePostCr();
     const { forms } = useFormStore();
     const { isPending: isPendingTcr, error: errorTcr, data: tcrData } = useGetAllTcr();
@@ -73,7 +74,7 @@ export function CreateCrForm(): JSX.Element | null | string {
     };
 
     if (forms.cr.type === "update") return null;
-    if (isPendingTcr || isPendingPartner || isPendingTx) return "Carregando...";
+
     if (errorTcr || errorPartner || errorTx) {
         const errorMessage = errorTcr?.message || errorPartner?.message || errorTx?.message;
         return <ErrorAlert message={errorMessage ? errorMessage : "Ocorreu um erro!"} />;
@@ -94,6 +95,10 @@ export function CreateCrForm(): JSX.Element | null | string {
                     Ocorreu um erro ao criar a Conta. Tente novamente.
                 </Alert>
             )}
+
+            {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
+
+            {(isPendingTcr || isPendingPartner || isPendingTx) && <CustomBackdrop isOpen={mutation.isPending} />}
 
             <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", minWidth: 500 }}>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
@@ -137,7 +142,7 @@ export function CreateCrForm(): JSX.Element | null | string {
                             control={control}
                             render={({ field }) => (
                                 <Autocomplete
-                                    options={tcrData}
+                                    options={tcrData ? tcrData: []}
                                     sx={{ flex: 1, width: '100%' }}
                                     getOptionLabel={(option) => option.name || ""}
                                     onChange={(_, data) => field.onChange(data ? data.id : "")}
@@ -159,7 +164,7 @@ export function CreateCrForm(): JSX.Element | null | string {
                             control={control}
                             render={({ field }) => (
                                 <Autocomplete
-                                    options={txData}
+                                    options={txData ? txData : []}
                                     sx={{ flex: 1 }}
                                     getOptionLabel={(option) => option.description || ""}
                                     onChange={(_, data) => field.onChange(data ? data.id : "")}
@@ -183,7 +188,7 @@ export function CreateCrForm(): JSX.Element | null | string {
                         control={control}
                         render={({ field }) => (
                             <Autocomplete
-                                options={partnerData}
+                                options={partnerData ? partnerData : []}
                                 getOptionLabel={(option) => option.name || ""}
                                 onChange={(_, data) => field.onChange(data ? data.id : "")}
                                 renderInput={(params) => (
@@ -271,25 +276,36 @@ export function UpdateCrForm(): JSX.Element | null | string {
     };
 
     if (forms.cr.type === "create" || !forms.cr.updateItem) return null;
-    if (isPendingTcr || isPendingPartner || isPendingTx) return "Carregando...";
+
     if (errorTcr || errorPartner || errorTx) {
         const errorMessage = errorTcr?.message || errorPartner?.message || errorTx?.message;
-        return "Ocorreu um erro: " + errorMessage;
+        return (
+            <Alert severity="error" style={{ width: "100%" }}>
+                {`'Ocorreu um erro: ' + ${errorMessage}`}
+            </Alert>
+        )
     }
 
     return (
         <FormContainer>
             <ButtonUpdateForm name="cr" title="Atualizar Conta a Receber" />
+            
             {mutation.isSuccess && (
                 <Alert severity="success" style={{ width: "100%" }}>
                     Conta atualizada com sucesso!
                 </Alert>
             )}
+
             {mutation.isError && (
                 <Alert severity="error" style={{ width: "100%" }}>
                     Ocorreu um erro ao atualizar a Conta. Tente novamente.
                 </Alert>
             )}
+
+            {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
+
+            {(isPendingTcr || isPendingPartner || isPendingTx) && <CustomBackdrop isOpen={mutation.isPending} />}
+
             <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", minWidth: 500 }}>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
                     <Controller
@@ -315,11 +331,11 @@ export function UpdateCrForm(): JSX.Element | null | string {
                         control={control}
                         render={({ field }) => (
                             <Autocomplete
-                                options={tcrData}
+                                options={tcrData ? tcrData : []}
                                 getOptionLabel={(option) => option.name || ""}
                                 onChange={(_, data) => field.onChange(data ? data.id : "")}
                                 defaultValue={
-                                    tcrData.find((option) => option.id === forms.cr.updateItem?.type) || null
+                                    tcrData && tcrData.find((option) => option.id === forms.cr.updateItem?.type) || null
                                 }
                                 renderInput={(params) => (
                                     <TextField
@@ -339,11 +355,11 @@ export function UpdateCrForm(): JSX.Element | null | string {
                         control={control}
                         render={({ field }) => (
                             <Autocomplete
-                                options={partnerData}
+                                options={partnerData ? partnerData : []}
                                 getOptionLabel={(option) => option.name || ""}
                                 onChange={(_, data) => field.onChange(data ? data.id : "")}
                                 defaultValue={
-                                    partnerData.find((option) => option.id === forms.cr.updateItem?.customer) || null
+                                    partnerData && partnerData.find((option) => option.id === forms.cr.updateItem?.customer) || null
                                 }
                                 renderInput={(params) => (
                                     <TextField
@@ -398,11 +414,11 @@ export function UpdateCrForm(): JSX.Element | null | string {
                         control={control}
                         render={({ field }) => (
                             <Autocomplete
-                                options={txData}
+                                options={txData ? txData : []}
                                 getOptionLabel={(option) => option.description || ""}
                                 onChange={(_, data) => field.onChange(data ? data.id : "")}
                                 defaultValue={
-                                    txData.find((option) => option.id === forms.cr.updateItem?.tx) || null
+                                    txData && txData.find((option) => option.id === forms.cr.updateItem?.tx) || null
                                 }
                                 renderInput={(params) => (
                                     <TextField

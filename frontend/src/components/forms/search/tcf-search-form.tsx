@@ -89,7 +89,7 @@ const TcfSearchForm = ({ onSearch }: TcfSearchFormProps): JSX.Element => {
           helperText={errors.createdAt?.message}
         />
         <TextField
-          label="Alteração"
+          label="Alterado em"
           {...register('updatedAt')}
           variant="outlined"
           type="date"

@@ -25,6 +25,7 @@ import { useAuth } from "../../hooks/use-auth";
 import FormContainer from "./templates/form-container";
 import ButtonUpdateForm from "./templates/button-update-form";
 import { strToPtBrMoney } from "../../utils/strToPtBrMoney";
+import CustomBackdrop from "../customBackdrop";
 
 // Tipos inferidos dos schemas
 type CreateCpFormData = z.infer<typeof createCpSchema>;
@@ -34,7 +35,7 @@ type UpdateCpFormData = z.infer<typeof updateCpSchema>;
   Formulário de Criação de Cp
   Exibido quando o contexto indicar o modo "create"
 */
-export function CreateCpForm(): JSX.Element | null | string {
+export function CreateCpForm(): JSX.Element | null {
     const mutation = usePostCp();
     const { forms } = useFormStore();
     const { isPending: isPendingTcp, error: errorTcp, data: tcpData } = useGetAllTcp();
@@ -71,8 +72,6 @@ export function CreateCpForm(): JSX.Element | null | string {
 
     if (forms.cp.type === "update") return null;
 
-    if (isPendingTcp || isPendingPartner || isPendingTx) return "Carregando...";
-
     if (errorTcp || errorPartner || errorTx) {
         const errorMessage = errorTcp?.message || errorPartner?.message || errorTx?.message;
         return <ErrorAlert message={errorMessage ? errorMessage : 'Ocorreu um erro!'} />;
@@ -93,6 +92,10 @@ export function CreateCpForm(): JSX.Element | null | string {
                     Ocorreu um erro ao criar o Conta. Tente novamente.
                 </Alert>
             )}
+
+            {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
+
+            {(isPendingTcp || isPendingPartner || isPendingTx) && <CustomBackdrop isOpen={mutation.isPending} />}
 
             <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", minWidth: 500 }}>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
@@ -135,7 +138,7 @@ export function CreateCpForm(): JSX.Element | null | string {
                         control={control}
                         render={({ field }) => (
                             <Autocomplete
-                                options={tcpData}
+                                options={tcpData ? tcpData: []}
                                 getOptionLabel={(option) => option.name || ""}
                                 onChange={(_, data) => field.onChange(data ? data.id : "")}
                                 renderInput={(params) => (
@@ -158,7 +161,7 @@ export function CreateCpForm(): JSX.Element | null | string {
                         control={control}
                         render={({ field }) => (
                             <Autocomplete
-                                options={partnerData}
+                                options={partnerData ? partnerData : []}
                                 getOptionLabel={(option) => option.name || ""}
                                 onChange={(_, data) => field.onChange(data ? data.id : "")}
                                 renderInput={(params) => (
@@ -196,7 +199,7 @@ export function CreateCpForm(): JSX.Element | null | string {
                         control={control}
                         render={({ field }) => (
                             <Autocomplete
-                                options={txData}
+                                options={txData ? txData : []}
                                 getOptionLabel={(option) => option.description || ""}
                                 onChange={(_, data) => field.onChange(data ? data.id : "")}
                                 renderInput={(params) => (
@@ -231,7 +234,7 @@ export function CreateCpForm(): JSX.Element | null | string {
   Formulário de Atualização de Cp
   Exibido quando o contexto indicar o modo "update" e houver item para atualizar
 */
-export function UpdateCpForm(): JSX.Element | null | string {
+export function UpdateCpForm(): JSX.Element | null {
 
     const { forms } = useFormStore();
     const mutation = usePutCp(forms.cp.updateItem ? forms.cp.updateItem.id : '');
@@ -268,25 +271,37 @@ export function UpdateCpForm(): JSX.Element | null | string {
     };
 
     if (forms.cp.type === "create" || !forms.cp.updateItem) return null;
-    if (isPendingTcp || isPendingPartner || isPendingTx) return "Carregando...";
+
     if (errorTcp || errorPartner || errorTx) {
         const errorMessage = errorTcp?.message || errorPartner?.message || errorTx?.message;
-        return "Ocorreu um erro: " + errorMessage;
+        return (
+            <Alert severity="error" style={{ width: "100%" }}>
+                {`'Ocorreu um erro: ' + ${errorMessage}`}
+            </Alert>
+        )
     }
+
 
     return (
         <FormContainer>
             <ButtonUpdateForm name="cp" title="Atualizar Conta a Pagar" />
+
+            {(isPendingTcp || isPendingPartner || isPendingTx) && <CustomBackdrop isOpen={mutation.isPending} />}
+            
             {mutation.isSuccess && (
                 <Alert severity="success" style={{ width: "100%" }}>
                     Conta atualizada com sucesso!
                 </Alert>
             )}
+            
             {mutation.isError && (
                 <Alert severity="error" style={{ width: "100%" }}>
                     Ocorreu um erro ao atualizar o Conta. Tente novamente.
                 </Alert>
             )}
+
+            {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
+
             <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", minWidth: 500 }}>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
                     <Controller
@@ -312,11 +327,11 @@ export function UpdateCpForm(): JSX.Element | null | string {
                         control={control}
                         render={({ field }) => (
                             <Autocomplete
-                                options={tcpData}
+                                options={tcpData ? tcpData: []}
                                 getOptionLabel={(option) => option.name || ""}
                                 onChange={(_, data) => field.onChange(data ? data.id : "")}
                                 defaultValue={
-                                    tcpData.find(
+                                    tcpData && tcpData.find(
                                         (option) => option.id === forms.cp.updateItem?.type
                                     ) || null
                                 }
@@ -338,11 +353,11 @@ export function UpdateCpForm(): JSX.Element | null | string {
                         control={control}
                         render={({ field }) => (
                             <Autocomplete
-                                options={partnerData}
+                                options={partnerData ? partnerData : []}
                                 getOptionLabel={(option) => option.name || ""}
                                 onChange={(_, data) => field.onChange(data ? data.id : "")}
                                 defaultValue={
-                                    partnerData.find(
+                                    partnerData && partnerData.find(
                                         (option) => option.id === forms.cp.updateItem?.supplier
                                     ) || null
                                 }
@@ -398,11 +413,11 @@ export function UpdateCpForm(): JSX.Element | null | string {
                         control={control}
                         render={({ field }) => (
                             <Autocomplete
-                                options={txData}
+                                options={txData ? txData: []}
                                 getOptionLabel={(option) => option.description || ""}
                                 onChange={(_, data) => field.onChange(data ? data.id : "")}
                                 defaultValue={
-                                    txData.find(
+                                    txData && txData.find(
                                         (option) => option.id === forms.cp.updateItem?.tx
                                     ) || null
                                 }

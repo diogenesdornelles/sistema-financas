@@ -14,6 +14,7 @@ import { JSX } from 'react';
 import { useFormStore } from '../../hooks/use-form-store';
 import FormContainer from './templates/form-container';
 import ButtonUpdateForm from './templates/button-update-form';
+import CustomBackdrop from '../customBackdrop';
 
 
 type CreateTcfFormData = z.infer<typeof createTcfSchema>;
@@ -61,6 +62,8 @@ export function CreateTcfForm(): JSX.Element | null {
         </Alert>
       )}
 
+      {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
+
       <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", minWidth: 500 }}>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
           <TextField
@@ -101,65 +104,67 @@ export function UpdateTcfForm(): JSX.Element | null {
     defaultValues: forms.tcf.updateItem ? {
       name: forms.tcf.updateItem.name,
       status: forms.tcf.updateItem.status ? forms.tcf.updateItem.status : undefined
-    } : { },
+    } : {},
   });
 
-const statusValue = watch("status");
+  const statusValue = watch("status");
 
-const handleFormSubmit = async (data: UpdateTcfFormData) => {
-  try {
-    console.log("Dados enviados:", data);
-    await mutation.mutateAsync(data);
-  } catch (err) {
-    console.error("Erro ao atualizar o formulário:", err);
+  const handleFormSubmit = async (data: UpdateTcfFormData) => {
+    try {
+      console.log("Dados enviados:", data);
+      await mutation.mutateAsync(data);
+    } catch (err) {
+      console.error("Erro ao atualizar o formulário:", err);
+    }
+  };
+  if (forms.tcf.type === 'create' || !forms.tcf.updateItem) {
+    return null
   }
-};
-if (forms.tcf.type === 'create' || !forms.tcf.updateItem) {
-  return null
-}
 
-return (
-  <FormContainer>
-    <ButtonUpdateForm title="Atualizar Tipo de conta financeira" name='tcf' />
+  return (
+    <FormContainer>
+      <ButtonUpdateForm title="Atualizar Tipo de conta financeira" name='tcf' />
 
-    {mutation.isSuccess && (
-      <Alert severity="success" style={{ width: "100%" }}>
-        Atualização realizada com sucesso!
-      </Alert>
-    )}
+      {mutation.isSuccess && (
+        <Alert severity="success" style={{ width: "100%" }}>
+          Atualização realizada com sucesso!
+        </Alert>
+      )}
 
-    {mutation.isError && (
-      <Alert severity="error" style={{ width: "100%" }}>
-        Ocorreu um erro ao atualizar o formulário. Tente novamente.
-      </Alert>
-    )}
+      {mutation.isError && (
+        <Alert severity="error" style={{ width: "100%" }}>
+          Ocorreu um erro ao atualizar o formulário. Tente novamente.
+        </Alert>
+      )}
 
-    <form onSubmit={handleSubmit(handleFormSubmit)} style={{ width: "100%", minWidth: 500 }}>
-      <Box display="flex" flexDirection="column" gap={2}>
-        <TextField
-          label="Nome"
-          {...register("name")}
-          variant="outlined"
-          size="small"
-          error={!!errors.name}
-          helperText={errors.name?.message}
-        />
+      {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
 
-        <FormControlLabel
-          control={<Checkbox size="small" checked={statusValue} {...register("status")} />}
-          label={`Status: ${statusValue ? "Ativo" : "Inativo"}`}
-        />
+      <form onSubmit={handleSubmit(handleFormSubmit)} style={{ width: "100%", minWidth: 500 }}>
+        <Box display="flex" flexDirection="column" gap={2}>
+          <TextField
+            label="Nome"
+            {...register("name")}
+            variant="outlined"
+            size="small"
+            error={!!errors.name}
+            helperText={errors.name?.message}
+          />
 
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          disabled={mutation.isPending}
-        >
-          {mutation.isPending ? "Atualizando..." : "Atualizar"}
-        </Button>
-      </Box>
-    </form>
-  </FormContainer>
-);
+          <FormControlLabel
+            control={<Checkbox size="small" checked={statusValue} {...register("status")} />}
+            label={`Status: ${statusValue ? "Ativo" : "Inativo"}`}
+          />
+
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            disabled={mutation.isPending}
+          >
+            {mutation.isPending ? "Atualizando..." : "Atualizar"}
+          </Button>
+        </Box>
+      </form>
+    </FormContainer>
+  );
 }

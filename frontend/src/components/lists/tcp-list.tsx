@@ -24,10 +24,11 @@ import { useTheme } from '@mui/material/styles';
 import TcpSearchForm from '../forms/search/tcp-search-form';
 import { queryTcpSchema } from '../../../../packages/validators/zod-schemas/query/query-tcp.validator';
 import { z } from 'zod';
+import CustomBackdrop from '../customBackdrop';
 
 type QueryTcpFormData = z.infer<typeof queryTcpSchema>;
 
-const TcpList = (): JSX.Element | string => {
+const TcpList = (): JSX.Element => {
   const SKIP = 10;
   const [page, setPage] = useState(1);
   const [items, setItems] = useState<TcpProps[] | null>(null);
@@ -78,19 +79,20 @@ const TcpList = (): JSX.Element | string => {
     }
   }, [queryTcpMutation.data, data]);
 
-  if (isPending) return 'Carregando...';
   if (error) return <ErrorAlert message={error.message} />;
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
+      {(isPending) && <CustomBackdrop isOpen={isPending} />}
       <Typography variant="h4">Filtro</Typography>
       <TcpSearchForm onSearch={handleSearch} />
       <Divider />
       <Typography variant="h4">Tipos de contas a pagar</Typography>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} sx={{ height: '100%' }}>
         <Table sx={{ minWidth: 650 }} size="small" aria-label="tabela de tipos de contas a pagar">
           <TableHead>
             <TableRow>
+            <TableCell align='left' sx={{ fontWeight: 800 }}></TableCell>
               <TableCell align='left' sx={{ fontWeight: 800 }}>Nome</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Status</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Criado em</TableCell>
@@ -114,6 +116,9 @@ const TcpList = (): JSX.Element | string => {
                         : theme.palette.common.black,
                   }}
                 >
+                                    <TableCell scope="row" align='left' sx={{ fontWeight: 900 }}>
+                    {i + 1}
+                  </TableCell>
                   <TableCell align='left'>{item.name}</TableCell>
                   <TableCell align="right">{item.status ? 'Ativo' : 'Inativo'}</TableCell>
                   <TableCell align="right">{new Date(item.createdAt).toLocaleDateString()}</TableCell>
@@ -133,18 +138,18 @@ const TcpList = (): JSX.Element | string => {
       </TableContainer>
       {data && data.length > 0 && (
         <ButtonGroup
-          variant="contained"
-          aria-label="grupo de botões"
-          sx={{ marginBottom: 2, flex: 0, width: 'fit-content', alignSelf: 'center' }}
-        >
-          <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
-            Anterior
-          </Button>
-          <Button onClick={() => handleChangePage(1)} disabled={!data || data.length === 0}>
-            Próximo
-          </Button>
-        </ButtonGroup>
-      )}
+        variant="contained"
+        aria-label="basic button group"
+        sx={{ display: 'flex', marginBottom: 2, flex: 0, width: 'fit-content', height: '100%', alignSelf: 'center' }}
+      >
+        <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
+          Anterior
+        </Button>
+        <Button onClick={() => handleChangePage(1)} disabled={!data || data.length === 0}>
+          Próximo
+        </Button>
+      </ButtonGroup>
+    )}
     </Box>
   );
 };

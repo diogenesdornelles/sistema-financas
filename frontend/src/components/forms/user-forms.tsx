@@ -13,6 +13,7 @@ import { JSX } from 'react';
 import { useFormStore } from '../../hooks/use-form-store';
 import FormContainer from './templates/form-container';
 import ButtonUpdateForm from './templates/button-update-form';
+import CustomBackdrop from '../customBackdrop';
 
 type CreateUserFormData = z.infer<typeof createUserRepPwdSchema>;
 type UpdateUserFormData = z.infer<typeof updateUserSchema>;
@@ -63,6 +64,8 @@ export function CreateUserForm(): JSX.Element | null {
                     Ocorreu um erro ao criar o usuário. Tente novamente.
                 </Alert>
             )}
+
+            {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
 
             <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", minWidth: 500 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
@@ -172,6 +175,8 @@ export function UpdateUserForm(): JSX.Element | null {
                     Ocorreu um erro ao atualizar o usuário. Tente novamente.
                 </Alert>
             )}
+
+            {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
 
             <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", minWidth: 500 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>

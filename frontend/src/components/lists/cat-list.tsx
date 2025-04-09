@@ -24,12 +24,13 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import CustomBackdrop from '../customBackdrop';
 
 
 
 type QueryCatFormData = z.infer<typeof queryCatSchema>;
 
-const CatList = (): JSX.Element | string => {
+const CatList = (): JSX.Element => {
   const SKIP = 10;
   const [page, setPage] = useState(1);
   const { isPending, error, data } = useGetManyCat((page - 1) * SKIP)
@@ -87,20 +88,21 @@ const CatList = (): JSX.Element | string => {
     }
   }, [queryCatMutation.data, data]);
 
-
-  if (isPending) return 'Carregando...';
   if (error) return <ErrorAlert message={error.message} />;
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
+
+      {(isPending) && <CustomBackdrop isOpen={isPending} />}
       <Typography variant="h4">Filtro</Typography>
       <CatSearchForm onSearch={handleSearch} />
       <Divider />
       <Typography variant="h4">Categorias</Typography>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} sx={{ height: '100%' }}>
         <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
+              <TableCell align='left' sx={{ fontWeight: 800 }}></TableCell>
               <TableCell align='left' sx={{ fontWeight: 800 }}>Nome</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Status</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Descrição</TableCell>
@@ -122,7 +124,10 @@ const CatList = (): JSX.Element | string => {
                       ? theme.palette.common.white
                       : theme.palette.common.black,
               }}>
-                <TableCell component="th" scope="row" align='left' >
+                                  <TableCell scope="row" align='left' sx={{ fontWeight: 900 }}>
+                                    {i + 1}
+                                  </TableCell>
+                <TableCell scope="row" align='left' >
                   {item.name}
                 </TableCell>
                 <TableCell align="right">{`${item.status ? 'Ativo' : 'Inativo'}`}</TableCell>
@@ -144,21 +149,20 @@ const CatList = (): JSX.Element | string => {
         </Table>
       </TableContainer>
       {
-        data.length > 0 && (
+        data && data.length > 0 && (
           <ButtonGroup
-            variant="contained"
-            aria-label="Basic button group"
-            sx={{ marginBottom: 2, flex: 0, width: 'fit-content', alignSelf: 'center' }}
-          >
-            <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
-              Anterior
-            </Button>
-            <Button onClick={() => handleChangePage(1)} disabled={!data || data.length === 0}>
-              Próximo
-            </Button>
-          </ButtonGroup>
-        )
-      }
+          variant="contained"
+          aria-label="basic button group"
+          sx={{ display: 'flex', marginBottom: 2, flex: 0, width: 'fit-content', height: '100%', alignSelf: 'center' }}
+        >
+          <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
+            Anterior
+          </Button>
+          <Button onClick={() => handleChangePage(1)} disabled={!data || data.length === 0}>
+            Próximo
+          </Button>
+        </ButtonGroup>
+      )}
     </Box >
   );
 };

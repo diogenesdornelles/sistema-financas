@@ -10,6 +10,7 @@ import { usePostCat, usePutCat } from '../../hooks/use-cat';
 import { useAuth } from '../../hooks/use-auth';
 import FormContainer from './templates/form-container';
 import ButtonUpdateForm from './templates/button-update-form';
+import CustomBackdrop from '../customBackdrop';
 
 type CreateCatFormData = z.infer<typeof createCatSchema>;
 type UpdateCatFormData = z.infer<typeof updateCatSchema>;
@@ -49,11 +50,14 @@ export function CreateCatForm(): JSX.Element | null {
                     Categoria criada com sucesso!
                 </Alert>
             )}
+
             {mutation.isError && (
                 <Alert severity="error" style={{ width: "100%" }}>
                     {mutation.error?.message || "Ocorreu um erro ao criar categoria. Tente novamente."}
                 </Alert>
             )}
+
+            {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
 
             <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", minWidth: 500 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
@@ -129,7 +133,8 @@ export function UpdateCatForm(): JSX.Element | null {
 
     return (
         <FormContainer>
-            <ButtonUpdateForm name='cat' title="Atualizar categoria"/>
+            <ButtonUpdateForm name='cat' title="Atualizar categoria" />
+
             {mutation.isSuccess && (
                 <Alert severity="success" style={{ width: "100%" }}>
                     Categoria atualizado com sucesso!
@@ -141,6 +146,8 @@ export function UpdateCatForm(): JSX.Element | null {
                     Ocorreu um erro ao atualizar o Categoria. Tente novamente.
                 </Alert>
             )}
+
+            {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
 
             <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", minWidth: 500 }}>
 

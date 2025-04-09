@@ -24,6 +24,7 @@ import FormContainer from "./templates/form-container";
 import ButtonUpdateForm from "./templates/button-update-form";
 import { strToPtBrMoney } from "../../utils/strToPtBrMoney";
 import { TransactionType } from "../../../../packages/dtos/utils/enums";
+import CustomBackdrop from "../customBackdrop";
 // ajuste o caminho conforme necessário
 
 // Tipos inferidos dos schemas
@@ -77,7 +78,7 @@ export function CreateTxForm(): JSX.Element | null | string {
     };
 
     if (forms.tx.type === "update") return null;
-    if (isPendingCf || isPendingCat) return "Carregando...";
+
     if (errorCf || errorCat) {
         const errorMessage = errorCf?.message || errorCat?.message;
         return <ErrorAlert message={errorMessage ? errorMessage : "Ocorreu um erro!"} />;
@@ -98,6 +99,10 @@ export function CreateTxForm(): JSX.Element | null | string {
                     Ocorreu um erro ao criar a Transação. Tente novamente.
                 </Alert>
             )}
+
+            {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
+
+            {(isPendingCf || isPendingCat) && <CustomBackdrop isOpen={mutation.isPending} />}
 
             <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", minWidth: 500 }}>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
@@ -166,7 +171,7 @@ export function CreateTxForm(): JSX.Element | null | string {
                             render={({ field }) => (
                                 <Autocomplete
                                     sx={{ flex: 1, width: '100%' }}
-                                    options={catData}
+                                    options={catData ? catData: []}
                                     getOptionLabel={(option) => option.name || ""}
                                     onChange={(_, data) => field.onChange(data ? data.id : "")}
                                     renderInput={(params) => (
@@ -189,7 +194,7 @@ export function CreateTxForm(): JSX.Element | null | string {
                         control={control}
                         render={({ field }) => (
                             <Autocomplete
-                                options={cfData}
+                                options={cfData ? cfData: []}
                                 getOptionLabel={(option) => option.number || ""}
                                 onChange={(_, data) => field.onChange(data ? data.id : "")}
                                 renderInput={(params) => (
@@ -287,10 +292,10 @@ export function UpdateTxForm(): JSX.Element | null | string {
     };
 
     if (forms.tx.type === "create" || !forms.tx.updateItem) return null;
-    if (isPendingCf || isPendingCat) return "Carregando...";
+
     if (errorCf || errorCat) {
         const errorMessage = errorCf?.message || errorCat?.message;
-        return "Ocorreu um erro: " + errorMessage;
+        return <ErrorAlert message={errorMessage ? errorMessage : 'Ocorreu um erro!'} />;
     }
 
     return (
@@ -306,6 +311,11 @@ export function UpdateTxForm(): JSX.Element | null | string {
                     Ocorreu um erro ao atualizar a Transação. Tente novamente.
                 </Alert>
             )}
+
+            {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
+
+            {(isPendingCf || isPendingCat) && <CustomBackdrop isOpen={mutation.isPending} />}
+
             <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", minWidth: 500 }}>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
                     <Box sx={{ display: 'flex', flexDirection: 'row', columnGap: 2, width: '100%' }}>
@@ -370,11 +380,11 @@ export function UpdateTxForm(): JSX.Element | null | string {
                             control={control}
                             render={({ field }) => (
                                 <Autocomplete
-                                    options={catData}
+                                    options={catData ? catData : []}
                                     getOptionLabel={(option) => option.name || ""}
                                     onChange={(_, data) => field.onChange(data ? data.id : "")}
                                     defaultValue={
-                                        catData.find(
+                                        catData && catData.find(
                                             (option) => option.id === forms.tx.updateItem?.category
                                         ) || null
                                     }
@@ -396,11 +406,11 @@ export function UpdateTxForm(): JSX.Element | null | string {
                         control={control}
                         render={({ field }) => (
                             <Autocomplete
-                                options={cfData}
+                                options={cfData ? cfData: []}
                                 getOptionLabel={(option) => option.number || ""}
                                 onChange={(_, data) => field.onChange(data ? data.id : "")}
                                 defaultValue={
-                                    cfData.find(
+                                    cfData && cfData.find(
                                         (option) => option.id === forms.tx.updateItem?.cf
                                     ) || null
                                 }

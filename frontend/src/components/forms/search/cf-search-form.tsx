@@ -127,7 +127,7 @@ const CfSearchForm = ({ onSearch }: CfSearchFormProps): JSX.Element => {
           size="small"
         />
         <TextField
-          label="Criação"
+          label="Criado em"
           size="small"
           {...register('createdAt')}
           variant="outlined"

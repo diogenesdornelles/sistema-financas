@@ -99,7 +99,7 @@ export function CreateTxForm(): JSX.Element | null | string {
                 </Alert>
             )}
 
-            <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
+            <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", minWidth: 500 }}>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
                     <Box sx={{ display: 'flex', columnGap: 2 }}>
                         <Controller
@@ -306,7 +306,7 @@ export function UpdateTxForm(): JSX.Element | null | string {
                     Ocorreu um erro ao atualizar a Transação. Tente novamente.
                 </Alert>
             )}
-            <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
+            <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", minWidth: 500 }}>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
                     <Box sx={{ display: 'flex', flexDirection: 'row', columnGap: 2, width: '100%' }}>
                         <Controller

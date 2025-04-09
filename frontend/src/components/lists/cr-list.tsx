@@ -1,14 +1,18 @@
 import { JSX, useEffect, useState } from 'react';
 import {
-  List,
-  ListItem,
   IconButton,
   Box,
-  Chip,
   Typography,
   ButtonGroup,
   Button,
   Divider,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -33,6 +37,7 @@ const CrList = (): JSX.Element | string => {
   const queryCrMutation = useQueryCr();
   const { setFormType, setUpdateItem } = useFormStore();
   const theme = useTheme();
+
   const onEdit = (item: CrProps) => {
     setFormType('cr', 'update');
     setUpdateItem('cr', {
@@ -44,7 +49,7 @@ const CrList = (): JSX.Element | string => {
       due: item.due ? String(item.due) : "",
       rdate: item.rdate ? String(item.rdate) : "",
       obs: item.obs ? item.obs : "",
-      status: item.status ? item.status : undefined
+      status: item.status ? item.status : undefined,
     });
   };
 
@@ -69,7 +74,6 @@ const CrList = (): JSX.Element | string => {
       const nextPage = prev + direction;
       if (nextPage < 1) return prev;
       if (direction > 0 && (!data || data.length === 0)) return prev;
-
       return nextPage;
     });
   };
@@ -104,68 +108,68 @@ const CrList = (): JSX.Element | string => {
       <CrSearchForm onSearch={handleSearch} />
       <Divider />
       <Typography variant="h4">Contas a receber</Typography>
-      <List sx={{ flex: 1, width: '100%', maxHeight: 400, overflow: 'auto' }}>
-        {items &&
-          items.map((item: CrProps, i: number) => (
-            <ListItem
-              key={item.id}
-              divider
-              sx={{
-                display: 'flex',
-                p: 2,
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                background: i % 2 === 0
-                  ? theme.palette.mode === 'light'
-                    ? theme.palette.grey[50]
-                    : theme.palette.grey[900]
-                  : theme.palette.mode === 'light'
-                  ? theme.palette.common.white
-                  : theme.palette.common.black,
-              }}
-            >
-              <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, flexWrap: 'wrap', alignItems: 'baseline' }}>
-                <Chip label={`Valor: R$ ${strToPtBrMoney(String(item.value))}`} variant="filled" size="medium" color="primary" />
-                <Chip label={`Tipo: ${item.type.name}`} variant="outlined" size="small" />
-                <Chip label={`Cliente: ${item.customer.name}`} variant="outlined" size="small" />
-                <Chip label={`Vencimento: ${new Date(item.due).toLocaleDateString()}`} variant="outlined" size="small" />
-                {item.rdate && (
-                  <Chip label={`Recebido em: ${new Date(item.rdate).toLocaleDateString()}`} variant="outlined" size="small" />
-                )}
-                <Chip
-                  label={`Status: ${getPaymentStatusText(item.status)}`}
-                  color={item.status === PaymentStatus.PAID ? 'primary' : 'error'}
-                  variant="outlined"
-                  size="small"
-                />
-                <Chip
-                  label={`Criado em: ${new Date(item.createdAt).toLocaleDateString()}`}
-                  variant="outlined"
-                  size="small"
-                />
-                <Chip
-                  label={`Atualizado em: ${new Date(item.updatedAt).toLocaleDateString()}`}
-                  variant="outlined"
-                  size="small"
-                />
-                {item.obs && <Chip label={`Obs: ${item.obs}`} variant="outlined" size="small" />}
-                {item.tx && <Chip label={`Transação: ${item.tx.id}`} variant="outlined" size="small" />}
-              </Box>
-              <Box sx={{ display: 'flex', gap: 1 }}>
-                <IconButton edge="end" aria-label="edit" onClick={() => onEdit(item)}>
-                  <EditIcon />
-                </IconButton>
-                <IconButton edge="end" aria-label="delete" onClick={() => onDelete(item.id)}>
-                  <DeleteIcon />
-                </IconButton>
-              </Box>
-            </ListItem>
-          ))}
-      </List>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} size="small" aria-label="tabela de contas a receber">
+          <TableHead>
+            <TableRow>
+              <TableCell align='left' sx={{ fontWeight: 800 }}>Valor</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Tipo</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Cliente</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Vencimento</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Recebido em</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Status</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Criado em</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Atualizado em</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Obs</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Transação</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Ações</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {items &&
+              items.map((item: CrProps, i: number) => (
+                <TableRow
+                  key={item.id}
+                  sx={{
+                    background:
+                      i % 2 === 0
+                        ? theme.palette.mode === 'light'
+                          ? theme.palette.grey[50]
+                          : theme.palette.grey[900]
+                        : theme.palette.mode === 'light'
+                        ? theme.palette.common.white
+                        : theme.palette.common.black,
+                  }}
+                >
+                  <TableCell align='left'>R$ {strToPtBrMoney(String(item.value))}</TableCell>
+                  <TableCell align="right">{item.type.name}</TableCell>
+                  <TableCell align="right">{item.customer.name}</TableCell>
+                  <TableCell align="right">{new Date(item.due).toLocaleDateString()}</TableCell>
+                  <TableCell align="right">
+                    {item.rdate ? new Date(item.rdate).toLocaleDateString() : '-'}
+                  </TableCell>
+                  <TableCell align="right">{getPaymentStatusText(item.status)}</TableCell>
+                  <TableCell align="right">{new Date(item.createdAt).toLocaleDateString()}</TableCell>
+                  <TableCell align="right">{new Date(item.updatedAt).toLocaleDateString()}</TableCell>
+                  <TableCell align="right">{item.obs || '-'}</TableCell>
+                  <TableCell align="right">{item.tx ? item.tx.id : '-'}</TableCell>
+                  <TableCell align="right">
+                    <IconButton edge="end" aria-label="edit" onClick={() => onEdit(item)}>
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton edge="end" aria-label="delete" onClick={() => onDelete(item.id)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
       {data && data.length > 0 && (
         <ButtonGroup
           variant="contained"
-          aria-label="Basic button group"
+          aria-label="grupo de botões"
           sx={{ marginBottom: 2, flex: 0, width: 'fit-content', alignSelf: 'center' }}
         >
           <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>

@@ -1,13 +1,18 @@
 import { JSX, useEffect, useState } from 'react';
 import {
-  List,
-  ListItem,
   IconButton,
   Box,
-  Chip,
   Typography,
   ButtonGroup,
   Button,
+  Divider,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -20,7 +25,6 @@ import CfSearchForm from '../forms/search/cf-search-form';
 import { queryCfSchema } from '../../../../packages/validators/zod-schemas/query/query-cf.validator';
 import { z } from 'zod';
 import { strToPtBrMoney } from '../../utils/strToPtBrMoney';
-import Divider from '@mui/material/Divider';
 
 type QueryCfFormData = z.infer<typeof queryCfSchema>;
 
@@ -43,14 +47,13 @@ const CfList = (): JSX.Element | string => {
       bank: item.bank || undefined,
       obs: item.obs || undefined,
       status: item.status,
-      balance: String(item.balance)
+      balance: String(item.balance),
     });
   };
 
   const delMutation = useDeleteCf();
 
   const handleSearch = (data: QueryCfFormData) => {
-    console.log(data)
     queryCfMutation.mutate(data);
   };
 
@@ -90,62 +93,63 @@ const CfList = (): JSX.Element | string => {
       <Typography variant="h4">Filtro</Typography>
       <CfSearchForm onSearch={handleSearch} />
       <Divider />
-      <Typography variant="h4" sx={{marginTop: 0}}>Contas financeiras</Typography>
-      <List sx={{ flex: 1, width: '100%', maxHeight: 400, overflow: 'auto' }}>
-        {items &&
-          items.map((item: CfProps, i: number) => (
-            <ListItem
-              key={item.id}
-              divider
-              sx={{
-                display: 'flex',
-                p: 2,
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                background: i % 2 === 0
-                  ? theme.palette.mode === 'light'
-                    ? theme.palette.grey[50]
-                    : theme.palette.grey[900]
-                  : theme.palette.mode === 'light'
-                  ? theme.palette.common.white
-                  : theme.palette.common.black,
-              }}
-            >
-              <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, flexWrap: 'wrap', alignItems: 'baseline' }}>
-                <Chip label={`Conta: ${item.number}`} color="success" />
-                <Chip label={`Ag: ${item.ag || '-'}`} variant="outlined" size="small" />
-                <Chip label={`Banco: ${item.bank || '-'}`} variant="outlined" size="small" />
-                <Chip
-                  label={`Status: ${item.status ? 'Ativo' : 'Inativo'}`}
-                  color={item.status ? 'primary' : 'error'}
-                  variant="outlined"
-                  size="small"
-                />
-                <Chip label={`Tipo: ${item.type.name}`} variant="outlined" size="small" />
-                <Chip label={`Saldo: R$ ${strToPtBrMoney(String(item.balance))}`} variant="outlined" size="small" />
-                <Chip
-                  label={`Criado em: ${new Date(item.createdAt).toLocaleDateString()}`}
-                  variant="outlined"
-                  size="small"
-                />
-                <Chip
-                  label={`Atualizado em: ${new Date(item.updatedAt).toLocaleDateString()}`}
-                  variant="outlined"
-                  size="small"
-                />
-                {item.obs && <Chip label={`Obs: ${item.obs}`} variant="outlined" size="small" />}
-              </Box>
-              <Box sx={{ display: 'flex', gap: 1 }}>
-                <IconButton edge="end" aria-label="edit" onClick={() => onEdit(item)}>
-                  <EditIcon />
-                </IconButton>
-                <IconButton edge="end" aria-label="delete" onClick={() => onDelete(item.id)}>
-                  <DeleteIcon />
-                </IconButton>
-              </Box>
-            </ListItem>
-          ))}
-      </List>
+      <Typography variant="h4" sx={{ marginTop: 0 }}>
+        Contas financeiras
+      </Typography>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+          <TableHead>
+            <TableRow>
+              <TableCell align='left' sx={{ fontWeight: 800 }}>Número</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Agência</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Banco</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Status</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Tipo</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Saldo</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Criado em</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Atualizado em</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Ações</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {items &&
+              items.map((item: CfProps, i: number) => (
+                <TableRow
+                  key={item.id}
+                  sx={{
+                    background:
+                      i % 2 === 0
+                        ? theme.palette.mode === 'light'
+                          ? theme.palette.grey[50]
+                          : theme.palette.grey[900]
+                        : theme.palette.mode === 'light'
+                        ? theme.palette.common.white
+                        : theme.palette.common.black,
+                  }}
+                >
+                  <TableCell component="th" scope="row" align='left'>
+                    {item.number}
+                  </TableCell>
+                  <TableCell align="right">{item.ag || '-'}</TableCell>
+                  <TableCell align="right">{item.bank || '-'}</TableCell>
+                  <TableCell align="right">{item.status ? 'Ativo' : 'Inativo'}</TableCell>
+                  <TableCell align="right">{item.type.name}</TableCell>
+                  <TableCell align="right">R$ {strToPtBrMoney(String(item.balance))}</TableCell>
+                  <TableCell align="right">{new Date(item.createdAt).toLocaleDateString()}</TableCell>
+                  <TableCell align="right">{new Date(item.updatedAt).toLocaleDateString()}</TableCell>
+                  <TableCell align="right">
+                    <IconButton edge="end" aria-label="edit" onClick={() => onEdit(item)}>
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton edge="end" aria-label="delete" onClick={() => onDelete(item.id)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
       {data && data.length > 0 && (
         <ButtonGroup
           variant="contained"

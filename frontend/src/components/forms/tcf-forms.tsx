@@ -61,7 +61,7 @@ export function CreateTcfForm(): JSX.Element | null {
         </Alert>
       )}
 
-      <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
+      <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", minWidth: 500 }}>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
           <TextField
             label="Nome"
@@ -134,7 +134,7 @@ return (
       </Alert>
     )}
 
-    <form onSubmit={handleSubmit(handleFormSubmit)} style={{ width: "100%" }}>
+    <form onSubmit={handleSubmit(handleFormSubmit)} style={{ width: "100%", minWidth: 500 }}>
       <Box display="flex" flexDirection="column" gap={2}>
         <TextField
           label="Nome"

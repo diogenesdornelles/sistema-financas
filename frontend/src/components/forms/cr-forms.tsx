@@ -95,7 +95,7 @@ export function CreateCrForm(): JSX.Element | null | string {
                 </Alert>
             )}
 
-            <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
+            <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", minWidth: 500 }}>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
                     <Box sx={{ display: 'flex', columnGap: 2 }}>
                         <Controller
@@ -290,7 +290,7 @@ export function UpdateCrForm(): JSX.Element | null | string {
                     Ocorreu um erro ao atualizar a Conta. Tente novamente.
                 </Alert>
             )}
-            <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
+            <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", minWidth: 500 }}>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
                     <Controller
                         name="value"

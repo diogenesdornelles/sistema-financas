@@ -77,7 +77,7 @@ const TcrSearchForm = ({ onSearch }: TcrSearchFormProps): JSX.Element => {
           size="small"
         />
         <TextField
-          label="Criação"
+          label="Criado em"
           {...register('createdAt')}
           variant="outlined"
           type="date"

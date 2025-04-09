@@ -1,14 +1,18 @@
 import { JSX, useEffect, useState } from 'react';
 import {
-  List,
-  ListItem,
   IconButton,
   Box,
-  Chip,
   Typography,
   ButtonGroup,
   Button,
   Divider,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -39,7 +43,7 @@ const UserList = (): JSX.Element | string => {
       name: item.name,
       surname: item.surname,
       cpf: item.cpf,
-      status: item.status
+      status: item.status,
     });
   };
 
@@ -64,7 +68,6 @@ const UserList = (): JSX.Element | string => {
       const nextPage = prev + direction;
       if (nextPage < 1) return prev;
       if (direction > 0 && (!data || data.length === 0)) return prev;
-
       return nextPage;
     });
   };
@@ -86,62 +89,58 @@ const UserList = (): JSX.Element | string => {
       <UserSearchForm onSearch={handleSearch} />
       <Divider />
       <Typography variant="h4">Usuários</Typography>
-      <List sx={{ flex: 1, width: '100%', maxHeight: 400, overflow: 'auto' }}>
-        {items &&
-          items.map((item: UserProps, i: number) => (
-            <ListItem
-              key={item.id}
-              divider
-              sx={{
-                display: 'flex',
-                p: 2,
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                background: i % 2 === 0
-                  ? theme.palette.mode === 'light'
-                    ? theme.palette.grey[50]
-                    : theme.palette.grey[900]
-                  : theme.palette.mode === 'light'
-                  ? theme.palette.common.white
-                  : theme.palette.common.black,
-              }}
-            >
-              <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, flexWrap: 'wrap', alignItems: 'baseline' }}>
-                <Chip label={`Nome: ${item.name}`} color="secondary" />
-                <Chip label={`Sobrenome: ${item.surname}`} variant="outlined" size="small" />
-                <Chip label={`CPF: ${item.cpf}`} variant="outlined" size="small" />
-                <Chip
-                  label={`Status: ${item.status ? 'Ativo' : 'Inativo'}`}
-                  color={item.status ? 'primary' : 'error'}
-                  variant="outlined"
-                  size="small"
-                />
-                <Chip
-                  label={`Criado em: ${new Date(item.createdAt).toLocaleDateString()}`}
-                  variant="outlined"
-                  size="small"
-                />
-                <Chip
-                  label={`Atualizado em: ${new Date(item.updatedAt).toLocaleDateString()}`}
-                  variant="outlined"
-                  size="small"
-                />
-              </Box>
-              <Box sx={{ display: 'flex', gap: 1 }}>
-                <IconButton edge="end" aria-label="edit" onClick={() => onEdit(item)}>
-                  <EditIcon />
-                </IconButton>
-                <IconButton edge="end" aria-label="delete" onClick={() => onDelete(item.id)}>
-                  <DeleteIcon />
-                </IconButton>
-              </Box>
-            </ListItem>
-          ))}
-      </List>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} size="small" aria-label="tabela de usuários">
+          <TableHead>
+            <TableRow>
+              <TableCell align='left' sx={{ fontWeight: 800 }}>Nome</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Sobrenome</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>CPF</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Status</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Criado em</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Atualizado em</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Ações</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {items &&
+              items.map((item: UserProps, i: number) => (
+                <TableRow
+                  key={item.id}
+                  sx={{
+                    background:
+                      i % 2 === 0
+                        ? theme.palette.mode === 'light'
+                          ? theme.palette.grey[50]
+                          : theme.palette.grey[900]
+                        : theme.palette.mode === 'light'
+                        ? theme.palette.common.white
+                        : theme.palette.common.black,
+                  }}
+                >
+                  <TableCell align='left'>{item.name}</TableCell>
+                  <TableCell align="right">{item.surname}</TableCell>
+                  <TableCell align="right">{item.cpf}</TableCell>
+                  <TableCell align="right">{item.status ? 'Ativo' : 'Inativo'}</TableCell>
+                  <TableCell align="right">{new Date(item.createdAt).toLocaleDateString()}</TableCell>
+                  <TableCell align="right">{new Date(item.updatedAt).toLocaleDateString()}</TableCell>
+                  <TableCell align="right">
+                    <IconButton edge="end" aria-label="edit" onClick={() => onEdit(item)}>
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton edge="end" aria-label="delete" onClick={() => onDelete(item.id)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
       {data && data.length > 0 && (
         <ButtonGroup
           variant="contained"
-          aria-label="Basic button group"
+          aria-label="grupo de botões"
           sx={{ marginBottom: 2, flex: 0, width: 'fit-content', alignSelf: 'center' }}
         >
           <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>

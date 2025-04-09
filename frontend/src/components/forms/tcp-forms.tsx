@@ -58,7 +58,7 @@ export function CreateTcpForm(): JSX.Element | null {
                 </Alert>
             )}
 
-            <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
+            <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", minWidth: 500 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                     <TextField
                         label="Nome"
@@ -130,7 +130,7 @@ export function UpdateTcpForm(): JSX.Element | null {
                 </Alert>
             )}
 
-            <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
+            <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", minWidth: 500 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
                     <TextField
                         label="Nome"

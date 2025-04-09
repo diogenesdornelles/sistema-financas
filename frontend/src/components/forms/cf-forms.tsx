@@ -86,9 +86,9 @@ export function CreateCfForm(): JSX.Element | null | string {
                 </Alert>
             )}
 
-            <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
+            <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", minWidth: 500 }}>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-                    <Box sx={{ display: 'flex', columnGap: 2 }}>
+                    <Box sx={{ display: 'flex', gap: 2, justifyContent: 'space-between' }}>
                         <TextField
                             label="Número"
                             {...register("number")}
@@ -96,6 +96,7 @@ export function CreateCfForm(): JSX.Element | null | string {
                             error={!!errors.number}
                             helperText={errors.number?.message}
                             size="small"
+                            sx={{ width: '100%' }}
                         />
                         <Controller
                             name="balance"
@@ -107,6 +108,7 @@ export function CreateCfForm(): JSX.Element | null | string {
                                     label="Saldo(R$)"
                                     size="small"
                                     variant="outlined"
+                                    sx={{ width: '100%' }}
                                     error={!!errors.balance}
                                     helperText={errors.balance?.message}
                                     onChange={(e) => {
@@ -144,7 +146,7 @@ export function CreateCfForm(): JSX.Element | null | string {
                     />
 
 
-                    <Box sx={{ display: 'flex', columnGap: 2 }}>
+                    <Box sx={{ display: 'flex', gap: 2, justifyContent: 'space-between' }}>
                         <TextField
                             label="Agência"
                             size="small"
@@ -253,9 +255,9 @@ export function UpdateCfForm(): JSX.Element | null | string {
                 </Alert>
             )}
 
-            <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
+            <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", minWidth: 500 }}>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-                    <Box sx={{ display: 'flex', columnGap: 2 }}>
+                <Box sx={{ display: 'flex', gap: 2, justifyContent: 'space-between' }}>
                         <TextField
                             label="Número"
                             {...register("number")}
@@ -263,6 +265,7 @@ export function UpdateCfForm(): JSX.Element | null | string {
                             error={!!errors.number}
                             helperText={errors.number?.message}
                             sx={{ width: '100%' }}
+                            size="small"
                         />
                         <TextField
                             label="Saldo(R$)"
@@ -272,6 +275,7 @@ export function UpdateCfForm(): JSX.Element | null | string {
                             helperText={errors.balance?.message}
                             type="text"
                             sx={{ width: '100%' }}
+                            size="small"
                         />
                     </Box>
                     <Controller
@@ -297,22 +301,20 @@ export function UpdateCfForm(): JSX.Element | null | string {
                                         variant="outlined"
                                         error={!!errors.type}
                                         helperText={errors.type?.message}
+                                        size="small"
                                     />
                                 )}
                             />
                         )}
                     />
-
-
-
-                    <Box sx={{ display: 'flex', columnGap: 2 }}>
+                    <Box sx={{ display: 'flex', gap: 2, justifyContent: 'space-between' }}>
                         <TextField
                             label="Agência"
                             {...register("ag")}
                             variant="outlined"
                             error={!!errors.ag}
                             helperText={errors.ag?.message}
-                            sx={{ width: '100%' }}
+                            size="small"
                         />
 
                         <TextField
@@ -321,7 +323,7 @@ export function UpdateCfForm(): JSX.Element | null | string {
                             variant="outlined"
                             error={!!errors.bank}
                             helperText={errors.bank?.message}
-                            sx={{ width: '100%' }}
+                            size="small"
                         />
                     </Box>
 
@@ -333,6 +335,7 @@ export function UpdateCfForm(): JSX.Element | null | string {
                         helperText={errors.obs?.message}
                         multiline
                         rows={3}
+                        size="small"
                     />
 
                     <FormControlLabel

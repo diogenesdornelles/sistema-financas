@@ -108,6 +108,7 @@ const CfList = (): JSX.Element => {
               <TableCell align="right" sx={{ fontWeight: 800 }}>Status</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Tipo</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Saldo</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Observações</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Criado em</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Atualizado em</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Ações</TableCell>
@@ -140,6 +141,7 @@ const CfList = (): JSX.Element => {
                   <TableCell align="right">{item.status ? 'Ativo' : 'Inativo'}</TableCell>
                   <TableCell align="right">{item.type.name}</TableCell>
                   <TableCell align="right">R$ {strToPtBrMoney(String(item.balance))}</TableCell>
+                  <TableCell align="right">{item.obs || '-'}</TableCell>
                   <TableCell align="right">{new Date(item.createdAt).toLocaleDateString()}</TableCell>
                   <TableCell align="right">{new Date(item.updatedAt).toLocaleDateString()}</TableCell>
                   <TableCell align="right">

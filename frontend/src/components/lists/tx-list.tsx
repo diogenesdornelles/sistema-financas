@@ -100,16 +100,17 @@ const TxList = (): JSX.Element => {
         <Table sx={{ minWidth: 650 }} size="small" aria-label="tabela de transações">
           <TableHead>
             <TableRow>
-            <TableCell align='left' sx={{ fontWeight: 800 }}></TableCell>
+              <TableCell align='left' sx={{ fontWeight: 800 }}></TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Valor</TableCell>
               <TableCell align='left' sx={{ fontWeight: 800 }}>Tipo</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Conta</TableCell>
-              <TableCell align="right" sx={{ fontWeight: 800 }}>Valor</TableCell>
-              <TableCell align="right" sx={{ fontWeight: 800 }}>Categoria</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Descrição</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Categoria</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Obs</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Status</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Data</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Criado em</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Atualizado em</TableCell>
-              <TableCell align="right" sx={{ fontWeight: 800 }}>Obs</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Ações</TableCell>
             </TableRow>
           </TableHead>
@@ -125,24 +126,25 @@ const TxList = (): JSX.Element => {
                           ? theme.palette.grey[50]
                           : theme.palette.grey[900]
                         : theme.palette.mode === 'light'
-                        ? theme.palette.common.white
-                        : theme.palette.common.black,
+                          ? theme.palette.common.white
+                          : theme.palette.common.black,
                   }}
                 >
-                                    <TableCell scope="row" align='left' sx={{ fontWeight: 900 }}>
+                  <TableCell scope="row" align='left' sx={{ fontWeight: 900 }}>
                     {i + 1}
                   </TableCell>
+                  <TableCell align="right">R$ {strToPtBrMoney(String(item.value))}</TableCell>
                   <TableCell align='left'>
                     {item.type === TransactionType.ENTRY ? 'Entrada' : 'Saída'}
                   </TableCell>
                   <TableCell align="right">{item.cf.number}</TableCell>
-                  <TableCell align="right">R$ {strToPtBrMoney(String(item.value))}</TableCell>
-                  <TableCell align="right">{item.category.name}</TableCell>
                   <TableCell align="right">{item.description}</TableCell>
+                  <TableCell align="right">{item.category.name}</TableCell>
+                  <TableCell align="right">{item.obs || '-'}</TableCell>
                   <TableCell align="right">{item.status ? 'Ativo' : 'Inativo'}</TableCell>
+                  <TableCell align="right">{item.tdate ? new Date(item.tdate).toLocaleDateString() : '-'}</TableCell>
                   <TableCell align="right">{new Date(item.createdAt).toLocaleDateString()}</TableCell>
                   <TableCell align="right">{new Date(item.updatedAt).toLocaleDateString()}</TableCell>
-                  <TableCell align="right">{item.obs || '-'}</TableCell>
                   <TableCell align="right">
                     <IconButton edge="end" aria-label="edit" onClick={() => onEdit(item)}>
                       <EditIcon />
@@ -158,18 +160,18 @@ const TxList = (): JSX.Element => {
       </TableContainer>
       {data && data.length > 0 && (
         <ButtonGroup
-        variant="contained"
-        aria-label="basic button group"
-        sx={{ display: 'flex', marginBottom: 2, flex: 0, width: 'fit-content', height: '100%', alignSelf: 'center' }}
-      >
-        <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
-          Anterior
-        </Button>
-        <Button onClick={() => handleChangePage(1)} disabled={!data || data.length === 0}>
-          Próximo
-        </Button>
-      </ButtonGroup>
-    )}
+          variant="contained"
+          aria-label="basic button group"
+          sx={{ display: 'flex', marginBottom: 2, flex: 0, width: 'fit-content', height: '100%', alignSelf: 'center' }}
+        >
+          <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
+            Anterior
+          </Button>
+          <Button onClick={() => handleChangePage(1)} disabled={!data || data.length === 0}>
+            Próximo
+          </Button>
+        </ButtonGroup>
+      )}
     </Box>
   );
 };

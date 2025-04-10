@@ -26,6 +26,7 @@ import { queryCpSchema } from '../../../../packages/validators/zod-schemas/query
 import { z } from 'zod';
 import { strToPtBrMoney } from '../../utils/strToPtBrMoney';
 import CustomBackdrop from '../customBackdrop';
+import { CPStatus } from '../../../../packages/dtos/utils/enums';
 
 type QueryCpFormData = z.infer<typeof queryCpSchema>;
 
@@ -76,6 +77,19 @@ const CpList = (): JSX.Element => {
     });
   };
 
+  const getPaymentStatusText = (status: CPStatus): string => {
+    switch (status) {
+      case CPStatus.PENDING:
+        return 'Pendente';
+      case CPStatus.PAID:
+        return 'Pago';
+      case CPStatus.CANCELLED:
+        return 'Cancelado';
+      default:
+        return status;
+    }
+  };
+
   useEffect(() => {
     if (queryCpMutation.data) {
       setItems(queryCpMutation.data);
@@ -97,13 +111,15 @@ const CpList = (): JSX.Element => {
         <Table sx={{ minWidth: 650 }} size="small" aria-label="tabela de contas a pagar">
           <TableHead>
             <TableRow>
-            <TableCell align='left' sx={{ fontWeight: 800 }}></TableCell>
+              <TableCell align='left' sx={{ fontWeight: 800 }}></TableCell>
               <TableCell align='left' sx={{ fontWeight: 800 }}>Valor</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Tipo</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Fornecedor</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Vencimento</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Observações</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Pagamento</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Status</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Transação</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Criado em</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Atualizado em</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Ações</TableCell>
@@ -121,21 +137,23 @@ const CpList = (): JSX.Element => {
                           ? theme.palette.grey[50]
                           : theme.palette.grey[900]
                         : theme.palette.mode === 'light'
-                        ? theme.palette.common.white
-                        : theme.palette.common.black,
+                          ? theme.palette.common.white
+                          : theme.palette.common.black,
                   }}
                 >
-                                    <TableCell scope="row" align='left' sx={{ fontWeight: 900 }}>
+                  <TableCell scope="row" align='left' sx={{ fontWeight: 900 }}>
                     {i + 1}
                   </TableCell>
                   <TableCell align='left'>R$ {strToPtBrMoney(String(item.value))}</TableCell>
                   <TableCell align="right">{item.type.name}</TableCell>
                   <TableCell align="right">{item.supplier.name}</TableCell>
                   <TableCell align="right">{new Date(item.due).toLocaleDateString()}</TableCell>
+                  <TableCell align="right">{item.obs || '-'}</TableCell>
                   <TableCell align="right">
                     {item.pdate ? new Date(item.pdate).toLocaleDateString() : '-'}
                   </TableCell>
-                  <TableCell align="right">{item.status ? 'Ativo' : 'Inativo'}</TableCell>
+                  <TableCell align="right">{getPaymentStatusText(item.status)}</TableCell>
+                  <TableCell align="right">{item.tx ? item.tx.id : '-'}</TableCell>
                   <TableCell align="right">{new Date(item.createdAt).toLocaleDateString()}</TableCell>
                   <TableCell align="right">{new Date(item.updatedAt).toLocaleDateString()}</TableCell>
                   <TableCell align="right">
@@ -153,18 +171,18 @@ const CpList = (): JSX.Element => {
       </TableContainer>
       {data && data.length > 0 && (
         <ButtonGroup
-        variant="contained"
-        aria-label="basic button group"
-        sx={{ display: 'flex', marginBottom: 2, flex: 0, width: 'fit-content', height: '100%', alignSelf: 'center' }}
-      >
-        <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
-          Anterior
-        </Button>
-        <Button onClick={() => handleChangePage(1)} disabled={!data || data.length === 0}>
-          Próximo
-        </Button>
-      </ButtonGroup>
-    )}
+          variant="contained"
+          aria-label="basic button group"
+          sx={{ display: 'flex', marginBottom: 2, flex: 0, width: 'fit-content', height: '100%', alignSelf: 'center' }}
+        >
+          <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
+            Anterior
+          </Button>
+          <Button onClick={() => handleChangePage(1)} disabled={!data || data.length === 0}>
+            Próximo
+          </Button>
+        </ButtonGroup>
+      )}
     </Box>
   );
 };

@@ -26,7 +26,7 @@ import { queryCrSchema } from '../../../../packages/validators/zod-schemas/query
 import { z } from 'zod';
 import { PaymentStatus } from '../../../../packages/dtos/utils/enums';
 import { strToPtBrMoney } from '../../utils/strToPtBrMoney';
-import CustomBackdrop from '../customBackdrop';
+import CustomBackdrop from '../custom-backdrop';
 
 type QueryCrFormData = z.infer<typeof queryCrSchema>;
 
@@ -36,19 +36,18 @@ const CrList = (): JSX.Element => {
   const [items, setItems] = useState<CrProps[] | null>(null);
   const { isPending, error, data } = useGetManyCr((page - 1) * SKIP);
   const queryCrMutation = useQueryCr();
-  const { setFormType, setUpdateItem } = useFormStore();
+  const { setFormType, setUpdateItem, setIsOpen } = useFormStore();
   const theme = useTheme();
 
   const onEdit = (item: CrProps) => {
     setFormType('cr', 'update');
+    setIsOpen(true, 'cr')
     setUpdateItem('cr', {
       ...item,
       type: item.type.id,
       customer: item.customer.id,
-      tx: item.tx ? item.tx.id : "",
       value: String(item.value),
       due: item.due ? String(item.due) : "",
-      rdate: item.rdate ? String(item.rdate) : "",
       obs: item.obs ? item.obs : "",
       status: item.status ? item.status : undefined,
     });
@@ -113,14 +112,12 @@ const CrList = (): JSX.Element => {
         <Table sx={{ minWidth: 650 }} size="small" aria-label="tabela de contas a receber">
           <TableHead>
             <TableRow>
-              <TableCell align='left' sx={{ fontWeight: 800 }}></TableCell>
+              <TableCell align='left' sx={{ fontWeight: 800 }}>ID</TableCell>
               <TableCell align='left' sx={{ fontWeight: 800 }}>Valor</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Tipo</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Cliente</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Vencimento</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Observação</TableCell>
-              <TableCell align="right" sx={{ fontWeight: 800 }}>Transação</TableCell>
-              <TableCell align="right" sx={{ fontWeight: 800 }}>Recebido em</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Status</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Criado em</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Atualizado em</TableCell>
@@ -145,17 +142,13 @@ const CrList = (): JSX.Element => {
                 >
 
                   <TableCell scope="row" align='left' sx={{ fontWeight: 900 }}>
-                    {i + 1}
+                    {item.id}
                   </TableCell>
                   <TableCell align='left'>R$ {strToPtBrMoney(String(item.value))}</TableCell>
                   <TableCell align="right">{item.type.name}</TableCell>
                   <TableCell align="right">{item.customer.name}</TableCell>
                   <TableCell align="right">{new Date(item.due).toLocaleDateString()}</TableCell>
                   <TableCell align="right">{item.obs || '-'}</TableCell>
-                  <TableCell align="right">{item.tx ? item.tx.id : '-'}</TableCell>
-                  <TableCell align="right">
-                    {item.rdate ? new Date(item.rdate).toLocaleDateString() : '-'}
-                  </TableCell>
                   <TableCell align="right">{getPaymentStatusText(item.status)}</TableCell>
                   <TableCell align="right">{new Date(item.createdAt).toLocaleDateString()}</TableCell>
                   <TableCell align="right">{new Date(item.updatedAt).toLocaleDateString()}</TableCell>

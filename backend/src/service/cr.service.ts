@@ -15,8 +15,11 @@ export class CrService extends BaseService<
   UpdateCr,
   QueryCr
 > {
-  constructor() {
+  private readonly relations: string[]
+  constructor() 
+  {
     super(Cr);
+    this.relations = ["type", "customer"]
   }
 
   /**
@@ -26,7 +29,7 @@ export class CrService extends BaseService<
     try {
       return await this.repository.find({
         where: {status: Not(PaymentStatus.CANCELLED)},
-        relations: ["type", "customer", "tx"],
+        relations: this.relations,
       });
     } catch (error) {
       throw new Error(`Erro ao recuperar contas: ${error}`);
@@ -42,7 +45,7 @@ export class CrService extends BaseService<
         where: {status: Not(PaymentStatus.CANCELLED)},
         skip,
         take: 10,
-        relations: ["type", "customer", "tx"],
+        relations: this.relations,
       });
     } catch (error) {
       throw new Error(`Erro ao recuperar contas: ${error}`);
@@ -58,7 +61,7 @@ export class CrService extends BaseService<
     try {
       return await this.repository.findOne({
         where: { id },
-        relations: ["type", "customer", "tx"],
+        relations: this.relations,
       });
     } catch (error) {
       throw new Error(`Erro ao recuperar conta com ID ${id}: ${error}`);
@@ -77,7 +80,6 @@ export class CrService extends BaseService<
         user: { id: data.user } as User,
         type: { id: data.type } as Tcr,
         customer: { id: data.customer } as Partner,
-        tx: { id: data.tx } as Tx,
         value: data.value
           ? parseFloat(data.value.replace(/\./g, "").replace(",", "."))
           : undefined,
@@ -87,7 +89,7 @@ export class CrService extends BaseService<
 
       return await this.repository.findOneOrFail({
         where: { id: createdCr.id },
-        relations: ["type", "customer"],
+        relations: this.relations,
       });
     } catch (error) {
       throw new Error(`Erro ao criar conta: ${error}`);
@@ -111,19 +113,17 @@ export class CrService extends BaseService<
         customer: data.customer
           ? ({ id: data.customer } as Partner)
           : undefined,
-        tx: data.tx ? ({ id: data.tx } as Tx) : undefined,
         value: data.value
           ? parseFloat(data.value.replace(/\./g, "").replace(",", "."))
           : undefined,
         due: data.due ? new Date(data.due) : undefined,
-        rdate: data.rdate ? new Date(data.rdate) : undefined,
       };
 
       await this.repository.update({ id }, updateData);
 
       return await this.repository.findOne({
         where: { id },
-        relations: ["type", "customer", "tx"],
+        relations: this.relations,
       });
     } catch (error) {
       throw new Error(`Erro ao atualizar conta com ID ${id}: ${error}`);
@@ -176,21 +176,12 @@ export class CrService extends BaseService<
         where.updatedAt = updatedDate;
       }
 
-      if (data.rdate) {
-        const updatedDate = new Date(data.rdate);
-        where.updatedAt = updatedDate;
-      }
-
       if (data.obs) {
         where.obs = Like(`%${data.obs}%`);
       }
 
       if (data.status) {
         where.status = data.status;
-      }
-
-      if (data.tx) {
-        where.tx = { id: Like(`%${data.tx}%`) };
       }
 
       if (data.createdAt) {
@@ -205,7 +196,7 @@ export class CrService extends BaseService<
 
       return await this.repository.find({
         where,
-        relations: ["type", "supplier", "tx"],
+        relations: this.relations,
       });
     } catch (error) {
       throw new Error(`Erro ao filtrar contas a pagar: ${error}`);

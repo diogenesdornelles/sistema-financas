@@ -1,19 +1,26 @@
 import { create } from "zustand";
-import { FormsState } from "../types/form-state";
+import { FormsState, TValue } from "../types/form-state";
 
 export const useFormStore = create<FormsState & { forceUpdate: number; incrementForceUpdate: () => void }>((set) => ({
   forms: {
-    cf: { type: "create", updateItem: null },
-    tcf: { type: "create", updateItem: null },
-    cr: { type: "create", updateItem: null },
-    tcr: { type: "create", updateItem: null },
-    cp: { type: "create", updateItem: null },
-    tcp: { type: "create", updateItem: null },
-    partner: { type: "create", updateItem: null },
-    tx: { type: "create", updateItem: null },
-    cat: { type: "create", updateItem: null },
-    user: { type: "create", updateItem: null },
+    cf: { type: "create", updateItem: null, isOpen: false },
+    tcf: { type: "create", updateItem: null, isOpen: false },
+    cr: { type: "create", updateItem: null, isOpen: false },
+    tcr: { type: "create", updateItem: null, isOpen: false },
+    cp: { type: "create", updateItem: null, isOpen: false },
+    tcp: { type: "create", updateItem: null, isOpen: false },
+    partner: { type: "create", updateItem: null, isOpen: false },
+    tx: { type: "create", updateItem: null, isOpen: false },
+    cat: { type: "create", updateItem: null, isOpen: false },
+    user: { type: "create", updateItem: null, isOpen: false },
   },
+  setIsOpen: (value: boolean, name: TValue) =>
+    set((state) => ({
+      forms: {
+        ...state.forms,
+        [name]: { ...state.forms[name], isOpen: value }
+      },
+    })),
   setFormType: (key, type) =>
     set((state) => ({
       forms: {

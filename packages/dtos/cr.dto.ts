@@ -1,6 +1,5 @@
 import { PartnerProps } from "./partner.dto";
 import { TcrProps } from "./tcr.dto";
-import { TxProps } from "./tx.dto";
 import { PaymentStatus } from "./utils/enums";
 
 export interface CreateCr {
@@ -10,7 +9,6 @@ export interface CreateCr {
   due: string; // input date
   obs?: string;
   user: string; // não deve ser inserido
-  tx?: string; // input autocomplete com uuid
 }
 
 export interface UpdateCr {
@@ -20,8 +18,6 @@ export interface UpdateCr {
   due?: string;
   obs?: string;
   status?: PaymentStatus;
-  tx?: string;
-  rdate?: string;
 }
 
 export interface CrProps {
@@ -31,8 +27,6 @@ export interface CrProps {
   customer: PartnerProps;
   due: string;
   obs: string;
-  tx?: TxProps;
-  rdate?: string;
   status: PaymentStatus;
   createdAt: string;
   updatedAt: string;
@@ -45,8 +39,6 @@ export interface QueryCr {
   customer?: string;
   due?: string;
   obs?: string;
-  tx?: string;
-  rdate?: string;
   status?: PaymentStatus;
   createdAt?: string;
   updatedAt?: string;

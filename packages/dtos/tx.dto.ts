@@ -1,12 +1,14 @@
 import { CatProps } from "./cat.dto";
 import { CfProps } from "./cf.dto";
-import { TransactionType } from "./utils/enums";
+import { CpProps } from "./cp.dto";
+import { CrProps } from "./cr.dto";
 
 
 export interface CreateTx {
   value: string;
-  type: TransactionType;
   cf: string; // Identificador de Cf uuid
+  cp?: string; // Identificador de Cp uuid. Ao menos um, entre cr cp, deve ser uuid.
+  cr?: string; // Identificador de Cr uuid
   description: string; 
   user: string; // uuid de user, não cria campo
   category: string; // Identificador de Cat
@@ -16,8 +18,9 @@ export interface CreateTx {
 
 export interface UpdateTx {
   value?: string;
-  type?: TransactionType;
   cf?: string;
+  cp?: string; 
+  cr?: string;
   description?: string;
   category?: string;
   obs?: string;
@@ -28,8 +31,9 @@ export interface UpdateTx {
 export interface TxProps {
   id: string;
   value: number;
-  type: TransactionType;
   cf: CfProps;
+  cp?: CpProps; 
+  cr?: CrProps;
   description: string;
   category: CatProps;
   obs: string;
@@ -42,8 +46,9 @@ export interface TxProps {
 
 export interface QueryTx {
   value?: string;
-  type?: TransactionType;
   cf?: string;
+  cp?: string; 
+  cr?: string;
   description?: string;
   category?: string;
   obs?: string;

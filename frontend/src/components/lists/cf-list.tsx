@@ -25,7 +25,7 @@ import CfSearchForm from '../forms/search/cf-search-form';
 import { queryCfSchema } from '../../../../packages/validators/zod-schemas/query/query-cf.validator';
 import { z } from 'zod';
 import { strToPtBrMoney } from '../../utils/strToPtBrMoney';
-import CustomBackdrop from '../customBackdrop';
+import CustomBackdrop from '../custom-backdrop';
 
 type QueryCfFormData = z.infer<typeof queryCfSchema>;
 
@@ -35,11 +35,12 @@ const CfList = (): JSX.Element => {
   const [items, setItems] = useState<CfProps[] | null>(null);
   const { isPending, error, data } = useGetManyCf((page - 1) * SKIP);
   const queryCfMutation = useQueryCf();
-  const { setFormType, setUpdateItem } = useFormStore();
+  const { setFormType, setUpdateItem, setIsOpen } = useFormStore();
   const theme = useTheme();
 
   const onEdit = (item: CfProps) => {
     setFormType('cf', 'update');
+    setIsOpen(true, 'cf')
     setUpdateItem('cf', {
       ...item,
       number: item.number,
@@ -101,7 +102,7 @@ const CfList = (): JSX.Element => {
         <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table" >
           <TableHead>
             <TableRow>
-            <TableCell align='left' sx={{ fontWeight: 800 }}></TableCell>
+            <TableCell align='left' sx={{ fontWeight: 800 }}>ID</TableCell>
               <TableCell align='left' sx={{ fontWeight: 800 }}>Número</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Agência</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Banco</TableCell>
@@ -131,7 +132,7 @@ const CfList = (): JSX.Element => {
                   }}
                 >
                   <TableCell scope="row" align='left' sx={{ fontWeight: 900 }}>
-                    {i + 1}
+                    {item.id}
                   </TableCell>
                   <TableCell scope="row" align='left'>
                     {item.number}

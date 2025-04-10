@@ -157,3 +157,17 @@ A modularidade do sistema permite a inclusão de funcionalidades adicionais, com
 - Alertas e Notificações: Lembretes para contas a pagar ou receber, evitando atrasos e multas.
 
 - Controle de Acesso e Auditoria: Implementação de autenticação, autorização e logs para monitorar as atividades do sistema.
+
+## Core das RNs
+
+- As contas financeiras são a alma do sistema, possuindo número com campo principal;
+- Todas elas possuem, ainda, um saldo, o qual deve estar sempre atualizado;
+- O saldo somente pode ser incrementado ou decrementado, respectivamente, por um efetivo recebimento ou pagamento de uma conta;
+- Para um recebimento, o sistema permite o gerenciamento de contas a receber;
+- Para um pagamento, o sistema permite o gerenciamento de contas a pagar;
+- Todas as contas possuem um tipo, convém frisar;
+- Cada uma dessas contas (a receber ou a pagar) possui um valor, uma data de vencimento, um parceiro e um status, com o objetivo de controle;
+- O efetivo pagamento ou recebimento, quando registrado, gera uma atualização automática do saldo da respectiva conta;
+- Para gerar o movimento de conta, deve haver uma transação como entidade associativa, em que se registra a conta a receber ou pagar, a conta financeira e a data da transação;
+- Concluímos que não é preciso ter tipo de transação: se a transação estiver ligada com uma conta a receber, será de Entrada e, por outro lado, se for de pagamento, saída;
+- Conta a receber ou a pagar não precisam de campos de efetivo pagamento ou recebimento, pois estará registrado em transação;

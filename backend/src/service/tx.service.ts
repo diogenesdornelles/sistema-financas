@@ -1,5 +1,5 @@
 import { BaseService } from "./base.service";
-import { Cat, Cf, Tx, User } from "../entity/entities";
+import { Cat, Cf, Cp, Cr, Tx, User } from "../entity/entities";
 import {
   CreateTx,
   QueryTx,
@@ -14,8 +14,10 @@ export class TxService extends BaseService<
   UpdateTx,
   QueryTx
 > {
+  private readonly relations: string[]
   constructor() {
     super(Tx);
+    this.relations = ["category", "cf", "cr", "cp"]
   }
 
   /**
@@ -24,7 +26,7 @@ export class TxService extends BaseService<
   public getAll = async (): Promise<Tx[]> => {
     try {
       return await this.repository.find({
-        relations: ["category", "cf"], where: {status: true}
+        relations: this.relations, where: { status: true }
       });
     } catch (error) {
       throw new Error(`Erro ao recuperar transações: ${error}`);
@@ -39,8 +41,8 @@ export class TxService extends BaseService<
       return await this.repository.find({
         skip,
         take: 10,
-        where: {status: true},
-        relations: ["category", "cf"],
+        where: { status: true },
+        relations: this.relations,
       });
     } catch (error) {
       throw new Error(`Erro ao recuperar transações: ${error}`);
@@ -56,7 +58,7 @@ export class TxService extends BaseService<
     try {
       return await this.repository.findOne({
         where: { id },
-        relations: ["category", "cf"],
+        relations: this.relations,
       });
     } catch (error) {
       throw new Error(`Erro ao recuperar transação com ID ${id}: ${error}`);
@@ -75,6 +77,8 @@ export class TxService extends BaseService<
         user: { id: data.user } as User,
         category: { id: data.category } as Cat,
         cf: { id: data.cf } as Cf,
+        cp: { id: data.cp } as Cp,
+        cr: { id: data.cr } as Cr,
         value: data.value
           ? parseFloat(data.value.replace(/\./g, "").replace(",", "."))
           : undefined,
@@ -84,7 +88,7 @@ export class TxService extends BaseService<
 
       return await this.repository.findOneOrFail({
         where: { id: createdTx.id },
-        relations: ["category", "cf"],
+        relations: this.relations,
       });
     } catch (error) {
       throw new Error(`Erro ao criar transação: ${error}`);
@@ -106,6 +110,8 @@ export class TxService extends BaseService<
         ...data,
         category: data.category ? ({ id: data.category } as Cat) : undefined,
         cf: data.cf ? ({ id: data.cf } as Cf) : undefined,
+        cp: data.cp ? ({ id: data.cp } as Cp) : undefined,
+        cr: data.cr ? ({ id: data.cr } as Cr) : undefined,
         value: data.value
           ? parseFloat(data.value.replace(/\./g, "").replace(",", "."))
           : undefined,
@@ -116,7 +122,7 @@ export class TxService extends BaseService<
 
       return await this.repository.findOne({
         where: { id },
-        relations: ["category", "cf"],
+        relations: this.relations,
       });
     } catch (error) {
       throw new Error(`Erro ao atualizar transação com ID ${id}: ${error}`);
@@ -155,12 +161,16 @@ export class TxService extends BaseService<
         }
       }
 
-      if (data.type) {
-        where.type = data.type;
-      }
-
       if (data.cf) {
         where.cf = { id: Like(`%${data.cf}%`) };
+      }
+
+      if (data.cp) {
+        where.cp = { id: Like(`%${data.cp}%`) };
+      }
+
+      if (data.cr) {
+        where.cr = { id: Like(`%${data.cr}%`) };
       }
 
       if (data.description) {
@@ -196,7 +206,7 @@ export class TxService extends BaseService<
 
       return await this.repository.find({
         where,
-        relations: ["category", "cf"],
+        relations: this.relations,
       });
     } catch (error) {
       throw new Error(`Erro ao filtrar transações: ${error}`);

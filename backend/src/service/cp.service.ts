@@ -20,8 +20,10 @@ export class CpService extends BaseService<
   UpdateCp,
   QueryCp
 > {
+  private readonly relations: string[]
   constructor() {
     super(Cp);
+    this.relations = ["type", "supplier"]
   }
 
   /**
@@ -31,7 +33,7 @@ export class CpService extends BaseService<
     try {
       return await this.repository.find({
         
-        relations: ["type", "supplier", "tx"], where: {status: Not(CPStatus.CANCELLED)}
+        relations: this.relations, where: {status: Not(CPStatus.CANCELLED)}
       } );
     } catch (error) {
       throw new Error(`Erro ao recuperar contas: ${error}`);
@@ -47,7 +49,7 @@ export class CpService extends BaseService<
         where: {status: Not(CPStatus.CANCELLED)},
         skip,
         take: 10,
-        relations: ["type", "supplier", "tx"],
+        relations: this.relations,
       });
     } catch (error) {
       throw new Error(`Erro ao recuperar contas: ${error}`);
@@ -63,7 +65,7 @@ export class CpService extends BaseService<
     try {
       return await this.repository.findOne({
         where: { id },
-        relations: ["type", "supplier", "tx"],
+        relations: this.relations,
       });
     } catch (error) {
       throw new Error(`Erro ao recuperar conta com ID ${id}: ${error}`);
@@ -82,7 +84,6 @@ export class CpService extends BaseService<
         user: { id: data.user } as User,
         type: { id: data.type } as Tcp,
         supplier: { id: data.supplier } as Partner,
-        tx: { id: data.tx } as Tx,
         value: data.value
           ? parseFloat(data.value.replace(/\./g, "").replace(",", "."))
           : undefined,
@@ -92,7 +93,7 @@ export class CpService extends BaseService<
 
       return await this.repository.findOneOrFail({
         where: { id: createdCp.id },
-        relations: ["type", "supplier", "tx"],
+        relations: this.relations,
       });
     } catch (error) {
       throw new Error(`Erro ao criar conta: ${error}`);
@@ -116,19 +117,17 @@ export class CpService extends BaseService<
         supplier: data.supplier
           ? ({ id: data.supplier } as Partner)
           : undefined,
-        tx: data.tx ? ({ id: data.tx } as Tx) : undefined,
         value: data.value
           ? parseFloat(data.value.replace(/\./g, "").replace(",", "."))
           : undefined,
         due: data.due ? new Date(data.due) : undefined,
-        pdate: data.pdate ? new Date(data.pdate) : undefined,
       };
 
       await this.repository.update({ id }, updateData);
 
       return await this.repository.findOne({
         where: { id },
-        relations: ["type", "supplier", "tx"],
+        relations: this.relations,
       });
     } catch (error) {
       throw new Error(`Erro ao atualizar conta com ID ${id}: ${error}`);
@@ -181,21 +180,12 @@ export class CpService extends BaseService<
         where.updatedAt = updatedDate;
       }
 
-      if (data.pdate) {
-        const updatedDate = new Date(data.pdate);
-        where.updatedAt = updatedDate;
-      }
-
       if (data.obs) {
         where.obs = Like(`%${data.obs}%`);
       }
 
       if (data.status) {
         where.status = data.status;
-      }
-
-      if (data.tx) {
-        where.tx = { id: Like(`%${data.tx}%`) };
       }
 
       if (data.createdAt) {
@@ -210,7 +200,7 @@ export class CpService extends BaseService<
 
       return await this.repository.find({
         where,
-        relations: ["type", "supplier", "tx"],
+        relations: this.relations,
       });
     } catch (error) {
       throw new Error(`Erro ao filtrar contas a pagar: ${error}`);

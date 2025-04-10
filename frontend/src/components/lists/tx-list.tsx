@@ -24,9 +24,8 @@ import { useTheme } from '@mui/material/styles';
 import TxSearchForm from '../forms/search/tx-search-form';
 import { queryTxSchema } from '../../../../packages/validators/zod-schemas/query/query-tx.validator';
 import { z } from 'zod';
-import { TransactionType } from '../../../../packages/dtos/utils/enums';
 import { strToPtBrMoney } from '../../utils/strToPtBrMoney';
-import CustomBackdrop from '../customBackdrop';
+import CustomBackdrop from '../custom-backdrop';
 
 type QueryTxFormData = z.infer<typeof queryTxSchema>;
 
@@ -36,15 +35,17 @@ const TxList = (): JSX.Element => {
   const [items, setItems] = useState<TxProps[] | null>(null);
   const { isPending, error, data } = useGetManyTx((page - 1) * SKIP);
   const queryTxMutation = useQueryTx();
-  const { setFormType, setUpdateItem } = useFormStore();
+  const { setFormType, setUpdateItem, setIsOpen } = useFormStore();
   const theme = useTheme();
 
   const onEdit = (item: TxProps) => {
     setFormType('tx', 'update');
+    setIsOpen(true, 'tx')
     setUpdateItem('tx', {
       ...item,
       value: item.value ? String(item.value) : '',
-      type: item.type ? item.type : undefined,
+      cr: item.cr ? item.cr.id : undefined,
+      cp: item.cp ? item.cp.id : undefined,
       cf: item.cf ? item.cf.id : undefined,
       description: item.description ? item.description : '',
       category: item.category ? item.category.id : undefined,
@@ -100,10 +101,12 @@ const TxList = (): JSX.Element => {
         <Table sx={{ minWidth: 650 }} size="small" aria-label="tabela de transações">
           <TableHead>
             <TableRow>
-              <TableCell align='left' sx={{ fontWeight: 800 }}></TableCell>
+              <TableCell align='left' sx={{ fontWeight: 800 }}>ID</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Valor</TableCell>
               <TableCell align='left' sx={{ fontWeight: 800 }}>Tipo</TableCell>
-              <TableCell align="right" sx={{ fontWeight: 800 }}>Conta</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Conta Financeira</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Conta a pagar</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Conta a receber</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Descrição</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Categoria</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Obs</TableCell>
@@ -131,13 +134,15 @@ const TxList = (): JSX.Element => {
                   }}
                 >
                   <TableCell scope="row" align='left' sx={{ fontWeight: 900 }}>
-                    {i + 1}
+                    {item.id}
                   </TableCell>
                   <TableCell align="right">R$ {strToPtBrMoney(String(item.value))}</TableCell>
                   <TableCell align='left'>
-                    {item.type === TransactionType.ENTRY ? 'Entrada' : 'Saída'}
+                    {item.cr ? 'Entrada' : 'Saída'}
                   </TableCell>
                   <TableCell align="right">{item.cf.number}</TableCell>
+                  <TableCell align="right">{item.cp ? item.cp.id : '-'}</TableCell>
+                  <TableCell align="right">{item.cr ? item.cr.id : '-'}</TableCell>
                   <TableCell align="right">{item.description}</TableCell>
                   <TableCell align="right">{item.category.name}</TableCell>
                   <TableCell align="right">{item.obs || '-'}</TableCell>

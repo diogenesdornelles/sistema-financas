@@ -24,7 +24,7 @@ import { useTheme } from '@mui/material/styles';
 import TcfSearchForm from '../forms/search/tcf-search-form';
 import { queryTcfSchema } from '../../../../packages/validators/zod-schemas/query/query-tcf.validator';
 import { z } from 'zod';
-import CustomBackdrop from '../customBackdrop';
+import CustomBackdrop from '../custom-backdrop';
 
 type QueryTcfFormData = z.infer<typeof queryTcfSchema>;
 
@@ -34,11 +34,12 @@ const TcfList = (): JSX.Element => {
   const [items, setItems] = useState<TcfProps[] | null>(null);
   const { isPending, error, data } = useGetManyTcf((page - 1) * SKIP);
   const queryTcfMutation = useQueryTcf();
-  const { setFormType, setUpdateItem } = useFormStore();
+  const { setFormType, setUpdateItem, setIsOpen } = useFormStore();
   const theme = useTheme();
 
   const onEdit = (item: TcfProps) => {
     setFormType('tcf', 'update');
+    setIsOpen(true, 'tcf')
     setUpdateItem('tcf', {
       ...item,
       name: item.name,
@@ -92,7 +93,7 @@ const TcfList = (): JSX.Element => {
         <Table sx={{ minWidth: 650 }} size="small" aria-label="tabela de tipos de contas financeiras">
           <TableHead>
             <TableRow>
-            <TableCell align='left' sx={{ fontWeight: 800 }}></TableCell>
+              <TableCell align='left' sx={{ fontWeight: 800 }}>ID</TableCell>
               <TableCell align='left' sx={{ fontWeight: 800 }}>Nome</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Status</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Criado em</TableCell>
@@ -112,13 +113,13 @@ const TcfList = (): JSX.Element => {
                           ? theme.palette.grey[50]
                           : theme.palette.grey[900]
                         : theme.palette.mode === 'light'
-                        ? theme.palette.common.white
-                        : theme.palette.common.black,
+                          ? theme.palette.common.white
+                          : theme.palette.common.black,
                   }}
                 >
 
-<TableCell scope="row" align='left' sx={{ fontWeight: 900 }}>
-                    {i + 1}
+                  <TableCell scope="row" align='left' sx={{ fontWeight: 900 }}>
+                    {item.id}
                   </TableCell>
                   <TableCell align='left'>{item.name}</TableCell>
                   <TableCell align="right">{item.status ? 'Ativo' : 'Inativo'}</TableCell>
@@ -139,18 +140,18 @@ const TcfList = (): JSX.Element => {
       </TableContainer>
       {data && data.length > 0 && (
         <ButtonGroup
-        variant="contained"
-        aria-label="basic button group"
-        sx={{ display: 'flex', marginBottom: 2, flex: 0, width: 'fit-content', height: '100%', alignSelf: 'center' }}
-      >
-        <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
-          Anterior
-        </Button>
-        <Button onClick={() => handleChangePage(1)} disabled={!data || data.length === 0}>
-          Próximo
-        </Button>
-      </ButtonGroup>
-    )}
+          variant="contained"
+          aria-label="basic button group"
+          sx={{ display: 'flex', marginBottom: 2, flex: 0, width: 'fit-content', height: '100%', alignSelf: 'center' }}
+        >
+          <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
+            Anterior
+          </Button>
+          <Button onClick={() => handleChangePage(1)} disabled={!data || data.length === 0}>
+            Próximo
+          </Button>
+        </ButtonGroup>
+      )}
     </Box>
   );
 };

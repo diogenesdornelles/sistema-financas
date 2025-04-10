@@ -10,7 +10,7 @@ import { usePostCat, usePutCat } from '../../hooks/use-cat';
 import { useAuth } from '../../hooks/use-auth';
 import FormContainer from './templates/form-container';
 import ButtonUpdateForm from './templates/button-update-form';
-import CustomBackdrop from '../customBackdrop';
+import CustomBackdrop from '../custom-backdrop';
 
 type CreateCatFormData = z.infer<typeof createCatSchema>;
 type UpdateCatFormData = z.infer<typeof updateCatSchema>;
@@ -42,7 +42,7 @@ export function CreateCatForm(): JSX.Element | null {
 
     return (
 
-        <FormContainer>
+        <FormContainer formName='cat'>
             <Typography variant="h4">Nova Categoria</Typography>
 
             {mutation.isSuccess && (
@@ -132,7 +132,7 @@ export function UpdateCatForm(): JSX.Element | null {
     if (forms.cat.type === 'create' || !forms.cat.updateItem) return null;
 
     return (
-        <FormContainer>
+        <FormContainer formName='cat'>
             <ButtonUpdateForm name='cat' title="Atualizar categoria" />
 
             {mutation.isSuccess && (

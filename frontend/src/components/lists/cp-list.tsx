@@ -25,7 +25,7 @@ import CpSearchForm from '../forms/search/cp-search-form';
 import { queryCpSchema } from '../../../../packages/validators/zod-schemas/query/query-cp.validator';
 import { z } from 'zod';
 import { strToPtBrMoney } from '../../utils/strToPtBrMoney';
-import CustomBackdrop from '../customBackdrop';
+import CustomBackdrop from '../custom-backdrop';
 import { CPStatus } from '../../../../packages/dtos/utils/enums';
 
 type QueryCpFormData = z.infer<typeof queryCpSchema>;
@@ -36,19 +36,18 @@ const CpList = (): JSX.Element => {
   const [items, setItems] = useState<CpProps[] | null>(null);
   const { isPending, error, data } = useGetManyCp((page - 1) * SKIP);
   const queryCpMutation = useQueryCp();
-  const { setFormType, setUpdateItem } = useFormStore();
+  const { setFormType, setUpdateItem, setIsOpen } = useFormStore();
   const theme = useTheme();
 
   const onEdit = (item: CpProps) => {
     setFormType('cp', 'update');
+    setIsOpen(true, 'cp')
     setUpdateItem('cp', {
       ...item,
       type: item.type.id,
       supplier: item.supplier.id,
-      tx: item.tx ? item.tx.id : undefined,
       value: String(item.value),
       due: String(item.due),
-      pdate: item.pdate ? String(item.pdate) : '',
     });
   };
 
@@ -111,15 +110,13 @@ const CpList = (): JSX.Element => {
         <Table sx={{ minWidth: 650 }} size="small" aria-label="tabela de contas a pagar">
           <TableHead>
             <TableRow>
-              <TableCell align='left' sx={{ fontWeight: 800 }}></TableCell>
+              <TableCell align='left' sx={{ fontWeight: 800 }}>ID</TableCell>
               <TableCell align='left' sx={{ fontWeight: 800 }}>Valor</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Tipo</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Fornecedor</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Vencimento</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Observações</TableCell>
-              <TableCell align="right" sx={{ fontWeight: 800 }}>Pagamento</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Status</TableCell>
-              <TableCell align="right" sx={{ fontWeight: 800 }}>Transação</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Criado em</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Atualizado em</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Ações</TableCell>
@@ -142,18 +139,14 @@ const CpList = (): JSX.Element => {
                   }}
                 >
                   <TableCell scope="row" align='left' sx={{ fontWeight: 900 }}>
-                    {i + 1}
+                    {item.id}
                   </TableCell>
                   <TableCell align='left'>R$ {strToPtBrMoney(String(item.value))}</TableCell>
                   <TableCell align="right">{item.type.name}</TableCell>
                   <TableCell align="right">{item.supplier.name}</TableCell>
                   <TableCell align="right">{new Date(item.due).toLocaleDateString()}</TableCell>
                   <TableCell align="right">{item.obs || '-'}</TableCell>
-                  <TableCell align="right">
-                    {item.pdate ? new Date(item.pdate).toLocaleDateString() : '-'}
-                  </TableCell>
                   <TableCell align="right">{getPaymentStatusText(item.status)}</TableCell>
-                  <TableCell align="right">{item.tx ? item.tx.id : '-'}</TableCell>
                   <TableCell align="right">{new Date(item.createdAt).toLocaleDateString()}</TableCell>
                   <TableCell align="right">{new Date(item.updatedAt).toLocaleDateString()}</TableCell>
                   <TableCell align="right">

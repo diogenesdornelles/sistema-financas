@@ -14,7 +14,7 @@ import { JSX } from 'react';
 import { useFormStore } from '../../hooks/use-form-store';
 import FormContainer from './templates/form-container';
 import ButtonUpdateForm from './templates/button-update-form';
-import CustomBackdrop from '../customBackdrop';
+import CustomBackdrop from '../custom-backdrop';
 
 
 type CreateTcfFormData = z.infer<typeof createTcfSchema>;
@@ -48,7 +48,7 @@ export function CreateTcfForm(): JSX.Element | null {
   }
 
   return (
-    <FormContainer>
+    <FormContainer formName='tcr'>
       <Typography variant="h4">Novo Tipo de conta Financeira</Typography>
       {mutation.isSuccess && (
         <Alert severity="success" style={{ width: "100%" }}>
@@ -122,7 +122,7 @@ export function UpdateTcfForm(): JSX.Element | null {
   }
 
   return (
-    <FormContainer>
+    <FormContainer formName='tcr'>
       <ButtonUpdateForm title="Atualizar Tipo de conta financeira" name='tcf' />
 
       {mutation.isSuccess && (

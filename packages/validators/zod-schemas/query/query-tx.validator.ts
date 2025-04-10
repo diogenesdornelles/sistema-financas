@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { TransactionType } from "../create/create-tx.validator";
 
 
 export const queryTxSchema = z.object({
@@ -30,33 +29,33 @@ export const queryTxSchema = z.object({
       },
       { message: "O saldo deve ser um valor monetário maior que zero" }
     ),
-  status: z.coerce.boolean(),
-  type: z.nativeEnum(TransactionType).optional(),
-  customer: z.string(),
+  status: z.boolean(),
   obs: z.string(),
   description: z.string(),
   cf: z.string(),
+  cp: z.string().optional(),
+  cr: z.string().optional(),
   category: z.string(),
   tdate: z
-  .string()
-  .transform((value) => (value.trim() === "" ? undefined : value))
-  .optional()
-  .refine((value) => !value || !isNaN(Date.parse(value)), {
-    message: "Data inválida",
-  }),
-    createdAt: z
-      .string()
-      .transform((value) => (value.trim() === "" ? undefined : value))
-      .optional()
-      .refine((value) => !value || !isNaN(Date.parse(value)), {
-        message: "Data inválida",
-      }),
+    .string()
+    .transform((value) => (value.trim() === "" ? undefined : value))
+    .optional()
+    .refine((value) => !value || !isNaN(Date.parse(value)), {
+      message: "Data inválida",
+    }),
+  createdAt: z
+    .string()
+    .transform((value) => (value.trim() === "" ? undefined : value))
+    .optional()
+    .refine((value) => !value || !isNaN(Date.parse(value)), {
+      message: "Data inválida",
+    }),
 
-    updatedAt: z
-      .string()
-      .transform((value) => (value.trim() === "" ? undefined : value))
-      .optional()
-      .refine((value) => !value || !isNaN(Date.parse(value)), {
-        message: "Data inválida",
-      }),
+  updatedAt: z
+    .string()
+    .transform((value) => (value.trim() === "" ? undefined : value))
+    .optional()
+    .refine((value) => !value || !isNaN(Date.parse(value)), {
+      message: "Data inválida",
+    }),
 }).partial();

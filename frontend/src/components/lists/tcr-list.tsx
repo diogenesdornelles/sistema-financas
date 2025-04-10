@@ -24,7 +24,7 @@ import { useTheme } from '@mui/material/styles';
 import TcrSearchForm from '../forms/search/tcr-search-form';
 import { queryTcrSchema } from '../../../../packages/validators/zod-schemas/query/query-tcr.validator';
 import { z } from 'zod';
-import CustomBackdrop from '../customBackdrop';
+import CustomBackdrop from '../custom-backdrop';
 
 type QueryTcrFormData = z.infer<typeof queryTcrSchema>;
 
@@ -34,11 +34,12 @@ const TcrList = (): JSX.Element => {
   const [items, setItems] = useState<TcrProps[] | null>(null);
   const { isPending, error, data } = useGetManyTcr((page - 1) * SKIP);
   const queryTcrMutation = useQueryTcr();
-  const { setFormType, setUpdateItem } = useFormStore();
+  const { setFormType, setUpdateItem, setIsOpen } = useFormStore();
   const theme = useTheme();
 
   const onEdit = (item: TcrProps) => {
     setFormType('tcr', 'update');
+    setIsOpen(true, 'tcr')
     setUpdateItem('tcr', {
       ...item,
       name: item.name,
@@ -92,7 +93,7 @@ const TcrList = (): JSX.Element => {
         <Table sx={{ minWidth: 650 }} size="small" aria-label="tabela de tipos de contas a receber">
           <TableHead>
             <TableRow>
-            <TableCell align='left' sx={{ fontWeight: 800 }}></TableCell>
+            <TableCell align='left' sx={{ fontWeight: 800 }}>ID</TableCell>
               <TableCell align='left' sx={{ fontWeight: 800 }}>Nome</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Status</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Criado em</TableCell>
@@ -117,7 +118,7 @@ const TcrList = (): JSX.Element => {
                   }}
                 >
                                     <TableCell scope="row" align='left' sx={{ fontWeight: 900 }}>
-                    {i + 1}
+                    {item.id}
                   </TableCell>
                   <TableCell align='left'>{item.name}</TableCell>
                   <TableCell align="right">{item.status ? 'Ativo' : 'Inativo'}</TableCell>

@@ -10,7 +10,7 @@ import { usePostPartner, usePutPartner } from '../../hooks/use-partner';
 import { useAuth } from '../../hooks/use-auth';
 import FormContainer from './templates/form-container';
 import ButtonUpdateForm from './templates/button-update-form';
-import CustomBackdrop from '../customBackdrop';
+import CustomBackdrop from '../custom-backdrop';
 
 type CreatePartnerFormData = z.infer<typeof createPartnerSchema>;
 type UpdatePartnerFormData = z.infer<typeof updatePartnerSchema>;
@@ -44,7 +44,7 @@ export function CreatePartnerForm(): JSX.Element | null {
     if (forms.partner.type === 'update') return null;
 
     return (
-        <FormContainer>
+        <FormContainer formName='partner'>
             <Typography variant="h4">Novo Parceiro</Typography>
 
             {mutation.isSuccess && (
@@ -152,7 +152,7 @@ export function UpdatePartnerForm(): JSX.Element | null {
     if (forms.partner.type === 'create' || !forms.partner.updateItem) return null;
 
     return (
-        <FormContainer>
+        <FormContainer formName='partner'>
             <ButtonUpdateForm title='Atualizar Parceiro' name='partner' />
 
             {mutation.isSuccess && (

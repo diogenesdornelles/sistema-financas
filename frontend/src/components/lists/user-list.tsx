@@ -24,7 +24,7 @@ import { useTheme } from '@mui/material/styles';
 import UserSearchForm from '../forms/search/user-search-form';
 import { queryUserSchema } from '../../../../packages/validators/zod-schemas/query/query-user.validator';
 import { z } from 'zod';
-import CustomBackdrop from '../customBackdrop';
+import CustomBackdrop from '../custom-backdrop';
 
 type QueryUserFormData = z.infer<typeof queryUserSchema>;
 
@@ -34,11 +34,12 @@ const UserList = (): JSX.Element => {
   const [items, setItems] = useState<UserProps[] | null>(null);
   const { isPending, error, data } = useGetManyUser((page - 1) * SKIP);
   const queryUserMutation = useQueryUser();
-  const { setFormType, setUpdateItem } = useFormStore();
+  const { setFormType, setUpdateItem, setIsOpen } = useFormStore();
   const theme = useTheme();
 
   const onEdit = (item: UserProps) => {
     setFormType('user', 'update');
+    setIsOpen(true, 'user')
     setUpdateItem('user', {
       ...item,
       name: item.name,
@@ -94,7 +95,7 @@ const UserList = (): JSX.Element => {
         <Table sx={{ minWidth: 650 }} size="small" aria-label="tabela de usuários">
           <TableHead>
             <TableRow>
-            <TableCell align='left' sx={{ fontWeight: 800 }}></TableCell>
+            <TableCell align='left' sx={{ fontWeight: 800 }}>ID</TableCell>
               <TableCell align='left' sx={{ fontWeight: 800 }}>Nome</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Sobrenome</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>CPF</TableCell>
@@ -121,7 +122,7 @@ const UserList = (): JSX.Element => {
                   }}
                 >
                                     <TableCell scope="row" align='left' sx={{ fontWeight: 900 }}>
-                    {i + 1}
+                    {item.id}
                   </TableCell>
                   <TableCell align='left'>{item.name}</TableCell>
                   <TableCell align="right">{item.surname}</TableCell>

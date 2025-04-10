@@ -22,7 +22,7 @@ import { useAuth } from "../../hooks/use-auth";
 import FormContainer from './templates/form-container';
 import ButtonUpdateForm from "./templates/button-update-form";
 import { strToPtBrMoney } from '../../utils/strToPtBrMoney'
-import CustomBackdrop from "../customBackdrop";
+import CustomBackdrop from "../custom-backdrop";
 
 // Tipos inferidos dos schemas
 type CreateCfFormData = z.infer<typeof createCfSchema>;
@@ -70,7 +70,7 @@ export function CreateCfForm(): JSX.Element | null {
     if (error) return <ErrorAlert message={error.message} />
 
     return (
-        <FormContainer>
+        <FormContainer formName='cf'>
             <Typography variant="h4">Nova Conta Financeira</Typography>
 
             {isPending && <CustomBackdrop isOpen={mutation.isPending} />}
@@ -245,10 +245,10 @@ export function UpdateCfForm(): JSX.Element | null {
     )
 
     return (
-        <FormContainer>
+        <FormContainer formName='cf'>
             <ButtonUpdateForm name="cf" title="Atualizar Conta Financeira" />
 
-            {isPending && <CustomBackdrop isOpen={mutation.isPending} />}
+            {isPending && <CustomBackdrop isOpen={true} />}
             
             {mutation.isSuccess && (
                 <Alert severity="success" style={{ width: "100%" }}>

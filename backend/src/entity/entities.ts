@@ -128,9 +128,6 @@ export class Cp extends Base {
   @Column({ type: "date" })
   due!: Date; // Create: required; Update: no required; Response: required
 
-  @Column({ type: "date", nullable: true })
-  pdate!: Date; // Create: no required; Update: no required; Response: no required
-
   @Column({ type: "text", nullable: true })
   obs!: string; // Create: no required; Update: no required; Response: required
 
@@ -138,12 +135,11 @@ export class Cp extends Base {
   @JoinColumn({ name: "userId" })
   user!: User; // Create: required; Update: no required; Response: no required
 
-  @ManyToOne(() => Tx, (tx) => tx.crs, { nullable: true })
-  @JoinColumn({ name: "txId" })
-  tx?: Tx; // Create: no required; Update: no required; Response: no required
-
   @Column({ type: "enum", enum: CPStatus, default: CPStatus.PENDING })
   status!: CPStatus; // Create: no required; Update: no required; Response: required
+
+  @OneToMany(() => Tx, (tx) => tx.cp)
+  txs!: Tx[]; // Create: no required; Update: no required; Response: no required
 }
 
 // 5. Tcp (Tipo Conta a Pagar)
@@ -176,9 +172,6 @@ export class Cr extends Base {
   @Column({ type: "date" })
   due!: Date; // Create: required; Update: no required; Response: required
 
-  @Column({ type: "date", nullable: true })
-  rdate!: Date; // Create: no required; Update: no required; Response: no required
-
   @Column({ type: "text", nullable: true })
   obs!: string; // Create: no required; Update: no required; Response: required
 
@@ -186,12 +179,11 @@ export class Cr extends Base {
   @JoinColumn({ name: "userId" })
   user!: User; // Create: required; Update: no required; Response: no required
 
-  @ManyToOne(() => Tx, (tx) => tx.crs, { nullable: true })
-  @JoinColumn({ name: "txId" })
-  tx?: Tx; // Create: no required; Update: no required; Response: no required
-
   @Column({ type: "enum", enum: PaymentStatus, default: PaymentStatus.PENDING })
   status!: PaymentStatus; // Create: no required; Update: no required; Response: required
+
+  @OneToMany(() => Tx, (tx) => tx.cr)
+  txs!: Tx[]; // Create: no required; Update: no required; Response: no required
 }
 
 // 7. Tcr (Tipo Conta a Receber)
@@ -252,6 +244,14 @@ export class Tx extends Base {
   @Column({ type: "varchar", length: 100 })
   description!: string; // Create: required; Update: no required; Response: required
 
+  @ManyToOne(() => Cp, (cp) => cp.txs, {nullable: true})
+  @JoinColumn({ name: "cpId" })
+  cp!: Cp; // Create: required; Update: no required; Response: no required
+
+  @ManyToOne(() => Cr, (cr) => cr.txs, {nullable: true})
+  @JoinColumn({ name: "crId" })
+  cr!: Cr; // Create: required; Update: no required; Response: no required
+
   @ManyToOne(() => User, (user) => user.txs)
   @JoinColumn({ name: "userId" })
   user!: User; // Create: required; Update: no required; Response: no required
@@ -262,12 +262,6 @@ export class Tx extends Base {
   @ManyToOne(() => Cat, (cat) => cat.txs)
   @JoinColumn({ name: "catId" })
   category!: Cat; // Create: required; Update: no required; Response: required as Cat
-
-  @OneToMany(() => Cp, (cp) => cp.tx)
-  cps!: Cp[]; // Create: no required; Update: no required; Response: no required
-
-  @OneToMany(() => Cr, (cr) => cr.tx)
-  crs!: Cr[]; // Create: no required; Update: no required; Response: no required
 
   @Column({ type: "text", nullable: true })
   obs!: string; // Create: no required; Update: no required; Response: required

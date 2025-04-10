@@ -24,7 +24,7 @@ import { useTheme } from '@mui/material/styles';
 import TcpSearchForm from '../forms/search/tcp-search-form';
 import { queryTcpSchema } from '../../../../packages/validators/zod-schemas/query/query-tcp.validator';
 import { z } from 'zod';
-import CustomBackdrop from '../customBackdrop';
+import CustomBackdrop from '../custom-backdrop';
 
 type QueryTcpFormData = z.infer<typeof queryTcpSchema>;
 
@@ -34,11 +34,12 @@ const TcpList = (): JSX.Element => {
   const [items, setItems] = useState<TcpProps[] | null>(null);
   const { isPending, error, data } = useGetManyTcp((page - 1) * SKIP);
   const queryTcpMutation = useQueryTcp();
-  const { setFormType, setUpdateItem } = useFormStore();
+  const { setFormType, setUpdateItem, setIsOpen } = useFormStore();
   const theme = useTheme();
 
   const onEdit = (item: TcpProps) => {
     setFormType('tcp', 'update');
+    setIsOpen(true, 'tcp')
     setUpdateItem('tcp', {
       ...item,
       name: item.name,
@@ -92,7 +93,7 @@ const TcpList = (): JSX.Element => {
         <Table sx={{ minWidth: 650 }} size="small" aria-label="tabela de tipos de contas a pagar">
           <TableHead>
             <TableRow>
-            <TableCell align='left' sx={{ fontWeight: 800 }}></TableCell>
+            <TableCell align='left' sx={{ fontWeight: 800 }}>ID</TableCell>
               <TableCell align='left' sx={{ fontWeight: 800 }}>Nome</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Status</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Criado em</TableCell>
@@ -117,7 +118,7 @@ const TcpList = (): JSX.Element => {
                   }}
                 >
                                     <TableCell scope="row" align='left' sx={{ fontWeight: 900 }}>
-                    {i + 1}
+                    {item.id}
                   </TableCell>
                   <TableCell align='left'>{item.name}</TableCell>
                   <TableCell align="right">{item.status ? 'Ativo' : 'Inativo'}</TableCell>

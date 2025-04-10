@@ -13,7 +13,7 @@ import { useFormStore } from '../../hooks/use-form-store';
 import { JSX } from 'react';
 import FormContainer from './templates/form-container';
 import ButtonUpdateForm from './templates/button-update-form';
-import CustomBackdrop from '../customBackdrop';
+import CustomBackdrop from '../custom-backdrop';
 
 type CreateTcrFormData = z.infer<typeof createTcrSchema>;
 type UpdateTcrFormData = z.infer<typeof updateTcrSchema>;
@@ -46,7 +46,7 @@ export function CreateTcrForm(): JSX.Element | null {
     if (forms.tcr.type === 'update') return null;
 
     return (
-        <FormContainer>
+        <FormContainer formName='tcr'>
             <Typography variant="h4">Novo Tipo de conta a receber</Typography>
 
             {mutation.isSuccess && (
@@ -119,7 +119,7 @@ export function UpdateTcrForm(): JSX.Element | null {
     if (forms.tcr.type === 'create' || !forms.tcr.updateItem) return null;
 
     return (
-        <FormContainer>
+        <FormContainer formName='tcr'>
             <ButtonUpdateForm title="Atualizar Tipo de conta a receber" name='tcr' />
 
             {mutation.isSuccess && (

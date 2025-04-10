@@ -34,34 +34,26 @@ export const queryCrSchema = z.object({
   type: z.string(),
   customer: z.string(),
   obs: z.string(),
-  tx: z.string(),
   due: z
-  .string()
-  .transform((value) => (value.trim() === "" ? undefined : value))
-  .optional()
-  .refine((value) => !value || !isNaN(Date.parse(value)), {
-    message: "Data inválida",
-  }),
-  rdate: z
-  .string()
-  .transform((value) => (value.trim() === "" ? undefined : value))
-  .optional()
-  .refine((value) => !value || !isNaN(Date.parse(value)), {
-    message: "Data inválida",
-  }),
-    createdAt: z
-      .string()
-      .transform((value) => (value.trim() === "" ? undefined : value))
-      .optional()
-      .refine((value) => !value || !isNaN(Date.parse(value)), {
-        message: "Data inválida",
-      }),
+    .string()
+    .transform((value) => (value.trim() === "" ? undefined : value))
+    .optional()
+    .refine((value) => !value || !isNaN(Date.parse(value)), {
+      message: "Data inválida",
+    }),
+  createdAt: z
+    .string()
+    .transform((value) => (value.trim() === "" ? undefined : value))
+    .optional()
+    .refine((value) => !value || !isNaN(Date.parse(value)), {
+      message: "Data inválida",
+    }),
 
-    updatedAt: z
-      .string()
-      .transform((value) => (value.trim() === "" ? undefined : value))
-      .optional()
-      .refine((value) => !value || !isNaN(Date.parse(value)), {
-        message: "Data inválida",
-      }),
+  updatedAt: z
+    .string()
+    .transform((value) => (value.trim() === "" ? undefined : value))
+    .optional()
+    .refine((value) => !value || !isNaN(Date.parse(value)), {
+      message: "Data inválida",
+    }),
 }).partial();

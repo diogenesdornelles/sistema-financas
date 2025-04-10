@@ -1,20 +1,22 @@
 import { Box } from "@mui/material";
-import { JSX, useState } from "react";
+import { JSX } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
 import DynamicFormIcon from '@mui/icons-material/DynamicForm';
 import { useTheme } from "@mui/material/styles";
+import { TValue } from "../../../types/form-state";
+import { useFormStore } from "../../../hooks/use-form-store";
 
 
 const MotionBox = motion(Box)
 
-export default function FormContainer({ children }: { children: React.ReactNode }): JSX.Element {
-    const [openForm, setOpenForm] = useState(false);
+export default function FormContainer({ children, formName }: { children: React.ReactNode, formName: TValue }): JSX.Element {
     const theme = useTheme();
+    const { forms, setIsOpen } = useFormStore();
 
     const contentVariants = {
-        hidden: { opacity: 0, scale: 0.95, transition: { duration: 0.2 } },
-        visible: { opacity: 1, scale: 1, transition: { duration: 0.3 } },
+        hidden: { opacity: 0, scale: 0.95, transition: { duration: 0.8 } },
+        visible: { opacity: 1, scale: 1, transition: { duration: 0.8 } },
     };
 
     const collapsedWidth = 70;
@@ -25,10 +27,10 @@ export default function FormContainer({ children }: { children: React.ReactNode 
             layout 
             initial={false}
             animate={{
-                width: openForm ? expandedWidth : collapsedWidth,
+                width: forms[formName].isOpen ? expandedWidth : collapsedWidth,
             }}
             transition={{
-                duration: 0.4,
+                duration: 0.8,
                 ease: "easeInOut",
             }}
             style={{
@@ -38,7 +40,7 @@ export default function FormContainer({ children }: { children: React.ReactNode 
             <Box
                 sx={{
                     display: "flex",
-                    padding: openForm ? 2 : 0,
+                    padding: forms[formName].isOpen ? 2 : 0,
                     gap: theme.spacing(2),
                     borderRadius: 1,
                     boxShadow: 0,
@@ -54,7 +56,7 @@ export default function FormContainer({ children }: { children: React.ReactNode 
                 }}
             >
                 <AnimatePresence initial={false} mode="wait">
-                    {openForm ? (
+                    {forms[formName].isOpen ? (
                         <MotionBox
                             key="form-content"
                             initial="hidden"
@@ -69,7 +71,7 @@ export default function FormContainer({ children }: { children: React.ReactNode 
                             }}
                         >
                             <Box
-                                onClick={() => setOpenForm(false)}
+                                onClick={() => setIsOpen(false, formName)}
                                 sx={{
                                     alignSelf: 'flex-end',
                                     cursor: 'pointer',
@@ -78,7 +80,7 @@ export default function FormContainer({ children }: { children: React.ReactNode 
                                     color: theme.palette.mode === 'light' ? theme.palette.primary.dark : theme.palette.common.white
                                 }}
                             >
-                                <CloseFullscreenIcon />
+                                <CloseFullscreenIcon sx={{fontSize: 34}}/>
                             </Box>
                             {children}
                         </MotionBox>
@@ -92,7 +94,7 @@ export default function FormContainer({ children }: { children: React.ReactNode 
                             sx={{alignSelf: 'center'}}
                         >
                              <Box
-                                 onClick={() => setOpenForm(true)}
+                                 onClick={() => setIsOpen(true, formName)}
                                  sx={{
                                      cursor: 'pointer',
                                      display: 'flex',
@@ -102,7 +104,7 @@ export default function FormContainer({ children }: { children: React.ReactNode 
                                      color: theme.palette.mode === 'light' ? theme.palette.primary.dark : theme.palette.common.white
                                  }}
                             >
-                                <DynamicFormIcon />
+                                <DynamicFormIcon sx={{fontSize: 34}}/>
                              </Box>
                         </MotionBox>
                     )}

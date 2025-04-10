@@ -19,13 +19,12 @@ import { updateCpSchema } from "../../../../packages/validators/zod-schemas/upda
 import { usePostCp, usePutCp } from "../../hooks/use-cp";
 import { useGetAllTcp } from "../../hooks/use-tcp";
 import { useGetAllPartner } from "../../hooks/use-partner";
-import { useGetAllTx } from "../../hooks/use-tx";
 import ErrorAlert from "../alerts/error-alert";
 import { useAuth } from "../../hooks/use-auth";
 import FormContainer from "./templates/form-container";
 import ButtonUpdateForm from "./templates/button-update-form";
 import { strToPtBrMoney } from "../../utils/strToPtBrMoney";
-import CustomBackdrop from "../customBackdrop";
+import CustomBackdrop from "../custom-backdrop";
 
 // Tipos inferidos dos schemas
 type CreateCpFormData = z.infer<typeof createCpSchema>;
@@ -40,7 +39,6 @@ export function CreateCpForm(): JSX.Element | null {
     const { forms } = useFormStore();
     const { isPending: isPendingTcp, error: errorTcp, data: tcpData } = useGetAllTcp();
     const { isPending: isPendingPartner, error: errorPartner, data: partnerData } = useGetAllPartner();
-    const { isPending: isPendingTx, error: errorTx, data: txData } = useGetAllTx();
     const { session } = useAuth();
 
     const {
@@ -58,7 +56,6 @@ export function CreateCpForm(): JSX.Element | null {
             due: "", // data atual
             obs: "",
             user: session ? session.user.id : "",
-            tx: "",
         },
     });
 
@@ -72,13 +69,13 @@ export function CreateCpForm(): JSX.Element | null {
 
     if (forms.cp.type === "update") return null;
 
-    if (errorTcp || errorPartner || errorTx) {
-        const errorMessage = errorTcp?.message || errorPartner?.message || errorTx?.message;
+    if (errorTcp || errorPartner) {
+        const errorMessage = errorTcp?.message || errorPartner?.message ;
         return <ErrorAlert message={errorMessage ? errorMessage : 'Ocorreu um erro!'} />;
     }
 
     return (
-        <FormContainer>
+        <FormContainer formName='cp'>
             <Typography variant="h4">Nova Conta a Pagar</Typography>
 
             {mutation.isSuccess && (
@@ -95,7 +92,7 @@ export function CreateCpForm(): JSX.Element | null {
 
             {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
 
-            {(isPendingTcp || isPendingPartner || isPendingTx) && <CustomBackdrop isOpen={mutation.isPending} />}
+            {(isPendingTcp || isPendingPartner ) && <CustomBackdrop isOpen={mutation.isPending} />}
 
             <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", minWidth: 500 }}>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
@@ -193,29 +190,6 @@ export function CreateCpForm(): JSX.Element | null {
                         rows={3}
                     />
 
-                    {/* Transação (Autocomplete de Tx) */}
-                    <Controller
-                        name="tx"
-                        control={control}
-                        render={({ field }) => (
-                            <Autocomplete
-                                options={txData ? txData : []}
-                                getOptionLabel={(option) => option.description || ""}
-                                onChange={(_, data) => field.onChange(data ? data.id : "")}
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        label="Transação"
-                                        size="small"
-                                        variant="outlined"
-                                        error={!!errors.tx}
-                                        helperText={errors.tx?.message}
-                                    />
-                                )}
-                            />
-                        )}
-                    />
-
                     <Button
                         type="submit"
                         variant="contained"
@@ -240,7 +214,6 @@ export function UpdateCpForm(): JSX.Element | null {
     const mutation = usePutCp(forms.cp.updateItem ? forms.cp.updateItem.id : '');
     const { isPending: isPendingTcp, error: errorTcp, data: tcpData } = useGetAllTcp();
     const { isPending: isPendingPartner, error: errorPartner, data: partnerData } = useGetAllPartner();
-    const { isPending: isPendingTx, error: errorTx, data: txData } = useGetAllTx();
 
     const {
         register,
@@ -253,9 +226,7 @@ export function UpdateCpForm(): JSX.Element | null {
         defaultValues: forms.cp.updateItem ? {
             type: forms.cp.updateItem.type,
             supplier: forms.cp.updateItem.supplier,
-            tx: forms.cp.updateItem.tx ? forms.cp.updateItem.tx : undefined,
             due: String(forms.cp.updateItem.due),
-            pdate: forms.cp.updateItem.pdate ? String(forms.cp.updateItem.pdate) : '',
             value: strToPtBrMoney(forms.cp.updateItem?.value || ""),
         } : {},
     });
@@ -272,8 +243,8 @@ export function UpdateCpForm(): JSX.Element | null {
 
     if (forms.cp.type === "create" || !forms.cp.updateItem) return null;
 
-    if (errorTcp || errorPartner || errorTx) {
-        const errorMessage = errorTcp?.message || errorPartner?.message || errorTx?.message;
+    if (errorTcp || errorPartner ) {
+        const errorMessage = errorTcp?.message || errorPartner?.message;
         return (
             <Alert severity="error" style={{ width: "100%" }}>
                 {`'Ocorreu um erro: ' + ${errorMessage}`}
@@ -283,10 +254,10 @@ export function UpdateCpForm(): JSX.Element | null {
 
 
     return (
-        <FormContainer>
+        <FormContainer formName='cp'>
             <ButtonUpdateForm name="cp" title="Atualizar Conta a Pagar" />
 
-            {(isPendingTcp || isPendingPartner || isPendingTx) && <CustomBackdrop isOpen={mutation.isPending} />}
+            {(isPendingTcp || isPendingPartner ) && <CustomBackdrop isOpen={true} />}
             
             {mutation.isSuccess && (
                 <Alert severity="success" style={{ width: "100%" }}>
@@ -387,18 +358,6 @@ export function UpdateCpForm(): JSX.Element | null {
                         }}
                     />
                     <TextField
-                        label="Data de Pagamento"
-                        {...register("pdate")}
-                        variant="outlined"
-                        size="small"
-                        error={!!errors.pdate}
-                        helperText={errors.pdate?.message}
-                        type="date"
-                        slotProps={{
-                            inputLabel: { shrink: true },
-                        }}
-                    />
-                    <TextField
                         label="Observações"
                         {...register("obs")}
                         variant="outlined"
@@ -407,32 +366,6 @@ export function UpdateCpForm(): JSX.Element | null {
                         helperText={errors.obs?.message}
                         multiline
                         rows={3}
-                    />
-                    <Controller
-                        name="tx"
-                        control={control}
-                        render={({ field }) => (
-                            <Autocomplete
-                                options={txData ? txData: []}
-                                getOptionLabel={(option) => option.description || ""}
-                                onChange={(_, data) => field.onChange(data ? data.id : "")}
-                                defaultValue={
-                                    txData && txData.find(
-                                        (option) => option.id === forms.cp.updateItem?.tx
-                                    ) || null
-                                }
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        label="Transação"
-                                        variant="outlined"
-                                        size="small"
-                                        error={!!errors.tx}
-                                        helperText={errors.tx?.message}
-                                    />
-                                )}
-                            />
-                        )}
                     />
                     <InputLabel id="cp-status-label-update">Tipo</InputLabel>
                     <Select

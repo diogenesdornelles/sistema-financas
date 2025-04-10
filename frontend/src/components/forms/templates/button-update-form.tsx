@@ -5,11 +5,12 @@ import { TValue } from "../../../types/form-state";
 
 
 export default function ButtonUpdateForm({name, title}: {name: TValue, title:  string}) {
-    const { setFormType, setUpdateItem } = useFormStore();
+    const { setFormType, setUpdateItem, setIsOpen } = useFormStore();
 
     const onClose = () => {
         setFormType(name, "create");
         setUpdateItem(name, null);
+        setIsOpen(false, name)
     };
     return (
         <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 4 }}>

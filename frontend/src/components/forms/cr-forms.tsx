@@ -19,13 +19,12 @@ import { updateCrSchema } from "../../../../packages/validators/zod-schemas/upda
 import { usePostCr, usePutCr } from "../../hooks/use-cr";
 import { useGetAllTcr } from "../../hooks/use-tcr";
 import { useGetAllPartner } from "../../hooks/use-partner";
-import { useGetAllTx } from "../../hooks/use-tx";
 import ErrorAlert from "../alerts/error-alert";
 import { useAuth } from "../../hooks/use-auth";
 import FormContainer from "./templates/form-container";
 import ButtonUpdateForm from "./templates/button-update-form";
 import { strToPtBrMoney } from "../../utils/strToPtBrMoney";
-import CustomBackdrop from "../customBackdrop";
+import CustomBackdrop from "../custom-backdrop";
 
 // Tipos inferidos dos schemas
 type CreateCrFormData = z.infer<typeof createCrSchema>;
@@ -40,7 +39,6 @@ export function CreateCrForm(): JSX.Element | null {
     const { forms } = useFormStore();
     const { isPending: isPendingTcr, error: errorTcr, data: tcrData } = useGetAllTcr();
     const { isPending: isPendingPartner, error: errorPartner, data: partnerData } = useGetAllPartner();
-    const { isPending: isPendingTx, error: errorTx, data: txData } = useGetAllTx();
     const { session } = useAuth();
 
     const {
@@ -58,15 +56,13 @@ export function CreateCrForm(): JSX.Element | null {
             due: "",
             obs: "",
             user: session ? session.user.id : "",
-            tx: "",
         },
     });
 
     const onSubmit = async (data: CreateCrFormData) => {
         try {
             await mutation.mutateAsync({
-                ...data,
-                tx: data.tx ? data.tx : undefined
+                ...data
             });
         } catch (err) {
             console.error("Erro ao criar Conta:", err);
@@ -75,13 +71,13 @@ export function CreateCrForm(): JSX.Element | null {
 
     if (forms.cr.type === "update") return null;
 
-    if (errorTcr || errorPartner || errorTx) {
-        const errorMessage = errorTcr?.message || errorPartner?.message || errorTx?.message;
+    if (errorTcr || errorPartner ) {
+        const errorMessage = errorTcr?.message || errorPartner?.message;
         return <ErrorAlert message={errorMessage ? errorMessage : "Ocorreu um erro!"} />;
     }
 
     return (
-        <FormContainer>
+        <FormContainer formName='cr'>
             <Typography variant="h4">Nova Conta a Receber</Typography>
 
             {mutation.isSuccess && (
@@ -98,7 +94,7 @@ export function CreateCrForm(): JSX.Element | null {
 
             {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
 
-            {(isPendingTcr || isPendingPartner || isPendingTx) && <CustomBackdrop isOpen={mutation.isPending} />}
+            {(isPendingTcr || isPendingPartner ) && <CustomBackdrop isOpen={mutation.isPending} />}
 
             <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", minWidth: 500 }}>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
@@ -154,28 +150,6 @@ export function CreateCrForm(): JSX.Element | null {
                                             size="small"
                                             error={!!errors.type}
                                             helperText={errors.type?.message}
-                                        />
-                                    )}
-                                />
-                            )}
-                        />
-                        <Controller
-                            name="tx"
-                            control={control}
-                            render={({ field }) => (
-                                <Autocomplete
-                                    options={txData ? txData : []}
-                                    sx={{ flex: 1 }}
-                                    getOptionLabel={(option) => option.description || ""}
-                                    onChange={(_, data) => field.onChange(data ? data.id : "")}
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            label="Transação"
-                                            variant="outlined"
-                                            size="small"
-                                            error={!!errors.tx}
-                                            helperText={errors.tx?.message}
                                         />
                                     )}
                                 />
@@ -240,7 +214,6 @@ export function UpdateCrForm(): JSX.Element | null | string {
     const mutation = usePutCr(forms.cr.updateItem ? forms.cr.updateItem.id : '');
     const { isPending: isPendingTcr, error: errorTcr, data: tcrData } = useGetAllTcr();
     const { isPending: isPendingPartner, error: errorPartner, data: partnerData } = useGetAllPartner();
-    const { isPending: isPendingTx, error: errorTx, data: txData } = useGetAllTx();
 
     const {
         register,
@@ -253,9 +226,7 @@ export function UpdateCrForm(): JSX.Element | null | string {
         defaultValues: forms.cr.updateItem ? {
             type: forms.cr.updateItem.type,
             customer: forms.cr.updateItem.customer,
-            tx: forms.cr.updateItem.tx ? forms.cr.updateItem.tx : "",
             due: forms.cr.updateItem.due ? String(forms.cr.updateItem.due) : "",
-            rdate: forms.cr.updateItem.rdate ? String(forms.cr.updateItem.rdate) : "",
             obs: forms.cr.updateItem.obs ? forms.cr.updateItem.obs : "",
             status: forms.cr.updateItem.status ? forms.cr.updateItem.status : undefined,
             value: strToPtBrMoney(forms.cr.updateItem?.value || ""),
@@ -267,8 +238,7 @@ export function UpdateCrForm(): JSX.Element | null | string {
     const onSubmit = async (data: UpdateCrFormData) => {
         try {
             await mutation.mutateAsync({
-                ...data,
-                tx: data.tx ? data.tx : undefined
+                ...data
             });
         } catch (err) {
             console.error("Erro ao atualizar a Conta:", err);
@@ -277,8 +247,8 @@ export function UpdateCrForm(): JSX.Element | null | string {
 
     if (forms.cr.type === "create" || !forms.cr.updateItem) return null;
 
-    if (errorTcr || errorPartner || errorTx) {
-        const errorMessage = errorTcr?.message || errorPartner?.message || errorTx?.message;
+    if (errorTcr || errorPartner ) {
+        const errorMessage = errorTcr?.message || errorPartner?.message
         return (
             <Alert severity="error" style={{ width: "100%" }}>
                 {`'Ocorreu um erro: ' + ${errorMessage}`}
@@ -287,7 +257,7 @@ export function UpdateCrForm(): JSX.Element | null | string {
     }
 
     return (
-        <FormContainer>
+        <FormContainer formName='cr'>
             <ButtonUpdateForm name="cr" title="Atualizar Conta a Receber" />
             
             {mutation.isSuccess && (
@@ -304,7 +274,7 @@ export function UpdateCrForm(): JSX.Element | null | string {
 
             {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
 
-            {(isPendingTcr || isPendingPartner || isPendingTx) && <CustomBackdrop isOpen={mutation.isPending} />}
+            {(isPendingTcr || isPendingPartner ) && <CustomBackdrop isOpen={true} />}
 
             <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", minWidth: 500 }}>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
@@ -386,19 +356,6 @@ export function UpdateCrForm(): JSX.Element | null | string {
                             inputLabel: { shrink: true },
                         }}
                     />
-                    {/* Campo para Data de Recebimento (rdate) */}
-                    <TextField
-                        label="Data de Recebimento"
-                        {...register("rdate")}
-                        variant="outlined"
-                        size="small"
-                        error={!!errors.rdate}
-                        helperText={errors.rdate?.message}
-                        type="date"
-                        slotProps={{
-                            inputLabel: { shrink: true },
-                        }}
-                    />
                     <TextField
                         label="Observações"
                         {...register("obs")}
@@ -409,31 +366,7 @@ export function UpdateCrForm(): JSX.Element | null | string {
                         multiline
                         rows={3}
                     />
-                    <Controller
-                        name="tx"
-                        control={control}
-                        render={({ field }) => (
-                            <Autocomplete
-                                options={txData ? txData : []}
-                                getOptionLabel={(option) => option.description || ""}
-                                onChange={(_, data) => field.onChange(data ? data.id : "")}
-                                defaultValue={
-                                    txData && txData.find((option) => option.id === forms.cr.updateItem?.tx) || null
-                                }
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        label="Transação"
-                                        variant="outlined"
-                                        error={!!errors.tx}
-                                        helperText={errors.tx?.message}
-                                    />
-                                )}
-                            />
-                        )}
-                    />
-
-                    <InputLabel id="cr-status-label-update">Tipo</InputLabel>
+                   <InputLabel id="cr-status-label-update">Tipo</InputLabel>
                     <Select
                         labelId="cr-status-label-update"
                         label="Status"

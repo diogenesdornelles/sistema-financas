@@ -28,7 +28,6 @@ export const createCrSchema = z
     type: z.string().uuid("Informar o tipo"),
     user: z.string().uuid("Informar o usuário"),
     customer: z.string().uuid("Informar o cliente"),
-    tx: z.string().uuid("Informar a transação").optional(),
     obs: z
       .string()
       .max(255, "Observação pode ter no máximo 255 caracteres")

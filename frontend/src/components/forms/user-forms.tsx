@@ -13,7 +13,7 @@ import { JSX } from 'react';
 import { useFormStore } from '../../hooks/use-form-store';
 import FormContainer from './templates/form-container';
 import ButtonUpdateForm from './templates/button-update-form';
-import CustomBackdrop from '../customBackdrop';
+import CustomBackdrop from '../custom-backdrop';
 
 type CreateUserFormData = z.infer<typeof createUserRepPwdSchema>;
 type UpdateUserFormData = z.infer<typeof updateUserSchema>;
@@ -51,7 +51,7 @@ export function CreateUserForm(): JSX.Element | null {
     if (forms.user.type === 'update') return null;
 
     return (
-        <FormContainer>
+        <FormContainer formName='user'>
             <Typography variant="h4">Novo Usuário</Typography>
             {mutation.isSuccess && (
                 <Alert severity="success" style={{ width: "100%" }}>
@@ -161,7 +161,7 @@ export function UpdateUserForm(): JSX.Element | null {
     if (forms.user.type === 'create' || !forms.user.updateItem) return null;
 
     return (
-        <FormContainer>
+        <FormContainer formName='user'>
             <ButtonUpdateForm title="Atualizar usuário" name='user'/>
 
             {mutation.isSuccess && (

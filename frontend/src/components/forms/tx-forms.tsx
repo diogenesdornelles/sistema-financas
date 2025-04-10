@@ -23,8 +23,9 @@ import { useAuth } from "../../hooks/use-auth";
 import FormContainer from "./templates/form-container";
 import ButtonUpdateForm from "./templates/button-update-form";
 import { strToPtBrMoney } from "../../utils/strToPtBrMoney";
-import { TransactionType } from "../../../../packages/dtos/utils/enums";
-import CustomBackdrop from "../customBackdrop";
+import CustomBackdrop from "../custom-backdrop";
+import { useGetAllCp } from "../../hooks/use-cp";
+import { useGetAllCr } from "../../hooks/use-cr";
 // ajuste o caminho conforme necessário
 
 // Tipos inferidos dos schemas
@@ -40,12 +41,9 @@ export function CreateTxForm(): JSX.Element | null | string {
     const { forms } = useFormStore();
     const { isPending: isPendingCf, error: errorCf, data: cfData } = useGetAllCf();
     const { isPending: isPendingCat, error: errorCat, data: catData } = useGetAllCat();
+    const { isPending: isPendingCp, error: errorCp, data: cpData } = useGetAllCp();
+    const { isPending: isPendingCr, error: errorCr, data: crData } = useGetAllCr();
 
-    // Opções estáticas para o campo "type" baseadas no TransactionType
-    const transactionTypeOptions = [
-        { id: TransactionType.ENTRY, label: "Entrada" },
-        { id: TransactionType.OUTFLOW, label: "Saída" },
-    ];
 
     const { session } = useAuth();
 
@@ -59,7 +57,6 @@ export function CreateTxForm(): JSX.Element | null | string {
         mode: "onSubmit",
         defaultValues: {
             value: "",
-            type: undefined,
             cf: "",
             description: "",
             category: "",
@@ -79,13 +76,13 @@ export function CreateTxForm(): JSX.Element | null | string {
 
     if (forms.tx.type === "update") return null;
 
-    if (errorCf || errorCat) {
-        const errorMessage = errorCf?.message || errorCat?.message;
-        return <ErrorAlert message={errorMessage ? errorMessage : "Ocorreu um erro!"} />;
+    if (errorCf || errorCat || errorCp || errorCr) {
+        const errorMessage = errorCf?.message || errorCat?.message || errorCp?.message || errorCr?.message;
+        return <ErrorAlert message={errorMessage ? errorMessage : 'Ocorreu um erro!'} />;
     }
 
     return (
-        <FormContainer>
+        <FormContainer formName='tx'>
             <Typography variant="h4">Nova Transação</Typography>
 
             {mutation.isSuccess && (
@@ -102,14 +99,13 @@ export function CreateTxForm(): JSX.Element | null | string {
 
             {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
 
-            {(isPendingCf || isPendingCat) && <CustomBackdrop isOpen={mutation.isPending} />}
+            {(isPendingCf || isPendingCat || isPendingCp || isPendingCr) && <CustomBackdrop isOpen={true} />}
 
             <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", minWidth: 500 }}>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
                     <Box sx={{ display: 'flex', columnGap: 2 }}>
                         <Controller
                             name="value"
-                            
                             control={control}
                             render={({ field }) => (
                                 <TextField
@@ -117,7 +113,7 @@ export function CreateTxForm(): JSX.Element | null | string {
                                     label="Valor (R$)"
                                     variant="outlined"
                                     size="small"
-                                    sx={{width: '100%'}}
+                                    sx={{ width: '100%' }}
                                     error={!!errors.value}
                                     helperText={errors.value?.message}
                                     onChange={(e) => {
@@ -130,7 +126,7 @@ export function CreateTxForm(): JSX.Element | null | string {
                         <TextField
                             label="Data da Transação"
                             {...register("tdate")}
-                            sx={{width: '100%'}}
+                            sx={{ width: '100%' }}
                             variant="outlined"
                             size="small"
                             error={!!errors.tdate}
@@ -142,59 +138,38 @@ export function CreateTxForm(): JSX.Element | null | string {
                         />
 
                     </Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', columnGap: 2, width: '100%' }}>
-                        <Controller
-                            name="type"
-                            control={control}
-                            render={({ field }) => (
-                                <Autocomplete
-                                    sx={{ flex: 1, width: '100%' }}
-                                    options={transactionTypeOptions}
-                                    getOptionLabel={(option) => option.label}
-                                    onChange={(_, data) => field.onChange(data ? data.id : "")}
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            label="Tipo"
-                                            variant="outlined"
-                                            size="small"
-                                            error={!!errors.type}
-                                            helperText={errors.type?.message}
-                                        />
-                                    )}
-                                />
-                            )}
-                        />
-                        <Controller
-                            name="category"
-                            control={control}
-                            render={({ field }) => (
-                                <Autocomplete
-                                    sx={{ flex: 1, width: '100%' }}
-                                    options={catData ? catData: []}
-                                    getOptionLabel={(option) => option.name || ""}
-                                    onChange={(_, data) => field.onChange(data ? data.id : "")}
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            label="Categoria"
-                                            size="small"
-                                            variant="outlined"
-                                            error={!!errors.category}
-                                            helperText={errors.category?.message}
-                                        />
-                                    )}
-                                />
-                            )}
-                        />
-                    </Box>
+
+
+                    <Controller
+                        name="category"
+                        control={control}
+                        render={({ field }) => (
+                            <Autocomplete
+                                sx={{ flex: 1, width: '100%' }}
+                                options={catData ? catData : []}
+                                getOptionLabel={(option) => option.name || ""}
+                                onChange={(_, data) => field.onChange(data ? data.id : "")}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Categoria"
+                                        size="small"
+                                        variant="outlined"
+                                        error={!!errors.category}
+                                        helperText={errors.category?.message}
+                                    />
+                                )}
+                            />
+                        )}
+                    />
+
 
                     <Controller
                         name="cf"
                         control={control}
                         render={({ field }) => (
                             <Autocomplete
-                                options={cfData ? cfData: []}
+                                options={cfData ? cfData : []}
                                 getOptionLabel={(option) => option.number || ""}
                                 onChange={(_, data) => field.onChange(data ? data.id : "")}
                                 renderInput={(params) => (
@@ -205,6 +180,52 @@ export function CreateTxForm(): JSX.Element | null | string {
                                         size="small"
                                         error={!!errors.cf}
                                         helperText={errors.cf?.message}
+                                    />
+                                )}
+                            />
+                        )}
+                    />
+
+                    <Controller
+                        name="cp"
+                        control={control}
+                        render={({ field }) => (
+                            <Autocomplete
+                                sx={{ flex: 1, width: '100%' }}
+                                options={cpData ? cpData : []}
+                                getOptionLabel={(option) => option.id || ""}
+                                onChange={(_, data) => field.onChange(data ? data.id : "")}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Conta a pagar"
+                                        size="small"
+                                        variant="outlined"
+                                        error={!!errors.cp}
+                                        helperText={errors.cp?.message}
+                                    />
+                                )}
+                            />
+                        )}
+                    />
+
+
+                    <Controller
+                        name="cr"
+                        control={control}
+                        render={({ field }) => (
+                            <Autocomplete
+                                options={crData ? crData : []}
+                                getOptionLabel={(option) => option.id || ""}
+                                onChange={(_, data) => field.onChange(data ? data.id : "")}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Conta a receber"
+                                        variant="outlined"
+                                        size="small"
+                                        error={!!errors.cr}
+                                        helperText={errors.cr?.message}
                                     />
                                 )}
                             />
@@ -255,11 +276,9 @@ export function UpdateTxForm(): JSX.Element | null | string {
     const mutation = usePutTx(forms.tx.updateItem ? forms.tx.updateItem.id : '');
     const { isPending: isPendingCf, error: errorCf, data: cfData } = useGetAllCf();
     const { isPending: isPendingCat, error: errorCat, data: catData } = useGetAllCat();
+    const { isPending: isPendingCp, error: errorCp, data: cpData } = useGetAllCp();
+    const { isPending: isPendingCr, error: errorCr, data: crData } = useGetAllCr();
 
-    const transactionTypeOptions = [
-        { id: TransactionType.ENTRY, label: "Entrada" },
-        { id: TransactionType.OUTFLOW, label: "Saída" },
-    ];
 
     const {
         register,
@@ -271,10 +290,11 @@ export function UpdateTxForm(): JSX.Element | null | string {
         resolver: zodResolver(updateTxSchema),
         defaultValues: forms.tx.updateItem ? {
             value: strToPtBrMoney(forms.tx.updateItem?.value || ""),
-            type: forms.tx.updateItem.type ? forms.tx.updateItem.type : undefined,
             cf: forms.tx.updateItem.cf ? forms.tx.updateItem.cf : undefined,
+            cp: forms.tx.updateItem.cp ? forms.tx.updateItem.cp : undefined,
+            cr: forms.tx.updateItem.cr ? forms.tx.updateItem.cr : undefined,
             description: forms.tx.updateItem.description ? forms.tx.updateItem.description : '',
-            category: forms.tx.updateItem.category  ? forms.tx.updateItem.category : undefined,
+            category: forms.tx.updateItem.category ? forms.tx.updateItem.category : undefined,
             obs: forms.tx.updateItem.obs ? forms.tx.updateItem.obs : undefined,
             status: forms.tx.updateItem.status,
             tdate: forms.tx.updateItem.tdate ? String(forms.tx.updateItem.tdate) : '',
@@ -293,13 +313,13 @@ export function UpdateTxForm(): JSX.Element | null | string {
 
     if (forms.tx.type === "create" || !forms.tx.updateItem) return null;
 
-    if (errorCf || errorCat) {
-        const errorMessage = errorCf?.message || errorCat?.message;
+    if (errorCf || errorCat || errorCp || errorCr) {
+        const errorMessage = errorCf?.message || errorCat?.message || errorCp?.message || errorCr?.message;
         return <ErrorAlert message={errorMessage ? errorMessage : 'Ocorreu um erro!'} />;
     }
 
     return (
-        <FormContainer>
+        <FormContainer formName='tx'>
             <ButtonUpdateForm name="tx" title="Atualizar Transação" />
             {mutation.isSuccess && (
                 <Alert severity="success" style={{ width: "100%" }}>
@@ -314,7 +334,7 @@ export function UpdateTxForm(): JSX.Element | null | string {
 
             {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
 
-            {(isPendingCf || isPendingCat) && <CustomBackdrop isOpen={mutation.isPending} />}
+            {(isPendingCf || isPendingCat || isPendingCp || isPendingCr) && <CustomBackdrop isOpen={true} />}
 
             <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", minWidth: 500 }}>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
@@ -348,65 +368,39 @@ export function UpdateTxForm(): JSX.Element | null | string {
                             }}
                         />
                     </Box>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', columnGap: 2, width: '100%' }}>
-                        <Controller
-                            name="type"
-                            control={control}
-                            render={({ field }) => (
-                                <Autocomplete
-                                    options={transactionTypeOptions}
-                                    sx={{ flex: 1, width: '100%' }}
-                                    getOptionLabel={(option) => option.label}
-                                    onChange={(_, data) => field.onChange(data ? data.id : "")}
-                                    defaultValue={
-                                        transactionTypeOptions.find(
-                                            (option) => option.id === forms.tx.updateItem?.type
-                                        ) || null
-                                    }
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            label="Tipo"
-                                            variant="outlined"
-                                            error={!!errors.type}
-                                            helperText={errors.type?.message}
-                                        />
-                                    )}
-                                />
-                            )}
-                        />
-                        <Controller
-                            name="category"
-                            control={control}
-                            render={({ field }) => (
-                                <Autocomplete
-                                    options={catData ? catData : []}
-                                    getOptionLabel={(option) => option.name || ""}
-                                    onChange={(_, data) => field.onChange(data ? data.id : "")}
-                                    defaultValue={
-                                        catData && catData.find(
-                                            (option) => option.id === forms.tx.updateItem?.category
-                                        ) || null
-                                    }
-                                    renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            label="Categoria"
-                                            variant="outlined"
-                                            error={!!errors.category}
-                                            helperText={errors.category?.message}
-                                        />
-                                    )}
-                                />
-                            )}
-                        />
-                    </Box>
+
+                    <Controller
+                        name="category"
+                        control={control}
+                        render={({ field }) => (
+                            <Autocomplete
+                                options={catData ? catData : []}
+                                getOptionLabel={(option) => option.name || ""}
+                                onChange={(_, data) => field.onChange(data ? data.id : "")}
+                                defaultValue={
+                                    catData && catData.find(
+                                        (option) => option.id === forms.tx.updateItem?.category
+                                    ) || null
+                                }
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Categoria"
+                                        variant="outlined"
+                                        error={!!errors.category}
+                                        helperText={errors.category?.message}
+                                    />
+                                )}
+                            />
+                        )}
+                    />
+
                     <Controller
                         name="cf"
                         control={control}
                         render={({ field }) => (
                             <Autocomplete
-                                options={cfData ? cfData: []}
+                                options={cfData ? cfData : []}
                                 getOptionLabel={(option) => option.number || ""}
                                 onChange={(_, data) => field.onChange(data ? data.id : "")}
                                 defaultValue={
@@ -426,6 +420,59 @@ export function UpdateTxForm(): JSX.Element | null | string {
                             />
                         )}
                     />
+
+                    <Controller
+                        name="cp"
+                        control={control}
+                        render={({ field }) => (
+                            <Autocomplete
+                                options={cpData ? cpData : []}
+                                getOptionLabel={(option) => option.id || ""}
+                                onChange={(_, data) => field.onChange(data ? data.id : "")}
+                                defaultValue={
+                                    cpData && cpData.find(
+                                        (option) => option.id === forms.tx.updateItem?.cp
+                                    ) || null
+                                }
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Conta a pagar"
+                                        variant="outlined"
+                                        error={!!errors.cp}
+                                        helperText={errors.cp?.message}
+                                    />
+                                )}
+                            />
+                        )}
+                    />
+
+                    <Controller
+                        name="cr"
+                        control={control}
+                        render={({ field }) => (
+                            <Autocomplete
+                                options={crData ? crData : []}
+                                getOptionLabel={(option) => option.id || ""}
+                                onChange={(_, data) => field.onChange(data ? data.id : "")}
+                                defaultValue={
+                                    crData && crData.find(
+                                        (option) => option.id === forms.tx.updateItem?.cr
+                                    ) || null
+                                }
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Conta a receber"
+                                        variant="outlined"
+                                        error={!!errors.cr}
+                                        helperText={errors.cr?.message}
+                                    />
+                                )}
+                            />
+                        )}
+                    />
+
                     <TextField
                         label="Descrição"
                         {...register("description")}

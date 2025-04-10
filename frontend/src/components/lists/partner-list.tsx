@@ -25,21 +25,22 @@ import PartnerSearchForm from '../forms/search/partner-search-form';
 import { PartnerType } from '../../../../packages/dtos/utils/enums';
 import { z } from 'zod';
 import { queryPartnerSchema } from '../../../../packages/validators/zod-schemas/query/query-partner.validator';
-import CustomBackdrop from '../customBackdrop';
+import CustomBackdrop from '../custom-backdrop';
 
 type QueryPartnerFormData = z.infer<typeof queryPartnerSchema>;
 
-const PartnerList = (): JSX.Element  => {
+const PartnerList = (): JSX.Element => {
   const SKIP = 10;
   const [page, setPage] = useState(1);
   const [items, setItems] = useState<PartnerProps[] | null>(null);
   const { isPending, error, data } = useGetManyPartner((page - 1) * SKIP);
   const queryPartnerMutation = useQueryPartner();
-  const { setFormType, setUpdateItem } = useFormStore();
+  const { setFormType, setUpdateItem, setIsOpen } = useFormStore();
   const theme = useTheme();
 
   const onEdit = (item: PartnerProps) => {
     setFormType('partner', 'update');
+    setIsOpen(true, 'partner')
     setUpdateItem('partner', {
       ...item,
       name: item.name,
@@ -96,7 +97,7 @@ const PartnerList = (): JSX.Element  => {
         <Table sx={{ minWidth: 650 }} size="small" aria-label="tabela de parceiros">
           <TableHead>
             <TableRow>
-            <TableCell align='left' sx={{ fontWeight: 800 }}></TableCell>
+              <TableCell align='left' sx={{ fontWeight: 800 }}>ID</TableCell>
               <TableCell align='left' sx={{ fontWeight: 800 }}>Parceiro</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Tipo</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Código</TableCell>
@@ -119,12 +120,12 @@ const PartnerList = (): JSX.Element  => {
                           ? theme.palette.grey[50]
                           : theme.palette.grey[900]
                         : theme.palette.mode === 'light'
-                        ? theme.palette.common.white
-                        : theme.palette.common.black,
+                          ? theme.palette.common.white
+                          : theme.palette.common.black,
                   }}
                 >
-                                    <TableCell scope="row" align='left' sx={{ fontWeight: 900 }}>
-                    {i + 1}
+                  <TableCell scope="row" align='left' sx={{ fontWeight: 900 }}>
+                    {item.id}
                   </TableCell>
                   <TableCell align='left'>{item.name.toUpperCase()}</TableCell>
                   <TableCell align="right">{item.type}</TableCell>
@@ -150,18 +151,18 @@ const PartnerList = (): JSX.Element  => {
       </TableContainer>
       {data && data.length > 0 && (
         <ButtonGroup
-        variant="contained"
-        aria-label="basic button group"
-        sx={{ display: 'flex', marginBottom: 2, flex: 0, width: 'fit-content', height: '100%', alignSelf: 'center' }}
-      >
-        <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
-          Anterior
-        </Button>
-        <Button onClick={() => handleChangePage(1)} disabled={!data || data.length === 0}>
-          Próximo
-        </Button>
-      </ButtonGroup>
-    )}
+          variant="contained"
+          aria-label="basic button group"
+          sx={{ display: 'flex', marginBottom: 2, flex: 0, width: 'fit-content', height: '100%', alignSelf: 'center' }}
+        >
+          <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
+            Anterior
+          </Button>
+          <Button onClick={() => handleChangePage(1)} disabled={!data || data.length === 0}>
+            Próximo
+          </Button>
+        </ButtonGroup>
+      )}
     </Box>
   );
 };

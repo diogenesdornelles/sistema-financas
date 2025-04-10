@@ -160,14 +160,17 @@ A modularidade do sistema permite a inclusão de funcionalidades adicionais, com
 
 ## Core das RNs
 
-- As contas financeiras são a alma do sistema, possuindo número com campo principal;
-- Todas elas possuem, ainda, um saldo, o qual deve estar sempre atualizado;
+- As contas financeiras (CF) são a alma do sistema, possuindo número com campo principal a ser fornecido e um tipo (TCF);
+- Pressupõe-se, de antemão, seja a CF uma conta em instituição bancária usual, de modo que é possível preencher outros campos, como agência e banco;
+- Se, porventura, se tratar de um cartão (crédito ou débito) é possível aproveitar os campos com informações que o identifique univocamente;
+- Todas as CFs possuem, ainda, um saldo, o qual deve estar sempre atualizado;
 - O saldo somente pode ser incrementado ou decrementado, respectivamente, por um efetivo recebimento ou pagamento de uma conta;
-- Para um recebimento, o sistema permite o gerenciamento de contas a receber;
-- Para um pagamento, o sistema permite o gerenciamento de contas a pagar;
-- Todas as contas possuem um tipo, convém frisar;
-- Cada uma dessas contas (a receber ou a pagar) possui um valor, uma data de vencimento, um parceiro e um status, com o objetivo de controle;
+- Para um recebimento, o sistema permite o gerenciamento de contas a receber (CR);
+- Para um pagamento, o sistema permite o gerenciamento de contas a pagar (CP);
+- Todas as contas possuem um tipo, convém frisar (TCP, TCR, TCF);
+- Cada uma dessas contas (a receber ou a pagar) possui um valor, uma data de vencimento, um parceiro (Partner) e um status, com o objetivo de controle;
 - O efetivo pagamento ou recebimento, quando registrado, gera uma atualização automática do saldo da respectiva conta;
-- Para gerar o movimento de conta, deve haver uma transação como entidade associativa, em que se registra a conta a receber ou pagar, a conta financeira e a data da transação;
-- Concluímos que não é preciso ter tipo de transação: se a transação estiver ligada com uma conta a receber, será de Entrada e, por outro lado, se for de pagamento, saída;
-- Conta a receber ou a pagar não precisam de campos de efetivo pagamento ou recebimento, pois estará registrado em transação;
+- Para gerar o movimento de conta, deve haver uma transação (TX) como entidade associativa, em que se registra CP ou CR, a CF e a data da transação;
+- Concluímos que não é preciso ter tipo de transação: se a transação estiver ligada com uma conta a receber, será de Entrada e, por outro lado, se for de pagamento, Saída;
+- Obviamente, uma transação deve estar ligada, por vez, a uma CP OU CR, não a ambas simultaneamente;
+- CP ou CR não precisam de campos de efetivo pagamento ou recebimento, pois estará registrado na pŕopria transação a que se refiram;

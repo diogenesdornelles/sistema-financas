@@ -31,7 +31,7 @@ const UserSearchForm = ({ onSearch }: UserSearchFormProps): JSX.Element => {
       id: '',
       surname: '',
       cpf: '',
-      status: undefined,
+      status: true,
       createdAt: '',
       updatedAt: '',
     },
@@ -55,7 +55,7 @@ const UserSearchForm = ({ onSearch }: UserSearchFormProps): JSX.Element => {
       id: '',
       surname: '',
       cpf: '',
-      status: undefined,
+      status: true,
       createdAt: '',
       updatedAt: '',
     });

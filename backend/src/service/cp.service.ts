@@ -148,9 +148,11 @@ export class CpService extends BaseService<
   public query = async (data: QueryCp): Promise<Cp[]> => {
     try {
       const where: FindOptionsWhere<Cp> = {};
+
       if (data.id) {
-        where.id = data.id;
+        where.id = Like(`%${data.id}%`);
       }
+
       if (data.value) {
         const value = parseFloat(
           data.value.replace(/\./g, "").replace(",", "."),
@@ -181,14 +183,14 @@ export class CpService extends BaseService<
         where.status = data.status;
       }
 
-      if (data.createdAt) {
-        const updatedDate = new Date(data.createdAt);
-        where.updatedAt = updatedDate;
-      }
-
       if (data.updatedAt) {
         const updatedDate = new Date(data.updatedAt);
-        where.updatedAt = updatedDate;
+        where.updatedAt = MoreThanOrEqual(updatedDate);
+      }
+
+      if (data.createdAt) {
+        const updatedDate = new Date(data.createdAt);
+        where.createdAt = MoreThanOrEqual(updatedDate);
       }
 
       return await this.repository.find({

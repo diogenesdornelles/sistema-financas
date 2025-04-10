@@ -28,7 +28,7 @@ const TcpSearchForm = ({ onSearch }: TcpSearchFormProps): JSX.Element => {
     resolver: zodResolver(queryTcpSchema),
     defaultValues: {
       name: '',
-      status: undefined,
+      status: true,
       createdAt: '',
       updatedAt: '',
       id: ''
@@ -50,7 +50,7 @@ const TcpSearchForm = ({ onSearch }: TcpSearchFormProps): JSX.Element => {
   const handleReset = () => {
     reset({
       name: '',
-      status: undefined,
+      status: true,
       createdAt: '',
       updatedAt: '',
       id: ''

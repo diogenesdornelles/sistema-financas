@@ -33,7 +33,7 @@ const CatSearchForm = ({ onSearch }: CatSearchFormProps): JSX.Element => {
       obs: '',
       createdAt: '',
       updatedAt: '',
-      status: undefined,
+      status: true,
     },
   });
 
@@ -57,7 +57,7 @@ const CatSearchForm = ({ onSearch }: CatSearchFormProps): JSX.Element => {
       obs: '',
       createdAt: '',
       updatedAt: '',
-      status: undefined,
+      status: true,
     });
     onSearch({} as QueryCatFormData); // envia filtro limpo
   };

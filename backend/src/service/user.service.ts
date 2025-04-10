@@ -6,7 +6,7 @@ import {
   UpdateUser,
 } from "../../../packages/dtos/user.dto";
 import hashPassword from "../utils/hash-pwd.util";
-import { FindOptionsWhere, Like } from "typeorm";
+import { FindOptionsWhere, Like, MoreThanOrEqual } from "typeorm";
 
 export class UserService extends BaseService<
   User,
@@ -180,9 +180,11 @@ export class UserService extends BaseService<
   public query = async (data: QueryUser): Promise<User[]> => {
     try {
       const where: FindOptionsWhere<User> = {};
+      console.log(data)
       if (data.id) {
-        where.id = data.id;
+        where.id = Like(`%${data.id}%`);
       }
+
       if (data.name) {
         where.name = Like(`%${data.name}%`);
       }
@@ -201,12 +203,12 @@ export class UserService extends BaseService<
 
       if (data.updatedAt) {
         const updatedDate = new Date(data.updatedAt);
-        where.updatedAt = updatedDate;
+        where.updatedAt = MoreThanOrEqual(updatedDate);
       }
 
       if (data.createdAt) {
         const updatedDate = new Date(data.createdAt);
-        where.updatedAt = updatedDate;
+        where.createdAt = MoreThanOrEqual(updatedDate);
       }
 
       return await this.repository.find({

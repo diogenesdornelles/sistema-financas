@@ -161,7 +161,6 @@ export default class GeneralMiddleware {
     res: Response,
     next: NextFunction,
   ) => {
-    console.log(req.body);
     if (req.method.toLocaleLowerCase() !== "get") {
       if (!req.body || Object.keys(req.body).length === 0) {
         sendErrorResponse(

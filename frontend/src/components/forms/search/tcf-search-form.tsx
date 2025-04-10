@@ -28,7 +28,7 @@ const TcfSearchForm = ({ onSearch }: TcfSearchFormProps): JSX.Element => {
     resolver: zodResolver(queryTcfSchema),
     defaultValues: {
       name: '',
-      status: undefined,
+      status: true,
       createdAt: '',
       updatedAt: '',
       id: ''
@@ -50,7 +50,7 @@ const TcfSearchForm = ({ onSearch }: TcfSearchFormProps): JSX.Element => {
   const handleReset = () => {
     reset({
       name: '',
-      status: undefined,
+      status: true,
       createdAt: '',
       updatedAt: '',
       id: ''

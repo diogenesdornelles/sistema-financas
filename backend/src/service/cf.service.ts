@@ -142,9 +142,11 @@ export class CfService extends BaseService<
   public query = async (data: QueryCf): Promise<Cf[]> => {
     try {
       const where: FindOptionsWhere<Cf> = {};
+
       if (data.id) {
-        where.id = data.id;
+        where.id = Like(`%${data.id}%`);
       }
+
       if (data.number) {
         where.number = Like(`%${data.number}%`);
       }
@@ -178,14 +180,14 @@ export class CfService extends BaseService<
         where.status = data.status;
       }
 
-      if (data.createdAt) {
-        const createdDate = new Date(data.createdAt);
-        where.createdAt = createdDate;
-      }
-
       if (data.updatedAt) {
         const updatedDate = new Date(data.updatedAt);
-        where.updatedAt = updatedDate;
+        where.updatedAt = MoreThanOrEqual(updatedDate);
+      }
+
+      if (data.createdAt) {
+        const updatedDate = new Date(data.createdAt);
+        where.createdAt = MoreThanOrEqual(updatedDate);
       }
 
       return await this.repository.find({

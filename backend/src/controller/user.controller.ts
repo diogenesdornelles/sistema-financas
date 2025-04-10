@@ -145,8 +145,8 @@ export default class UserController extends BaseController<UserService> {
   ): Promise<void> => {
     try {
       const validatedData: QueryUser = queryUserSchema.parse(req.body);
-      const item: User[] = await this.service.query(validatedData);
-      res.status(201).json(item);
+      const items: User[] = await this.service.query(validatedData);
+      res.status(201).json(items);
       return;
     } catch (error) {
       next(error);

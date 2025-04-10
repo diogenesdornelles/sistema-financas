@@ -36,7 +36,7 @@ const CfSearchForm = ({ onSearch }: CfSearchFormProps): JSX.Element => {
       obs: '',
       createdAt: '',
       updatedAt: '',
-      status: undefined,
+      status: true,
     },
   });
 
@@ -63,7 +63,7 @@ const CfSearchForm = ({ onSearch }: CfSearchFormProps): JSX.Element => {
       obs: '',
       createdAt: '',
       updatedAt: '',
-      status: undefined,
+      status: true,
     });
     onSearch({} as QueryCfFormData); // Envia filtro limpo
   };

@@ -93,7 +93,7 @@ const TcrList = (): JSX.Element => {
         <Table sx={{ minWidth: 650 }} size="small" aria-label="tabela de tipos de contas a receber">
           <TableHead>
             <TableRow>
-            <TableCell align='left' sx={{ fontWeight: 800 }}>ID</TableCell>
+              <TableCell align='left' sx={{ fontWeight: 800 }}>ID</TableCell>
               <TableCell align='left' sx={{ fontWeight: 800 }}>Nome</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Status</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Criado em</TableCell>
@@ -113,11 +113,11 @@ const TcrList = (): JSX.Element => {
                           ? theme.palette.grey[50]
                           : theme.palette.grey[900]
                         : theme.palette.mode === 'light'
-                        ? theme.palette.common.white
-                        : theme.palette.common.black,
+                          ? theme.palette.common.white
+                          : theme.palette.common.black,
                   }}
                 >
-                                    <TableCell scope="row" align='left' sx={{ fontWeight: 900 }}>
+                  <TableCell scope="row" align='left' sx={{ fontWeight: 900 }}>
                     {item.id}
                   </TableCell>
                   <TableCell align='left'>{item.name}</TableCell>
@@ -139,18 +139,18 @@ const TcrList = (): JSX.Element => {
       </TableContainer>
       {data && data.length > 0 && (
         <ButtonGroup
-        variant="contained"
-        aria-label="basic button group"
-        sx={{ display: 'flex', marginBottom: 2, flex: 0, width: 'fit-content', height: '100%', alignSelf: 'center' }}
-      >
-        <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
-          Anterior
-        </Button>
-        <Button onClick={() => handleChangePage(1)} disabled={!data || data.length === 0}>
-          Próximo
-        </Button>
-      </ButtonGroup>
-    )}
+          variant="contained"
+          aria-label="basic button group"
+          sx={{ display: 'flex', marginBottom: 2, flex: 0, width: 'fit-content', height: '100%', alignSelf: 'center' }}
+        >
+          <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
+            Anterior
+          </Button>
+          <Button onClick={() => handleChangePage(1)} disabled={!data || data.length === 0}>
+            Próximo
+          </Button>
+        </ButtonGroup>
+      )}
     </Box>
   );
 };

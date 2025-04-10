@@ -7,9 +7,13 @@ import {
   Box,
   FormControlLabel,
   Switch,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material';
 import { queryCrSchema } from '../../../../../packages/validators/zod-schemas/query/query-cr.validator';
 import { JSX } from 'react';
+import { PaymentStatus } from '../../../../../packages/dtos/utils/enums';
 
 type QueryCrFormData = z.infer<typeof queryCrSchema>;
 
@@ -32,12 +36,14 @@ const CrSearchForm = ({ onSearch }: CrSearchFormProps): JSX.Element => {
       customer: '',
       due: '',
       obs: '',
-      status: undefined,
+      status: PaymentStatus.PENDING,
       createdAt: '',
       updatedAt: '',
       id: ''
     },
   });
+
+  const statusValue = watch("status");
 
   const showInactives = watch('status');
 
@@ -110,6 +116,18 @@ const CrSearchForm = ({ onSearch }: CrSearchFormProps): JSX.Element => {
           helperText={errors.customer?.message}
           size="small"
         />
+        <InputLabel id="cr-status-label-search">Status</InputLabel>
+        <Select
+          labelId="cr-status-label-search"
+          label="Status"
+          size="small"
+          defaultValue={statusValue}
+          {...register("status")}
+        >
+          <MenuItem value="pending">Pendente</MenuItem>
+          <MenuItem value="paid">Pago</MenuItem>
+          <MenuItem value="cancelled">Cancelado</MenuItem>
+        </Select>
         <TextField
           label="Vencimento"
           {...register('due')}

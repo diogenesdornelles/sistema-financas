@@ -48,7 +48,7 @@ export function CreateTcfForm(): JSX.Element | null {
   }
 
   return (
-    <FormContainer formName='tcr'>
+    <FormContainer formName='tcf'>
       <Typography variant="h4">Novo Tipo de conta Financeira</Typography>
       {mutation.isSuccess && (
         <Alert severity="success" style={{ width: "100%" }}>
@@ -122,7 +122,7 @@ export function UpdateTcfForm(): JSX.Element | null {
   }
 
   return (
-    <FormContainer formName='tcr'>
+    <FormContainer formName='tcf'>
       <ButtonUpdateForm title="Atualizar Tipo de conta financeira" name='tcf' />
 
       {mutation.isSuccess && (

@@ -5,11 +5,13 @@ import {
   TextField,
   Button,
   Box,
-  FormControlLabel,
-  Switch,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material';
 import { queryCpSchema } from '../../../../../packages/validators/zod-schemas/query/query-cp.validator';
 import { JSX } from 'react';
+import { CPStatus } from '../../../../../packages/dtos/utils/enums';
 
 type QueryCpFormData = z.infer<typeof queryCpSchema>;
 
@@ -32,16 +34,19 @@ const CpSearchForm = ({ onSearch }: CpSearchFormProps): JSX.Element => {
       supplier: '',
       due: '',
       obs: '',
-      status: undefined,
+      status: CPStatus.PENDING,
       createdAt: '',
       updatedAt: '',
       id: ''
     },
   });
 
-  const showInactives = watch('status');
+  const statusValue = watch("status");
+
+
 
   const onSubmit = (data: QueryCpFormData) => {
+    console.log(data)
     const cleanedData: Partial<QueryCpFormData> = { ...data };
     (['id', 'value', 'supplier', 'type', 'due', 'obs', 'createdAt', 'updatedAt'] as const).forEach((key) => {
       if (!cleanedData[key]) {
@@ -58,7 +63,7 @@ const CpSearchForm = ({ onSearch }: CpSearchFormProps): JSX.Element => {
       supplier: '',
       due: '',
       obs: '',
-      status: undefined,
+      status: CPStatus.PENDING,
       createdAt: '',
       updatedAt: '',
       id: ''
@@ -86,6 +91,18 @@ const CpSearchForm = ({ onSearch }: CpSearchFormProps): JSX.Element => {
           helperText={errors.id?.message}
           size="small"
         />
+        <InputLabel id="cp-status-label-search">Status</InputLabel>
+        <Select
+          labelId="cp-status-label-search"
+          label="Status"
+          size="small"
+          defaultValue={statusValue}
+          {...register("status")}
+        >
+          <MenuItem value="pending">Pendente</MenuItem>
+          <MenuItem value="paid">Pago</MenuItem>
+          <MenuItem value="cancelled">Cancelado</MenuItem>
+        </Select>
         <TextField
           label="Valor"
           {...register('value')}
@@ -153,10 +170,6 @@ const CpSearchForm = ({ onSearch }: CpSearchFormProps): JSX.Element => {
           error={!!errors.updatedAt}
           helperText={errors.updatedAt?.message}
           size="small"
-        />
-        <FormControlLabel
-          control={<Switch {...register('status')} checked={!!showInactives} />}
-          label="Mostrar Inativos"
         />
         <Button type="submit" variant="contained" color="primary">
           Buscar

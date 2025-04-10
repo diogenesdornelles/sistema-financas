@@ -70,7 +70,7 @@ export function CreateCpForm(): JSX.Element | null {
     if (forms.cp.type === "update") return null;
 
     if (errorTcp || errorPartner) {
-        const errorMessage = errorTcp?.message || errorPartner?.message ;
+        const errorMessage = errorTcp?.message || errorPartner?.message;
         return <ErrorAlert message={errorMessage ? errorMessage : 'Ocorreu um erro!'} />;
     }
 
@@ -92,7 +92,7 @@ export function CreateCpForm(): JSX.Element | null {
 
             {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
 
-            {(isPendingTcp || isPendingPartner ) && <CustomBackdrop isOpen={mutation.isPending} />}
+            {(isPendingTcp || isPendingPartner) && <CustomBackdrop isOpen={mutation.isPending} />}
 
             <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%", minWidth: 500 }}>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
@@ -135,7 +135,7 @@ export function CreateCpForm(): JSX.Element | null {
                         control={control}
                         render={({ field }) => (
                             <Autocomplete
-                                options={tcpData ? tcpData: []}
+                                options={tcpData ? tcpData : []}
                                 getOptionLabel={(option) => option.name || ""}
                                 onChange={(_, data) => field.onChange(data ? data.id : "")}
                                 renderInput={(params) => (
@@ -243,7 +243,7 @@ export function UpdateCpForm(): JSX.Element | null {
 
     if (forms.cp.type === "create" || !forms.cp.updateItem) return null;
 
-    if (errorTcp || errorPartner ) {
+    if (errorTcp || errorPartner) {
         const errorMessage = errorTcp?.message || errorPartner?.message;
         return (
             <Alert severity="error" style={{ width: "100%" }}>
@@ -257,14 +257,14 @@ export function UpdateCpForm(): JSX.Element | null {
         <FormContainer formName='cp'>
             <ButtonUpdateForm name="cp" title="Atualizar Conta a Pagar" />
 
-            {(isPendingTcp || isPendingPartner ) && <CustomBackdrop isOpen={true} />}
-            
+            {(isPendingTcp || isPendingPartner) && <CustomBackdrop isOpen={true} />}
+
             {mutation.isSuccess && (
                 <Alert severity="success" style={{ width: "100%" }}>
                     Conta atualizada com sucesso!
                 </Alert>
             )}
-            
+
             {mutation.isError && (
                 <Alert severity="error" style={{ width: "100%" }}>
                     Ocorreu um erro ao atualizar o Conta. Tente novamente.
@@ -298,7 +298,7 @@ export function UpdateCpForm(): JSX.Element | null {
                         control={control}
                         render={({ field }) => (
                             <Autocomplete
-                                options={tcpData ? tcpData: []}
+                                options={tcpData ? tcpData : []}
                                 getOptionLabel={(option) => option.name || ""}
                                 onChange={(_, data) => field.onChange(data ? data.id : "")}
                                 defaultValue={
@@ -367,7 +367,7 @@ export function UpdateCpForm(): JSX.Element | null {
                         multiline
                         rows={3}
                     />
-                    <InputLabel id="cp-status-label-update">Tipo</InputLabel>
+                    <InputLabel id="cp-status-label-update">Status</InputLabel>
                     <Select
                         labelId="cp-status-label-update"
                         label="Status"

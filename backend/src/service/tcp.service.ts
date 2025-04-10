@@ -1,7 +1,7 @@
 import { BaseService } from "./base.service";
 import { Tcp } from "../entity/entities";
 import { CreateTcp, UpdateTcp, QueryTcp } from "../../../packages/dtos/tcp.dto";
-import { FindOptionsWhere, Like } from "typeorm";
+import { FindOptionsWhere, Like, MoreThanOrEqual } from "typeorm";
 
 export class TcpService extends BaseService<
   Tcp,
@@ -110,9 +110,11 @@ export class TcpService extends BaseService<
   public query = async (data: QueryTcp): Promise<Tcp[]> => {
     try {
       const where: FindOptionsWhere<Tcp> = {};
+
       if (data.id) {
-        where.id = data.id;
+        where.id = Like(`%${data.id}%`);
       }
+
       if (data.name) {
         where.name = Like(`%${data.name}%`);
       }
@@ -121,14 +123,14 @@ export class TcpService extends BaseService<
         where.status = data.status;
       }
 
-      if (data.createdAt) {
-        const updatedDate = new Date(data.createdAt);
-        where.updatedAt = updatedDate;
-      }
-
       if (data.updatedAt) {
         const updatedDate = new Date(data.updatedAt);
-        where.updatedAt = updatedDate;
+        where.updatedAt = MoreThanOrEqual(updatedDate);
+      }
+
+      if (data.createdAt) {
+        const updatedDate = new Date(data.createdAt);
+        where.createdAt = MoreThanOrEqual(updatedDate);
       }
 
       return await this.repository.find({

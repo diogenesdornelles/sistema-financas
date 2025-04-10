@@ -5,7 +5,7 @@ import {
   QueryPartner,
   UpdatePartner,
 } from "../../../packages/dtos/partner.dto";
-import { FindOptionsWhere, Like } from "typeorm";
+import { FindOptionsWhere, Like, MoreThanOrEqual } from "typeorm";
 import {
   PartnerSearchType,
   PartnerType,
@@ -140,9 +140,11 @@ export class PartnerService extends BaseService<
   public query = async (data: QueryPartner): Promise<Partner[]> => {
     try {
       const where: FindOptionsWhere<Partner> = {};
+
       if (data.id) {
-        where.id = data.id;
+        where.id = Like(`%${data.id}%`);
       }
+
       if (data.name) {
         where.name = Like(`%${data.name}%`);
       }
@@ -163,14 +165,14 @@ export class PartnerService extends BaseService<
         where.status = data.status;
       }
 
-      if (data.createdAt) {
-        const updatedDate = new Date(data.createdAt);
-        where.updatedAt = updatedDate;
-      }
-
       if (data.updatedAt) {
         const updatedDate = new Date(data.updatedAt);
-        where.updatedAt = updatedDate;
+        where.updatedAt = MoreThanOrEqual(updatedDate);
+      }
+
+      if (data.createdAt) {
+        const updatedDate = new Date(data.createdAt);
+        where.createdAt = MoreThanOrEqual(updatedDate);
       }
 
       return await this.repository.find({

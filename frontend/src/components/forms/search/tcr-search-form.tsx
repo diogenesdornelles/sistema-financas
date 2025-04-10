@@ -28,7 +28,7 @@ const TcrSearchForm = ({ onSearch }: TcrSearchFormProps): JSX.Element => {
     resolver: zodResolver(queryTcrSchema),
     defaultValues: {
       name: '',
-      status: undefined,
+      status: true,
       createdAt: '',
       updatedAt: '',
       id: ''
@@ -50,7 +50,7 @@ const TcrSearchForm = ({ onSearch }: TcrSearchFormProps): JSX.Element => {
   const handleReset = () => {
     reset({
       name: '',
-      status: undefined,
+      status: true,
       createdAt: '',
       updatedAt: '',
       id: ''

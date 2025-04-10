@@ -1,8 +1,7 @@
 import { BaseService } from "./base.service";
 import { Tcr } from "../entity/entities";
 import { CreateTcr, UpdateTcr, QueryTcr } from "../../../packages/dtos/tcr.dto";
-import { Query } from "mysql2/typings/mysql/lib/protocol/sequences/Query";
-import { FindOptionsWhere, Like } from "typeorm";
+import { FindOptionsWhere, Like, MoreThanOrEqual } from "typeorm";
 
 export class TcrService extends BaseService<
   Tcr,
@@ -111,9 +110,11 @@ export class TcrService extends BaseService<
   public query = async (data: QueryTcr): Promise<Tcr[]> => {
     try {
       const where: FindOptionsWhere<Tcr> = {};
+
       if (data.id) {
-        where.id = data.id;
+        where.id = Like(`%${data.id}%`);
       }
+
       if (data.name) {
         where.name = Like(`%${data.name}%`);
       }
@@ -122,14 +123,14 @@ export class TcrService extends BaseService<
         where.status = data.status;
       }
 
-      if (data.createdAt) {
-        const updatedDate = new Date(data.createdAt);
-        where.updatedAt = updatedDate;
-      }
-
       if (data.updatedAt) {
         const updatedDate = new Date(data.updatedAt);
-        where.updatedAt = updatedDate;
+        where.updatedAt = MoreThanOrEqual(updatedDate);
+      }
+
+      if (data.createdAt) {
+        const updatedDate = new Date(data.createdAt);
+        where.createdAt = MoreThanOrEqual(updatedDate);
       }
 
       return await this.repository.find({

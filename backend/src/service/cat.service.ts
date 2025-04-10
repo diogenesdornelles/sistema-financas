@@ -6,7 +6,7 @@ import {
   CatProps,
   QueryCat,
 } from "../../../packages/dtos/cat.dto";
-import { FindOptionsWhere, Like } from "typeorm";
+import { FindOptionsWhere, Like, MoreThanOrEqual } from "typeorm";
 
 export class CatService extends BaseService<
   Cat,
@@ -126,10 +126,13 @@ export class CatService extends BaseService<
    */
   public query = async (data: QueryCat): Promise<Cat[]> => {
     try {
+      
       const where: FindOptionsWhere<Cat> = {};
+
       if (data.id) {
-        where.id = data.id;
+        where.id = Like(`%${data.id}%`);
       }
+
       if (data.name) {
         where.name = Like(`%${data.name}%`);
       }
@@ -146,14 +149,14 @@ export class CatService extends BaseService<
         where.status = data.status;
       }
 
-      if (data.createdAt) {
-        const createdDate = new Date(data.createdAt);
-        where.createdAt = createdDate;
-      }
-
       if (data.updatedAt) {
         const updatedDate = new Date(data.updatedAt);
-        where.updatedAt = updatedDate;
+        where.updatedAt = MoreThanOrEqual(updatedDate);
+      }
+
+      if (data.createdAt) {
+        const updatedDate = new Date(data.createdAt);
+        where.createdAt = MoreThanOrEqual(updatedDate);
       }
 
       return await this.repository.find({ where });

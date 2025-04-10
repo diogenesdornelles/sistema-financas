@@ -1,11 +1,11 @@
 import { z } from "zod";
-import { PartnerType } from "../create/create-partner.validator";
 import { PartnerSearchType } from "../../../dtos/utils/enums";
 
 
 
 export const queryPartnerSchema = z
     .object({
+        id: z.string().optional(),
         name: z
             .string(),
         cod: z

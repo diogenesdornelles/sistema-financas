@@ -1,10 +1,6 @@
 import { BaseService } from "./base.service";
 import { Cat, Cf, Cp, Cr, Tx, User } from "../entity/entities";
-import {
-  CreateTx,
-  QueryTx,
-  UpdateTx,
-} from "../../../packages/dtos/tx.dto";
+import { CreateTx, QueryTx, UpdateTx } from "../../../packages/dtos/tx.dto";
 import { FindOptionsWhere, Like, MoreThanOrEqual } from "typeorm";
 
 export class TxService extends BaseService<
@@ -14,10 +10,10 @@ export class TxService extends BaseService<
   UpdateTx,
   QueryTx
 > {
-  private readonly relations: string[]
+  private readonly relations: string[];
   constructor() {
     super(Tx);
-    this.relations = ["category", "cf", "cr", "cp"]
+    this.relations = ["category", "cf", "cr", "cp"];
   }
 
   /**
@@ -26,7 +22,8 @@ export class TxService extends BaseService<
   public getAll = async (): Promise<Tx[]> => {
     try {
       return await this.repository.find({
-        relations: this.relations, where: { status: true }
+        relations: this.relations,
+        where: { status: true },
       });
     } catch (error) {
       throw new Error(`Erro ao recuperar transações: ${error}`);
@@ -151,6 +148,10 @@ export class TxService extends BaseService<
   public query = async (data: QueryTx): Promise<Tx[]> => {
     try {
       const where: FindOptionsWhere<Tx> = {};
+
+      if (data.id) {
+        where.id = data.id;
+      }
 
       if (data.value) {
         const value = parseFloat(

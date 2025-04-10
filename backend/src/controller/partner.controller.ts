@@ -40,8 +40,7 @@ export default class PartnerController extends BaseController<PartnerService> {
       const { skip } = req.params;
       const skipInt = parseInt(skip);
       if (skipInt >= 0) {
-        const items: Partner[] | null =
-          await this.service.getMany(skipInt);
+        const items: Partner[] | null = await this.service.getMany(skipInt);
         if (!items) {
           res.status(404).json({ message: "Parceiros não encontrados" });
           return;
@@ -104,8 +103,10 @@ export default class PartnerController extends BaseController<PartnerService> {
     try {
       const { id } = req.params;
       const validatedData: UpdatePartner = updatePartnerSchema.parse(req.body);
-      const updatedItem: Partial<Partner> | null =
-        await this.service.update(id, validatedData);
+      const updatedItem: Partial<Partner> | null = await this.service.update(
+        id,
+        validatedData,
+      );
       if (!updatedItem) {
         res.status(404).json({ message: "Parceiro não encontrado" });
         return;

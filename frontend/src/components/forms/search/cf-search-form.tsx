@@ -27,6 +27,7 @@ const CfSearchForm = ({ onSearch }: CfSearchFormProps): JSX.Element => {
   } = useForm<QueryCfFormData>({
     resolver: zodResolver(queryCfSchema),
     defaultValues: {
+      id: '',
       number: '',
       balance: '',
       type: '',
@@ -43,7 +44,7 @@ const CfSearchForm = ({ onSearch }: CfSearchFormProps): JSX.Element => {
 
   const onSubmit = (data: QueryCfFormData) => {
     const cleanedData: Partial<QueryCfFormData> = { ...data };
-    (['number', 'balance', 'type', 'ag', 'bank', 'createdAt', 'updatedAt'] as const).forEach((key) => {
+    (['id', 'number', 'balance', 'type', 'ag', 'bank', 'createdAt', 'updatedAt'] as const).forEach((key) => {
       if (!cleanedData[key]) {
         delete cleanedData[key];
       }
@@ -53,6 +54,7 @@ const CfSearchForm = ({ onSearch }: CfSearchFormProps): JSX.Element => {
 
   const handleReset = () => {
     reset({
+      id: '',
       number: '',
       balance: '',
       type: '',
@@ -78,6 +80,14 @@ const CfSearchForm = ({ onSearch }: CfSearchFormProps): JSX.Element => {
           alignItems: 'center',
         }}
       >
+        <TextField
+          label="ID"
+          {...register('id')}
+          variant="outlined"
+          error={!!errors.id}
+          helperText={errors.id?.message}
+          size="small"
+        />
         <TextField
           label="Número"
           {...register('number')}

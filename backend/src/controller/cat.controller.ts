@@ -1,11 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { CatService } from "../service/cat.service";
 import { BaseController } from "./base.controller";
-import {
-  UpdateCat,
-  CreateCat,
-  QueryCat,
-} from "../../../packages/dtos/cat.dto";
+import { UpdateCat, CreateCat, QueryCat } from "../../../packages/dtos/cat.dto";
 import { createCatSchema } from "../../../packages/validators/zod-schemas/create/create-cat.validator";
 import { updateCatSchema } from "../../../packages/validators/zod-schemas/update/update-cat.validator";
 import { queryCatSchema } from "../../../packages/validators/zod-schemas/query/query-cat.validator";

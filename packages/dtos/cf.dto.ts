@@ -40,6 +40,7 @@ export interface CfProps {
 
 
 export interface QueryCf {
+  id?: string;
   number?: string;
   balance?: string;
   type?: string;

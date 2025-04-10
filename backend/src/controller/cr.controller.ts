@@ -1,11 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { CrService } from "../service/cr.service";
 import { BaseController } from "./base.controller";
-import {
-  UpdateCr,
-  CreateCr,
-  QueryCr,
-} from "../../../packages/dtos/cr.dto";
+import { UpdateCr, CreateCr, QueryCr } from "../../../packages/dtos/cr.dto";
 import { createCrSchema } from "../../../packages/validators/zod-schemas/create/create-cr.validator";
 import { updateCrSchema } from "../../../packages/validators/zod-schemas/update/update-cr.validator";
 import { queryCrSchema } from "../../../packages/validators/zod-schemas/query/query-cr.validator";

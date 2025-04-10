@@ -17,6 +17,7 @@ export interface TcrProps {
 
 
 export interface QueryTcr {
+  id?: string;
   name?: string;
   status?: boolean;
   createdAt?: string;

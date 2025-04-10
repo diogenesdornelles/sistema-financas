@@ -2,6 +2,7 @@ import { z } from "zod";
 
 
 export const queryTxSchema = z.object({
+  id: z.string().optional(),
   value: z
     .string()
     .transform((value) => (value.trim() === "" ? undefined : value.trim()))
@@ -32,7 +33,7 @@ export const queryTxSchema = z.object({
   status: z.boolean(),
   obs: z.string(),
   description: z.string(),
-  cf: z.string(),
+  cf: z.string().optional(),
   cp: z.string().optional(),
   cr: z.string().optional(),
   category: z.string(),

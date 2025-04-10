@@ -17,6 +17,7 @@ export interface TcfProps {
 }
 
 export interface QueryTcf {
+  id?: string;
   name?: string;
   status?: boolean;
   createdAt?: string;

@@ -45,6 +45,7 @@ export interface TxProps {
 
 
 export interface QueryTx {
+  id?: string;
   value?: string;
   cf?: string;
   cp?: string; 

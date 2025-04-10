@@ -17,6 +17,7 @@ export interface TcpProps {
 
 
 export interface QueryTcp {
+  id?: string;
   name?: string;
   status?: boolean;
   createdAt?: string;

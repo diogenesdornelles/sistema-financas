@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { createTcpSchema } from "../create/create-tcp.validator";
 
 
 export const queryTcpSchema = z.object({
+  id: z.string().optional(),
   name: z.string(),
   status: z.coerce.boolean(),
   createdAt: z

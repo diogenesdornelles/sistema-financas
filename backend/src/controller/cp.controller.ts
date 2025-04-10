@@ -1,11 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { CpService } from "../service/cp.service";
 import { BaseController } from "./base.controller";
-import {
-  UpdateCp,
-  CreateCp,
-  QueryCp,
-} from "../../../packages/dtos/cp.dto";
+import { UpdateCp, CreateCp, QueryCp } from "../../../packages/dtos/cp.dto";
 import { createCpSchema } from "../../../packages/validators/zod-schemas/create/create-cp.validator";
 import { updateCpSchema } from "../../../packages/validators/zod-schemas/update/update-cp.validator";
 import { queryCpSchema } from "../../../packages/validators/zod-schemas/query/query-cp.validator";

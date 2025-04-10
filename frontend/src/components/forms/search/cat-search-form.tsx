@@ -27,6 +27,7 @@ const CatSearchForm = ({ onSearch }: CatSearchFormProps): JSX.Element => {
   } = useForm<QueryCatFormData>({
     resolver: zodResolver(queryCatSchema),
     defaultValues: {
+      id: '',
       name: '',
       description: '',
       obs: '',
@@ -40,7 +41,7 @@ const CatSearchForm = ({ onSearch }: CatSearchFormProps): JSX.Element => {
 
   const onSubmit = (data: QueryCatFormData) => {
     const cleanedData: Partial<QueryCatFormData> = { ...data };
-    (['name', 'description', 'obs', 'createdAt', 'updatedAt'] as const).forEach((key) => {
+    (['id', 'name', 'description', 'obs', 'createdAt', 'updatedAt'] as const).forEach((key) => {
       if (!cleanedData[key]) {
         delete cleanedData[key];
       }
@@ -50,6 +51,7 @@ const CatSearchForm = ({ onSearch }: CatSearchFormProps): JSX.Element => {
 
   const handleReset = () => {
     reset({
+      id: '',
       name: '',
       description: '',
       obs: '',
@@ -73,6 +75,14 @@ const CatSearchForm = ({ onSearch }: CatSearchFormProps): JSX.Element => {
           
         }}
       >
+        <TextField
+          label="ID"
+          {...register('id')}
+          variant="outlined"
+          error={!!errors.id}
+          helperText={errors.id?.message}
+          size="small"
+        />
         <TextField
           label="Nome"
           {...register('name')}

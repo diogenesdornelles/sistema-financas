@@ -39,6 +39,7 @@ const PartnerSearchForm = ({ onSearch }: PartnerSearchFormProps): JSX.Element =>
       obs: '',
       createdAt: '',
       updatedAt: '',
+      id: ''
     },
   });
 
@@ -46,7 +47,7 @@ const PartnerSearchForm = ({ onSearch }: PartnerSearchFormProps): JSX.Element =>
 
   const onSubmit = (data: QueryPartnerFormData) => {
     const cleanedData: Partial<QueryPartnerFormData> = { ...data };
-    (['name', 'cod', 'obs', 'createdAt', 'updatedAt', 'type'] as const).forEach((key) => {
+    (['id', 'name', 'cod', 'obs', 'createdAt', 'updatedAt', 'type'] as const).forEach((key) => {
       if (!cleanedData[key]) {
         delete cleanedData[key];
       }
@@ -63,6 +64,7 @@ const PartnerSearchForm = ({ onSearch }: PartnerSearchFormProps): JSX.Element =>
       obs: '',
       createdAt: '',
       updatedAt: '',
+      id: ''
     });
     onSearch({} as QueryPartnerFormData); // Envia filtro limpo
   };
@@ -79,6 +81,14 @@ const PartnerSearchForm = ({ onSearch }: PartnerSearchFormProps): JSX.Element =>
           alignItems: 'center',
         }}
       >
+        <TextField
+          label="ID"
+          {...register('id')}
+          variant="outlined"
+          error={!!errors.id}
+          helperText={errors.id?.message}
+          size="small"
+        />
         <TextField
           label="Nome"
           {...register('name')}
@@ -98,7 +108,7 @@ const PartnerSearchForm = ({ onSearch }: PartnerSearchFormProps): JSX.Element =>
         <FormControl variant="outlined" error={!!errors.type}>
           <InputLabel id="partner-type-label-search" size='small'>Tipo</InputLabel>
           <Select
-            sx={{width: 100}}
+            sx={{ width: 100 }}
             labelId="partner-type-label-search"
             label="Tipo"
             size="small"

@@ -1,10 +1,6 @@
 import { BaseService } from "./base.service";
 import { Cf, Tcf, User } from "../entity/entities";
-import {
-  CreateCf,
-  UpdateCf,
-  QueryCf,
-} from "../../../packages/dtos/cf.dto";
+import { CreateCf, UpdateCf, QueryCf } from "../../../packages/dtos/cf.dto";
 import { FindOptionsWhere, Like, MoreThanOrEqual } from "typeorm";
 
 export class CfService extends BaseService<
@@ -23,7 +19,10 @@ export class CfService extends BaseService<
    */
   public getAll = async (): Promise<Cf[]> => {
     try {
-      const cfs = await this.repository.find({ relations: ["type"], where: {status: true} });
+      const cfs = await this.repository.find({
+        relations: ["type"],
+        where: { status: true },
+      });
       return cfs;
     } catch (error) {
       throw new Error(`Erro ao recuperar contas: ${error}`);
@@ -36,7 +35,7 @@ export class CfService extends BaseService<
   public getMany = async (skip: number): Promise<Cf[]> => {
     try {
       const cfs = await this.repository.find({
-        where: {status: true},
+        where: { status: true },
         skip,
         take: 10,
         relations: ["type"],
@@ -143,7 +142,9 @@ export class CfService extends BaseService<
   public query = async (data: QueryCf): Promise<Cf[]> => {
     try {
       const where: FindOptionsWhere<Cf> = {};
-
+      if (data.id) {
+        where.id = data.id;
+      }
       if (data.number) {
         where.number = Like(`%${data.number}%`);
       }

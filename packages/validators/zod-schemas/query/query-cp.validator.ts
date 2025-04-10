@@ -3,6 +3,7 @@ import { CPStatus } from "../../../dtos/utils/enums";
 
 
 export const queryCpSchema = z.object({
+  id: z.string().optional(),
   value: z
     .string()
     .transform((value) => (value.trim() === "" ? undefined : value.trim()))

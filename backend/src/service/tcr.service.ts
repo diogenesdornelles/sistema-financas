@@ -1,10 +1,6 @@
 import { BaseService } from "./base.service";
 import { Tcr } from "../entity/entities";
-import {
-  CreateTcr,
-  UpdateTcr,
-  QueryTcr,
-} from "../../../packages/dtos/tcr.dto";
+import { CreateTcr, UpdateTcr, QueryTcr } from "../../../packages/dtos/tcr.dto";
 import { Query } from "mysql2/typings/mysql/lib/protocol/sequences/Query";
 import { FindOptionsWhere, Like } from "typeorm";
 
@@ -24,7 +20,7 @@ export class TcrService extends BaseService<
    */
   public getAll = async (): Promise<Tcr[]> => {
     try {
-      return await this.repository.find({where: {status: true}});
+      return await this.repository.find({ where: { status: true } });
     } catch (error) {
       throw new Error(`Erro ao recuperar tipos de conta: ${error}`);
     }
@@ -35,7 +31,11 @@ export class TcrService extends BaseService<
    */
   public getMany = async (skip: number): Promise<Tcr[]> => {
     try {
-      return await this.repository.find({ skip, take: 10, where: {status: true} });
+      return await this.repository.find({
+        skip,
+        take: 10,
+        where: { status: true },
+      });
     } catch (error) {
       throw new Error(`Erro ao recuperar tipos de conta: ${error}`);
     }
@@ -111,7 +111,9 @@ export class TcrService extends BaseService<
   public query = async (data: QueryTcr): Promise<Tcr[]> => {
     try {
       const where: FindOptionsWhere<Tcr> = {};
-
+      if (data.id) {
+        where.id = data.id;
+      }
       if (data.name) {
         where.name = Like(`%${data.name}%`);
       }

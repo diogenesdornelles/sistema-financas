@@ -86,7 +86,7 @@ export default class UserController extends BaseController<UserService> {
   ): Promise<void> => {
     try {
       const validatedData: CreateUser = createUserSchema.parse(req.body);
-      const user: Omit<User, 'pwd'> = await this.service.create(validatedData);
+      const user: Omit<User, "pwd"> = await this.service.create(validatedData);
       res.status(201).json(user);
       return;
     } catch (error) {

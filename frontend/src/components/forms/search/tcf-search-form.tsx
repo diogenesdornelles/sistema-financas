@@ -31,6 +31,7 @@ const TcfSearchForm = ({ onSearch }: TcfSearchFormProps): JSX.Element => {
       status: undefined,
       createdAt: '',
       updatedAt: '',
+      id: ''
     },
   });
 
@@ -38,7 +39,7 @@ const TcfSearchForm = ({ onSearch }: TcfSearchFormProps): JSX.Element => {
 
   const onSubmit = (data: QueryTcfFormData) => {
     const cleanedData: Partial<QueryTcfFormData> = { ...data };
-    (['name', 'createdAt', 'updatedAt'] as const).forEach((key) => {
+    (['id', 'name', 'createdAt', 'updatedAt'] as const).forEach((key) => {
       if (!cleanedData[key]) {
         delete cleanedData[key];
       }
@@ -52,6 +53,7 @@ const TcfSearchForm = ({ onSearch }: TcfSearchFormProps): JSX.Element => {
       status: undefined,
       createdAt: '',
       updatedAt: '',
+      id: ''
     });
     onSearch({} as QueryTcfFormData); // Envia filtro limpo
   };
@@ -68,6 +70,14 @@ const TcfSearchForm = ({ onSearch }: TcfSearchFormProps): JSX.Element => {
           alignItems: 'center',
         }}
       >
+        <TextField
+          label="ID"
+          {...register('id')}
+          variant="outlined"
+          error={!!errors.id}
+          helperText={errors.id?.message}
+          size="small"
+        />
         <TextField
           label="Nome"
           {...register('name')}

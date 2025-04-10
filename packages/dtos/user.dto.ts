@@ -26,6 +26,7 @@ export interface UserProps {
 }
 
 export interface QueryUser {
+  id?: string;
   name?: string;
   surname?: string;
   cpf?: string;

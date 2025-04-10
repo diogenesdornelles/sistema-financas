@@ -3,20 +3,30 @@ import { User } from "../entity/entities";
 import {
   CreateUser,
   QueryUser,
-  UpdateUser
+  UpdateUser,
 } from "../../../packages/dtos/user.dto";
 import hashPassword from "../utils/hash-pwd.util";
 import { FindOptionsWhere, Like } from "typeorm";
 
 export class UserService extends BaseService<
   User,
-  Omit<User, 'pwd'>,
+  Omit<User, "pwd">,
   CreateUser,
   UpdateUser,
   QueryUser
 > {
+  private readonly selection: string[]
   constructor() {
     super(User);
+    this.selection = [
+      "id",
+      "name",
+      "status",
+      "surname",
+      "createdAt",
+      "updatedAt",
+      "cpf",
+    ]
   }
 
   /**
@@ -25,8 +35,16 @@ export class UserService extends BaseService<
   public getAll = async (): Promise<User[]> => {
     try {
       const users = await this.repository.find({
-        select: ["id", "name", "status", "surname", "createdAt", "updatedAt", "cpf"],
-        where: {status: true},
+        select: [
+          "id",
+          "name",
+          "status",
+          "surname",
+          "createdAt",
+          "updatedAt",
+          "cpf",
+        ],
+        where: { status: true },
         relations: [],
       });
       return users;
@@ -41,8 +59,16 @@ export class UserService extends BaseService<
   public getMany = async (skip: number): Promise<User[]> => {
     try {
       const users = await this.repository.find({
-        where: {status: true},
-        select: ["id", "name", "status", "surname", "createdAt", "updatedAt", "cpf"],
+        where: { status: true },
+        select: [
+          "id",
+          "name",
+          "status",
+          "surname",
+          "createdAt",
+          "updatedAt",
+          "cpf",
+        ],
         skip,
         take: 10,
         relations: [],
@@ -62,7 +88,15 @@ export class UserService extends BaseService<
     try {
       const user = await this.repository.findOne({
         where: { id },
-        select: ["id", "name", "status", "surname", "createdAt", "updatedAt", "cpf"],
+        select: [
+          "id",
+          "name",
+          "status",
+          "surname",
+          "createdAt",
+          "updatedAt",
+          "cpf",
+        ],
         relations: [],
       });
       return user;
@@ -76,7 +110,7 @@ export class UserService extends BaseService<
    *
    * @param data - Dados para criação do usuário.
    */
-  public create = async (data: CreateUser): Promise<Omit<User, 'pwd'>> => {
+  public create = async (data: CreateUser): Promise<Omit<User, "pwd">> => {
     try {
       const hashedPwd = await hashPassword(data.pwd);
       const user = this.repository.create({ ...data, pwd: hashedPwd });
@@ -107,7 +141,15 @@ export class UserService extends BaseService<
       await this.repository.update({ id }, data);
       const updatedUser = await this.repository.findOne({
         where: { id },
-        select: ["id", "name", "status", "surname", "createdAt", "updatedAt", "cpf"],
+        select: [
+          "id",
+          "name",
+          "status",
+          "surname",
+          "createdAt",
+          "updatedAt",
+          "cpf",
+        ],
         relations: [],
       });
       return updatedUser;
@@ -138,7 +180,9 @@ export class UserService extends BaseService<
   public query = async (data: QueryUser): Promise<User[]> => {
     try {
       const where: FindOptionsWhere<User> = {};
-
+      if (data.id) {
+        where.id = data.id;
+      }
       if (data.name) {
         where.name = Like(`%${data.name}%`);
       }
@@ -167,7 +211,15 @@ export class UserService extends BaseService<
 
       return await this.repository.find({
         where,
-        select: ["id", "name", "status", "surname", "createdAt", "updatedAt", "cpf"],
+        select: [
+          "id",
+          "name",
+          "status",
+          "surname",
+          "createdAt",
+          "updatedAt",
+          "cpf",
+        ],
       });
     } catch (error) {
       throw new Error(`Erro ao filtrar usuários: ${error}`);

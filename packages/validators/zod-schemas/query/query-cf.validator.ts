@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const queryCfSchema = z
   .object({
+    id: z.string().optional(),
     number: z.string().optional(),
 
     balance: z

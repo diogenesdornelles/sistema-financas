@@ -6,7 +6,10 @@ import {
   UpdatePartner,
 } from "../../../packages/dtos/partner.dto";
 import { FindOptionsWhere, Like } from "typeorm";
-import { PartnerSearchType, PartnerType } from "../../../packages/dtos/utils/enums";
+import {
+  PartnerSearchType,
+  PartnerType,
+} from "../../../packages/dtos/utils/enums";
 
 export class PartnerService extends BaseService<
   Partner,
@@ -25,7 +28,7 @@ export class PartnerService extends BaseService<
   public getAll = async (): Promise<Partner[]> => {
     try {
       return await this.repository.find({
-        where: {status: true},
+        where: { status: true },
         relations: [],
       });
     } catch (error) {
@@ -39,7 +42,7 @@ export class PartnerService extends BaseService<
   public getMany = async (skip: number): Promise<Partner[]> => {
     try {
       return await this.repository.find({
-        where: {status: true},
+        where: { status: true },
         skip,
         take: 10,
         relations: [],
@@ -137,7 +140,9 @@ export class PartnerService extends BaseService<
   public query = async (data: QueryPartner): Promise<Partner[]> => {
     try {
       const where: FindOptionsWhere<Partner> = {};
-
+      if (data.id) {
+        where.id = data.id;
+      }
       if (data.name) {
         where.name = Like(`%${data.name}%`);
       }

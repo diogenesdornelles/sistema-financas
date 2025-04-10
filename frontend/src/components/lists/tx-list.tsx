@@ -105,8 +105,8 @@ const TxList = (): JSX.Element => {
               <TableCell align="right" sx={{ fontWeight: 800 }}>Valor</TableCell>
               <TableCell align='left' sx={{ fontWeight: 800 }}>Tipo</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Conta Financeira</TableCell>
-              <TableCell align="right" sx={{ fontWeight: 800 }}>Conta a pagar</TableCell>
-              <TableCell align="right" sx={{ fontWeight: 800 }}>Conta a receber</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>ID Conta a pagar</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>ID Conta a receber</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Descrição</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Categoria</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Obs</TableCell>

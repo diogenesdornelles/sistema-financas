@@ -175,7 +175,7 @@ export function CreateTxForm(): JSX.Element | null | string {
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
-                                        label="Conta"
+                                        label="ID Conta Financeira"
                                         variant="outlined"
                                         size="small"
                                         error={!!errors.cf}
@@ -198,7 +198,7 @@ export function CreateTxForm(): JSX.Element | null | string {
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
-                                        label="Conta a pagar"
+                                        label="ID Conta a Pagar"
                                         size="small"
                                         variant="outlined"
                                         error={!!errors.cp}
@@ -221,7 +221,7 @@ export function CreateTxForm(): JSX.Element | null | string {
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
-                                        label="Conta a receber"
+                                        label="ID Conta a Receber"
                                         variant="outlined"
                                         size="small"
                                         error={!!errors.cr}
@@ -411,7 +411,7 @@ export function UpdateTxForm(): JSX.Element | null | string {
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
-                                        label="Conta"
+                                        label="ID Conta Financeira"
                                         variant="outlined"
                                         error={!!errors.cf}
                                         helperText={errors.cf?.message}

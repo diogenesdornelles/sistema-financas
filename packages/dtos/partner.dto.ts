@@ -31,6 +31,7 @@ export interface PartnerProps {
 
 
 export interface QueryPartner {
+  id?: string;
   name?: string;
   type?: PartnerSearchType;
   cod?: string;

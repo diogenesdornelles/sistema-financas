@@ -27,9 +27,11 @@ const TxSearchForm = ({ onSearch }: TxSearchFormProps): JSX.Element => {
   } = useForm<QueryTxFormData>({
     resolver: zodResolver(queryTxSchema),
     defaultValues: {
+      id: '',
       value: '',
-      type: undefined,
       cf: '',
+      cr: '',
+      cp: '',
       description: '',
       category: '',
       obs: '',
@@ -44,7 +46,7 @@ const TxSearchForm = ({ onSearch }: TxSearchFormProps): JSX.Element => {
 
   const onSubmit = (data: QueryTxFormData) => {
     const cleanedData: Partial<QueryTxFormData> = { ...data };
-    (['value', 'cf', 'type', 'description', 'category', 'tdate', 'obs', 'createdAt', 'updatedAt'] as const).forEach((key) => {
+    (['id', 'value', 'cf', 'cp', 'cr', 'description', 'category', 'tdate', 'obs', 'createdAt', 'updatedAt'] as const).forEach((key) => {
       if (!cleanedData[key]) {
         delete cleanedData[key];
       }
@@ -54,9 +56,11 @@ const TxSearchForm = ({ onSearch }: TxSearchFormProps): JSX.Element => {
 
   const handleReset = () => {
     reset({
+      id: '',
       value: '',
-      type: undefined,
       cf: '',
+      cr: '',
+      cp: '',
       description: '',
       category: '',
       obs: '',
@@ -81,6 +85,14 @@ const TxSearchForm = ({ onSearch }: TxSearchFormProps): JSX.Element => {
         }}
       >
         <TextField
+          label="ID"
+          {...register('id')}
+          variant="outlined"
+          error={!!errors.id}
+          helperText={errors.id?.message}
+          size="small"
+        />
+        <TextField
           label="Valor"
           {...register('value')}
           variant="outlined"
@@ -89,15 +101,23 @@ const TxSearchForm = ({ onSearch }: TxSearchFormProps): JSX.Element => {
           size="small"
         />
         <TextField
-          label="Tipo"
-          {...register('type')}
+          label="ID Conta a Receber"
+          {...register('cr')}
           variant="outlined"
-          error={!!errors.type}
-          helperText={errors.type?.message}
+          error={!!errors.cr}
+          helperText={errors.cr?.message}
           size="small"
         />
         <TextField
-          label="Conta Financeira"
+          label="ID Conta a Pagar"
+          {...register('cp')}
+          variant="outlined"
+          error={!!errors.cp}
+          helperText={errors.cp?.message}
+          size="small"
+        />
+        <TextField
+          label="ID Conta Financeira"
           {...register('cf')}
           variant="outlined"
           error={!!errors.cf}

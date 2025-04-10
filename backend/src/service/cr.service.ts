@@ -1,10 +1,6 @@
 import { BaseService } from "./base.service";
 import { Cr, Partner, Tcr, Tx, User } from "../entity/entities";
-import {
-  CreateCr,
-  UpdateCr,
-  QueryCr,
-} from "../../../packages/dtos/cr.dto";
+import { CreateCr, UpdateCr, QueryCr } from "../../../packages/dtos/cr.dto";
 import { PaymentStatus } from "../../../packages/dtos/utils/enums";
 import { FindOptionsWhere, Like, MoreThanOrEqual, Not } from "typeorm";
 
@@ -15,11 +11,10 @@ export class CrService extends BaseService<
   UpdateCr,
   QueryCr
 > {
-  private readonly relations: string[]
-  constructor() 
-  {
+  private readonly relations: string[];
+  constructor() {
     super(Cr);
-    this.relations = ["type", "customer"]
+    this.relations = ["type", "customer"];
   }
 
   /**
@@ -28,7 +23,7 @@ export class CrService extends BaseService<
   public getAll = async (): Promise<Cr[]> => {
     try {
       return await this.repository.find({
-        where: {status: Not(PaymentStatus.CANCELLED)},
+        where: { status: Not(PaymentStatus.CANCELLED) },
         relations: this.relations,
       });
     } catch (error) {
@@ -42,7 +37,7 @@ export class CrService extends BaseService<
   public getMany = async (skip: number): Promise<Cr[]> => {
     try {
       return await this.repository.find({
-        where: {status: Not(PaymentStatus.CANCELLED)},
+        where: { status: Not(PaymentStatus.CANCELLED) },
         skip,
         take: 10,
         relations: this.relations,
@@ -153,7 +148,9 @@ export class CrService extends BaseService<
   public query = async (data: QueryCr): Promise<Cr[]> => {
     try {
       const where: FindOptionsWhere<Cr> = {};
-
+      if (data.id) {
+        where.id = data.id;
+      }
       if (data.value) {
         const value = parseFloat(
           data.value.replace(/\./g, "").replace(",", "."),

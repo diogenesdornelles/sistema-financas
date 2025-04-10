@@ -34,6 +34,7 @@ export interface CrProps {
 
 
 export interface QueryCr {
+  id?: string;
   value?: string;
   type?: string;
   customer?: string;

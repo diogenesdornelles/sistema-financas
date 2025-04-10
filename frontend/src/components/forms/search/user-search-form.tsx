@@ -28,6 +28,7 @@ const UserSearchForm = ({ onSearch }: UserSearchFormProps): JSX.Element => {
     resolver: zodResolver(queryUserSchema),
     defaultValues: {
       name: '',
+      id: '',
       surname: '',
       cpf: '',
       status: undefined,
@@ -40,7 +41,7 @@ const UserSearchForm = ({ onSearch }: UserSearchFormProps): JSX.Element => {
 
   const onSubmit = (data: QueryUserFormData) => {
     const cleanedData: Partial<QueryUserFormData> = { ...data };
-    (['name', 'surname', 'cpf', 'createdAt', 'updatedAt'] as const).forEach((key) => {
+    (['id', 'name', 'surname', 'cpf', 'createdAt', 'updatedAt'] as const).forEach((key) => {
       if (!cleanedData[key]) {
         delete cleanedData[key];
       }
@@ -51,6 +52,7 @@ const UserSearchForm = ({ onSearch }: UserSearchFormProps): JSX.Element => {
   const handleReset = () => {
     reset({
       name: '',
+      id: '',
       surname: '',
       cpf: '',
       status: undefined,
@@ -72,6 +74,14 @@ const UserSearchForm = ({ onSearch }: UserSearchFormProps): JSX.Element => {
           alignItems: 'center',
         }}
       >
+        <TextField
+          label="ID"
+          {...register('id')}
+          variant="outlined"
+          error={!!errors.id}
+          helperText={errors.id?.message}
+          size="small"
+        />
         <TextField
           label="Nome"
           {...register('name')}

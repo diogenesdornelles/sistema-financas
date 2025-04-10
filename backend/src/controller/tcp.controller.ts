@@ -1,11 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { TcpService } from "../service/tcp.service";
 import { BaseController } from "./base.controller";
-import {
-  UpdateTcp,
-  CreateTcp,
-  QueryTcp,
-} from "../../../packages/dtos/tcp.dto";
+import { UpdateTcp, CreateTcp, QueryTcp } from "../../../packages/dtos/tcp.dto";
 import { createTcpSchema } from "../../../packages/validators/zod-schemas/create/create-tcp.validator";
 import { updateTcpSchema } from "../../../packages/validators/zod-schemas/update/update-tcp.validator";
 import { queryTcpSchema } from "../../../packages/validators/zod-schemas/query/query-tcp.validator";

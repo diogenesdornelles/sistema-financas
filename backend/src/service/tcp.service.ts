@@ -1,10 +1,6 @@
 import { BaseService } from "./base.service";
 import { Tcp } from "../entity/entities";
-import {
-  CreateTcp,
-  UpdateTcp,
-  QueryTcp,
-} from "../../../packages/dtos/tcp.dto";
+import { CreateTcp, UpdateTcp, QueryTcp } from "../../../packages/dtos/tcp.dto";
 import { FindOptionsWhere, Like } from "typeorm";
 
 export class TcpService extends BaseService<
@@ -23,7 +19,7 @@ export class TcpService extends BaseService<
    */
   public getAll = async (): Promise<Tcp[]> => {
     try {
-      return await this.repository.find({where: {status: true}});
+      return await this.repository.find({ where: { status: true } });
     } catch (error) {
       throw new Error(`Erro ao recuperar tipos de conta: ${error}`);
     }
@@ -34,7 +30,11 @@ export class TcpService extends BaseService<
    */
   public getMany = async (skip: number): Promise<Tcp[]> => {
     try {
-      return await this.repository.find({ skip, take: 10, where: {status: true} });
+      return await this.repository.find({
+        skip,
+        take: 10,
+        where: { status: true },
+      });
     } catch (error) {
       throw new Error(`Erro ao recuperar tipos de conta: ${error}`);
     }
@@ -110,7 +110,9 @@ export class TcpService extends BaseService<
   public query = async (data: QueryTcp): Promise<Tcp[]> => {
     try {
       const where: FindOptionsWhere<Tcp> = {};
-
+      if (data.id) {
+        where.id = data.id;
+      }
       if (data.name) {
         where.name = Like(`%${data.name}%`);
       }

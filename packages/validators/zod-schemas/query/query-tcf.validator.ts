@@ -2,6 +2,7 @@ import { z } from "zod";
 
 
 export const queryTcfSchema = z.object({
+  id: z.string().optional(),
   name: z.string(),
   status: z.coerce.boolean(),
   createdAt: z

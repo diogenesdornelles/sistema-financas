@@ -31,6 +31,7 @@ const TcpSearchForm = ({ onSearch }: TcpSearchFormProps): JSX.Element => {
       status: undefined,
       createdAt: '',
       updatedAt: '',
+      id: ''
     },
   });
 
@@ -38,7 +39,7 @@ const TcpSearchForm = ({ onSearch }: TcpSearchFormProps): JSX.Element => {
 
   const onSubmit = (data: QueryTcpFormData) => {
     const cleanedData: Partial<QueryTcpFormData> = { ...data };
-    (['name', 'createdAt', 'updatedAt'] as const).forEach((key) => {
+    (['id', 'name', 'createdAt', 'updatedAt'] as const).forEach((key) => {
       if (!cleanedData[key]) {
         delete cleanedData[key];
       }
@@ -52,6 +53,7 @@ const TcpSearchForm = ({ onSearch }: TcpSearchFormProps): JSX.Element => {
       status: undefined,
       createdAt: '',
       updatedAt: '',
+      id: ''
     });
     onSearch({} as QueryTcpFormData); // Envia filtro limpo
   };
@@ -68,6 +70,14 @@ const TcpSearchForm = ({ onSearch }: TcpSearchFormProps): JSX.Element => {
           alignItems: 'center',
         }}
       >
+        <TextField
+          label="ID"
+          {...register('id')}
+          variant="outlined"
+          error={!!errors.id}
+          helperText={errors.id?.message}
+          size="small"
+        />
         <TextField
           label="Nome"
           {...register('name')}

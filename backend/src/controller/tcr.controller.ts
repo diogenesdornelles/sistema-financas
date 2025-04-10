@@ -1,11 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { TcrService } from "../service/tcr.service";
 import { BaseController } from "./base.controller";
-import {
-  UpdateTcr,
-  CreateTcr,
-  QueryTcr,
-} from "../../../packages/dtos/tcr.dto";
+import { UpdateTcr, CreateTcr, QueryTcr } from "../../../packages/dtos/tcr.dto";
 import { createTcrSchema } from "../../../packages/validators/zod-schemas/create/create-tcr.validator";
 import { updateTcrSchema } from "../../../packages/validators/zod-schemas/update/update-tcr.validator";
 import { queryTcrSchema } from "../../../packages/validators/zod-schemas/query/query-tcr.validator";

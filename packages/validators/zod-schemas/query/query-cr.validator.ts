@@ -3,6 +3,7 @@ import { PaymentStatus } from "../../../dtos/utils/enums";
 
 
 export const queryCrSchema = z.object({
+  id: z.string().optional(),
   value: z
     .string()
     .transform((value) => (value.trim() === "" ? undefined : value.trim()))

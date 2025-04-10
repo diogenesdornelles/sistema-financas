@@ -31,12 +31,11 @@ const CpSearchForm = ({ onSearch }: CpSearchFormProps): JSX.Element => {
       type: '',
       supplier: '',
       due: '',
-      pdate: '',
       obs: '',
       status: undefined,
-      tx: '',
       createdAt: '',
       updatedAt: '',
+      id: ''
     },
   });
 
@@ -44,7 +43,7 @@ const CpSearchForm = ({ onSearch }: CpSearchFormProps): JSX.Element => {
 
   const onSubmit = (data: QueryCpFormData) => {
     const cleanedData: Partial<QueryCpFormData> = { ...data };
-    (['value', 'supplier', 'type', 'due', 'pdate', 'tx', 'obs', 'createdAt', 'updatedAt'] as const).forEach((key) => {
+    (['id', 'value', 'supplier', 'type', 'due', 'obs', 'createdAt', 'updatedAt'] as const).forEach((key) => {
       if (!cleanedData[key]) {
         delete cleanedData[key];
       }
@@ -58,12 +57,11 @@ const CpSearchForm = ({ onSearch }: CpSearchFormProps): JSX.Element => {
       type: '',
       supplier: '',
       due: '',
-      pdate: '',
       obs: '',
       status: undefined,
-      tx: '',
       createdAt: '',
       updatedAt: '',
+      id: ''
     });
     onSearch({} as QueryCpFormData); // Envia filtro limpo
   };
@@ -80,6 +78,14 @@ const CpSearchForm = ({ onSearch }: CpSearchFormProps): JSX.Element => {
           alignItems: 'center',
         }}
       >
+        <TextField
+          label="ID"
+          {...register('id')}
+          variant="outlined"
+          error={!!errors.id}
+          helperText={errors.id?.message}
+          size="small"
+        />
         <TextField
           label="Valor"
           {...register('value')}
@@ -117,31 +123,11 @@ const CpSearchForm = ({ onSearch }: CpSearchFormProps): JSX.Element => {
           size="small"
         />
         <TextField
-          label="Pagamento"
-          {...register('pdate')}
-          variant="outlined"
-          type="date"
-          slotProps={{
-            inputLabel: { shrink: true },
-          }}
-          error={!!errors.pdate}
-          helperText={errors.pdate?.message}
-          size="small"
-        />
-        <TextField
           label="Observações"
           {...register('obs')}
           variant="outlined"
           error={!!errors.obs}
           helperText={errors.obs?.message}
-          size="small"
-        />
-        <TextField
-          label="Transação"
-          {...register('tx')}
-          variant="outlined"
-          error={!!errors.tx}
-          helperText={errors.tx?.message}
           size="small"
         />
         <TextField

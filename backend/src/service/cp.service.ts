@@ -1,17 +1,8 @@
 import { BaseService } from "./base.service";
 import { Cp, Partner, Tcp, Tx, User } from "../entity/entities";
-import {
-  CreateCp,
-  UpdateCp,
-  QueryCp,
-} from "../../../packages/dtos/cp.dto";
+import { CreateCp, UpdateCp, QueryCp } from "../../../packages/dtos/cp.dto";
 import { CPStatus } from "../../../packages/dtos/utils/enums";
-import {
-  FindOptionsWhere,
-  Like,
-  MoreThanOrEqual,
-  Not
-} from "typeorm";
+import { FindOptionsWhere, Like, MoreThanOrEqual, Not } from "typeorm";
 
 export class CpService extends BaseService<
   Cp,
@@ -20,10 +11,10 @@ export class CpService extends BaseService<
   UpdateCp,
   QueryCp
 > {
-  private readonly relations: string[]
+  private readonly relations: string[];
   constructor() {
     super(Cp);
-    this.relations = ["type", "supplier"]
+    this.relations = ["type", "supplier"];
   }
 
   /**
@@ -32,9 +23,9 @@ export class CpService extends BaseService<
   public getAll = async (): Promise<Cp[]> => {
     try {
       return await this.repository.find({
-        
-        relations: this.relations, where: {status: Not(CPStatus.CANCELLED)}
-      } );
+        relations: this.relations,
+        where: { status: Not(CPStatus.CANCELLED) },
+      });
     } catch (error) {
       throw new Error(`Erro ao recuperar contas: ${error}`);
     }
@@ -46,7 +37,7 @@ export class CpService extends BaseService<
   public getMany = async (skip: number): Promise<Cp[]> => {
     try {
       return await this.repository.find({
-        where: {status: Not(CPStatus.CANCELLED)},
+        where: { status: Not(CPStatus.CANCELLED) },
         skip,
         take: 10,
         relations: this.relations,
@@ -157,7 +148,9 @@ export class CpService extends BaseService<
   public query = async (data: QueryCp): Promise<Cp[]> => {
     try {
       const where: FindOptionsWhere<Cp> = {};
-
+      if (data.id) {
+        where.id = data.id;
+      }
       if (data.value) {
         const value = parseFloat(
           data.value.replace(/\./g, "").replace(",", "."),

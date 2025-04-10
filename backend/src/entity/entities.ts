@@ -244,11 +244,11 @@ export class Tx extends Base {
   @Column({ type: "varchar", length: 100 })
   description!: string; // Create: required; Update: no required; Response: required
 
-  @ManyToOne(() => Cp, (cp) => cp.txs, {nullable: true})
+  @ManyToOne(() => Cp, (cp) => cp.txs, { nullable: true })
   @JoinColumn({ name: "cpId" })
   cp!: Cp; // Create: required; Update: no required; Response: no required
 
-  @ManyToOne(() => Cr, (cr) => cr.txs, {nullable: true})
+  @ManyToOne(() => Cr, (cr) => cr.txs, { nullable: true })
   @JoinColumn({ name: "crId" })
   cr!: Cr; // Create: required; Update: no required; Response: no required
 

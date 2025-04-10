@@ -24,6 +24,7 @@ export interface CatProps {
 
 
 export interface QueryCat {
+  id?: string;
   name?: string;
   description?: string;
   status?: boolean;

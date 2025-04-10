@@ -1,11 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { TxService } from "../service/tx.service";
 import { BaseController } from "./base.controller";
-import {
-  UpdateTx,
-  CreateTx,
-  QueryTx,
-} from "../../../packages/dtos/tx.dto";
+import { UpdateTx, CreateTx, QueryTx } from "../../../packages/dtos/tx.dto";
 import { createTxSchema } from "../../../packages/validators/zod-schemas/create/create-tx.validator";
 import { updateTxSchema } from "../../../packages/validators/zod-schemas/update/update-tx.validator";
 import { queryTxSchema } from "../../../packages/validators/zod-schemas/query/query-tx.validator";

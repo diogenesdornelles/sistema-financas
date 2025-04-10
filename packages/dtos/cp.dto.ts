@@ -36,6 +36,7 @@ export interface CpProps {
 
 
 export interface QueryCp {
+  id?: string;
   value?: string;
   type?: string;
   supplier?: string;

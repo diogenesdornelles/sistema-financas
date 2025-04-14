@@ -1,0 +1,32 @@
+# Use postgres/example user/password credentials
+version: '3.9'
+services:
+  postgres_db_sys_finan:
+
+    build: ./postgres
+    image: postgres:latest
+    env_file:
+      - .env
+    container_name: postgres_db_sys_finan
+    ports:
+      - "5433:5432" # Porta externa 5433 -> interna 5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+    networks:
+      - sistema_financas_net
+
+  adminer:
+    image: adminer
+    restart: always
+    ports: 
+     - "8000:8000"
+    networks:
+      - sistema_financas_net
+
+volumes:
+  postgres_data:
+
+networks:
+  sistema_financas_net:

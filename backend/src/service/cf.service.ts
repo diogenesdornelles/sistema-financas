@@ -12,6 +12,7 @@ export class CfService extends BaseService<
 > {
   constructor() {
     super(Cf);
+    this.relations = ["type"]
   }
 
   /**
@@ -20,7 +21,7 @@ export class CfService extends BaseService<
   public getAll = async (): Promise<Cf[]> => {
     try {
       const cfs = await this.repository.find({
-        relations: ["type"],
+        relations: this.relations,
         where: { status: true },
       });
       return cfs;
@@ -38,7 +39,7 @@ export class CfService extends BaseService<
         where: { status: true },
         skip,
         take: 10,
-        relations: ["type"],
+        relations: this.relations,
       });
       return cfs;
     } catch (error) {
@@ -55,7 +56,7 @@ export class CfService extends BaseService<
     try {
       const cf = await this.repository.findOne({
         where: { id },
-        relations: ["type"],
+        relations: this.relations,
       });
       return cf;
     } catch (error) {
@@ -82,7 +83,7 @@ export class CfService extends BaseService<
 
       return await this.repository.findOneOrFail({
         where: { id: createdCf.id },
-        relations: ["type"],
+        relations: this.relations,
       });
     } catch (error) {
       throw new Error(`Erro ao criar conta : ${error}`);
@@ -112,7 +113,7 @@ export class CfService extends BaseService<
 
       return await this.repository.findOne({
         where: { id },
-        relations: ["type"],
+        relations: this.relations,
       });
     } catch (error) {
       throw new Error(`Erro ao atualizar conta  com ID ${id}: ${error}`);
@@ -192,7 +193,7 @@ export class CfService extends BaseService<
 
       return await this.repository.find({
         where,
-        relations: ["type"],
+        relations: this.relations,
       });
     } catch (error) {
       throw new Error(`Erro ao filtrar contas financeiras: ${error}`);

@@ -12,7 +12,6 @@ export class TxService extends BaseService<
   UpdateTx,
   QueryTx
 > {
-  private readonly relations: string[]
   private cpRepo: Repository<Cp>
   private crRepo: Repository<Cr>
   constructor() {

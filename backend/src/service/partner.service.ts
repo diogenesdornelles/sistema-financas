@@ -29,7 +29,7 @@ export class PartnerService extends BaseService<
     try {
       return await this.repository.find({
         where: { status: true },
-        relations: [],
+        relations: this.relations,
       });
     } catch (error) {
       throw new Error(`Erro ao recuperar parceiros: ${error}`);
@@ -45,7 +45,7 @@ export class PartnerService extends BaseService<
         where: { status: true },
         skip,
         take: 10,
-        relations: [],
+        relations: this.relations,
       });
     } catch (error) {
       throw new Error(`Erro ao recuperar parceiros: ${error}`);
@@ -61,7 +61,7 @@ export class PartnerService extends BaseService<
     try {
       return await this.repository.findOne({
         where: { id },
-        relations: [],
+        relations: this.relations,
       });
     } catch (error) {
       throw new Error(`Erro ao recuperar parceiro com ID ${id}: ${error}`);
@@ -84,7 +84,7 @@ export class PartnerService extends BaseService<
 
       return await this.repository.findOneOrFail({
         where: { id: createdPartner.id },
-        relations: [],
+        relations: this.relations,
       });
     } catch (error) {
       throw new Error(`Erro ao criar parceiro: ${error}`);
@@ -110,7 +110,7 @@ export class PartnerService extends BaseService<
 
       return await this.repository.findOne({
         where: { id },
-        relations: [],
+        relations: this.relations,
       });
     } catch (error) {
       throw new Error(`Erro ao atualizar parceiro com ID ${id}: ${error}`);
@@ -177,7 +177,7 @@ export class PartnerService extends BaseService<
 
       return await this.repository.find({
         where,
-        relations: [],
+        relations: this.relations,
       });
     } catch (error) {
       throw new Error(`Erro ao filtrar contas a pagar: ${error}`);

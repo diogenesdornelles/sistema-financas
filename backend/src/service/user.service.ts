@@ -45,7 +45,7 @@ export class UserService extends BaseService<
           "cpf",
         ],
         where: { status: true },
-        relations: [],
+        relations: this.relations,
       });
       return users;
     } catch (error) {
@@ -71,7 +71,7 @@ export class UserService extends BaseService<
         ],
         skip,
         take: 10,
-        relations: [],
+        relations: this.relations,
       });
       return users;
     } catch (error) {
@@ -97,7 +97,7 @@ export class UserService extends BaseService<
           "updatedAt",
           "cpf",
         ],
-        relations: [],
+        relations: this.relations,
       });
       return user;
     } catch (error) {
@@ -150,7 +150,7 @@ export class UserService extends BaseService<
           "updatedAt",
           "cpf",
         ],
-        relations: [],
+        relations: this.relations,
       });
       return updatedUser;
     } catch (error) {
@@ -221,6 +221,7 @@ export class UserService extends BaseService<
           "updatedAt",
           "cpf",
         ],
+        relations: this.relations
       });
     } catch (error) {
       throw new Error(`Erro ao filtrar usuários: ${error}`);

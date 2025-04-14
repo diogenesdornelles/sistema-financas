@@ -2,7 +2,8 @@ import { BaseService } from "./base.service";
 import { Cr, Partner, Tcr, Tx, User } from "../entity/entities";
 import { CreateCr, UpdateCr, QueryCr } from "../../../packages/dtos/cr.dto";
 import { PaymentStatus } from "../../../packages/dtos/utils/enums";
-import { FindOptionsWhere, Like, MoreThanOrEqual, Not, Raw } from "typeorm";
+import { FindOptionsWhere, Like, MoreThanOrEqual, Not, Raw, Repository } from "typeorm";
+import { AppDataSource } from "../config/db";
 
 export class CrService extends BaseService<
   Cr,
@@ -11,10 +12,11 @@ export class CrService extends BaseService<
   UpdateCr,
   QueryCr
 > {
-  private readonly relations: string[];
+  public txRepo: Repository<Tx>
   constructor() {
     super(Cr);
     this.relations = ["type", "customer"];
+    this.txRepo = AppDataSource.getRepository(Tx);
   }
 
   /**
@@ -132,11 +134,25 @@ export class CrService extends BaseService<
    */
   public delete = async (id: string): Promise<boolean> => {
     try {
+      // Verifica se a conta existe
+      const cr = await this.repository.findOne({ where: { id } });
+      if (!cr) {
+        throw new Error(`Conta com ID ${id} não encontrada.`);
+      }
+  
+      // Atualiza o status da conta para CANCELLED (deleção lógica)
       await this.repository.update({ id }, { status: PaymentStatus.CANCELLED });
-      const updatedCr = await this.repository.findOne({ where: { id } });
-      return updatedCr?.status === PaymentStatus.CANCELLED;
+  
+      // Atualiza o status da transação associada, se existir
+      const dbTx = await this.txRepo.findOne({ where: { cp: { id } } });
+      if (dbTx) {
+        await this.txRepo.update(dbTx.id, { status: false });
+      }
+  
+      // Retorna true se a deleção lógica foi bem-sucedida
+      return true;
     } catch (error) {
-      throw new Error(`Erro ao remover conta com ID ${id}: ${error}`);
+      throw new Error(`Erro ao remover conta com ID ${id}: ${String(error)}`);
     }
   };
 

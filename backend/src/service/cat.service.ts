@@ -25,7 +25,7 @@ export class CatService extends BaseService<
   public getAll = async (): Promise<Cat[]> => {
     try {
       const cats = await this.repository.find({
-        relations: [],
+        relations: this.relations,
         where: { status: true },
       });
       return cats;
@@ -40,7 +40,7 @@ export class CatService extends BaseService<
         where: { status: true },
         skip,
         take: 10,
-        relations: [],
+        relations: this.relations,
       });
       return cats;
     } catch (error) {
@@ -57,7 +57,7 @@ export class CatService extends BaseService<
     try {
       const cat = await this.repository.findOne({
         where: { id },
-        relations: [],
+        relations: this.relations,
       });
       return cat;
     } catch (error) {

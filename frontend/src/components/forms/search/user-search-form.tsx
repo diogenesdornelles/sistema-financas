@@ -47,21 +47,9 @@ const UserSearchForm = ({ onSearch }: UserSearchFormProps): JSX.Element => {
       }
     });
     onSearch(cleanedData);
-    handleReset()
+    reset()
   };
 
-  const handleReset = () => {
-    reset({
-      name: '',
-      id: '',
-      surname: '',
-      cpf: '',
-      status: true,
-      createdAt: '',
-      updatedAt: '',
-    });
-    onSearch({} as QueryUserFormData); // Envia filtro limpo
-  };
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
@@ -138,7 +126,7 @@ const UserSearchForm = ({ onSearch }: UserSearchFormProps): JSX.Element => {
         <Button type="submit" variant="contained" color="primary">
           Buscar
         </Button>
-        <Button type="button" variant="outlined" color="secondary" onClick={handleReset}>
+        <Button type="button" variant="outlined" color="secondary" onClick={() => reset()}>
           Limpar
         </Button>
       </form>

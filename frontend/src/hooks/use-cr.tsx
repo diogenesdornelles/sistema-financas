@@ -28,7 +28,7 @@ export function useQueryCr() {
 export function useGetCr(id: string) {
   return useQuery({
     queryFn: () => Api.cr.get(id), 
-    queryKey: ["cr", "get", id], 
+    queryKey: ["cr", "get"], 
   });
 }
 

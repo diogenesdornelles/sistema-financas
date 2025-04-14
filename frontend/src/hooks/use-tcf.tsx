@@ -27,7 +27,7 @@ export function useQueryTcf() {
 export function useGetTcf(id: string) {
   return useQuery({
     queryFn: () => Api.tcf.get(id),
-    queryKey: ["tcf", "get", id],
+    queryKey: ["tcf", "get"],
   });
 }
 

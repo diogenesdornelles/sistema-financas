@@ -10,12 +10,12 @@ export class DbService {
   }
 
   /**
-   * Recupera saldos das contas.
+   * Recupera saldos das contas ativas.
    - Pegar cada CF em TX (distinct);
    - somar valores onde CR é null (Saída);
    - somar valores onde CP é null (Entrada);
    - diminuir as somas;
-   - até a data corrente;
+   - até a data informada;
    - devolver CF com campo saldo atual
    *
    * @param date - Data limite. Desconsidera transações do dia atual.
@@ -33,7 +33,7 @@ export class DbService {
             SUM(ttx."value") FILTER (WHERE ttx."crId" IS NULL) AS "balance"
           FROM tx ttx
           INNER JOIN cf tcf ON tcf."id" = ttx."cfId"
-          WHERE ttx."tdate" <= $1
+          WHERE ttx."tdate" <= $1 AND ttx."status"=true
           GROUP BY ttx."cfId", tcf."number"`,
         [date]
       );

@@ -1,7 +1,7 @@
 import { BaseService } from "./base.service";
 import { Cp, Partner, Tcp, Tx, User } from "../entity/entities";
 import { CreateCp, UpdateCp, QueryCp } from "../../../packages/dtos/cp.dto";
-import { CPStatus } from "../../../packages/dtos/utils/enums";
+import { PaymentStatus } from "../../../packages/dtos/utils/enums";
 import { FindOptionsWhere, Like, MoreThanOrEqual, Not, Raw } from "typeorm";
 
 export class CpService extends BaseService<
@@ -24,7 +24,7 @@ export class CpService extends BaseService<
     try {
       return await this.repository.find({
         relations: this.relations,
-        where: { status: Not(CPStatus.CANCELLED) },
+        where: { status: Not(PaymentStatus.CANCELLED) },
       });
     } catch (error) {
       throw new Error(`Erro ao recuperar contas: ${error}`);
@@ -37,7 +37,7 @@ export class CpService extends BaseService<
   public getMany = async (skip: number): Promise<Cp[]> => {
     try {
       return await this.repository.find({
-        where: { status: Not(CPStatus.CANCELLED) },
+        where: { status: Not(PaymentStatus.CANCELLED) },
         skip,
         take: 10,
         relations: this.relations,
@@ -126,15 +126,15 @@ export class CpService extends BaseService<
   };
 
   /**
-   * Remove logicamente uma conta (status = CPStatus.CANCELLED).
+   * Remove logicamente uma conta (status = PaymentStatus.CANCELLED).
    *
    * @param id - Identificador.
    */
   public delete = async (id: string): Promise<boolean> => {
     try {
-      await this.repository.update({ id }, { status: CPStatus.CANCELLED });
+      await this.repository.update({ id }, { status: PaymentStatus.CANCELLED });
       const updatedCp = await this.repository.findOne({ where: { id } });
-      return updatedCp?.status === CPStatus.CANCELLED;
+      return updatedCp?.status === PaymentStatus.CANCELLED;
     } catch (error) {
       throw new Error(`Erro ao remover conta com ID ${id}: ${error}`);
     }

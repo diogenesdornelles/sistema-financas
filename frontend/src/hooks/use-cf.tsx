@@ -23,7 +23,7 @@ export function useGetManyCf(skip: number) {
 export function useGetCf(id: string) {
   return useQuery({
     queryFn: () => Api.cf.get(id), 
-    queryKey: ["cf", "get", id], 
+    queryKey: ["cf", "get"], 
   });
 }
 

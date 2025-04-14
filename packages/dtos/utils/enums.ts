@@ -1,10 +1,5 @@
 // Enums para status, tipos e transações
-export enum CPStatus {
-    PENDING = "pending",
-    PAID = "paid",
-    CANCELLED = "cancelled",
-  }
-  
+
   export enum PaymentStatus {
     PENDING = "pending",
     PAID = "paid",
@@ -23,6 +18,12 @@ export enum CPStatus {
   }
   
   export enum TransactionType {
-    ENTRY = "E",
-    OUTFLOW = "O",
+    ENTRY = "entry",
+    OUTFLOW = "outflow",
+  }
+
+  export enum TransactionSearchType {
+    ENTRY = "entry",
+    OUTFLOW = "outflow",
+    BOTH = 'entryoutflow'
   }

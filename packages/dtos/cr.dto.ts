@@ -17,7 +17,6 @@ export interface UpdateCr {
   customer?: string;
   due?: string;
   obs?: string;
-  status?: PaymentStatus;
 }
 
 export interface CrProps {

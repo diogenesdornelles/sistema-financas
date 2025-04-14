@@ -27,7 +27,7 @@ export function useGetManyCp(skip: number) {
 export function useGetCp(id: string) {
   return useQuery({
     queryFn: () => Api.cp.get(id), 
-    queryKey: ["cp", "get", id], 
+    queryKey: ["cp", "get"], 
   });
 }
 

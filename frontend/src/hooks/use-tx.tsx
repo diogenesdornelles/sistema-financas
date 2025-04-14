@@ -27,7 +27,7 @@ export function useGetManyTx(skip: number) {
 export function useGetTx(id: string) {
   return useQuery({
     queryFn: () => Api.tx.get(id),
-    queryKey: ["tx", "get", id],
+    queryKey: ["tx", "get"],
   });
 }
 

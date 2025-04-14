@@ -55,22 +55,7 @@ const CrSearchForm = ({ onSearch }: CrSearchFormProps): JSX.Element => {
       }
     });
     onSearch(cleanedData);
-    handleReset()
-  };
-
-  const handleReset = () => {
-    reset({
-      value: '',
-      type: '',
-      customer: '',
-      due: '',
-      obs: '',
-      status: undefined,
-      createdAt: '',
-      updatedAt: '',
-      id: ''
-    });
-    onSearch({} as QueryCrFormData); // Envia filtro limpo
+    reset()
   };
 
   return (
@@ -180,7 +165,7 @@ const CrSearchForm = ({ onSearch }: CrSearchFormProps): JSX.Element => {
         <Button type="submit" variant="contained" color="primary">
           Buscar
         </Button>
-        <Button type="button" variant="outlined" color="secondary" onClick={handleReset}>
+        <Button type="button" variant="outlined" color="secondary" onClick={() => reset()}>
           Limpar
         </Button>
       </form>

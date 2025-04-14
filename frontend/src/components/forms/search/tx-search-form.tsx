@@ -7,9 +7,14 @@ import {
   Box,
   FormControlLabel,
   Switch,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material';
 import { queryTxSchema } from '../../../../../packages/validators/zod-schemas/query/query-tx.validator';
 import { JSX } from 'react';
+import { TransactionSearchType } from '../../../../../packages/dtos/utils/enums';
 
 type QueryTxFormData = z.infer<typeof queryTxSchema>;
 
@@ -39,39 +44,24 @@ const TxSearchForm = ({ onSearch }: TxSearchFormProps): JSX.Element => {
       tdate: '',
       createdAt: '',
       updatedAt: '',
+      type: TransactionSearchType.BOTH
     },
   });
+
 
   const showInactives = watch('status');
 
   const onSubmit = (data: QueryTxFormData) => {
     const cleanedData: Partial<QueryTxFormData> = { ...data };
-    (['id', 'value', 'cf', 'cp', 'cr', 'description', 'category', 'tdate', 'obs', 'createdAt', 'updatedAt'] as const).forEach((key) => {
+    (['id', 'value', 'cf', 'cp', 'cr', 'description', 'type', 'category', 'tdate', 'obs', 'createdAt', 'updatedAt'] as const).forEach((key) => {
       if (!cleanedData[key]) {
         delete cleanedData[key];
       }
     });
     onSearch(cleanedData);
-    handleReset()
+    reset()
   };
 
-  const handleReset = () => {
-    reset({
-      id: '',
-      value: '',
-      cf: '',
-      cr: '',
-      cp: '',
-      description: '',
-      category: '',
-      obs: '',
-      status: true,
-      tdate: '',
-      createdAt: '',
-      updatedAt: '',
-    });
-    onSearch({} as QueryTxFormData); // Envia filtro limpo
-  };
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
@@ -185,6 +175,26 @@ const TxSearchForm = ({ onSearch }: TxSearchFormProps): JSX.Element => {
           helperText={errors.updatedAt?.message}
           size="small"
         />
+        <FormControl variant="outlined" error={!!errors.type}>
+          <InputLabel id="tx-type-label-search" size='small'>Tipo</InputLabel>
+          <Select
+            sx={{ width: 100 }}
+            labelId="tx-type-label-search"
+            label="Tipo"
+            size="small"
+            defaultValue={TransactionSearchType.BOTH}
+            {...register("type")}
+          >
+            <MenuItem value="entry">Entrada</MenuItem>
+            <MenuItem value="outflow">Saída</MenuItem>
+            <MenuItem value="entryoutflow">Ambos</MenuItem>
+          </Select>
+          {errors.type && (
+            <p style={{ color: '#d32f2f', fontSize: '0.75rem', margin: '3px 14px 0' }}>
+              {errors.type.message}
+            </p>
+          )}
+        </FormControl>
         <FormControlLabel
           control={<Switch {...register('status')} checked={!!showInactives} />}
           label="Mostrar Inativos"
@@ -192,7 +202,7 @@ const TxSearchForm = ({ onSearch }: TxSearchFormProps): JSX.Element => {
         <Button type="submit" variant="contained" color="primary">
           Buscar
         </Button>
-        <Button type="button" variant="outlined" color="secondary" onClick={handleReset}>
+        <Button type="button" variant="outlined" color="secondary" onClick={() => reset()}>
           Limpar
         </Button>
       </form>

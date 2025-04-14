@@ -1,9 +1,9 @@
 import { z } from "zod";
-import { CPStatus } from "../../../dtos/utils/enums";
+import { PaymentStatus } from "../../../dtos/utils/enums";
 
 
 export const queryCpSchema = z.object({
-  id: z.string().optional(),
+  id: z.string().uuid().optional(),
   value: z
     .string()
     .transform((value) => (value.trim() === "" ? undefined : value.trim()))
@@ -31,7 +31,7 @@ export const queryCpSchema = z.object({
       },
       { message: "O saldo deve ser um valor monetário maior que zero" }
     ),
-  status: z.nativeEnum(CPStatus).optional(),
+  status: z.nativeEnum(PaymentStatus).optional(),
   type: z.string(), // procura por nome de tipo
   supplier: z.string(), // procura por nome de fornecedor
   obs: z.string(),

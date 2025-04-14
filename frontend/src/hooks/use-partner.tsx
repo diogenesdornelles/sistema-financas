@@ -28,7 +28,7 @@ export function useQueryPartner() {
 export function useGetPartner(id: string) {
   return useQuery({
     queryFn: () => Api.partner.get(id), 
-    queryKey: ["partner", "get", id], 
+    queryKey: ["partner", "get"], 
   });
 }
 

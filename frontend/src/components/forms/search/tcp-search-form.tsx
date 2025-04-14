@@ -45,18 +45,7 @@ const TcpSearchForm = ({ onSearch }: TcpSearchFormProps): JSX.Element => {
       }
     });
     onSearch(cleanedData);
-    handleReset()
-  };
-
-  const handleReset = () => {
-    reset({
-      name: '',
-      status: true,
-      createdAt: '',
-      updatedAt: '',
-      id: ''
-    });
-    onSearch({} as QueryTcpFormData); // Envia filtro limpo
+    reset()
   };
 
   return (
@@ -118,7 +107,7 @@ const TcpSearchForm = ({ onSearch }: TcpSearchFormProps): JSX.Element => {
         <Button type="submit" variant="contained" color="primary">
           Buscar
         </Button>
-        <Button type="button" variant="outlined" color="secondary" onClick={handleReset}>
+        <Button type="button" variant="outlined" color="secondary" onClick={() => reset()}>
           Limpar
         </Button>
       </form>

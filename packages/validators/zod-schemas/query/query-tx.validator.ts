@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { TransactionSearchType } from "../../../dtos/utils/enums";
 
 
 export const queryTxSchema = z.object({
@@ -37,6 +38,7 @@ export const queryTxSchema = z.object({
   cp: z.string().optional(),
   cr: z.string().optional(),
   category: z.string(),
+  type: z.nativeEnum(TransactionSearchType).optional(),
   tdate: z
     .string()
     .transform((value) => (value.trim() === "" ? undefined : value))

@@ -7,10 +7,7 @@ import {
     Box,
     Alert,
     Autocomplete,
-    Typography,
-    InputLabel,
-    Select,
-    MenuItem,
+    Typography
 } from "@mui/material";
 import { JSX } from "react";
 import { useFormStore } from "../../hooks/use-form-store";
@@ -222,7 +219,6 @@ export function UpdateCrForm(): JSX.Element | null | string {
         handleSubmit,
         control,
         reset,
-        watch,
         formState: { errors },
     } = useForm<UpdateCrFormData>({
         resolver: zodResolver(updateCrSchema),
@@ -231,12 +227,9 @@ export function UpdateCrForm(): JSX.Element | null | string {
             customer: forms.cr.updateItem.customer,
             due: forms.cr.updateItem.due ? String(forms.cr.updateItem.due) : "",
             obs: forms.cr.updateItem.obs ? forms.cr.updateItem.obs : "",
-            status: forms.cr.updateItem.status ? forms.cr.updateItem.status : undefined,
             value: strToPtBrMoney(forms.cr.updateItem?.value || ""),
         } : {},
     });
-
-    const statusValue = watch("status");
 
     const onSubmit = async (data: UpdateCrFormData) => {
         try {
@@ -370,18 +363,6 @@ export function UpdateCrForm(): JSX.Element | null | string {
                         multiline
                         rows={3}
                     />
-                   <InputLabel id="cr-status-label-update">Tipo</InputLabel>
-                    <Select
-                        labelId="cr-status-label-update"
-                        label="Status"
-                        size="small"
-                        defaultValue={statusValue}
-                        {...register("status")}
-                    >
-                        <MenuItem value="pending">Pendente</MenuItem>
-                        <MenuItem value="paid">Pago</MenuItem>
-                        <MenuItem value="cancelled">Cancelado</MenuItem>
-                    </Select>
                     <Button
                         type="submit"
                         variant="contained"

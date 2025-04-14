@@ -2,6 +2,7 @@ import { CatProps } from "./cat.dto";
 import { CfProps } from "./cf.dto";
 import { CpProps } from "./cp.dto";
 import { CrProps } from "./cr.dto";
+import { TransactionSearchType, TransactionType } from "./utils/enums";
 
 
 export interface CreateTx {
@@ -31,6 +32,7 @@ export interface UpdateTx {
 export interface TxProps {
   id: string;
   value: number;
+  type: TransactionType;
   cf: CfProps;
   cp?: CpProps; 
   cr?: CrProps;
@@ -47,6 +49,7 @@ export interface TxProps {
 export interface QueryTx {
   id?: string;
   value?: string;
+  type?: TransactionSearchType;
   cf?: string;
   cp?: string; 
   cr?: string;

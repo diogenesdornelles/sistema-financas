@@ -47,21 +47,9 @@ const CatSearchForm = ({ onSearch }: CatSearchFormProps): JSX.Element => {
       }
     });
     onSearch(cleanedData);
-    handleReset()
+    reset()
   };
 
-  const handleReset = () => {
-    reset({
-      id: '',
-      name: '',
-      description: '',
-      obs: '',
-      createdAt: '',
-      updatedAt: '',
-      status: true,
-    });
-    onSearch({} as QueryCatFormData); // envia filtro limpo
-  };
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
@@ -139,7 +127,7 @@ const CatSearchForm = ({ onSearch }: CatSearchFormProps): JSX.Element => {
         <Button type="submit" variant="contained" color="primary">
           Buscar
         </Button>
-        <Button type="button" variant="outlined" color="secondary" onClick={handleReset}>
+        <Button type="button" variant="outlined" color="secondary" onClick={() => reset()}>
           Limpar
         </Button>
       </form>

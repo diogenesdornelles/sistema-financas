@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { queryCpSchema } from '../../../../../packages/validators/zod-schemas/query/query-cp.validator';
 import { JSX } from 'react';
-import { CPStatus } from '../../../../../packages/dtos/utils/enums';
+import { PaymentStatus } from '../../../../../packages/dtos/utils/enums';
 
 type QueryCpFormData = z.infer<typeof queryCpSchema>;
 
@@ -34,7 +34,7 @@ const CpSearchForm = ({ onSearch }: CpSearchFormProps): JSX.Element => {
       supplier: '',
       due: '',
       obs: '',
-      status: CPStatus.PENDING,
+      status: PaymentStatus.PENDING,
       createdAt: '',
       updatedAt: '',
       id: ''
@@ -54,23 +54,9 @@ const CpSearchForm = ({ onSearch }: CpSearchFormProps): JSX.Element => {
       }
     });
     onSearch(cleanedData);
-    handleReset()
+    reset()
   };
 
-  const handleReset = () => {
-    reset({
-      value: '',
-      type: '',
-      supplier: '',
-      due: '',
-      obs: '',
-      status: CPStatus.PENDING,
-      createdAt: '',
-      updatedAt: '',
-      id: ''
-    });
-    onSearch({} as QueryCpFormData); // Envia filtro limpo
-  };
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
@@ -175,7 +161,7 @@ const CpSearchForm = ({ onSearch }: CpSearchFormProps): JSX.Element => {
         <Button type="submit" variant="contained" color="primary">
           Buscar
         </Button>
-        <Button type="button" variant="outlined" color="secondary" onClick={handleReset}>
+        <Button type="button" variant="outlined" color="secondary" onClick={() => reset()}>
           Limpar
         </Button>
       </form>

@@ -9,7 +9,6 @@ import {
   JoinColumn,
 } from "typeorm";
 import {
-  CPStatus,
   PartnerType,
   PaymentStatus,
   TransactionType,
@@ -135,8 +134,8 @@ export class Cp extends Base {
   @JoinColumn({ name: "userId" })
   user!: User; // Create: required; Update: no required; Response: no required
 
-  @Column({ type: "enum", enum: CPStatus, default: CPStatus.PENDING })
-  status!: CPStatus; // Create: no required; Update: no required; Response: required
+  @Column({ type: "enum", enum: PaymentStatus, default: PaymentStatus.PENDING })
+  status!: PaymentStatus; // Create: no required; Update: no required; Response: required
 
   @OneToMany(() => Tx, (tx) => tx.cp)
   txs!: Tx[]; // Create: no required; Update: no required; Response: no required

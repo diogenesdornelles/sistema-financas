@@ -53,21 +53,7 @@ const PartnerSearchForm = ({ onSearch }: PartnerSearchFormProps): JSX.Element =>
       }
     });
     onSearch(cleanedData);
-    handleReset()
-  };
-
-  const handleReset = () => {
-    reset({
-      name: '',
-      cod: '',
-      type: PartnerSearchType.PFPJ,
-      status: true,
-      obs: '',
-      createdAt: '',
-      updatedAt: '',
-      id: ''
-    });
-    onSearch({} as QueryPartnerFormData); // Envia filtro limpo
+    reset()
   };
 
   return (
@@ -165,7 +151,7 @@ const PartnerSearchForm = ({ onSearch }: PartnerSearchFormProps): JSX.Element =>
         <Button type="submit" variant="contained" color="primary">
           Buscar
         </Button>
-        <Button type="button" variant="outlined" color="secondary" onClick={handleReset}>
+        <Button type="button" variant="outlined" color="secondary" onClick={() => reset()}>
           Limpar
         </Button>
       </form>

@@ -50,23 +50,7 @@ const CfSearchForm = ({ onSearch }: CfSearchFormProps): JSX.Element => {
       }
     });
     onSearch(cleanedData);
-    handleReset()
-  };
-
-  const handleReset = () => {
-    reset({
-      id: '',
-      number: '',
-      balance: '',
-      type: '',
-      ag: '',
-      bank: '',
-      obs: '',
-      createdAt: '',
-      updatedAt: '',
-      status: true,
-    });
-    onSearch({} as QueryCfFormData); // Envia filtro limpo
+    reset()
   };
 
   return (
@@ -168,7 +152,7 @@ const CfSearchForm = ({ onSearch }: CfSearchFormProps): JSX.Element => {
         <Button type="submit" variant="contained" color="primary">
           Buscar
         </Button>
-        <Button type="button" variant="outlined" color="secondary" onClick={handleReset}>
+        <Button type="button" variant="outlined" color="secondary" onClick={() => reset()}>
           Limpar
         </Button>
       </form>

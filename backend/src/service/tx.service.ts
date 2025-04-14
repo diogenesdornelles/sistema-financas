@@ -1,7 +1,9 @@
 import { BaseService } from "./base.service";
 import { Cat, Cf, Cp, Cr, Tx, User } from "../entity/entities";
 import { CreateTx, QueryTx, UpdateTx } from "../../../packages/dtos/tx.dto";
-import { FindOptionsWhere, Like, MoreThanOrEqual, Raw } from "typeorm";
+import { FindOptionsWhere, Like, MoreThanOrEqual, Raw, Repository } from "typeorm";
+import { PaymentStatus, TransactionSearchType, TransactionType } from "../../../packages/dtos/utils/enums";
+import { AppDataSource } from "../config/db";
 
 export class TxService extends BaseService<
   Tx,
@@ -10,10 +12,14 @@ export class TxService extends BaseService<
   UpdateTx,
   QueryTx
 > {
-  private readonly relations: string[];
+  private readonly relations: string[]
+  private cpRepo: Repository<Cp>
+  private crRepo: Repository<Cr>
   constructor() {
     super(Tx);
     this.relations = ["category", "cf", "cr", "cp"];
+    this.cpRepo = AppDataSource.getRepository(Cp);
+    this.crRepo = AppDataSource.getRepository(Cr);
   }
 
   /**
@@ -69,19 +75,41 @@ export class TxService extends BaseService<
    */
   public create = async (data: CreateTx): Promise<Tx> => {
     try {
-      const newTx = this.repository.create({
+
+      // insere o tipo de transação, de acordo com a presença de CR ou CP
+      const updatedData = {
         ...data,
-        user: { id: data.user } as User,
-        category: { id: data.category } as Cat,
-        cf: { id: data.cf } as Cf,
-        cp: { id: data.cp } as Cp,
-        cr: { id: data.cr } as Cr,
-        value: data.value
-          ? parseFloat(data.value.replace(/\./g, "").replace(",", "."))
+        type: data.cr ? TransactionType.ENTRY : TransactionType.OUTFLOW
+      }
+
+      const newTx = this.repository.create({
+        ...updatedData,
+        user: { id: updatedData.user } as User,
+        category: { id: updatedData.category } as Cat,
+        cf: { id: updatedData.cf } as Cf,
+        cp: { id: updatedData.cp } as Cp,
+        cr: { id: updatedData.cr } as Cr,
+        value: updatedData.value
+          ? parseFloat(updatedData.value.replace(/\./g, "").replace(",", "."))
           : undefined,
       });
 
       const createdTx = await this.repository.save(newTx);
+
+      // atualiza CP ou CR para pago
+      if (createdTx.cp) {
+        await this.cpRepo.update(
+          createdTx.cp.id,
+          { status: PaymentStatus.PAID },
+        );
+      }
+
+      if (createdTx.cr) {
+        await this.crRepo.update(
+          createdTx.cr.id,
+          { status: PaymentStatus.PAID },
+        );
+      }
 
       return await this.repository.findOneOrFail({
         where: { id: createdTx.id },
@@ -91,6 +119,22 @@ export class TxService extends BaseService<
       throw new Error(`Erro ao criar transação: ${error}`);
     }
   };
+
+  private async updatePaymentStatus(
+    oldId: string | undefined,
+    newId: string | undefined,
+    repo: Repository<Cr> | Repository<Cp>,
+  ): Promise<void> {
+    if (oldId && oldId !== newId) {
+      // Retorna o antigo para "PENDING"
+      await repo.update(oldId, { status: PaymentStatus.PENDING });
+    }
+    if (newId && oldId !== newId) {
+      // Define o novo como "PAID"
+      await repo.update(newId, { status: PaymentStatus.PAID });
+    }
+  }
+
 
   /**
    * Atualiza uma transação existente.
@@ -103,8 +147,14 @@ export class TxService extends BaseService<
     data: UpdateTx,
   ): Promise<Partial<Tx> | null> => {
     try {
+      const dbData = await this.repository.findOneBy({ id });
+      if (!dbData) {
+        throw new Error(`Transação com ID ${id} não encontrada.`);
+      }
+
       const updateData: Partial<Tx> = {
         ...data,
+        type: data.cr ? TransactionType.ENTRY : TransactionType.OUTFLOW,
         category: data.category ? ({ id: data.category } as Cat) : undefined,
         cf: data.cf ? ({ id: data.cf } as Cf) : undefined,
         cp: data.cp ? ({ id: data.cp } as Cp) : undefined,
@@ -117,12 +167,16 @@ export class TxService extends BaseService<
 
       await this.repository.update({ id }, updateData);
 
+      // Atualiza status de CP e CR
+      await this.updatePaymentStatus(dbData.cp?.id, updateData.cp?.id, this.cpRepo);
+      await this.updatePaymentStatus(dbData.cr?.id, updateData.cr?.id, this.crRepo);
+
       return await this.repository.findOne({
         where: { id },
         relations: this.relations,
       });
     } catch (error) {
-      throw new Error(`Erro ao atualizar transação com ID ${id}: ${error}`);
+      throw new Error(`Erro ao atualizar transação com ID ${id}: ${String(error)}`);
     }
   };
 
@@ -133,11 +187,27 @@ export class TxService extends BaseService<
    */
   public delete = async (id: string): Promise<boolean> => {
     try {
+      // Verifica se a transação existe
+      const transaction = await this.repository.findOne({ where: { id } });
+      if (!transaction) {
+        throw new Error(`Transação com ID ${id} não encontrada.`);
+      }
+
+      // Atualiza o status da transação para false (exclusão lógica)
       await this.repository.update({ id }, { status: false });
-      const updatedTx = await this.repository.findOne({ where: { id } });
-      return updatedTx?.status === false;
+
+      // Atualiza os estados de CP e CR, se existirem
+      if (transaction.cp) {
+        await this.cpRepo.update(transaction.cp.id, { status: PaymentStatus.PENDING });
+      }
+      if (transaction.cr) {
+        await this.crRepo.update(transaction.cr.id, { status: PaymentStatus.PENDING });
+      }
+
+      // Retorna true se a exclusão lógica foi bem-sucedida
+      return true;
     } catch (error) {
-      throw new Error(`Erro ao remover transação com ID ${id}: ${error}`);
+      throw new Error(`Erro ao remover transação com ID ${id}: ${String(error)}`);
     }
   };
   /**
@@ -160,6 +230,10 @@ export class TxService extends BaseService<
         if (!isNaN(value)) {
           where.value = MoreThanOrEqual(value);
         }
+      }
+
+      if (data.type && data.type !== TransactionSearchType.BOTH) {
+        where.type = data.type as unknown as TransactionType;
       }
 
       if (data.cf) {

@@ -26,7 +26,7 @@ import { queryCpSchema } from '../../../../packages/validators/zod-schemas/query
 import { z } from 'zod';
 import { strToPtBrMoney } from '../../utils/strToPtBrMoney';
 import CustomBackdrop from '../custom-backdrop';
-import { CPStatus } from '../../../../packages/dtos/utils/enums';
+import { PaymentStatus } from '../../../../packages/dtos/utils/enums';
 
 type QueryCpFormData = z.infer<typeof queryCpSchema>;
 
@@ -76,13 +76,13 @@ const CpList = (): JSX.Element => {
     });
   };
 
-  const getPaymentStatusText = (status: CPStatus): string => {
+  const getPaymentStatusText = (status: PaymentStatus): string => {
     switch (status) {
-      case CPStatus.PENDING:
+      case PaymentStatus.PENDING:
         return 'Pendente';
-      case CPStatus.PAID:
+      case PaymentStatus.PAID:
         return 'Pago';
-      case CPStatus.CANCELLED:
+      case PaymentStatus.CANCELLED:
         return 'Cancelado';
       default:
         return status;

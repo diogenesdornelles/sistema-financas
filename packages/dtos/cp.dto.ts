@@ -1,7 +1,7 @@
 
 import { PartnerProps } from "./partner.dto";
 import { TcpProps } from "./tcp.dto";
-import { CPStatus } from "./utils/enums";
+import { PaymentStatus } from "./utils/enums";
 
 export interface CreateCp {
   // required na criação
@@ -19,7 +19,6 @@ export interface UpdateCp {
   supplier?: string;
   due?: string;
   obs?: string;
-  status?: CPStatus;
 }
 
 export interface CpProps {
@@ -29,7 +28,7 @@ export interface CpProps {
   supplier: PartnerProps;
   due: string;
   obs: string;
-  status: CPStatus;
+  status: PaymentStatus;
   createdAt: string;
   updatedAt: string;
 }
@@ -42,7 +41,7 @@ export interface QueryCp {
   supplier?: string;
   due?: string;
   obs?: string;
-  status?: CPStatus;
+  status?: PaymentStatus;
   createdAt?: string;
   updatedAt?: string;
 }

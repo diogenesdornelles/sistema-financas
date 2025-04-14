@@ -108,7 +108,7 @@ const CfList = (): JSX.Element => {
               <TableCell align="right" sx={{ fontWeight: 800 }}>Banco</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Status</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Tipo</TableCell>
-              <TableCell align="right" sx={{ fontWeight: 800 }}>Saldo</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Saldo original</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Observações</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Criado em</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Atualizado em</TableCell>

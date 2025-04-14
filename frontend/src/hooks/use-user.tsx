@@ -27,7 +27,7 @@ export function useGetManyUser(skip: number) {
 export function useGetUser(id: string) {
   return useQuery({
     queryFn: () => Api.user.get(id),
-    queryKey: ["User", "get", id],
+    queryKey: ["User", "get"],
   });
 }
 

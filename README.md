@@ -152,11 +152,10 @@ example
 
 A modularidade do sistema permite a inclusão de funcionalidades adicionais, como:
 
-- Relatórios e Dashboards: Análises visuais do fluxo de caixa e gráficos que auxiliem na tomada de decisão.
-
-- Alertas e Notificações: Lembretes para contas a pagar ou receber, evitando atrasos e multas.
-
-- Controle de Acesso e Auditoria: Implementação de autenticação, autorização e logs para monitorar as atividades do sistema.
+- Relatórios e Dashboards: Análises visuais do fluxo de caixa e gráficos que auxiliem na tomada de decisão;
+- Alertas e Notificações: Lembretes para contas a pagar ou receber, evitando atrasos e multas;
+- Controle de Acesso e Auditoria: Implementação de autenticação, autorização e logs para monitorar as atividades do sistema;
+- Incluir forma de pagamento para qualificar transações;
 
 ## Core das RNs
 

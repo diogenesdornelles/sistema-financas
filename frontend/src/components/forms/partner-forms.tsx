@@ -11,6 +11,7 @@ import { useAuth } from '../../hooks/use-auth';
 import FormContainer from './templates/form-container';
 import ButtonUpdateForm from './templates/button-update-form';
 import CustomBackdrop from '../custom-backdrop';
+import { PartnerType } from '../../../../packages/dtos/utils/enums';
 
 type CreatePartnerFormData = z.infer<typeof createPartnerSchema>;
 type UpdatePartnerFormData = z.infer<typeof updatePartnerSchema>;
@@ -21,21 +22,23 @@ export function CreatePartnerForm(): JSX.Element | null {
     const { forms } = useFormStore();
     const { session } = useAuth()
 
-    const { register, handleSubmit, reset, formState: { errors } } = useForm<CreatePartnerFormData>({
+    const { register, handleSubmit, reset, watch, formState: { errors } } = useForm<CreatePartnerFormData>({
         resolver: zodResolver(createPartnerSchema),
         defaultValues: {
             name: '',
             cod: '',
             user: session ? session?.user.id : '',
             obs: "",
-            type: undefined
+            type: PartnerType.PJ
         }
 
     });
 
+    const typeValue = watch('type')
+
     const onSubmit = async (data: CreatePartnerFormData) => {
         try {
-            await mutation.mutateAsync({ ...data, user: session ? session?.user.id : '' });
+            await mutation.mutateAsync(data);
             reset()
         } catch (err) {
             console.error("Erro ao criar parceiro:", err);
@@ -79,7 +82,7 @@ export function CreatePartnerForm(): JSX.Element | null {
                             size="small"
                             labelId="partner-type-label"
                             label="Tipo"
-                            defaultValue=""
+                            defaultValue={typeValue}
                             {...register("type")}
                         >
                             <MenuItem value="PF">PF</MenuItem>
@@ -142,6 +145,8 @@ export function UpdatePartnerForm(): JSX.Element | null {
 
     const statusValue = watch("status");
 
+    const typeValue = watch('type')
+
     const onSubmit = async (data: UpdatePartnerFormData) => {
         try {
             await mutation.mutateAsync(data);
@@ -188,7 +193,7 @@ export function UpdatePartnerForm(): JSX.Element | null {
                             labelId="partner-type-label-update"
                             label="Tipo"
                             size="small"
-                            defaultValue=""
+                            defaultValue={typeValue}
                             {...register("type")}
                         >
                             <MenuItem value="PF">PF</MenuItem>

@@ -10,8 +10,12 @@ import {
     Checkbox,
     FormControlLabel,
     Typography,
+    FormControl,
+    FormLabel,
+    RadioGroup,
+    Radio,
 } from "@mui/material";
-import { JSX } from "react";
+import { JSX, useState } from "react";
 import { useFormStore } from "../../hooks/use-form-store";
 import { createTxSchema } from "../../../../packages/validators/zod-schemas/create/create-tx.validator";
 import { updateTxSchema } from "../../../../packages/validators/zod-schemas/update/update-tx.validator";
@@ -31,6 +35,7 @@ import { useGetAllCr } from "../../hooks/use-cr";
 // Tipos inferidos dos schemas
 type CreateTxFormData = z.infer<typeof createTxSchema>;
 type UpdateTxFormData = z.infer<typeof updateTxSchema>;
+type RadioInput = 'cp' | 'cr'
 
 /* 
   Formulário de Criação de Tx
@@ -43,6 +48,7 @@ export function CreateTxForm(): JSX.Element | null | string {
     const { isPending: isPendingCat, error: errorCat, data: catData } = useGetAllCat();
     const { isPending: isPendingCp, error: errorCp, data: cpData } = useGetAllCp();
     const { isPending: isPendingCr, error: errorCr, data: crData } = useGetAllCr();
+    const [account, setAccount] = useState<RadioInput>('cp')
 
 
     const { session } = useAuth();
@@ -63,6 +69,8 @@ export function CreateTxForm(): JSX.Element | null | string {
             category: "",
             obs: "",
             tdate: "",
+            cp: undefined,
+            cr: undefined,
             user: session ? session.user.id : "",
         },
     });
@@ -141,7 +149,6 @@ export function CreateTxForm(): JSX.Element | null | string {
 
                     </Box>
 
-
                     <Controller
                         name="category"
                         control={control}
@@ -165,7 +172,6 @@ export function CreateTxForm(): JSX.Element | null | string {
                         )}
                     />
 
-
                     <Controller
                         name="cf"
                         control={control}
@@ -188,51 +194,66 @@ export function CreateTxForm(): JSX.Element | null | string {
                         )}
                     />
 
-                    <Controller
-                        name="cp"
-                        control={control}
-                        render={({ field }) => (
-                            <Autocomplete
-                                sx={{ flex: 1, width: '100%' }}
-                                options={cpData ? cpData : []}
-                                getOptionLabel={(option) => option.id || ""}
-                                onChange={(_, data) => field.onChange(data ? data.id : "")}
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        label="ID Conta a Pagar"
-                                        size="small"
-                                        variant="outlined"
-                                        error={!!errors.cp}
-                                        helperText={errors.cp?.message}
-                                    />
-                                )}
-                            />
-                        )}
-                    />
+                    <FormControl>
+                        <FormLabel id="radio-buttons-group-label">Conta a</FormLabel>
+                        <RadioGroup
+                            aria-labelledby="radio-buttons-group-label"
+                            defaultValue={account}
+                            name="radio-buttons-group"
+                            onChange={(e) => setAccount(e.target.value as RadioInput)}
+                            sx={{ display: "flex", flexDirection: 'row', marginBottom: -2 }}
+                        >
+                            <FormControlLabel value="cp" control={<Radio />} label="pagar" />
+                            <FormControlLabel value="cr" control={<Radio />} label="receber" />
+                        </RadioGroup>
+                    </FormControl>
 
-
-                    <Controller
-                        name="cr"
-                        control={control}
-                        render={({ field }) => (
-                            <Autocomplete
-                                options={crData ? crData : []}
-                                getOptionLabel={(option) => option.id || ""}
-                                onChange={(_, data) => field.onChange(data ? data.id : "")}
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        label="ID Conta a Receber"
-                                        variant="outlined"
-                                        size="small"
-                                        error={!!errors.cr}
-                                        helperText={errors.cr?.message}
-                                    />
-                                )}
-                            />
-                        )}
-                    />
+                    {account === 'cp' ? (
+                        <Controller
+                            name="cp"
+                            control={control}
+                            render={({ field }) => (
+                                <Autocomplete
+                                    sx={{ flex: 1, width: '100%' }}
+                                    options={cpData ? cpData : []}
+                                    getOptionLabel={(option) => option.id || ""}
+                                    onChange={(_, data) => field.onChange(data ? data.id : "")}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="ID Conta a Pagar"
+                                            size="small"
+                                            variant="outlined"
+                                            error={!!errors.cp}
+                                            helperText={errors.cp?.message}
+                                        />
+                                    )}
+                                />
+                            )}
+                        />
+                    ) : (
+                        <Controller
+                            name="cr"
+                            control={control}
+                            render={({ field }) => (
+                                <Autocomplete
+                                    options={crData ? crData : []}
+                                    getOptionLabel={(option) => option.id || ""}
+                                    onChange={(_, data) => field.onChange(data ? data.id : "")}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="ID Conta a Receber"
+                                            variant="outlined"
+                                            size="small"
+                                            error={!!errors.cr}
+                                            helperText={errors.cr?.message}
+                                        />
+                                    )}
+                                />
+                            )}
+                        />
+                    )}
 
                     <TextField
                         label="Descrição"
@@ -280,6 +301,7 @@ export function UpdateTxForm(): JSX.Element | null | string {
     const { isPending: isPendingCat, error: errorCat, data: catData } = useGetAllCat();
     const { isPending: isPendingCp, error: errorCp, data: cpData } = useGetAllCp();
     const { isPending: isPendingCr, error: errorCr, data: crData } = useGetAllCr();
+    const [account, setAccount] = useState<RadioInput>('cp')
 
 
     const {
@@ -425,57 +447,75 @@ export function UpdateTxForm(): JSX.Element | null | string {
                         )}
                     />
 
-                    <Controller
-                        name="cp"
-                        control={control}
-                        render={({ field }) => (
-                            <Autocomplete
-                                options={cpData ? cpData : []}
-                                getOptionLabel={(option) => option.id || ""}
-                                onChange={(_, data) => field.onChange(data ? data.id : "")}
-                                defaultValue={
-                                    cpData && cpData.find(
-                                        (option) => option.id === forms.tx.updateItem?.cp
-                                    ) || null
-                                }
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        label="Conta a pagar"
-                                        variant="outlined"
-                                        error={!!errors.cp}
-                                        helperText={errors.cp?.message}
-                                    />
-                                )}
-                            />
-                        )}
-                    />
+                    <FormControl>
+                        <FormLabel id="radio-buttons-group-label">Conta a</FormLabel>
+                        <RadioGroup
+                            aria-labelledby="radio-buttons-group-label"
+                            defaultValue={account}
+                            name="radio-buttons-group"
+                            onChange={(e) => setAccount(e.target.value as RadioInput)}
+                            sx={{ display: "flex", flexDirection: 'row', marginBottom: -2 }}
+                        >
+                            <FormControlLabel value="cp" control={<Radio />} label="pagar" />
+                            <FormControlLabel value="cr" control={<Radio />} label="receber" />
+                        </RadioGroup>
+                    </FormControl>
 
-                    <Controller
-                        name="cr"
-                        control={control}
-                        render={({ field }) => (
-                            <Autocomplete
-                                options={crData ? crData : []}
-                                getOptionLabel={(option) => option.id || ""}
-                                onChange={(_, data) => field.onChange(data ? data.id : "")}
-                                defaultValue={
-                                    crData && crData.find(
-                                        (option) => option.id === forms.tx.updateItem?.cr
-                                    ) || null
-                                }
-                                renderInput={(params) => (
-                                    <TextField
-                                        {...params}
-                                        label="Conta a receber"
-                                        variant="outlined"
-                                        error={!!errors.cr}
-                                        helperText={errors.cr?.message}
-                                    />
-                                )}
-                            />
-                        )}
-                    />
+                    {account ? (
+                        <Controller
+                            name="cp"
+                            control={control}
+                            render={({ field }) => (
+                                <Autocomplete
+                                    options={cpData ? cpData : []}
+                                    getOptionLabel={(option) => option.id || ""}
+                                    onChange={(_, data) => field.onChange(data ? data.id : "")}
+                                    defaultValue={
+                                        cpData && cpData.find(
+                                            (option) => option.id === forms.tx.updateItem?.cp
+                                        ) || null
+                                    }
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Conta a pagar"
+                                            variant="outlined"
+                                            error={!!errors.cp}
+                                            helperText={errors.cp?.message}
+                                        />
+                                    )}
+                                />
+                            )}
+                        />
+                    ) : (
+
+                        <Controller
+                            name="cr"
+                            control={control}
+                            render={({ field }) => (
+                                <Autocomplete
+                                    options={crData ? crData : []}
+                                    getOptionLabel={(option) => option.id || ""}
+                                    onChange={(_, data) => field.onChange(data ? data.id : "")}
+                                    defaultValue={
+                                        crData && crData.find(
+                                            (option) => option.id === forms.tx.updateItem?.cr
+                                        ) || null
+                                    }
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Conta a receber"
+                                            variant="outlined"
+                                            error={!!errors.cr}
+                                            helperText={errors.cr?.message}
+                                        />
+                                    )}
+                                />
+                            )}
+                        />
+                    )
+                    }
 
                     <TextField
                         label="Descrição"

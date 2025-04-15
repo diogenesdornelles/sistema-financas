@@ -114,7 +114,10 @@ export function UpdateTcrForm(): JSX.Element | null {
     const onSubmit = async (data: UpdateTcrFormData) => {
         try {
             await mutation.mutateAsync(data);
-            reset()
+            reset({
+                name: data.name,
+                status: data.status ? data.status : undefined
+              })
         } catch (err) {
             console.error("Erro ao atualizar o Tipo de conta a receber:", err);
         }

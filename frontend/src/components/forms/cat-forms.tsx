@@ -125,7 +125,12 @@ export function UpdateCatForm(): JSX.Element | null {
     const onSubmit = async (data: UpdateCatFormData) => {
         try {
             await mutation.mutateAsync(data);
-            reset()
+            reset({
+                name: data.name,
+                obs: data.obs,
+                description: data.description,
+                status: data.status
+            })
         } catch (err) {
             console.error("Erro ao atualizar Categoria:", err);
         }

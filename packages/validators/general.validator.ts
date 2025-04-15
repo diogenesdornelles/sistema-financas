@@ -82,15 +82,36 @@ export default class GeneralValidator {
     return true;
   };
 
-  public static validateMoneyString = (value: string): string  => {
-    const re = /^\d{1,3}(?:\.\d{3})*(?:,\d{2})?$|^\d+(?:,\d{2})?$/;
-    if (re.test(value.trim())) {
-      const normalized = value.trim().replace(/\./g, "").replace(",", ".");
-      const converted = parseFloat(normalized);
-      return !isNaN(converted) && GeneralValidator.validateMoneyNumber(converted) && converted >= 0.0 && normalized.length >= 4 ? normalized : "";
+  public static validateMoneyString = (value: string): string | false => {
+    try {
+      
+      if (!value || value.trim() === "") {
+        return false; //
+      }
+
+      const trimmed = value.trim();
+      const parsedValue = Number.parseFloat(trimmed);
+
+      if (!Number.isNaN(parsedValue)) {
+        if (parsedValue >= 0.0 && GeneralValidator.validateMoneyNumber(parsedValue)) {
+          return trimmed;
+        }
+      }
+
+      const re = /^\d{1,3}(?:\.\d{3})*(?:,\d{2})?$|^\d+(?:,\d{2})?$/;
+      if (re.test(trimmed)) {
+        const normalized = trimmed.replace(/\./g, "").replace(",", ".");
+        const converted = parseFloat(normalized);
+        if (!Number.isNaN(converted) && GeneralValidator.validateMoneyNumber(converted) && converted >= 0.0) {
+          return normalized; 
+        }
+      }
+      return false;
+    } catch (error) {
+      console.error("Erro ao validar string monetária:", error);
+      return false;
     }
-    return "";
-  }
+  };
 
   public static validateUUID = (cod: string): boolean => {
     if (!cod || !isUuid(cod)) {
@@ -102,7 +123,6 @@ export default class GeneralValidator {
   public static validateDateUntilPresent = (date: string): boolean => {
     try {
       const parsedDate = dateSchemaMin.parse(date);
-      console.log(parsedDate)
       return !!parsedDate;
     } catch (error) {
       console.error("Erro ao validar data até o presente:", error);

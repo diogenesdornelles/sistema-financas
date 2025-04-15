@@ -1,11 +1,8 @@
 import { z } from "zod";
 
 import GeneralValidator from "../../general.validator";
+import { PartnerType } from "../../../dtos/utils/enums";
 
-export enum PartnerType {
-    PF = "PF",
-    PJ = "PJ",
-}
 
 export const createPartnerSchema = z
     .object({

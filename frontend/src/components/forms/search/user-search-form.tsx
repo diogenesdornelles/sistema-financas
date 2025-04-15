@@ -15,9 +15,10 @@ type QueryUserFormData = z.infer<typeof queryUserSchema>;
 
 interface UserSearchFormProps {
   onSearch: (data: QueryUserFormData) => void;
+  onClear: () => void;
 }
 
-const UserSearchForm = ({ onSearch }: UserSearchFormProps): JSX.Element => {
+const UserSearchForm = ({ onSearch, onClear }: UserSearchFormProps): JSX.Element => {
   const {
     register,
     handleSubmit,
@@ -31,7 +32,7 @@ const UserSearchForm = ({ onSearch }: UserSearchFormProps): JSX.Element => {
       id: '',
       surname: '',
       cpf: '',
-      status: true,
+      status: false, // não mostrar inativos
       createdAt: '',
       updatedAt: '',
     },
@@ -49,7 +50,10 @@ const UserSearchForm = ({ onSearch }: UserSearchFormProps): JSX.Element => {
     onSearch(cleanedData);
     reset()
   };
-
+  const handleClear = () => {
+    reset();
+    onClear();
+  };
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
@@ -126,7 +130,7 @@ const UserSearchForm = ({ onSearch }: UserSearchFormProps): JSX.Element => {
         <Button type="submit" variant="contained" color="primary">
           Buscar
         </Button>
-        <Button type="button" variant="outlined" color="secondary" onClick={() => reset()}>
+        <Button type="button" variant="outlined" color="secondary" onClick={handleClear}>
           Limpar
         </Button>
       </form>

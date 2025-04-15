@@ -71,6 +71,10 @@ const TxList = (): JSX.Element => {
     }
   };
 
+  const handleClearSearch = () => {
+    setItems(data || null);
+  };
+
   const handleChangePage = (direction: number) => {
     setPage((prev) => {
       const nextPage = prev + direction;
@@ -94,7 +98,7 @@ const TxList = (): JSX.Element => {
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
       {(isPending) && <CustomBackdrop isOpen={isPending} />}
       <Typography variant="h4">Filtro</Typography>
-      <TxSearchForm onSearch={handleSearch} />
+      <TxSearchForm onSearch={handleSearch} onClear={handleClearSearch}/>
       <Divider />
       <Typography variant="h4">Transações</Typography>
       <TableContainer component={Paper} sx={{ height: '100%' }}>

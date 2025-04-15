@@ -1,6 +1,7 @@
 import { z } from "zod";
-import { PartnerType } from "../create/create-partner.validator";
+
 import GeneralValidator from "../../general.validator";
+import { PartnerType } from "../../../dtos/utils/enums";
 
 
 export const updatePartnerSchema = z
@@ -8,7 +9,8 @@ export const updatePartnerSchema = z
         name: z
             .string()
             .min(3, "Nome precisa ter ao menos 3 caracteres")
-            .max(100, "Nome pode ter no máximo 100 caracteres"),
+            .max(100, "Nome pode ter no máximo 100 caracteres")
+            .optional(),
         
         cod: z
             .string()
@@ -17,8 +19,8 @@ export const updatePartnerSchema = z
                 message: "Código deve ter 11 dígitos (CPF) ou 14 dígitos (CNPJ)",
             }),
         
-        type: z.nativeEnum(PartnerType),
-        status: z.boolean(),
+        type: z.nativeEnum(PartnerType).optional(),
+        status: z.boolean().optional(),
         obs: z
             .string()
             .max(255, "Observação pode ter no máximo 255 caracteres")

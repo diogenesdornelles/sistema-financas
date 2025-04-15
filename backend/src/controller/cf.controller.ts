@@ -82,6 +82,7 @@ export default class CfController extends BaseController<CfService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
+      console.log(req.body)
       const validatedData: CreateCf = createCfSchema.parse(req.body);
       const item: Cf = await this.service.create(validatedData);
       res.status(201).json(item);

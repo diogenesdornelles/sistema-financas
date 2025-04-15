@@ -4,6 +4,8 @@ import { CreateCp, UpdateCp, QueryCp } from "../../../packages/dtos/cp.dto";
 import { PaymentStatus } from "../../../packages/dtos/utils/enums";
 import { FindOptionsWhere, Like, MoreThanOrEqual, Not, Raw, Repository } from "typeorm";
 import { AppDataSource } from "../config/db";
+import GeneralValidator from "../../../packages/validators/general.validator";
+import { ApiError } from "../utils/api-error.util";
 
 export class CpService extends BaseService<
   Cp,
@@ -72,13 +74,19 @@ export class CpService extends BaseService<
    */
   public create = async (data: CreateCp): Promise<Cp> => {
     try {
+
+      const value = GeneralValidator.validateMoneyString(data.value)
+
+      if (!value) {
+        throw new ApiError(401, "Informar um valor Pt-Br válido")
+      }
       const newCp = this.repository.create({
         ...data,
         user: { id: data.user } as User,
         type: { id: data.type } as Tcp,
         supplier: { id: data.supplier } as Partner,
-        value: data.value
-          ? parseFloat(data.value.replace(/\./g, "").replace(",", "."))
+        value: value
+          ? parseFloat(value)
           : undefined,
       });
 
@@ -104,14 +112,23 @@ export class CpService extends BaseService<
     data: UpdateCp,
   ): Promise<Partial<Cp> | null> => {
     try {
+      let value: string | boolean = false
+
+      if (data.value) {
+        value = GeneralValidator.validateMoneyString(data.value ? data.value : '') // valor que falha
+        if (!value) {
+          throw new ApiError(401, "Informar um valor Pt-Br válido")
+        }
+      }
+
       const updateData: Partial<Cp> = {
         ...data,
         type: data.type ? ({ id: data.type } as Tcp) : undefined,
         supplier: data.supplier
           ? ({ id: data.supplier } as Partner)
           : undefined,
-        value: data.value
-          ? parseFloat(data.value.replace(/\./g, "").replace(",", "."))
+        value: value
+          ? parseFloat(value)
           : undefined,
         due: data.due ? new Date(data.due) : undefined,
       };
@@ -139,16 +156,16 @@ export class CpService extends BaseService<
       if (!cp) {
         throw new Error(`Conta com ID ${id} não encontrada.`);
       }
-  
+
       // Atualiza o status da conta para CANCELLED (deleção lógica)
       await this.repository.update({ id }, { status: PaymentStatus.CANCELLED });
-  
+
       // Atualiza o status da transação associada, se existir
       const dbTx = await this.txRepo.findOne({ where: { cp: { id } } });
       if (dbTx) {
         await this.txRepo.update(dbTx.id, { status: false });
       }
-  
+
       // Retorna true se a deleção lógica foi bem-sucedida
       return true;
     } catch (error) {

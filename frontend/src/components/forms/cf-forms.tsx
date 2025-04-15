@@ -136,6 +136,7 @@ export function CreateCfForm(): JSX.Element | null {
                                 onChange={(_, data) =>
                                     field.onChange(data ? data.id : "")
                                 }
+                                value={field.value ? (data?.find((option) => option.id === field.value) || null) : null}
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
@@ -232,7 +233,15 @@ export function UpdateCfForm(): JSX.Element | null {
     const onSubmit = async (data: UpdateCfFormData) => {
         try {
             await mutation.mutateAsync(data);
-            reset()
+            reset({
+                number: data.number,
+                type: data.type,
+                ag: data.ag || undefined,
+                bank: data.bank || undefined,
+                obs: data.obs || undefined,
+                status: data.status,
+                balance: strToPtBrMoney(data.balance ?? '0.00')
+            })
         } catch (err) {
             console.error("Erro ao atualizar Conta:", err);
         }

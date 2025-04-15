@@ -4,6 +4,8 @@ import { CreateTx, QueryTx, UpdateTx } from "../../../packages/dtos/tx.dto";
 import { FindOptionsWhere, Like, MoreThanOrEqual, Raw, Repository } from "typeorm";
 import { PaymentStatus, TransactionSearchType, TransactionType } from "../../../packages/dtos/utils/enums";
 import { AppDataSource } from "../config/db";
+import GeneralValidator from "../../../packages/validators/general.validator";
+import { ApiError } from "../utils/api-error.util";
 
 export class TxService extends BaseService<
   Tx,
@@ -75,6 +77,12 @@ export class TxService extends BaseService<
   public create = async (data: CreateTx): Promise<Tx> => {
     try {
 
+      const value = GeneralValidator.validateMoneyString(data.value)
+
+      if (!value) {
+        throw new ApiError(401, "Informar um valor Pt-Br válido")
+      }
+
       // insere o tipo de transação, de acordo com a presença de CR ou CP
       const updatedData = {
         ...data,
@@ -88,9 +96,9 @@ export class TxService extends BaseService<
         cf: { id: updatedData.cf } as Cf,
         cp: { id: updatedData.cp } as Cp,
         cr: { id: updatedData.cr } as Cr,
-        value: updatedData.value
-          ? parseFloat(updatedData.value.replace(/\./g, "").replace(",", "."))
-          : undefined,
+        value: value
+        ? parseFloat(value)
+        : undefined,
       });
 
       const createdTx = await this.repository.save(newTx);
@@ -146,6 +154,16 @@ export class TxService extends BaseService<
     data: UpdateTx,
   ): Promise<Partial<Tx> | null> => {
     try {
+
+      let value: string | boolean = false
+
+      if (data.value) {
+        value = GeneralValidator.validateMoneyString(data.value ? data.value : '') // valor que falha
+        if (!value) {
+          throw new ApiError(401, "Informar um valor Pt-Br válido")
+        }
+      }
+
       const dbData = await this.repository.findOneBy({ id });
       if (!dbData) {
         throw new Error(`Transação com ID ${id} não encontrada.`);
@@ -158,9 +176,9 @@ export class TxService extends BaseService<
         cf: data.cf ? ({ id: data.cf } as Cf) : undefined,
         cp: data.cp ? ({ id: data.cp } as Cp) : undefined,
         cr: data.cr ? ({ id: data.cr } as Cr) : undefined,
-        value: data.value
-          ? parseFloat(data.value.replace(/\./g, "").replace(",", "."))
-          : undefined,
+        value: value
+        ? parseFloat(value)
+        : undefined,
         tdate: data.tdate ? new Date(data.tdate) : undefined,
       };
 

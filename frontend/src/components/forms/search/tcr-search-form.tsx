@@ -15,9 +15,10 @@ type QueryTcrFormData = z.infer<typeof queryTcrSchema>;
 
 interface TcrSearchFormProps {
   onSearch: (data: QueryTcrFormData) => void;
+  onClear: () => void;
 }
 
-const TcrSearchForm = ({ onSearch }: TcrSearchFormProps): JSX.Element => {
+const TcrSearchForm = ({ onSearch, onClear }: TcrSearchFormProps): JSX.Element => {
   const {
     register,
     handleSubmit,
@@ -28,12 +29,17 @@ const TcrSearchForm = ({ onSearch }: TcrSearchFormProps): JSX.Element => {
     resolver: zodResolver(queryTcrSchema),
     defaultValues: {
       name: '',
-      status: true,
+      status: false, // não mostrar inativos
       createdAt: '',
       updatedAt: '',
       id: ''
     },
   });
+
+  const handleClear = () => {
+    reset();
+    onClear();
+  };
 
   const showInactives = watch('status');
 
@@ -108,7 +114,7 @@ const TcrSearchForm = ({ onSearch }: TcrSearchFormProps): JSX.Element => {
         <Button type="submit" variant="contained" color="primary">
           Buscar
         </Button>
-        <Button type="button" variant="outlined" color="secondary" onClick={() => reset()}>
+        <Button type="button" variant="outlined" color="secondary" onClick={handleClear}>
           Limpar
         </Button>
       </form>

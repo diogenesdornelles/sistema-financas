@@ -62,6 +62,7 @@ export class TcfService extends BaseService<
    */
   public create = async (data: CreateTcf): Promise<Tcf> => {
     try {
+      console.log(data)
       const createdTcf = await this.repository.save(
         this.repository.create(data),
       );

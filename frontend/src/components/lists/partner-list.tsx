@@ -67,6 +67,10 @@ const PartnerList = (): JSX.Element => {
     }
   };
 
+  const handleClearSearch = () => {
+    setItems(data || null);
+  };
+
   const handleChangePage = (direction: number) => {
     setPage((prev) => {
       const nextPage = prev + direction;
@@ -90,7 +94,7 @@ const PartnerList = (): JSX.Element => {
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
       {(isPending) && <CustomBackdrop isOpen={isPending} />}
       <Typography variant="h4">Filtro</Typography>
-      <PartnerSearchForm onSearch={handleSearch} />
+      <PartnerSearchForm onSearch={handleSearch} onClear={handleClearSearch}/>
       <Divider />
       <Typography variant="h4">Parceiros</Typography>
       <TableContainer component={Paper} sx={{ height: '100%' }}>

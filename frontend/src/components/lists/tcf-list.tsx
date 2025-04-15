@@ -53,6 +53,10 @@ const TcfList = (): JSX.Element => {
     queryTcfMutation.mutate(data);
   };
 
+  const handleClearSearch = () => {
+    setItems(data || null);
+  };
+
   const onDelete = async (id: string) => {
     if (confirm('Deseja deletar?')) {
       try {
@@ -86,7 +90,7 @@ const TcfList = (): JSX.Element => {
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
       {(isPending) && <CustomBackdrop isOpen={isPending} />}
       <Typography variant="h4">Filtro</Typography>
-      <TcfSearchForm onSearch={handleSearch} />
+      <TcfSearchForm onSearch={handleSearch} onClear={handleClearSearch}/>
       <Divider />
       <Typography variant="h4">Tipos de contas financeiras</Typography>
       <TableContainer component={Paper} sx={{ height: '100%' }}>

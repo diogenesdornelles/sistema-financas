@@ -15,9 +15,10 @@ type QueryTcpFormData = z.infer<typeof queryTcpSchema>;
 
 interface TcpSearchFormProps {
   onSearch: (data: QueryTcpFormData) => void;
+  onClear: () => void;
 }
 
-const TcpSearchForm = ({ onSearch }: TcpSearchFormProps): JSX.Element => {
+const TcpSearchForm = ({ onSearch, onClear }: TcpSearchFormProps): JSX.Element => {
   const {
     register,
     handleSubmit,
@@ -28,12 +29,17 @@ const TcpSearchForm = ({ onSearch }: TcpSearchFormProps): JSX.Element => {
     resolver: zodResolver(queryTcpSchema),
     defaultValues: {
       name: '',
-      status: true,
+      status: false, // não mostrar inativos
       createdAt: '',
       updatedAt: '',
       id: ''
     },
   });
+
+  const handleClear = () => {
+    reset();
+    onClear();
+  };
 
   const showInactives = watch('status');
 
@@ -107,7 +113,7 @@ const TcpSearchForm = ({ onSearch }: TcpSearchFormProps): JSX.Element => {
         <Button type="submit" variant="contained" color="primary">
           Buscar
         </Button>
-        <Button type="button" variant="outlined" color="secondary" onClick={() => reset()}>
+        <Button type="button" variant="outlined" color="secondary" onClick={handleClear}>
           Limpar
         </Button>
       </form>

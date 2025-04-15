@@ -49,7 +49,6 @@ const CrList = (): JSX.Element => {
       value: String(item.value),
       due: item.due ? String(item.due) : "",
       obs: item.obs ? item.obs : "",
-      status: item.status ? item.status : undefined,
     });
   };
 
@@ -57,6 +56,10 @@ const CrList = (): JSX.Element => {
 
   const handleSearch = (data: QueryCrFormData) => {
     queryCrMutation.mutate(data);
+  };
+
+  const handleClearSearch = () => {
+    setItems(data || null);
   };
 
   const onDelete = async (id: string) => {
@@ -105,7 +108,7 @@ const CrList = (): JSX.Element => {
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
       {(isPending) && <CustomBackdrop isOpen={isPending} />}
       <Typography variant="h4">Filtro</Typography>
-      <CrSearchForm onSearch={handleSearch} />
+      <CrSearchForm onSearch={handleSearch} onClear={handleClearSearch}/>
       <Divider />
       <Typography variant="h4">Contas a receber</Typography>
       <TableContainer component={Paper} sx={{ height: '100%' }}>

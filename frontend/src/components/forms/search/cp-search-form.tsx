@@ -17,9 +17,10 @@ type QueryCpFormData = z.infer<typeof queryCpSchema>;
 
 interface CpSearchFormProps {
   onSearch: (data: QueryCpFormData) => void;
+  onClear: () => void;
 }
 
-const CpSearchForm = ({ onSearch }: CpSearchFormProps): JSX.Element => {
+const CpSearchForm = ({ onSearch, onClear }: CpSearchFormProps): JSX.Element => {
   const {
     register,
     handleSubmit,
@@ -43,7 +44,10 @@ const CpSearchForm = ({ onSearch }: CpSearchFormProps): JSX.Element => {
 
   const statusValue = watch("status");
 
-
+  const handleClear = () => {
+    reset();
+    onClear();
+  };
 
   const onSubmit = (data: QueryCpFormData) => {
     console.log(data)
@@ -161,7 +165,7 @@ const CpSearchForm = ({ onSearch }: CpSearchFormProps): JSX.Element => {
         <Button type="submit" variant="contained" color="primary">
           Buscar
         </Button>
-        <Button type="button" variant="outlined" color="secondary" onClick={() => reset()}>
+        <Button type="button" variant="outlined" color="secondary" onClick={handleClear}>
           Limpar
         </Button>
       </form>

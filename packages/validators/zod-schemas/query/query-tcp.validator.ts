@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export const queryTcpSchema = z.object({
   id: z.string().optional(),
-  name: z.string(),
+  name: z.string().optional(),
   status: z.coerce.boolean(),
   createdAt: z
   .string()

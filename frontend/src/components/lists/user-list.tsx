@@ -55,6 +55,10 @@ const UserList = (): JSX.Element => {
     queryUserMutation.mutate(data);
   };
 
+  const handleClearSearch = () => {
+    setItems(data || null);
+  };
+
   const onDelete = async (id: string) => {
     if (confirm('Deseja deletar?')) {
       try {
@@ -88,7 +92,7 @@ const UserList = (): JSX.Element => {
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
       {(isPending) && <CustomBackdrop isOpen={isPending} />}
       <Typography variant="h4">Filtro</Typography>
-      <UserSearchForm onSearch={handleSearch} />
+      <UserSearchForm onSearch={handleSearch} onClear={handleClearSearch}/>
       <Divider />
       <Typography variant="h4">Usuários</Typography>
       <TableContainer component={Paper} sx={{ height: '100%' }}>

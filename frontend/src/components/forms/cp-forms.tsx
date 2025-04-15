@@ -28,6 +28,7 @@ import CustomBackdrop from "../custom-backdrop";
 type CreateCpFormData = z.infer<typeof createCpSchema>;
 type UpdateCpFormData = z.infer<typeof updateCpSchema>;
 
+
 /* 
   Formulário de Criação de Cp
   Exibido quando o contexto indicar o modo "create"
@@ -138,6 +139,7 @@ export function CreateCpForm(): JSX.Element | null {
                                 options={tcpData ? tcpData : []}
                                 getOptionLabel={(option) => option.name || ""}
                                 onChange={(_, data) => field.onChange(data ? data.id : "")}
+                                value={field.value ? (tcpData?.find((option) => option.id === field.value) || null) : null}
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
@@ -151,8 +153,6 @@ export function CreateCpForm(): JSX.Element | null {
                             />
                         )}
                     />
-
-                    {/* Fornecedor (Autocomplete de Partner) */}
                     <Controller
                         name="supplier"
                         control={control}
@@ -161,6 +161,7 @@ export function CreateCpForm(): JSX.Element | null {
                                 options={partnerData ? partnerData : []}
                                 getOptionLabel={(option) => option.name || ""}
                                 onChange={(_, data) => field.onChange(data ? data.id : "")}
+                                value={field.value ? (partnerData?.find((option) => option.id === field.value) || null) : null}
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
@@ -174,11 +175,6 @@ export function CreateCpForm(): JSX.Element | null {
                             />
                         )}
                     />
-
-                    {/* Data de Vencimento */}
-
-
-                    {/* Observações */}
                     <TextField
                         label="Observações"
                         {...register("obs")}
@@ -234,7 +230,12 @@ export function UpdateCpForm(): JSX.Element | null {
     const onSubmit = async (data: UpdateCpFormData) => {
         try {
             await mutation.mutateAsync(data);
-            reset()
+            reset({
+                type: data.type,
+                supplier: data.supplier,
+                due: String(data.due),
+                value: strToPtBrMoney(data.value || ""),
+            })
         } catch (err) {
             console.error("Erro ao atualizar Conta:", err);
         }

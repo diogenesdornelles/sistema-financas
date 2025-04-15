@@ -4,6 +4,8 @@ import { CreateCr, UpdateCr, QueryCr } from "../../../packages/dtos/cr.dto";
 import { PaymentStatus } from "../../../packages/dtos/utils/enums";
 import { FindOptionsWhere, Like, MoreThanOrEqual, Not, Raw, Repository } from "typeorm";
 import { AppDataSource } from "../config/db";
+import GeneralValidator from "../../../packages/validators/general.validator";
+import { ApiError } from "../utils/api-error.util";
 
 export class CrService extends BaseService<
   Cr,
@@ -72,13 +74,18 @@ export class CrService extends BaseService<
    */
   public create = async (data: CreateCr): Promise<Cr> => {
     try {
+      const value = GeneralValidator.validateMoneyString(data.value)
+
+      if (!value) {
+        throw new ApiError(401, "Informar um valor Pt-Br válido")
+      }
       const newCr = this.repository.create({
         ...data,
         user: { id: data.user } as User,
         type: { id: data.type } as Tcr,
         customer: { id: data.customer } as Partner,
-        value: data.value
-          ? parseFloat(data.value.replace(/\./g, "").replace(",", "."))
+        value: value
+          ? parseFloat(value)
           : undefined,
       });
 
@@ -104,15 +111,24 @@ export class CrService extends BaseService<
     data: UpdateCr,
   ): Promise<Partial<Cr> | null> => {
     try {
+
+      let value: string | boolean = false
+
+      if (data.value) {
+        value = GeneralValidator.validateMoneyString(data.value ? data.value : '') // valor que falha
+        if (!value) {
+          throw new ApiError(401, "Informar um valor Pt-Br válido")
+        }
+      }
       const updateData: Partial<Cr> = {
         ...data,
         type: data.type ? ({ id: data.type } as Tcr) : undefined,
         customer: data.customer
           ? ({ id: data.customer } as Partner)
           : undefined,
-        value: data.value
-          ? parseFloat(data.value.replace(/\./g, "").replace(",", "."))
-          : undefined,
+        value: value
+        ? parseFloat(value)
+        : undefined,
         due: data.due ? new Date(data.due) : undefined,
       };
 
@@ -139,16 +155,16 @@ export class CrService extends BaseService<
       if (!cr) {
         throw new Error(`Conta com ID ${id} não encontrada.`);
       }
-  
+
       // Atualiza o status da conta para CANCELLED (deleção lógica)
       await this.repository.update({ id }, { status: PaymentStatus.CANCELLED });
-  
+
       // Atualiza o status da transação associada, se existir
       const dbTx = await this.txRepo.findOne({ where: { cp: { id } } });
       if (dbTx) {
         await this.txRepo.update(dbTx.id, { status: false });
       }
-  
+
       // Retorna true se a deleção lógica foi bem-sucedida
       return true;
     } catch (error) {
@@ -163,7 +179,7 @@ export class CrService extends BaseService<
    */
   public query = async (data: QueryCr): Promise<Cr[]> => {
     try {
-      
+
       const where: FindOptionsWhere<Cr> = {};
 
       if (data.id) {

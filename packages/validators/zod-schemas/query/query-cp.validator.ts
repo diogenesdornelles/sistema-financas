@@ -4,16 +4,12 @@ import GeneralValidator from "../../general.validator";
 
 
 export const queryCpSchema = z.object({
-  id: z.string().uuid().optional(),
-  value: z.string()
-        .transform((value) => GeneralValidator.validateMoneyString(value))
-        .refine((value) => value !== "", {
-          message: "O saldo deve estar no formato monetário brasileiro (ex.: 1.234,56)",
-        }).optional(),
+  id: z.string().optional(),
+  value: z.string().optional(),
   status: z.nativeEnum(PaymentStatus).optional(),
-  type: z.string(), // procura por nome de tipo
-  supplier: z.string(), // procura por nome de fornecedor
-  obs: z.string(),
+  type: z.string().optional(), // procura por nome de tipo
+  supplier: z.string().optional(), // procura por nome de fornecedor
+  obs: z.string().optional(),
   due: z
     .string()
     .transform((value) => (value.trim() === "" ? undefined : value))

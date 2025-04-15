@@ -20,9 +20,10 @@ type QueryPartnerFormData = z.infer<typeof queryPartnerSchema>;
 
 interface PartnerSearchFormProps {
   onSearch: (data: QueryPartnerFormData) => void;
+  onClear: () => void;
 }
 
-const PartnerSearchForm = ({ onSearch }: PartnerSearchFormProps): JSX.Element => {
+const PartnerSearchForm = ({ onSearch, onClear }: PartnerSearchFormProps): JSX.Element => {
   const {
     register,
     handleSubmit,
@@ -35,7 +36,7 @@ const PartnerSearchForm = ({ onSearch }: PartnerSearchFormProps): JSX.Element =>
       name: '',
       cod: '',
       type: PartnerSearchType.PFPJ,
-      status: true,
+      status: false, // não mostrar inativos
       obs: '',
       createdAt: '',
       updatedAt: '',
@@ -54,6 +55,10 @@ const PartnerSearchForm = ({ onSearch }: PartnerSearchFormProps): JSX.Element =>
     });
     onSearch(cleanedData);
     reset()
+  };
+  const handleClear = () => {
+    reset();
+    onClear();
   };
 
   return (
@@ -151,7 +156,7 @@ const PartnerSearchForm = ({ onSearch }: PartnerSearchFormProps): JSX.Element =>
         <Button type="submit" variant="contained" color="primary">
           Buscar
         </Button>
-        <Button type="button" variant="outlined" color="secondary" onClick={() => reset()}>
+        <Button type="button" variant="outlined" color="secondary" onClick={handleClear}>
           Limpar
         </Button>
       </form>

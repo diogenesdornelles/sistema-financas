@@ -59,6 +59,10 @@ const CfList = (): JSX.Element => {
     queryCfMutation.mutate(data);
   };
 
+  const handleClearSearch = () => {
+    setItems(data || null);
+  };
+
   const onDelete = async (id: string) => {
     if (confirm('Deseja deletar?')) {
       try {
@@ -79,6 +83,7 @@ const CfList = (): JSX.Element => {
     });
   };
 
+
   useEffect(() => {
     if (queryCfMutation.data) {
       setItems(queryCfMutation.data);
@@ -93,7 +98,7 @@ const CfList = (): JSX.Element => {
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
       {(isPending) && <CustomBackdrop isOpen={isPending} />}
       <Typography variant="h4">Filtro</Typography>
-      <CfSearchForm onSearch={handleSearch} />
+      <CfSearchForm onSearch={handleSearch} onClear={handleClearSearch}/>
       <Divider />
       <Typography variant="h4" sx={{ marginTop: 0 }}>
         Contas financeiras

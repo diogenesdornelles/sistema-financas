@@ -141,6 +141,7 @@ export function CreateCrForm(): JSX.Element | null {
                                     sx={{ flex: 1, width: '100%' }}
                                     getOptionLabel={(option) => option.name || ""}
                                     onChange={(_, data) => field.onChange(data ? data.id : "")}
+                                    value={field.value ? (tcrData?.find((option) => option.id === field.value) || null) : null}
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
@@ -164,6 +165,7 @@ export function CreateCrForm(): JSX.Element | null {
                                 options={partnerData ? partnerData : []}
                                 getOptionLabel={(option) => option.name || ""}
                                 onChange={(_, data) => field.onChange(data ? data.id : "")}
+                                value={field.value ? (partnerData?.find((option) => option.id === field.value) || null) : null}
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
@@ -233,10 +235,14 @@ export function UpdateCrForm(): JSX.Element | null | string {
 
     const onSubmit = async (data: UpdateCrFormData) => {
         try {
-            await mutation.mutateAsync({
-                ...data
-            });
-            reset()
+            await mutation.mutateAsync(data);
+            reset({
+                type: data.type,
+                customer: data.customer,
+                due: data.due ? String(data.due) : "",
+                obs: data.obs ? data.obs : "",
+                value: strToPtBrMoney(data.value || ""),
+            })
         } catch (err) {
             console.error("Erro ao atualizar a Conta:", err);
         }

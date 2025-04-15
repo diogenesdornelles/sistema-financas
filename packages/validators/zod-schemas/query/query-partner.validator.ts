@@ -7,10 +7,11 @@ export const queryPartnerSchema = z
     .object({
         id: z.string().optional(),
         name: z
-            .string(),
+            .string().optional(),
         cod: z
             .string()
-            .transform((str) => str.replace(/\D/g, "")),
+            .optional()
+            .transform((str) => str && str.replace(/\D/g, "")),
         createdAt: z
             .string()
             .transform((value) => (value.trim() === "" ? undefined : value))

@@ -78,7 +78,9 @@ export function CreateTxForm(): JSX.Element | null | string {
     const onSubmit = async (data: CreateTxFormData) => {
         try {
             await mutation.mutateAsync(data);
-            reset()
+            reset({
+
+            })
         } catch (err) {
             console.error("Erro ao criar Transação:", err);
         }
@@ -158,6 +160,7 @@ export function CreateTxForm(): JSX.Element | null | string {
                                 options={catData ? catData : []}
                                 getOptionLabel={(option) => option.name || ""}
                                 onChange={(_, data) => field.onChange(data ? data.id : "")}
+                                value={field.value ? (catData?.find((option) => option.id === field.value) || null) : null}
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
@@ -180,6 +183,7 @@ export function CreateTxForm(): JSX.Element | null | string {
                                 options={cfData ? cfData : []}
                                 getOptionLabel={(option) => option.number || ""}
                                 onChange={(_, data) => field.onChange(data ? data.id : "")}
+                                value={field.value ? (cfData?.find((option) => option.id === field.value) || null) : null}
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
@@ -218,6 +222,7 @@ export function CreateTxForm(): JSX.Element | null | string {
                                     options={cpData ? cpData : []}
                                     getOptionLabel={(option) => option.id || ""}
                                     onChange={(_, data) => field.onChange(data ? data.id : "")}
+                                    value={field.value ? (cpData?.find((option) => option.id === field.value) || null) : null}
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
@@ -240,6 +245,7 @@ export function CreateTxForm(): JSX.Element | null | string {
                                     options={crData ? crData : []}
                                     getOptionLabel={(option) => option.id || ""}
                                     onChange={(_, data) => field.onChange(data ? data.id : "")}
+                                    value={field.value ? (crData?.find((option) => option.id === field.value) || null) : null}
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
@@ -331,7 +337,17 @@ export function UpdateTxForm(): JSX.Element | null | string {
     const onSubmit = async (data: UpdateTxFormData) => {
         try {
             await mutation.mutateAsync(data);
-            reset()
+            reset({
+                value: strToPtBrMoney(data.value || ""),
+                cf: data.cf ? data.cf : undefined,
+                cp: data.cp ? data.cp : undefined,
+                cr: data.cr ? data.cr : undefined,
+                description: data.description ? data.description : '',
+                category: data.category ? data.category : undefined,
+                obs: data.obs ? data.obs : undefined,
+                status: data.status,
+                tdate: data.tdate ? String(data.tdate) : '', 
+            })
         } catch (err) {
             console.error("Erro ao atualizar Transação:", err);
         }

@@ -150,7 +150,13 @@ export function UpdatePartnerForm(): JSX.Element | null {
     const onSubmit = async (data: UpdatePartnerFormData) => {
         try {
             await mutation.mutateAsync(data);
-            reset()
+            reset({
+                name: data.name,
+                type: data.type ? data.type : undefined,
+                cod: data.cod,
+                obs: data.obs ? data.obs : '',
+                status: data.status ? data.status: undefined
+            })
         } catch (err) {
             console.error("Erro ao atualizar Parceiro:", err);
         }

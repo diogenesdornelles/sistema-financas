@@ -112,7 +112,10 @@ export function UpdateTcpForm(): JSX.Element | null {
     const onSubmit = async (data: UpdateTcpFormData) => {
         try {
             await mutation.mutateAsync(data);
-            reset()
+            reset({
+                name: data.name,
+                status: data.status ? data.status : undefined
+              })
         } catch (err) {
             console.error("Erro ao atualizar o Tipo de conta a paga:", err);
         }

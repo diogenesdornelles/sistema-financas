@@ -4,12 +4,9 @@ import GeneralValidator from "../../general.validator";
 
 export const updateTxSchema = z
   .object({
-    value: z.string()
-      .transform((value) => GeneralValidator.validateMoneyString(value))
-      .refine((value) => value !== "", {
-        message: "O saldo deve estar no formato monetário brasileiro (ex.: 1.234,56)",
-      }).optional(),
-    cf: z.string().uuid("Informar a conta financeira (UUID)"),
+    value: z.string({message: "valor é obrigatório"})
+        .optional(),
+    cf: z.string().uuid("Informar a conta financeira (UUID)").optional(),
     cp: z
       .string()
       .uuid("A conta de pagamento (cp) deve ser um UUID válido")
@@ -18,12 +15,13 @@ export const updateTxSchema = z
       .string()
       .uuid("A conta de recebimento (cr) deve ser um UUID válido")
       .optional(),
-    category: z.string().uuid("Informar a categoria (UUID)"),
+    category: z.string().uuid("Informar a categoria (UUID)").optional(),
     status: z.boolean().optional(),
     tdate: z
       .string()
+      .optional()
       .refine(
-        (dateString) => GeneralValidator.validateDateUntilPresent(dateString),
+        (dateString) => dateString && GeneralValidator.validateDateUntilPresent(dateString),
         {
           message:
             "A data de transação deve ser válida e menor ou igual à data atual.",
@@ -35,7 +33,7 @@ export const updateTxSchema = z
       .optional(),
     description: z
       .string()
-      .max(100, "Descrição pode ter no máximo 100 caracteres"),
+      .max(100, "Descrição pode ter no máximo 100 caracteres").optional(),
   })
   .strict()
   .superRefine((data, ctx) => {

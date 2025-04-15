@@ -15,9 +15,10 @@ type QueryCatFormData = z.infer<typeof queryCatSchema>;
 
 interface CatSearchFormProps {
   onSearch: (data: QueryCatFormData) => void;
+  onClear: () => void;
 }
 
-const CatSearchForm = ({ onSearch }: CatSearchFormProps): JSX.Element => {
+const CatSearchForm = ({ onSearch, onClear }: CatSearchFormProps): JSX.Element => {
   const {
     register,
     handleSubmit,
@@ -33,14 +34,21 @@ const CatSearchForm = ({ onSearch }: CatSearchFormProps): JSX.Element => {
       obs: '',
       createdAt: '',
       updatedAt: '',
-      status: true,
+      status: false, // não mostrar inativos
     },
   });
 
   const showInactives = watch('status');
 
+  const handleClear = () => {
+    reset();
+    onClear();
+  };
+
   const onSubmit = (data: QueryCatFormData) => {
+
     const cleanedData: Partial<QueryCatFormData> = { ...data };
+    
     (['id', 'name', 'description', 'obs', 'createdAt', 'updatedAt'] as const).forEach((key) => {
       if (!cleanedData[key]) {
         delete cleanedData[key];
@@ -127,7 +135,7 @@ const CatSearchForm = ({ onSearch }: CatSearchFormProps): JSX.Element => {
         <Button type="submit" variant="contained" color="primary">
           Buscar
         </Button>
-        <Button type="button" variant="outlined" color="secondary" onClick={() => reset()}>
+        <Button type="button" variant="outlined" color="secondary" onClick={handleClear}>
           Limpar
         </Button>
       </form>

@@ -20,9 +20,12 @@ type QueryTxFormData = z.infer<typeof queryTxSchema>;
 
 interface TxSearchFormProps {
   onSearch: (data: QueryTxFormData) => void;
+  onClear: () => void;
 }
 
-const TxSearchForm = ({ onSearch }: TxSearchFormProps): JSX.Element => {
+
+
+const TxSearchForm = ({ onSearch, onClear }: TxSearchFormProps): JSX.Element => {
   const {
     register,
     handleSubmit,
@@ -40,7 +43,7 @@ const TxSearchForm = ({ onSearch }: TxSearchFormProps): JSX.Element => {
       description: '',
       category: '',
       obs: '',
-      status: true,
+      status: false, // não mostrar inativos
       tdate: '',
       createdAt: '',
       updatedAt: '',
@@ -48,7 +51,10 @@ const TxSearchForm = ({ onSearch }: TxSearchFormProps): JSX.Element => {
     },
   });
 
-
+  const handleClear = () => {
+    reset();
+    onClear();
+  };
   const showInactives = watch('status');
 
   const onSubmit = (data: QueryTxFormData) => {
@@ -202,7 +208,7 @@ const TxSearchForm = ({ onSearch }: TxSearchFormProps): JSX.Element => {
         <Button type="submit" variant="contained" color="primary">
           Buscar
         </Button>
-        <Button type="button" variant="outlined" color="secondary" onClick={() => reset()}>
+        <Button type="button" variant="outlined" color="secondary" onClick={handleClear}>
           Limpar
         </Button>
       </form>

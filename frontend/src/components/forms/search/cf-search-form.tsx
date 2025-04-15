@@ -15,9 +15,10 @@ type QueryCfFormData = z.infer<typeof queryCfSchema>;
 
 interface CfSearchFormProps {
   onSearch: (data: QueryCfFormData) => void;
+  onClear: () => void;
 }
 
-const CfSearchForm = ({ onSearch }: CfSearchFormProps): JSX.Element => {
+const CfSearchForm = ({ onSearch, onClear }: CfSearchFormProps): JSX.Element => {
   const {
     register,
     handleSubmit,
@@ -36,7 +37,7 @@ const CfSearchForm = ({ onSearch }: CfSearchFormProps): JSX.Element => {
       obs: '',
       createdAt: '',
       updatedAt: '',
-      status: true,
+      status: false, // não mostrar inativos
     },
   });
 
@@ -51,6 +52,11 @@ const CfSearchForm = ({ onSearch }: CfSearchFormProps): JSX.Element => {
     });
     onSearch(cleanedData);
     reset()
+  };
+
+  const handleClear = () => {
+    reset();
+    onClear();
   };
 
   return (
@@ -82,7 +88,7 @@ const CfSearchForm = ({ onSearch }: CfSearchFormProps): JSX.Element => {
           size="small"
         />
         <TextField
-          label="Saldo"
+          label="Saldo inicial"
           {...register('balance')}
           variant="outlined"
           error={!!errors.balance}
@@ -152,7 +158,7 @@ const CfSearchForm = ({ onSearch }: CfSearchFormProps): JSX.Element => {
         <Button type="submit" variant="contained" color="primary">
           Buscar
         </Button>
-        <Button type="button" variant="outlined" color="secondary" onClick={() => reset()}>
+        <Button type="button" variant="outlined" color="secondary" onClick={handleClear}>
           Limpar
         </Button>
       </form>

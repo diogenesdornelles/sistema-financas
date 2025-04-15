@@ -115,7 +115,10 @@ export function UpdateTcfForm(): JSX.Element | null {
   const handleFormSubmit = async (data: UpdateTcfFormData) => {
     try {
       await mutation.mutateAsync(data);
-      reset()
+      reset({
+        name: data.name,
+        status: data.status ? data.status : undefined
+      })
     } catch (err) {
       console.error("Erro ao atualizar o formulário:", err);
     }

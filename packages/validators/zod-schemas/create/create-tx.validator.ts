@@ -3,11 +3,7 @@ import GeneralValidator from "../../general.validator";
 
 export const createTxSchema = z
   .object({
-    value: z.string()
-      .transform((value) => GeneralValidator.validateMoneyString(value))
-      .refine((value) => value !== "", {
-        message: "O saldo deve estar no formato monetário brasileiro (ex.: 1.234,56)",
-      }),
+    value: z.string({message: "valor é obrigatório"}),
     user: z.string().uuid("Informar o usuário (UUID)"),
     cf: z.string().uuid("Informar a conta financeira (UUID)"),
     cp: z

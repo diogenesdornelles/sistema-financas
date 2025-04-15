@@ -63,6 +63,10 @@ const TcpList = (): JSX.Element => {
     }
   };
 
+  const handleClearSearch = () => {
+    setItems(data || null);
+  };
+
   const handleChangePage = (direction: number) => {
     setPage((prev) => {
       const nextPage = prev + direction;
@@ -86,7 +90,7 @@ const TcpList = (): JSX.Element => {
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
       {(isPending) && <CustomBackdrop isOpen={isPending} />}
       <Typography variant="h4">Filtro</Typography>
-      <TcpSearchForm onSearch={handleSearch} />
+      <TcpSearchForm onSearch={handleSearch} onClear={handleClearSearch}/>
       <Divider />
       <Typography variant="h4">Tipos de contas a pagar</Typography>
       <TableContainer component={Paper} sx={{ height: '100%' }}>

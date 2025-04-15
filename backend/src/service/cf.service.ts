@@ -2,6 +2,8 @@ import { BaseService } from "./base.service";
 import { Cf, Tcf, User } from "../entity/entities";
 import { CreateCf, UpdateCf, QueryCf } from "../../../packages/dtos/cf.dto";
 import { FindOptionsWhere, Like, MoreThanOrEqual, Raw } from "typeorm";
+import GeneralValidator from "../../../packages/validators/general.validator";
+import { ApiError } from "../utils/api-error.util";
 
 export class CfService extends BaseService<
   Cf,
@@ -71,12 +73,18 @@ export class CfService extends BaseService<
    */
   public create = async (data: CreateCf): Promise<Cf> => {
     try {
+      const balance = GeneralValidator.validateMoneyString(data.balance ? data.balance : '')
+
+      if (!balance) {
+        throw new ApiError(401, "Informar um valor Pt-Br válido")
+      }
+
       const cf = this.repository.create({
         ...data,
         user: { id: data.user } as User,
         type: { id: data.type } as Tcf,
-        balance: data.balance
-          ? parseFloat(data.balance.replace(/\./g, "").replace(",", "."))
+        balance: balance
+          ? parseFloat(balance)
           : 0.0,
       });
       const createdCf = await this.repository.save(cf);
@@ -101,11 +109,21 @@ export class CfService extends BaseService<
     data: UpdateCf,
   ): Promise<Partial<Cf> | null> => {
     try {
+
+      let value: string | boolean = false
+
+      if (data.balance) {
+        value = GeneralValidator.validateMoneyString(data.balance ? data.balance : '') // valor que falha
+        if (!value) {
+          throw new ApiError(401, "Informar um valor Pt-Br válido")
+        }
+      }
+
       const updateData: Partial<Cf> = {
         ...data,
         type: data.type ? ({ id: data.type } as Tcf) : undefined,
-        balance: data.balance
-          ? parseFloat(data.balance.replace(/\./g, "").replace(",", "."))
+        balance: value
+          ? parseFloat(value)
           : undefined,
       };
 

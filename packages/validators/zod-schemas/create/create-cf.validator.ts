@@ -1,5 +1,4 @@
 import { z } from "zod";
-import GeneralValidator from "../../general.validator";
 
 export const createCfSchema = z
   .object({
@@ -15,11 +14,7 @@ export const createCfSchema = z
       .string()
       .max(30, "Banco precisa ter no máximo 30 caracteres")
       .optional(),
-    balance: z.string()
-      .transform((value) => GeneralValidator.validateMoneyString(value))
-      .refine((value) => value !== "", {
-        message: "O saldo deve estar no formato monetário brasileiro (ex.: 1.234,56)",
-      }),
+    balance: z.string({message: "valor é obrigatório"}),
     type: z.string().uuid("Informar o tipo"),
     user: z.string().uuid("Informar o usuário"),
     obs: z

@@ -155,7 +155,13 @@ export function UpdateUserForm(): JSX.Element | null {
     const onSubmit = async (data: UpdateUserFormData) => {
         try {
             await mutation.mutateAsync(data);
-            reset()
+            reset({
+                name: data.name,
+                surname: data.surname,
+                cpf: data.cpf,
+                status: data.status,
+                pwd: ''
+            })
         } catch (err) {
             console.error("Erro ao atualizar o usuário:", err);
         }

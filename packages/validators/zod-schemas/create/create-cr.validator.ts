@@ -3,11 +3,7 @@ import GeneralValidator from "../../general.validator";
 
 export const createCrSchema = z
   .object({
-    value: z.string()
-      .transform((value) => GeneralValidator.validateMoneyString(value))
-      .refine((value) => value !== "", {
-        message: "O saldo deve estar no formato monetário brasileiro (ex.: 1.234,56)",
-      }),
+    value: z.string({message: "valor é obrigatório"}),
     due: z.string()
       .refine((date) => GeneralValidator.validateDatePostPresent(date), {
         message: "A data de vencimento deve ser maior ou igual a data atual.",

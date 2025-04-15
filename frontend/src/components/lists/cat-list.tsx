@@ -57,6 +57,11 @@ const CatList = (): JSX.Element => {
     queryCatMutation.mutate(data);
   };
 
+  const handleClearSearch = () => {
+    setItems(data || null);
+  };
+  
+
   const onDelete = async (id: string) => {
     if (confirm('Deseja deletar?')) {
       try {
@@ -96,7 +101,7 @@ const CatList = (): JSX.Element => {
 
       {(isPending) && <CustomBackdrop isOpen={isPending} />}
       <Typography variant="h4">Filtro</Typography>
-      <CatSearchForm onSearch={handleSearch} />
+      <CatSearchForm onSearch={handleSearch} onClear={handleClearSearch}/>
       <Divider />
       <Typography variant="h4">Categorias</Typography>
       <TableContainer component={Paper} sx={{ height: '100%' }}>

@@ -19,9 +19,10 @@ type QueryCrFormData = z.infer<typeof queryCrSchema>;
 
 interface CrSearchFormProps {
   onSearch: (data: QueryCrFormData) => void;
+  onClear: () => void;
 }
 
-const CrSearchForm = ({ onSearch }: CrSearchFormProps): JSX.Element => {
+const CrSearchForm = ({ onSearch, onClear }: CrSearchFormProps): JSX.Element => {
   const {
     register,
     handleSubmit,
@@ -56,6 +57,11 @@ const CrSearchForm = ({ onSearch }: CrSearchFormProps): JSX.Element => {
     });
     onSearch(cleanedData);
     reset()
+  };
+
+  const handleClear = () => {
+    reset();
+    onClear();
   };
 
   return (
@@ -165,7 +171,7 @@ const CrSearchForm = ({ onSearch }: CrSearchFormProps): JSX.Element => {
         <Button type="submit" variant="contained" color="primary">
           Buscar
         </Button>
-        <Button type="button" variant="outlined" color="secondary" onClick={() => reset()}>
+        <Button type="button" variant="outlined" color="secondary" onClick={handleClear}>
           Limpar
         </Button>
       </form>

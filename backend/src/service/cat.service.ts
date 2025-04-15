@@ -1,9 +1,8 @@
 import { BaseService } from "./base.service";
-import { Cat } from "../entity/entities";
+import { Cat, User } from "../entity/entities";
 import {
   CreateCat,
   UpdateCat,
-  CatProps,
   QueryCat,
 } from "../../../packages/dtos/cat.dto";
 import { FindOptionsWhere, Like, MoreThanOrEqual, Raw } from "typeorm";
@@ -71,10 +70,11 @@ export class CatService extends BaseService<
    * @param data - Dados para criação.
    */
   public create = async (data: CreateCat): Promise<Cat> => {
+    console.log(data)
     try {
       const cat = this.repository.create({
         ...data,
-        user: { id: data.user },
+        user: { id: data.user } as User, 
       });
       return await this.repository.save(cat);
     } catch (error) {
@@ -155,6 +155,7 @@ export class CatService extends BaseService<
       }
 
       if (data.createdAt) {
+        console.log(data.createdAt)
         const updatedDate = new Date(data.createdAt);
         where.createdAt = MoreThanOrEqual(updatedDate);
       }

@@ -104,7 +104,7 @@ const CatList = (): JSX.Element => {
       <CatSearchForm onSearch={handleSearch} onClear={handleClearSearch}/>
       <Divider />
       <Typography variant="h4">Categorias</Typography>
-      <TableContainer component={Paper} sx={{ height: '100%' }}>
+      <TableContainer component={Paper} sx={{ maxHeight: 450 }}>
         <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
@@ -139,8 +139,8 @@ const CatList = (): JSX.Element => {
                 <TableCell align="right">{`${item.status ? 'Ativo' : 'Inativo'}`}</TableCell>
                 <TableCell align="right">{item.description}</TableCell>
                 <TableCell align="right">{item.obs}</TableCell>
-                <TableCell align="right">{new Date(item.createdAt).toLocaleDateString()}</TableCell>
-                <TableCell align="right">{new Date(item.updatedAt).toLocaleDateString()}</TableCell>
+                  <TableCell align="right">{new Date(item.createdAt).toLocaleDateString()}</TableCell>
+                  <TableCell align="right">{new Date(item.updatedAt).toLocaleDateString()}</TableCell>
                 <TableCell align="right">
                   <IconButton edge="end" aria-label="edit" onClick={() => onEdit(item)}>
                     <EditIcon />

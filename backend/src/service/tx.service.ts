@@ -77,7 +77,7 @@ export class TxService extends BaseService<
   public create = async (data: CreateTx): Promise<Tx> => {
     try {
 
-      const value = GeneralValidator.validateMoneyString(data.value)
+      const value = GeneralValidator.validateAndNormalizeMoneyString(data.value)
 
       if (!value) {
         throw new ApiError(401, "Informar um valor Pt-Br válido")
@@ -158,7 +158,7 @@ export class TxService extends BaseService<
       let value: string | boolean = false
 
       if (data.value) {
-        value = GeneralValidator.validateMoneyString(data.value ? data.value : '') // valor que falha
+        value = GeneralValidator.validateAndNormalizeMoneyString(data.value ? data.value : '') // valor que falha
         if (!value) {
           throw new ApiError(401, "Informar um valor Pt-Br válido")
         }

@@ -111,7 +111,7 @@ const CrList = (): JSX.Element => {
       <CrSearchForm onSearch={handleSearch} onClear={handleClearSearch}/>
       <Divider />
       <Typography variant="h4">Contas a receber</Typography>
-      <TableContainer component={Paper} sx={{ height: '100%' }}>
+      <TableContainer component={Paper} sx={{ maxHeight: 450 }}>
         <Table sx={{ minWidth: 650 }} size="small" aria-label="tabela de contas a receber">
           <TableHead>
             <TableRow>
@@ -150,7 +150,7 @@ const CrList = (): JSX.Element => {
                   <TableCell align='left'>R$ {strToPtBrMoney(String(item.value))}</TableCell>
                   <TableCell align="right">{item.type.name}</TableCell>
                   <TableCell align="right">{item.customer.name}</TableCell>
-                  <TableCell align="right">{new Date(item.due).toLocaleDateString()}</TableCell>
+                  <TableCell align="right">{new Date(item.due + 'T00:00:00').toLocaleDateString()}</TableCell>
                   <TableCell align="right">{item.obs || '-'}</TableCell>
                   <TableCell align="right">{getPaymentStatusText(item.status)}</TableCell>
                   <TableCell align="right">{new Date(item.createdAt).toLocaleDateString()}</TableCell>

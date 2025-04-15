@@ -97,7 +97,7 @@ const PartnerList = (): JSX.Element => {
       <PartnerSearchForm onSearch={handleSearch} onClear={handleClearSearch}/>
       <Divider />
       <Typography variant="h4">Parceiros</Typography>
-      <TableContainer component={Paper} sx={{ height: '100%' }}>
+      <TableContainer component={Paper} sx={{ maxHeight: 450 }}>
         <Table sx={{ minWidth: 650 }} size="small" aria-label="tabela de parceiros">
           <TableHead>
             <TableRow>

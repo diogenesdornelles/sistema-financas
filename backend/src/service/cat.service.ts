@@ -70,7 +70,6 @@ export class CatService extends BaseService<
    * @param data - Dados para criação.
    */
   public create = async (data: CreateCat): Promise<Cat> => {
-    console.log(data)
     try {
       const cat = this.repository.create({
         ...data,
@@ -155,7 +154,6 @@ export class CatService extends BaseService<
       }
 
       if (data.createdAt) {
-        console.log(data.createdAt)
         const updatedDate = new Date(data.createdAt);
         where.createdAt = MoreThanOrEqual(updatedDate);
       }

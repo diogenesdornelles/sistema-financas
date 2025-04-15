@@ -49,7 +49,7 @@ export function CreateCfForm(): JSX.Element | null {
         mode: 'onSubmit',
         defaultValues: {
             number: '',
-            balance: '0,00',
+            balance: '',
             user: session ? session?.user.id : '',
             bank: '',
             ag: '',
@@ -224,7 +224,7 @@ export function UpdateCfForm(): JSX.Element | null {
             bank: forms.cf.updateItem.bank || undefined,
             obs: forms.cf.updateItem.obs || undefined,
             status: forms.cf.updateItem.status,
-            balance: strToPtBrMoney(forms.cf.updateItem?.balance ?? '0.00')
+            balance: strToPtBrMoney(forms.cf.updateItem?.balance ?? '')
         } : {},
     });
 
@@ -240,7 +240,7 @@ export function UpdateCfForm(): JSX.Element | null {
                 bank: data.bank || undefined,
                 obs: data.obs || undefined,
                 status: data.status,
-                balance: strToPtBrMoney(data.balance ?? '0.00')
+                balance: strToPtBrMoney(data.balance ?? '')
             })
         } catch (err) {
             console.error("Erro ao atualizar Conta:", err);

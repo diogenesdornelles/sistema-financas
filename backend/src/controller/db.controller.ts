@@ -16,7 +16,6 @@ export default class DbController {
     ): Promise<void> => {
         try {
             const { date } = req.params
-            console.log(date)
             const items: DbBalanceProps | null = await this.service.getBalances(date);
             if (items) {
                 res.status(200).json(items);

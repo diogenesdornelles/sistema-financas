@@ -3,7 +3,7 @@ import { dateSchemaMaj, dateSchemaMin } from "./utils/date-schema";
 
 export default class GeneralValidator {
   public static validateCNPJ(cnpj: string): boolean {
-    // Remove todos os caracteres que não são dígitos
+
     const cleanedCNPJ = cnpj.replace(/\D/g, "");
 
     // Verifica se possui 14 dígitos
@@ -11,12 +11,10 @@ export default class GeneralValidator {
       return false;
     }
 
-    // Verifica se todos os dígitos são iguais (ex.: "00000000000000")
     if (/^(\d)\1+$/.test(cleanedCNPJ)) {
       return false;
     }
 
-    // Função auxiliar para calcular o dígito verificador
     const calculateDigit = (cnpjPart: string, weights: number[]): number => {
       let sum = 0;
       for (let i = 0; i < weights.length; i++) {
@@ -26,7 +24,6 @@ export default class GeneralValidator {
       return remainder < 2 ? 0 : 11 - remainder;
     };
 
-    // Cálculo do primeiro dígito verificador (para os 12 primeiros dígitos)
     const weightsFirst = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
     const firstDigit = calculateDigit(
       cleanedCNPJ.substring(0, 12),
@@ -36,8 +33,6 @@ export default class GeneralValidator {
     if (firstDigit !== parseInt(cleanedCNPJ.charAt(12), 10)) {
       return false;
     }
-
-    // Cálculo do segundo dígito verificador (para os 13 primeiros dígitos, incluindo o primeiro dígito verificador)
     const weightsSecond = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
     const secondDigit = calculateDigit(
       cleanedCNPJ.substring(0, 13),
@@ -58,7 +53,6 @@ export default class GeneralValidator {
     let sum = 0;
     let remainder: number;
 
-    // Validação do primeiro dígito verificador
     for (let i = 1; i <= 9; i++) {
       sum += parseInt(cpf.substring(i - 1, i)) * (11 - i);
     }
@@ -69,7 +63,6 @@ export default class GeneralValidator {
     }
 
     sum = 0;
-    // Validação do segundo dígito verificador
     for (let i = 1; i <= 10; i++) {
       sum += parseInt(cpf.substring(i - 1, i)) * (12 - i);
     }
@@ -82,33 +75,49 @@ export default class GeneralValidator {
     return true;
   };
 
-  public static validateMoneyString = (value: string): string | false => {
+  public static validateMoneyNumber = (value: number): boolean => {
+    if (!Number.isFinite(value)) {
+      return false;
+    }
+    const multiplied = value * 100;
+    return Math.abs(Math.round(multiplied) - multiplied) < 1e-9;
+  };
+
+  public static validateAndNormalizeMoneyString = (value: string): string | false => {
     try {
-      
       if (!value || value.trim() === "") {
-        return false; //
+        return false;
       }
 
       const trimmed = value.trim();
-      const parsedValue = Number.parseFloat(trimmed);
+      let parsedNumber: number = NaN;
 
-      if (!Number.isNaN(parsedValue)) {
-        if (parsedValue >= 0.0 && GeneralValidator.validateMoneyNumber(parsedValue)) {
-          return trimmed;
+      const rePtBr = /^\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?$|^\d+(?:,\d{1,2})?$/;
+      const rePtBrInt = /^\d{1,3}(?:\.\d{3})*$|^\d+$/;
+
+      if (rePtBr.test(trimmed) || rePtBrInt.test(trimmed)) {
+        const normalized = trimmed.replace(/\./g, "").replace(",", ".");
+        if (/^\d+(\.\d+)?$/.test(normalized) || /^\d+$/.test(normalized)) {
+          parsedNumber = parseFloat(normalized);
+        }
+      } else {
+        const reStandard = /^\d+(?:\.\d{1,2})?$|^\d+$/;
+        if (reStandard.test(trimmed) && !trimmed.includes(',')) { 
+          parsedNumber = parseFloat(trimmed);
         }
       }
-
-      const re = /^\d{1,3}(?:\.\d{3})*(?:,\d{2})?$|^\d+(?:,\d{2})?$/;
-      if (re.test(trimmed)) {
-        const normalized = trimmed.replace(/\./g, "").replace(",", ".");
-        const converted = parseFloat(normalized);
-        if (!Number.isNaN(converted) && GeneralValidator.validateMoneyNumber(converted) && converted >= 0.0) {
-          return normalized; 
-        }
+      if (
+        !isNaN(parsedNumber) &&                
+        Number.isFinite(parsedNumber) &&       
+        parsedNumber >= 0.0 &&                 
+        GeneralValidator.validateMoneyNumber(parsedNumber)
+      ) {
+        return parsedNumber.toFixed(2);
       }
       return false;
+
     } catch (error) {
-      console.error("Erro ao validar string monetária:", error);
+      console.error("Erro ao validar a string monetária", error);
       return false;
     }
   };
@@ -142,9 +151,7 @@ export default class GeneralValidator {
   };
 
 
-  public static validateMoneyNumber = (value: number): boolean => {
-    return Number.isInteger(value * 100);
-  };
+
 
   public static isValidPwd = (pwd: string): boolean => {
     // Expressão regular que valida:

@@ -73,7 +73,8 @@ export class CfService extends BaseService<
    */
   public create = async (data: CreateCf): Promise<Cf> => {
     try {
-      const balance = GeneralValidator.validateMoneyString(data.balance ? data.balance : '')
+
+      const balance = GeneralValidator.validateAndNormalizeMoneyString(data.balance ? data.balance : '0.0')
 
       if (!balance) {
         throw new ApiError(401, "Informar um valor Pt-Br válido")
@@ -113,7 +114,7 @@ export class CfService extends BaseService<
       let value: string | boolean = false
 
       if (data.balance) {
-        value = GeneralValidator.validateMoneyString(data.balance ? data.balance : '') // valor que falha
+        value = GeneralValidator.validateAndNormalizeMoneyString(data.balance ? data.balance : '') // valor que falha
         if (!value) {
           throw new ApiError(401, "Informar um valor Pt-Br válido")
         }

@@ -101,7 +101,7 @@ const TxList = (): JSX.Element => {
       <TxSearchForm onSearch={handleSearch} onClear={handleClearSearch}/>
       <Divider />
       <Typography variant="h4">Transações</Typography>
-      <TableContainer component={Paper} sx={{ height: '100%' }}>
+      <TableContainer component={Paper} sx={{ maxHeight: 450 }}>
         <Table sx={{ minWidth: 650 }} size="small" aria-label="tabela de transações">
           <TableHead>
             <TableRow>
@@ -151,7 +151,7 @@ const TxList = (): JSX.Element => {
                   <TableCell align="right">{item.category.name}</TableCell>
                   <TableCell align="right">{item.obs || '-'}</TableCell>
                   <TableCell align="right">{item.status ? 'Ativo' : 'Inativo'}</TableCell>
-                  <TableCell align="right">{item.tdate ? new Date(item.tdate).toLocaleDateString() : '-'}</TableCell>
+                  <TableCell align="right">{item.tdate ? new Date(item.tdate + 'T00:00:00').toLocaleDateString() : '-'}</TableCell>
                   <TableCell align="right">{new Date(item.createdAt).toLocaleDateString()}</TableCell>
                   <TableCell align="right">{new Date(item.updatedAt).toLocaleDateString()}</TableCell>
                   <TableCell align="right">

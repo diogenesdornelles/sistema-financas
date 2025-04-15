@@ -81,7 +81,6 @@ export default class TxController extends BaseController<TxService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      console.log(req.body)
       const validatedData: CreateTx = createTxSchema.parse(req.body);
       const item: Tx = await this.service.create(validatedData);
       res.status(201).json(item);

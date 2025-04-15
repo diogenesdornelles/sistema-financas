@@ -1,26 +1,14 @@
 import { z } from "zod";
+import GeneralValidator from "../../general.validator";
 
 
 export const updateTxSchema = z
   .object({
-    value: z
-      .string()
-      .min(4, "Precisa ter tamanho mínimo 4")
-      .regex(
-        /^\d{1,3}(\.\d{3})*,\d{2}$/,
-        "Precisa ter formato de dinheiro brasileiro (ex: 1.234,56)"
-      )
-      .refine(
-        (valor) => {
-          if (typeof valor !== "string") return false;
-          const normalizado = valor.replace(/\./g, "").replace(",", ".");
-          const convertido = parseFloat(normalizado);
-          return !isNaN(convertido) && convertido > 0;
-        },
-        {
-          message: "O valor deve ser maior que zero.",
-        }
-      ),
+    value: z.string()
+      .transform((value) => GeneralValidator.validateMoneyString(value))
+      .refine((value) => value !== "", {
+        message: "O saldo deve estar no formato monetário brasileiro (ex.: 1.234,56)",
+      }).optional(),
     cf: z.string().uuid("Informar a conta financeira (UUID)"),
     cp: z
       .string()
@@ -35,21 +23,7 @@ export const updateTxSchema = z
     tdate: z
       .string()
       .refine(
-        (dateString) => {
-          if (!/^\d{4}-\d{2}-\d{2}(T.*)?$/.test(dateString)) return false;
-          try {
-            const transactionDate = new Date(dateString);
-            if (isNaN(transactionDate.getTime())) return false;
-
-            const today = new Date();
-            transactionDate.setHours(0, 0, 0, 0);
-            today.setHours(0, 0, 0, 0);
-
-            return transactionDate <= today;
-          } catch (e) {
-            return false;
-          }
-        },
+        (dateString) => GeneralValidator.validateDateUntilPresent(dateString),
         {
           message:
             "A data de transação deve ser válida e menor ou igual à data atual.",

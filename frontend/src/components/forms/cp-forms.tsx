@@ -9,8 +9,6 @@ import {
     Autocomplete,
     Typography,
     InputLabel,
-    Select,
-    MenuItem,
 } from "@mui/material";
 import { JSX } from "react";
 import { useFormStore } from "../../hooks/use-form-store";
@@ -222,7 +220,6 @@ export function UpdateCpForm(): JSX.Element | null {
         handleSubmit,
         control,
         reset,
-        watch,
         formState: { errors },
     } = useForm<UpdateCpFormData>({
         resolver: zodResolver(updateCpSchema),
@@ -233,8 +230,6 @@ export function UpdateCpForm(): JSX.Element | null {
             value: strToPtBrMoney(forms.cp.updateItem?.value || ""),
         } : {},
     });
-
-    const statusValue = watch("status");
 
     const onSubmit = async (data: UpdateCpFormData) => {
         try {
@@ -372,17 +367,6 @@ export function UpdateCpForm(): JSX.Element | null {
                         rows={3}
                     />
                     <InputLabel id="cp-status-label-update">Status</InputLabel>
-                    <Select
-                        labelId="cp-status-label-update"
-                        label="Status"
-                        size="small"
-                        defaultValue={statusValue}
-                        {...register("status")}
-                    >
-                        <MenuItem value="pending">Pendente</MenuItem>
-                        <MenuItem value="paid">Pago</MenuItem>
-                        <MenuItem value="cancelled">Cancelado</MenuItem>
-                    </Select>
                     <Button
                         type="submit"
                         variant="contained"

@@ -378,7 +378,8 @@ export const Api = {
 
   db: {
     getBalances: async (date: string): Promise<DbBalanceProps> => {
-      return await restClient.get(`db/balances/${date}`);
+      const { data } = await restClient.get(`db/balances/${date}`);
+      return data
     },
   },
 

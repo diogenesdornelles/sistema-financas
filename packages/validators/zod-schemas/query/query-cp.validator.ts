@@ -1,36 +1,15 @@
 import { z } from "zod";
 import { PaymentStatus } from "../../../dtos/utils/enums";
+import GeneralValidator from "../../general.validator";
 
 
 export const queryCpSchema = z.object({
   id: z.string().uuid().optional(),
-  value: z
-    .string()
-    .transform((value) => (value.trim() === "" ? undefined : value.trim()))
-    .optional()
-    .refine(
-      (value) => {
-        if (value === undefined) return true;
-        return value.length >= 4;
-      },
-      { message: "Precisa ter tamanho mínimo 4" }
-    )
-    .refine(
-      (value) => {
-        if (value === undefined) return true;
-        return /^\d{1,3}(\.\d{3})*(,\d{2})?$/.test(value);
-      },
-      { message: "Precisa ter formato dinheiro (ex: 1.234,56)" }
-    )
-    .refine(
-      (value) => {
-        if (value === undefined) return true;
-        const normalizado = value.replace(/\./g, "").replace(",", ".");
-        const convertido = parseFloat(normalizado);
-        return !isNaN(convertido) && convertido > 0;
-      },
-      { message: "O saldo deve ser um valor monetário maior que zero" }
-    ),
+  value: z.string()
+        .transform((value) => GeneralValidator.validateMoneyString(value))
+        .refine((value) => value !== "", {
+          message: "O saldo deve estar no formato monetário brasileiro (ex.: 1.234,56)",
+        }).optional(),
   status: z.nativeEnum(PaymentStatus).optional(),
   type: z.string(), // procura por nome de tipo
   supplier: z.string(), // procura por nome de fornecedor

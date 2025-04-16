@@ -6,6 +6,8 @@ import { createTxSchema } from "../../../packages/validators/zod-schemas/create/
 import { updateTxSchema } from "../../../packages/validators/zod-schemas/update/update-tx.validator";
 import { queryTxSchema } from "../../../packages/validators/zod-schemas/query/query-tx.validator";
 import { Tx } from "../entity/entities";
+import GeneralValidator from "../../../packages/validators/general.validator";
+import { ApiError } from "../utils/api-error.util";
 
 export default class TxController extends BaseController<TxService> {
   constructor() {
@@ -81,7 +83,14 @@ export default class TxController extends BaseController<TxService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const validatedData: CreateTx = createTxSchema.parse(req.body);
+
+      const { value } = req.body;
+
+      const normalizedValue = GeneralValidator.validateAndNormalizeMoneyString(value || "");
+      if (!normalizedValue) {
+        throw new ApiError(401, "Informar um valor Pt-Br válido");
+      }
+      const validatedData: CreateTx = createTxSchema.parse({ ...req.body, value: normalizedValue });
       const item: Tx = await this.service.create(validatedData);
       res.status(201).json(item);
       return;
@@ -98,6 +107,15 @@ export default class TxController extends BaseController<TxService> {
   ): Promise<void> => {
     try {
       const { id } = req.params;
+      const { value } = req.body;
+
+      if (value) {
+        const normalizedValue = GeneralValidator.validateAndNormalizeMoneyString(value);
+        if (!normalizedValue) {
+          throw new ApiError(401, "Informar um valor Pt-Br válido");
+        }
+        req.body.value = normalizedValue;
+      }
       const validatedData: UpdateTx = updateTxSchema.parse(req.body);
       const updatedItem: Partial<Tx> | null = await this.service.update(
         id,

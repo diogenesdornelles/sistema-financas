@@ -110,7 +110,7 @@ const CpList = (): JSX.Element => {
       <CpSearchForm onSearch={handleSearch} onClear={handleClearSearch}/>
       <Divider />
       <Typography variant="h4">Contas a pagar</Typography>
-      <TableContainer component={Paper} sx={{ maxHeight: 450 }}>
+      <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
         <Table sx={{ minWidth: 650 }} size="small" aria-label="tabela de contas a pagar">
           <TableHead>
             <TableRow>

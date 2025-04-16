@@ -6,6 +6,8 @@ import { createCpSchema } from "../../../packages/validators/zod-schemas/create/
 import { updateCpSchema } from "../../../packages/validators/zod-schemas/update/update-cp.validator";
 import { queryCpSchema } from "../../../packages/validators/zod-schemas/query/query-cp.validator";
 import { Cp } from "../entity/entities";
+import GeneralValidator from "../../../packages/validators/general.validator";
+import { ApiError } from "../utils/api-error.util";
 
 export default class CpController extends BaseController<CpService> {
   constructor() {
@@ -81,7 +83,16 @@ export default class CpController extends BaseController<CpService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const validatedData: CreateCp = createCpSchema.parse(req.body);
+
+      const { value } = req.body;
+
+      const normalizedValue = GeneralValidator.validateAndNormalizeMoneyString(value || "");
+
+      if (!normalizedValue) {
+        throw new ApiError(401, "Informar um valor Pt-Br válido");
+      }
+      
+      const validatedData: CreateCp = createCpSchema.parse({ ...req.body, value: normalizedValue });
       const item: Cp = await this.service.create(validatedData);
       res.status(201).json(item);
       return;
@@ -98,6 +109,15 @@ export default class CpController extends BaseController<CpService> {
   ): Promise<void> => {
     try {
       const { id } = req.params;
+      const { value } = req.body;
+
+      if (value) {
+        const normalizedValue = GeneralValidator.validateAndNormalizeMoneyString(value);
+        if (!normalizedValue) {
+          throw new ApiError(401, "Informar um valor Pt-Br válido");
+        }
+        req.body.value = normalizedValue;
+      }
       const validatedData: UpdateCp = updateCpSchema.parse(req.body);
       const updateditem: Partial<Cp> | null = await this.service.update(
         id,

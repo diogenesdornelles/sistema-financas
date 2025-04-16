@@ -1,7 +1,7 @@
 import { BaseService } from "./base.service";
 import { Tcr } from "../entity/entities";
 import { CreateTcr, UpdateTcr, QueryTcr } from "../../../packages/dtos/tcr.dto";
-import { FindOptionsWhere, Like, MoreThanOrEqual, Raw } from "typeorm";
+import { FindOptionsWhere, ILike, Like, MoreThanOrEqual, Raw } from "typeorm";
 
 export class TcrService extends BaseService<
   Tcr,
@@ -112,11 +112,11 @@ export class TcrService extends BaseService<
       const where: FindOptionsWhere<Tcr> = {};
 
       if (data.id) {
-        where.id = Raw((alias) => `${alias}::text ILIKE :id`, { id: `%${data.id}%` });
+        where.id = Raw((alias) => `CAST(${alias} AS TEXT) ILIKE :id`, { id: `%${data.id}%` });
       }
 
       if (data.name) {
-        where.name = Like(`%${data.name}%`);
+        where.name = ILike(`%${data.name}%`);
       }
 
       if (data.status) {

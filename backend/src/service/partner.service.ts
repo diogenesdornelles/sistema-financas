@@ -5,7 +5,7 @@ import {
   QueryPartner,
   UpdatePartner,
 } from "../../../packages/dtos/partner.dto";
-import { FindOptionsWhere, Like, MoreThanOrEqual, Raw } from "typeorm";
+import { FindOptionsWhere, ILike, Like, MoreThanOrEqual, Raw } from "typeorm";
 import {
   PartnerSearchType,
   PartnerType,
@@ -142,11 +142,11 @@ export class PartnerService extends BaseService<
       const where: FindOptionsWhere<Partner> = {};
 
       if (data.id) {
-        where.id = Raw((alias) => `${alias}::text ILIKE :id`, { id: `%${data.id}%` });
+        where.id = Raw((alias) => `CAST(${alias} AS TEXT) ILIKE :id`, { id: `%${data.id}%` });
       }
 
       if (data.name) {
-        where.name = Like(`%${data.name}%`);
+        where.name = ILike(`%${data.name}%`);
       }
 
       if (data.type && data.type !== PartnerSearchType.PFPJ) {
@@ -158,7 +158,7 @@ export class PartnerService extends BaseService<
       }
 
       if (data.obs) {
-        where.obs = Like(`%${data.obs}%`);
+        where.obs = ILike(`%${data.obs}%`);
       }
 
       if (data.status) {

@@ -6,7 +6,7 @@ import {
   UpdateUser,
 } from "../../../packages/dtos/user.dto";
 import hashPassword from "../utils/hash-pwd.util";
-import { FindOptionsWhere, Like, MoreThanOrEqual, Raw } from "typeorm";
+import { FindOptionsWhere, ILike, Like, MoreThanOrEqual, Raw } from "typeorm";
 
 export class UserService extends BaseService<
   User,
@@ -180,20 +180,21 @@ export class UserService extends BaseService<
   public query = async (data: QueryUser): Promise<User[]> => {
     try {
       const where: FindOptionsWhere<User> = {};
+
       if (data.id) {
-        where.id = Raw((alias) => `${alias}::text ILIKE :id`, { id: `%${data.id}%` });
+        where.id = Raw((alias) => `CAST(${alias} AS TEXT) ILIKE :id`, { id: `%${data.id}%` });
       }
 
       if (data.name) {
-        where.name = Like(`%${data.name}%`);
+        where.name = ILike(`%${data.name}%`);
       }
 
       if (data.surname) {
-        where.surname = Like(`%${data.surname}%`);
+        where.surname = ILike(`%${data.surname}%`);
       }
 
       if (data.cpf) {
-        where.cpf = Like(`%${data.cpf}%`);
+        where.cpf = ILike(`%${data.cpf}%`);
       }
 
       if (data.status) {

@@ -5,7 +5,7 @@ import {
   UpdateCat,
   QueryCat,
 } from "../../../packages/dtos/cat.dto";
-import { FindOptionsWhere, Like, MoreThanOrEqual, Raw } from "typeorm";
+import { FindOptionsWhere, ILike, Like, MoreThanOrEqual, Raw } from "typeorm";
 
 export class CatService extends BaseService<
   Cat,
@@ -129,19 +129,19 @@ export class CatService extends BaseService<
       const where: FindOptionsWhere<Cat> = {};
 
       if (data.id) {
-        where.id = Raw((alias) => `${alias}::text ILIKE :id`, { id: `%${data.id}%` });
+        where.id = Raw((alias) => `CAST(${alias} AS TEXT) ILIKE :id`, { id: `%${data.id}%` });
       }
 
       if (data.name) {
-        where.name = Like(`%${data.name}%`);
+        where.name = ILike(`%${data.name}%`);
       }
 
       if (data.description) {
-        where.description = Like(`%${data.description}%`);
+        where.description = ILike(`%${data.description}%`);
       }
 
       if (data.obs) {
-        where.obs = Like(`%${data.obs}%`);
+        where.obs = ILike(`%${data.obs}%`);
       }
 
       if (data.status) {

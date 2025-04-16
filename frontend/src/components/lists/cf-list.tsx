@@ -103,7 +103,7 @@ const CfList = (): JSX.Element => {
       <Typography variant="h4" sx={{ marginTop: 0 }}>
         Contas financeiras
       </Typography>
-      <TableContainer component={Paper} sx={{ maxHeight: 450 }}>
+      <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
         <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table" >
           <TableHead>
             <TableRow>

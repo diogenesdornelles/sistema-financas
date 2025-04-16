@@ -2,7 +2,7 @@ import { BaseService } from "./base.service";
 import { Cp, Partner, Tcp, Tx, User } from "../entity/entities";
 import { CreateCp, UpdateCp, QueryCp } from "../../../packages/dtos/cp.dto";
 import { PaymentStatus } from "../../../packages/dtos/utils/enums";
-import { FindOptionsWhere, Like, MoreThanOrEqual, Not, Raw, Repository } from "typeorm";
+import { FindOptionsWhere, ILike, Like, MoreThanOrEqual, Not, Raw, Repository } from "typeorm";
 import { AppDataSource } from "../config/db";
 import GeneralValidator from "../../../packages/validators/general.validator";
 import { ApiError } from "../utils/api-error.util";
@@ -75,19 +75,13 @@ export class CpService extends BaseService<
   public create = async (data: CreateCp): Promise<Cp> => {
     try {
 
-      const value = GeneralValidator.validateAndNormalizeMoneyString(data.value)
 
-      if (!value) {
-        throw new ApiError(401, "Informar um valor Pt-Br válido")
-      }
       const newCp = this.repository.create({
         ...data,
         user: { id: data.user } as User,
         type: { id: data.type } as Tcp,
         supplier: { id: data.supplier } as Partner,
-        value: value
-          ? parseFloat(value)
-          : undefined,
+        value: data.value ? parseFloat(data.value) : undefined,
       });
 
       const createdCp = await this.repository.save(newCp);
@@ -112,14 +106,6 @@ export class CpService extends BaseService<
     data: UpdateCp,
   ): Promise<Partial<Cp> | null> => {
     try {
-      let value: string | boolean = false
-
-      if (data.value) {
-        value = GeneralValidator.validateAndNormalizeMoneyString(data.value ? data.value : '') // valor que falha
-        if (!value) {
-          throw new ApiError(401, "Informar um valor Pt-Br válido")
-        }
-      }
 
       const updateData: Partial<Cp> = {
         ...data,
@@ -127,9 +113,7 @@ export class CpService extends BaseService<
         supplier: data.supplier
           ? ({ id: data.supplier } as Partner)
           : undefined,
-        value: value
-          ? parseFloat(value)
-          : undefined,
+        value: data.value ? parseFloat(data.value) : undefined,
         due: data.due ? new Date(data.due) : undefined,
       };
 
@@ -183,7 +167,7 @@ export class CpService extends BaseService<
       const where: FindOptionsWhere<Cp> = {};
 
       if (data.id) {
-        where.id = Raw((alias) => `${alias}::text ILIKE :id`, { id: `%${data.id}%` });
+        where.id = Raw((alias) => `CAST(${alias} AS TEXT) ILIKE :id`, { id: `%${data.id}%` });
       }
 
       if (data.value) {
@@ -196,11 +180,15 @@ export class CpService extends BaseService<
       }
 
       if (data.type) {
-        where.type = { name: Like(`%${data.type}%`) };
+        where.type = {
+          name: Raw((alias) => `${alias} ILIKE :typeName`, { typeName: `%${data.type}%` }),
+        };
       }
 
       if (data.supplier) {
-        where.supplier = Like(`%${data.supplier}%`);
+        where.supplier = {
+          name: Raw((alias) => `${alias} ILIKE :supplierName`, { supplierName: `%${data.supplier}%` }),
+        };
       }
 
       if (data.due) {
@@ -209,7 +197,7 @@ export class CpService extends BaseService<
       }
 
       if (data.obs) {
-        where.obs = Like(`%${data.obs}%`);
+        where.obs = ILike(`%${data.obs}%`);
       }
 
       if (data.status) {

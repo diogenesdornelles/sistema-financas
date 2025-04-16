@@ -95,7 +95,7 @@ const UserList = (): JSX.Element => {
       <UserSearchForm onSearch={handleSearch} onClear={handleClearSearch}/>
       <Divider />
       <Typography variant="h4">Usuários</Typography>
-      <TableContainer component={Paper} sx={{ maxHeight: 450 }}>
+      <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
         <Table sx={{ minWidth: 650 }} size="small" aria-label="tabela de usuários">
           <TableHead>
             <TableRow>

@@ -1,7 +1,7 @@
 import { BaseService } from "./base.service";
 import { Tcp } from "../entity/entities";
 import { CreateTcp, UpdateTcp, QueryTcp } from "../../../packages/dtos/tcp.dto";
-import { FindOptionsWhere, Like, MoreThanOrEqual, Raw } from "typeorm";
+import { FindOptionsWhere, ILike, Like, MoreThanOrEqual, Raw } from "typeorm";
 
 export class TcpService extends BaseService<
   Tcp,
@@ -112,11 +112,11 @@ export class TcpService extends BaseService<
       const where: FindOptionsWhere<Tcp> = {};
 
       if (data.id) {
-        where.id = Raw((alias) => `${alias}::text ILIKE :id`, { id: `%${data.id}%` });
+        where.id = Raw((alias) => `CAST(${alias} AS TEXT) ILIKE :id`, { id: `%${data.id}%` });
       }
 
       if (data.name) {
-        where.name = Like(`%${data.name}%`);
+        where.name = ILike(`%${data.name}%`);
       }
 
       if (data.status) {

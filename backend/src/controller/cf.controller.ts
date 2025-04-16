@@ -7,6 +7,8 @@ import { updateCfSchema } from "../../../packages/validators/zod-schemas/update/
 import { QueryCat } from "../../../packages/dtos/cat.dto";
 import { queryCfSchema } from "../../../packages/validators/zod-schemas/query/query-cf.validator";
 import { Cf } from "../entity/entities";
+import GeneralValidator from "../../../packages/validators/general.validator";
+import { ApiError } from "../utils/api-error.util";
 
 export default class CfController extends BaseController<CfService> {
   constructor() {
@@ -82,13 +84,22 @@ export default class CfController extends BaseController<CfService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const validatedData: CreateCf = createCfSchema.parse(req.body);
-      const item: Cf = await this.service.create(validatedData);
-      res.status(201).json(item);
-      return;
+      const { balance } = req.body;
+
+      const normalizedBalance = GeneralValidator.validateAndNormalizeMoneyString(balance || "0.0");
+      if (!normalizedBalance) {
+        throw new ApiError(401, "Informar um valor Pt-Br válido");
+      }
+
+      const cf = await this.service.create({
+        ...req.body,
+        balance: normalizedBalance,
+      });
+      res.status(201).json(cf);
+      return 
     } catch (error) {
-      next(error);
-      return;
+      res.status(400).json({ error: error});
+      return 
     }
   };
 
@@ -99,20 +110,22 @@ export default class CfController extends BaseController<CfService> {
   ): Promise<void> => {
     try {
       const { id } = req.params;
-      const validatedData: UpdateCf = updateCfSchema.parse(req.body);
-      const updateditem: Partial<Cf> | null = await this.service.update(
-        id,
-        validatedData,
-      );
-      if (!updateditem) {
-        res.status(404).json({ message: "Conta não encontrada" });
-        return;
+      const { balance } = req.body;
+
+      if (balance) {
+        const normalizedBalance = GeneralValidator.validateAndNormalizeMoneyString(balance);
+        if (!normalizedBalance) {
+          throw new ApiError(401, "Informar um valor Pt-Br válido");
+        }
+        req.body.balance = normalizedBalance;
       }
-      res.status(200).json(updateditem);
-      return;
+      
+      const updatedCf = await this.service.update(id, req.body);
+      res.status(200).json(updatedCf);
+      return 
     } catch (error) {
-      next(error);
-      return;
+      res.status(400).json({ error: error });
+      return 
     }
   };
 

@@ -12,9 +12,9 @@ export const createPartnerSchema = z
             .max(100, "Nome pode ter no máximo 100 caracteres"),
 
         cod: z
-            .string(),
+            .string()
+            .transform((str) => str.replace(/\D/g, "")),
         type: z.nativeEnum(PartnerType),
-
         user: z.string().uuid("Informar o usuário"),
 
         obs: z

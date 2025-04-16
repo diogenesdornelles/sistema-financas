@@ -77,6 +77,8 @@ export class TxService extends BaseService<
   public create = async (data: CreateTx): Promise<Tx> => {
     try {
 
+      console.log(data)
+
       // insere o tipo de transação, de acordo com a presença de CR ou CP
       const updatedData = {
         ...data,
@@ -96,16 +98,16 @@ export class TxService extends BaseService<
       const createdTx = await this.repository.save(newTx);
 
       // atualiza CP ou CR para pago
-      if (createdTx.cp) {
+      if (updatedData.cp) {
         await this.cpRepo.update(
-          createdTx.cp.id,
+          updatedData.cp,
           { status: PaymentStatus.PAID },
         );
       }
 
-      if (createdTx.cr) {
+      if (updatedData.cr) {
         await this.crRepo.update(
-          createdTx.cr.id,
+          updatedData.cr,
           { status: PaymentStatus.PAID },
         );
       }

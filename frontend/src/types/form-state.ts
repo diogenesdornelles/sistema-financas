@@ -43,7 +43,7 @@ export type FormsState = {
     [K in TValue]: {
       type: TOpType;
       updateItem: (UpdateItemMap[K] & { id: string }) | null;
-      isOpen: boolean
+      isOpen: boolean;
     };
   };
   setIsOpen: (value: boolean, name: TValue) => void;

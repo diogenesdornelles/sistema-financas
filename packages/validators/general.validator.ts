@@ -6,7 +6,6 @@ export default class GeneralValidator {
 
     const cleanedCNPJ = cnpj.replace(/\D/g, "");
 
-    // Verifica se possui 14 dígitos
     if (cleanedCNPJ.length !== 14) {
       return false;
     }

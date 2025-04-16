@@ -14,7 +14,7 @@ export function useGetAllCat() {
 export function useGetManyCat(skip: number) {
   return useQuery({
     queryFn: () => Api.cat.getMany(skip), 
-    queryKey: ["cat", "getMany"],
+    queryKey: ["cat", "getMany", skip],
   });
 }
 
@@ -33,15 +33,19 @@ export function usePostCat() {
   return useMutation({
     mutationFn: (data: CreateCat) => Api.cat.post(data), 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cat", "getMany"] }); 
+      queryClient.invalidateQueries({ queryKey: ["cat", "getMany"], exact: false }); 
     },
   });
 }
 
 // Hook para criar uma consulta via POST
 export function useQueryCat() {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data: QueryCat) => Api.cat.query(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cat", "getMany"], exact: false }); 
+    },
 })}
 
 // Hook para atualizar um 'cat' existente (PUT)
@@ -52,7 +56,7 @@ export function usePutCat(id: string) {
     mutationFn: (data: UpdateCat) => Api.cat.put(data, id), 
     onSuccess: (data) => { 
       console.log(data)
-      queryClient.invalidateQueries({ queryKey: ["cat", "getMany"] }); 
+      queryClient.invalidateQueries({ queryKey: ["cat", "getMany"], exact: false }); 
     },
   });
 }
@@ -64,7 +68,7 @@ export function useDeleteCat() {
   return useMutation({
     mutationFn: (id: string) => Api.cat.delete(id), 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cat", "getMany"] }); 
+      queryClient.invalidateQueries({ queryKey: ["cat", "getMany"], exact: false }); 
     },
   });
 }

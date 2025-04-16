@@ -97,11 +97,13 @@ const TxList = (): JSX.Element => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
       {(isPending) && <CustomBackdrop isOpen={isPending} />}
-      <Typography variant="h4">Filtro</Typography>
-      <TxSearchForm onSearch={handleSearch} onClear={handleClearSearch}/>
+      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline', gap: 4 }}>
+        <Typography variant="h5">Filtro</Typography>
+        <TxSearchForm onSearch={handleSearch} onClear={handleClearSearch} />
+      </Box>
       <Divider />
-      <Typography variant="h4">Transações</Typography>
-      <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
+      <Typography variant="h5">Transações</Typography>
+      <TableContainer component={Paper} sx={{ flex: 1, minHeight: '30vh', maxHeight: '50vh', overflow: 'scroll' }}>
         <Table sx={{ minWidth: 650 }} size="small" aria-label="tabela de transações">
           <TableHead>
             <TableRow>
@@ -168,10 +170,10 @@ const TxList = (): JSX.Element => {
         </Table>
       </TableContainer>
       {data && data.length > 0 && (
+        <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', flex: 0.1}}>
         <ButtonGroup
           variant="contained"
           aria-label="basic button group"
-          sx={{ display: 'flex', marginBottom: 2, flex: 0, width: 'fit-content', height: '100%', alignSelf: 'center' }}
         >
           <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
             Anterior
@@ -180,6 +182,7 @@ const TxList = (): JSX.Element => {
             Próximo
           </Button>
         </ButtonGroup>
+      </Box>
       )}
     </Box>
   );

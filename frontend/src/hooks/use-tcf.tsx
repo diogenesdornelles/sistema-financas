@@ -13,21 +13,25 @@ export function useGetAllTcf() {
 export function useGetManyTcf(skip: number) {
   return useQuery({
     queryFn: () => Api.tcf.getMany(skip), 
-    queryKey: ["tcf", "getMany"], 
+    queryKey: ["tcf", "getMany", skip], 
   });
 }
 
 
 // Hook para criar uma consulta via POST
 export function useQueryTcf() {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data: QueryTcf) => Api.tcf.query(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tcf", "getMany"], exact: false });
+    },
 })}
 
 export function useGetTcf(id: string) {
   return useQuery({
     queryFn: () => Api.tcf.get(id),
-    queryKey: ["tcf", "get"],
+    queryKey: ["tcf", "get", id],
   });
 }
 
@@ -37,7 +41,7 @@ export function usePostTcf() {
   return useMutation({
     mutationFn: (data: CreateTcf) => Api.tcf.post(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tcf", "getMany"] });
+      queryClient.invalidateQueries({ queryKey: ["tcf", "getMany"], exact: false });
     },
   });
 }
@@ -48,7 +52,7 @@ export function usePutTcf(id: string) {
   return useMutation({
     mutationFn: (data: UpdateTcf) => Api.tcf.put(data, id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tcf", "getMany"]});
+      queryClient.invalidateQueries({ queryKey: ["tcf", "getMany"], exact: false });
     },
   });
 }
@@ -59,7 +63,7 @@ export function useDeleteTcf() {
   return useMutation({
     mutationFn: (id: string) => Api.tcf.delete(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tcf", "getMany"]});
+      queryClient.invalidateQueries({ queryKey: ["tcf", "getMany"], exact: false });
     },
   });
 }

@@ -97,17 +97,19 @@ const CfList = (): JSX.Element => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
       {(isPending) && <CustomBackdrop isOpen={isPending} />}
-      <Typography variant="h4">Filtro</Typography>
-      <CfSearchForm onSearch={handleSearch} onClear={handleClearSearch}/>
+      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline', gap: 4 }}>
+        <Typography variant="h5">Filtro</Typography>
+        <CfSearchForm onSearch={handleSearch} onClear={handleClearSearch} />
+      </Box>
       <Divider />
-      <Typography variant="h4" sx={{ marginTop: 0 }}>
+      <Typography variant="h5" sx={{ marginTop: 0 }}>
         Contas financeiras
       </Typography>
-      <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
+      <TableContainer component={Paper} sx={{ flex: 1, minHeight: '30vh', maxHeight: '50vh', overflow: 'scroll' }}>
         <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table" >
           <TableHead>
             <TableRow>
-            <TableCell align='left' sx={{ fontWeight: 800 }}>ID</TableCell>
+              <TableCell align='left' sx={{ fontWeight: 800 }}>ID</TableCell>
               <TableCell align='left' sx={{ fontWeight: 800 }}>Número</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Agência</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Banco</TableCell>
@@ -164,18 +166,19 @@ const CfList = (): JSX.Element => {
         </Table>
       </TableContainer>
       {data && data.length > 0 && (
-        <ButtonGroup
-          variant="contained"
-          aria-label="basic button group"
-          sx={{ display: 'flex', marginBottom: 2, flex: 0, width: 'fit-content', height: '100%', alignSelf: 'center' }}
-        >
-          <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
-            Anterior
-          </Button>
-          <Button onClick={() => handleChangePage(1)} disabled={!data || data.length === 0}>
-            Próximo
-          </Button>
-        </ButtonGroup>
+        <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', flex: 0.1}}>
+          <ButtonGroup
+            variant="contained"
+            aria-label="basic button group"
+          >
+            <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
+              Anterior
+            </Button>
+            <Button onClick={() => handleChangePage(1)} disabled={!data || data.length === 0}>
+              Próximo
+            </Button>
+          </ButtonGroup>
+        </Box>
       )}
     </Box>
   );

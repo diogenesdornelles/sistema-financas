@@ -11,15 +11,19 @@ export function useGetAllCp() {
 }
 // Hook para criar uma consulta via POST
 export function useQueryCp() {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data: QueryCp) => Api.cp.query(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cp", "getMany"], exact: false }); 
+    },
 })}
 
 // Hook para buscar muitas Cp
 export function useGetManyCp(skip: number) {
   return useQuery({
     queryFn: () => Api.cp.getMany(skip), 
-    queryKey: ["cp", "getMany"], 
+    queryKey: ["cp", "getMany", skip], 
   });
 }
 
@@ -27,7 +31,7 @@ export function useGetManyCp(skip: number) {
 export function useGetCp(id: string) {
   return useQuery({
     queryFn: () => Api.cp.get(id), 
-    queryKey: ["cp", "get"], 
+    queryKey: ["cp", "get", id], 
   });
 }
 
@@ -38,7 +42,7 @@ export function usePostCp() {
   return useMutation({
     mutationFn: (data: CreateCp) => Api.cp.post(data), 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cp", "getMany"] }); 
+      queryClient.invalidateQueries({ queryKey: ["cp", "getMany"], exact: false }); 
     },
   });
 }
@@ -50,7 +54,7 @@ export function usePutCp(id: string) {
   return useMutation({
     mutationFn: (data: UpdateCp) => Api.cp.put(data, id), 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cp", "getMany"] }); 
+      queryClient.invalidateQueries({ queryKey: ["cp", "getMany"], exact: false }); 
     },
   });
 }
@@ -62,7 +66,7 @@ export function useDeleteCp() {
   return useMutation({
     mutationFn: (id: string) => Api.cp.delete(id), 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cp", "getMany"] }); 
+      queryClient.invalidateQueries({ queryKey: ["cp", "getMany"], exact: false }); 
     },
   });
 }

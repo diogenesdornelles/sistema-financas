@@ -14,21 +14,25 @@ export function useGetAllPartner() {
 export function useGetManyPartner(skip: number) {
   return useQuery({
     queryFn: () => Api.partner.getMany(skip), 
-    queryKey: ["partner", "getMany"], 
+    queryKey: ["partner", "getMany", skip], 
   });
 }
 
 // Hook para criar uma consulta via POST
 export function useQueryPartner() {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data: QueryPartner) => Api.partner.query(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["partner", "getMany"], exact: false }); 
+    },
 })}
 
 // Hook para buscar um 'partner' específico pelo ID
 export function useGetPartner(id: string) {
   return useQuery({
     queryFn: () => Api.partner.get(id), 
-    queryKey: ["partner", "get"], 
+    queryKey: ["partner", "get", id], 
   });
 }
 
@@ -39,7 +43,7 @@ export function usePostPartner() {
   return useMutation({
     mutationFn: (data: CreatePartner) => Api.partner.post(data), 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["partner", "getMany"] }); 
+      queryClient.invalidateQueries({ queryKey: ["partner", "getMany"], exact: false }); 
     },
   });
 }
@@ -51,7 +55,7 @@ export function usePutPartner(id: string) {
   return useMutation({
     mutationFn: (data: UpdatePartner) => Api.partner.put(data, id), 
     onSuccess: () => { 
-      queryClient.invalidateQueries({ queryKey: ["partner", "getMany"] }); 
+      queryClient.invalidateQueries({ queryKey: ["partner", "getMany"], exact: false }); 
     },
   });
 }
@@ -63,7 +67,7 @@ export function useDeletePartner() {
   return useMutation({
     mutationFn: (id: string) => Api.partner.delete(id), 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["partner", "getMany"] }); 
+      queryClient.invalidateQueries({ queryKey: ["partner", "getMany"], exact: false }); 
     },
   });
 }

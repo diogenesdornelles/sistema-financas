@@ -1,5 +1,6 @@
 import { z } from "zod";
 import GeneralValidator from "../../general.validator";
+import { statusBoolSchema } from "../../utils/status-bool-schema";
 
 
 export const updateTxSchema = z
@@ -16,7 +17,7 @@ export const updateTxSchema = z
       .uuid("A conta de recebimento (cr) deve ser um UUID válido")
       .optional(),
     category: z.string().uuid("Informar a categoria (UUID)").optional(),
-    status: z.boolean().optional(),
+    status: statusBoolSchema.optional(),
     tdate: z
       .string()
       .optional()

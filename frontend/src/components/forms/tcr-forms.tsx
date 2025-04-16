@@ -105,7 +105,7 @@ export function UpdateTcrForm(): JSX.Element | null {
         resolver: zodResolver(updateTcrSchema),
         defaultValues: forms.tcr.updateItem ? {
             name: forms.tcr.updateItem.name,
-            status: forms.tcr.updateItem.status ? forms.tcr.updateItem.status : undefined
+            status: forms.tcr.updateItem.status ? forms.tcr.updateItem.status : false
           } : { },
         });
 

@@ -13,14 +13,18 @@ export function useGetAllTcp() {
 export function useGetManyTcp(skip: number) {
   return useQuery({
     queryFn: () => Api.tcp.getMany(skip), 
-    queryKey: ["tcp", "getMany"], 
+    queryKey: ["tcp", "getMany", skip], 
   });
 }
 
 // Hook para criar uma consulta via POST
 export function useQueryTcp() {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data: QueryTcp) => Api.tcp.query(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tcp", "getMany"], exact: false});
+    },
 })}
 
 export function useGetTcp(id: string) {
@@ -36,7 +40,7 @@ export function usePostTcp() {
   return useMutation({
     mutationFn: (data: CreateTcp) => Api.tcp.post(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tcp", "getMany"] });
+      queryClient.invalidateQueries({ queryKey: ["tcp", "getMany"], exact: false});
     },
   });
 }
@@ -47,7 +51,7 @@ export function usePutTcp(id: string) {
   return useMutation({
     mutationFn: (data: UpdateTcp) => Api.tcp.put(data, id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tcp", "getMany"]});
+      queryClient.invalidateQueries({ queryKey: ["tcp", "getMany"], exact: false});
     },
   });
 }
@@ -58,7 +62,7 @@ export function useDeleteTcp() {
   return useMutation({
     mutationFn: (id: string) => Api.tcp.delete(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tcp", "getMany"]});
+      queryClient.invalidateQueries({ queryKey: ["tcp", "getMany"], exact: false});
     },
   });
 }

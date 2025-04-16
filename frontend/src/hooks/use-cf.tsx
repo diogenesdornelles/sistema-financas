@@ -14,7 +14,7 @@ export function useGetAllCf() {
 export function useGetManyCf(skip: number) {
   return useQuery({
     queryFn: () => Api.cf.getMany(skip), 
-    queryKey: ["cf", "getMany"],
+    queryKey: ["cf", "getMany", skip],
   });
 }
 
@@ -23,7 +23,7 @@ export function useGetManyCf(skip: number) {
 export function useGetCf(id: string) {
   return useQuery({
     queryFn: () => Api.cf.get(id), 
-    queryKey: ["cf", "get"], 
+    queryKey: ["cf", "get", id], 
   });
 }
 
@@ -34,7 +34,7 @@ export function usePostCf() {
   return useMutation({
     mutationFn: (data: CreateCf) => Api.cf.post(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cf", "getMany"] });
+      queryClient.invalidateQueries({ queryKey: ["cf", "getMany"], exact: false });
     },
   });
 }
@@ -46,7 +46,7 @@ export function usePutCf(id: string) {
   return useMutation({
     mutationFn: (data: UpdateCf) => Api.cf.put(data, id),
     onSuccess: () => { 
-      queryClient.invalidateQueries({ queryKey: ["cf", "getMany"] }); 
+      queryClient.invalidateQueries({ queryKey: ["cf", "getMany"], exact: false }); 
     },
   });
 }
@@ -58,13 +58,17 @@ export function useDeleteCf() {
   return useMutation({
     mutationFn: (id: string) => Api.cf.delete(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cf", "getMany"] });
+      queryClient.invalidateQueries({ queryKey: ["cf", "getMany"], exact: false });
     },
   });
 }
 
 // Hook para criar uma consulta via POST
 export function useQueryCf() {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data: QueryCf) => Api.cf.query(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cf", "getMany"], exact: false });
+    },
 })}

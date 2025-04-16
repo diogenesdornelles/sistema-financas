@@ -4,6 +4,7 @@ export type ResultSet = {
     totalIn: number;
     totalOut: number;
     balance: number;
+    cfInitial: number;
 }
 
 export interface DbBalanceProps {

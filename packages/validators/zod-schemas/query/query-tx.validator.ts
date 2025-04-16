@@ -1,11 +1,11 @@
 import { z } from "zod";
 import { TransactionSearchType } from "../../../dtos/utils/enums";
-
+import {statusBoolSchema} from '../../utils/status-bool-schema'
 
 export const queryTxSchema = z.object({
   id: z.string().optional(),
   value: z.string().optional(),
-  status: z.boolean().optional(),
+  status: statusBoolSchema.optional(),
   obs: z.string().optional(),
   description: z.string(),
   cf: z.string().optional(),

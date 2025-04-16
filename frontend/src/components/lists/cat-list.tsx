@@ -60,7 +60,7 @@ const CatList = (): JSX.Element => {
   const handleClearSearch = () => {
     setItems(data || null);
   };
-  
+
 
   const onDelete = async (id: string) => {
     if (confirm('Deseja deletar?')) {
@@ -100,11 +100,13 @@ const CatList = (): JSX.Element => {
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
 
       {(isPending) && <CustomBackdrop isOpen={isPending} />}
-      <Typography variant="h4">Filtro</Typography>
-      <CatSearchForm onSearch={handleSearch} onClear={handleClearSearch}/>
+      <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline', gap: 4 }}>
+        <Typography variant="h5">Filtro</Typography>
+        <CatSearchForm onSearch={handleSearch} onClear={handleClearSearch} />
+      </Box>
       <Divider />
-      <Typography variant="h4">Categorias</Typography>
-      <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
+      <Typography variant="h5">Categorias</Typography>
+      <TableContainer component={Paper} sx={{ flex: 1, minHeight: '30vh', maxHeight: '50vh', overflow: 'scroll' }}>
         <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
@@ -139,8 +141,8 @@ const CatList = (): JSX.Element => {
                 <TableCell align="right">{`${item.status ? 'Ativo' : 'Inativo'}`}</TableCell>
                 <TableCell align="right">{item.description}</TableCell>
                 <TableCell align="right">{item.obs}</TableCell>
-                  <TableCell align="right">{new Date(item.createdAt).toLocaleDateString()}</TableCell>
-                  <TableCell align="right">{new Date(item.updatedAt).toLocaleDateString()}</TableCell>
+                <TableCell align="right">{new Date(item.createdAt).toLocaleDateString()}</TableCell>
+                <TableCell align="right">{new Date(item.updatedAt).toLocaleDateString()}</TableCell>
                 <TableCell align="right">
                   <IconButton edge="end" aria-label="edit" onClick={() => onEdit(item)}>
                     <EditIcon />
@@ -156,10 +158,10 @@ const CatList = (): JSX.Element => {
       </TableContainer>
       {
         data && data.length > 0 && (
+          <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', flex: 0.1}}>
           <ButtonGroup
             variant="contained"
             aria-label="basic button group"
-            sx={{ display: 'flex', marginBottom: 2, flex: 0, width: 'fit-content', height: '100%', alignSelf: 'center' }}
           >
             <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
               Anterior
@@ -168,6 +170,7 @@ const CatList = (): JSX.Element => {
               Próximo
             </Button>
           </ButtonGroup>
+        </Box>
         )}
     </Box >
   );

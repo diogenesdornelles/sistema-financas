@@ -181,13 +181,13 @@ export function CreateTxForm(): JSX.Element | null | string {
                         render={({ field }) => (
                             <Autocomplete
                                 options={cfData ? cfData : []}
-                                getOptionLabel={(option) => option.number || ""}
+                                getOptionLabel={(option) => option.number ? `${option.number} | ${option.ag} | ${option.bank}` : ""}
                                 onChange={(_, data) => field.onChange(data ? data.id : "")}
                                 value={field.value ? (cfData?.find((option) => option.id === field.value) || null) : null}
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
-                                        label="ID Conta Financeira"
+                                        label="N. | Ag | Banco - Conta Financeira"
                                         variant="outlined"
                                         size="small"
                                         error={!!errors.cf}
@@ -220,13 +220,13 @@ export function CreateTxForm(): JSX.Element | null | string {
                                 <Autocomplete
                                     sx={{ flex: 1, width: '100%' }}
                                     options={cpData ? cpData : []}
-                                    getOptionLabel={(option) => option.id || ""}
+                                    getOptionLabel={(option) => option.id ? `${option.supplier.name} | ${new Date(option.due + 'T00:00:00').toLocaleDateString()} | R$ ${strToPtBrMoney(String(option.value))}` : ""}
                                     onChange={(_, data) => field.onChange(data ? data.id : "")}
                                     value={field.value ? (cpData?.find((option) => option.id === field.value) || null) : null}
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
-                                            label="ID Conta a Pagar"
+                                            label="Fornecedor | Vcto. | Valor - Conta a pagar"
                                             size="small"
                                             variant="outlined"
                                             error={!!errors.cp}
@@ -243,13 +243,13 @@ export function CreateTxForm(): JSX.Element | null | string {
                             render={({ field }) => (
                                 <Autocomplete
                                     options={crData ? crData : []}
-                                    getOptionLabel={(option) => option.id || ""}
+                                    getOptionLabel={(option) => option.id ? `${option.customer.name} | ${new Date(option.due + 'T00:00:00').toLocaleDateString()} | R$ ${strToPtBrMoney(String(option.value))}` : ""}
                                     onChange={(_, data) => field.onChange(data ? data.id : "")}
                                     value={field.value ? (crData?.find((option) => option.id === field.value) || null) : null}
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
-                                            label="ID Conta a Receber"
+                                            label="Cliente | Vcto. | Valor - Conta a receber"
                                             variant="outlined"
                                             size="small"
                                             error={!!errors.cr}
@@ -443,7 +443,7 @@ export function UpdateTxForm(): JSX.Element | null | string {
                         render={({ field }) => (
                             <Autocomplete
                                 options={cfData ? cfData : []}
-                                getOptionLabel={(option) => option.number || ""}
+                                getOptionLabel={(option) => option.number ? `${option.number} | ${option.ag} | ${option.bank}` : ""}
                                 onChange={(_, data) => field.onChange(data ? data.id : "")}
                                 defaultValue={
                                     cfData && cfData.find(
@@ -453,7 +453,7 @@ export function UpdateTxForm(): JSX.Element | null | string {
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
-                                        label="ID Conta Financeira"
+                                        label="N. | Ag | Banco - Conta Financeira"
                                         variant="outlined"
                                         error={!!errors.cf}
                                         helperText={errors.cf?.message}
@@ -484,7 +484,7 @@ export function UpdateTxForm(): JSX.Element | null | string {
                             render={({ field }) => (
                                 <Autocomplete
                                     options={cpData ? cpData : []}
-                                    getOptionLabel={(option) => option.id || ""}
+                                    getOptionLabel={(option) => option.id ? `${option.supplier.name} | ${new Date(option.due + 'T00:00:00').toLocaleDateString()} | R$ ${strToPtBrMoney(String(option.value))}` : ""}
                                     onChange={(_, data) => field.onChange(data ? data.id : "")}
                                     defaultValue={
                                         cpData && cpData.find(
@@ -494,7 +494,7 @@ export function UpdateTxForm(): JSX.Element | null | string {
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
-                                            label="Conta a pagar"
+                                            label="Fornecedor | Vcto. | Valor - Conta a pagar"
                                             variant="outlined"
                                             error={!!errors.cp}
                                             helperText={errors.cp?.message}
@@ -511,7 +511,7 @@ export function UpdateTxForm(): JSX.Element | null | string {
                             render={({ field }) => (
                                 <Autocomplete
                                     options={crData ? crData : []}
-                                    getOptionLabel={(option) => option.id || ""}
+                                    getOptionLabel={(option) => option.id ? `${option.customer.name} | ${new Date(option.due + 'T00:00:00').toLocaleDateString()} | R$ ${strToPtBrMoney(String(option.value))}` : ""}
                                     onChange={(_, data) => field.onChange(data ? data.id : "")}
                                     defaultValue={
                                         crData && crData.find(
@@ -521,7 +521,7 @@ export function UpdateTxForm(): JSX.Element | null | string {
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
-                                            label="Conta a receber"
+                                            label="Cliente | Vcto. | Valor - Conta a receber"
                                             variant="outlined"
                                             error={!!errors.cr}
                                             helperText={errors.cr?.message}

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import GeneralValidator from "../../general.validator";
+import { statusBoolSchema } from "../../utils/status-bool-schema";
 
 
 export const updateUserSchema = z
@@ -24,7 +25,7 @@ export const updateUserSchema = z
       .refine((value) => (value && value?.length > 255 ? undefined : value), {
         message: "Sobrenome pode ter no máximo 255 caracteres"
       }),
-      pwd: z.string()
+    pwd: z.string()
       .transform((value) => (!value || !value.trim() ? undefined : value))
       .optional()
       .refine((value) => value === undefined || GeneralValidator.isValidPwd(value), {
@@ -41,7 +42,7 @@ export const updateUserSchema = z
       .transform((value) => (!value || !value.trim() ? undefined : value))
       .optional()
       .refine((value) => value && GeneralValidator.validateCpf, { message: "CPF inválido" }),
-    status: z.coerce.boolean().optional(),
+    status: statusBoolSchema.optional(),
   }).partial().superRefine(
     (data, cxt) => {
       console.log(data)

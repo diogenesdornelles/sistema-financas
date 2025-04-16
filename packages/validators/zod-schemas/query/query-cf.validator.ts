@@ -1,5 +1,6 @@
 import { z } from "zod";
 import GeneralValidator from "../../general.validator";
+import { statusBoolSchema } from "../../utils/status-bool-schema";
 
 export const queryCfSchema = z
   .object({
@@ -9,7 +10,7 @@ export const queryCfSchema = z
     type: z.string().optional(),
     ag: z.string().optional(),
     bank: z.string().optional(),
-    status: z.coerce.boolean().optional(),
+    status: statusBoolSchema.optional(),
     obs: z.string().optional(),
     createdAt: z
       .string()

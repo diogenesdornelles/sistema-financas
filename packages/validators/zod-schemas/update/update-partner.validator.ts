@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import GeneralValidator from "../../general.validator";
 import { PartnerType } from "../../../dtos/utils/enums";
+import { statusBoolSchema } from "../../utils/status-bool-schema";
 
 
 export const updatePartnerSchema = z
@@ -14,13 +15,9 @@ export const updatePartnerSchema = z
         
         cod: z
             .string()
-            .transform((str) => str.replace(/\D/g, ""))
-            .refine((cod) => cod.length === 11 || cod.length === 14, {
-                message: "Código deve ter 11 dígitos (CPF) ou 14 dígitos (CNPJ)",
-            }),
-        
+            .transform((str) => str.replace(/\D/g, "")),
         type: z.nativeEnum(PartnerType).optional(),
-        status: z.boolean().optional(),
+        status: statusBoolSchema.optional(),
         obs: z
             .string()
             .max(255, "Observação pode ter no máximo 255 caracteres")
@@ -28,13 +25,7 @@ export const updatePartnerSchema = z
     }).strict().partial()
     .superRefine((data, ctx) => {
         if (data.type === PartnerType.PF) {
-            if (data.cod && data.cod.length !== 11) {
-                ctx.addIssue({
-                    code: z.ZodIssueCode.custom,
-                    path: ["cod"],
-                    message: "CPF deve ter exatamente 11 dígitos.",
-                });
-            } else if (data.cod && !GeneralValidator.validateCpf(data.cod)) {
+            if (data.cod && !GeneralValidator.validateCpf(data.cod)) {
                 ctx.addIssue({
                     code: z.ZodIssueCode.custom,
                     path: ["cod"],
@@ -42,13 +33,7 @@ export const updatePartnerSchema = z
                 });
             }
         } else if (data.type === PartnerType.PJ) {
-            if (data.cod && data.cod.length !== 14) {
-                ctx.addIssue({
-                    code: z.ZodIssueCode.custom,
-                    path: ["cod"],
-                    message: "CNPJ deve ter exatamente 14 dígitos.",
-                });
-            } else if (data.cod && !GeneralValidator.validateCNPJ(data.cod)) {
+            if (data.cod && !GeneralValidator.validateCNPJ(data.cod)) {
                 ctx.addIssue({
                     code: z.ZodIssueCode.custom,
                     path: ["cod"],

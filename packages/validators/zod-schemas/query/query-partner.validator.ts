@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { PartnerSearchType } from "../../../dtos/utils/enums";
+import { statusBoolSchema } from "../../utils/status-bool-schema";
 
 
 
@@ -28,8 +29,8 @@ export const queryPartnerSchema = z
                 message: "Data inválida",
             }),
         type: z.nativeEnum(PartnerSearchType).optional(),
-        status: z.boolean(),
-        obs: z.string()
+        status: statusBoolSchema.optional(),
+        obs: z.string().optional()
     }).strict().partial().superRefine((data, ctx) => {
         console.log(data)
     });

@@ -11,8 +11,12 @@ export function useGetAllTx() {
 
 // Hook para criar uma consulta via POST
 export function useQueryTx() {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data: QueryTx) => Api.tx.query(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tx", "getMany"], exact: false });
+    },
 })}
 
 
@@ -20,14 +24,14 @@ export function useQueryTx() {
 export function useGetManyTx(skip: number) {
   return useQuery({
     queryFn: () => Api.tx.getMany(skip), 
-    queryKey: ["tx", "getMany"], 
+    queryKey: ["tx", "getMany", skip], 
   });
 }
 
 export function useGetTx(id: string) {
   return useQuery({
     queryFn: () => Api.tx.get(id),
-    queryKey: ["tx", "get"],
+    queryKey: ["tx", "get", id],
   });
 }
 
@@ -37,7 +41,7 @@ export function usePostTx() {
   return useMutation({
     mutationFn: (data: CreateTx) => Api.tx.post(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tx", "getMany"] });
+      queryClient.invalidateQueries({ queryKey: ["tx", "getMany"], exact: false });
     },
   });
 }
@@ -48,7 +52,7 @@ export function usePutTx(id: string) {
   return useMutation({
     mutationFn: (data: UpdateTx) => Api.tx.put(data, id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tx", "getMany"]});
+      queryClient.invalidateQueries({ queryKey: ["tx", "getMany"], exact: false });
     },
   });
 }
@@ -59,7 +63,7 @@ export function useDeleteTx() {
   return useMutation({
     mutationFn: (id: string) => Api.tx.delete(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tx", "getMany"]});
+      queryClient.invalidateQueries({ queryKey: ["tx", "getMany"], exact: false });
     },
   });
 }

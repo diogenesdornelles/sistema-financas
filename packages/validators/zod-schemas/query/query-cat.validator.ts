@@ -1,10 +1,11 @@
 import { z } from "zod";
+import { statusBoolSchema } from "../../utils/status-bool-schema";
 
 export const queryCatSchema = z.object({
   id: z.string().optional(),
   name: z.string().optional(),
   description: z.string().optional(),
-  status: z.coerce.boolean().optional(),
+  status: statusBoolSchema.optional(),
   obs: z.string().optional(),
   createdAt: z
     .string()

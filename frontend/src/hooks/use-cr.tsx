@@ -14,21 +14,25 @@ export function useGetAllCr() {
 export function useGetManyCr(skip: number) {
   return useQuery({
     queryFn: () => Api.cr.getMany(skip), 
-    queryKey: ["cr", "getMany"], 
+    queryKey: ["cr", "getMany", skip], 
   });
 }
 
 // Hook para criar uma consulta via POST
 export function useQueryCr() {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data: QueryCr) => Api.cr.query(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cr", "getMany"], exact: false }); 
+    },
 })}
 
 // Hook para buscar um 'cr' específico pelo ID
 export function useGetCr(id: string) {
   return useQuery({
     queryFn: () => Api.cr.get(id), 
-    queryKey: ["cr", "get"], 
+    queryKey: ["cr", "get", id], 
   });
 }
 
@@ -39,7 +43,7 @@ export function usePostCr() {
   return useMutation({
     mutationFn: (data: CreateCr) => Api.cr.post(data), 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cr", "getMany"] }); 
+      queryClient.invalidateQueries({ queryKey: ["cr", "getMany"], exact: false }); 
     },
   });
 }
@@ -50,7 +54,7 @@ export function usePutCr(id: string) {
   return useMutation({
     mutationFn: (data: UpdateCr) => Api.cr.put(data, id), 
     onSuccess: (/* data */) => { 
-      queryClient.invalidateQueries({ queryKey: ["cr", "getMany"] }); 
+      queryClient.invalidateQueries({ queryKey: ["cr", "getMany"], exact: false }); 
 
     },
   });
@@ -63,7 +67,7 @@ export function useDeleteCr() {
   return useMutation({
     mutationFn: (id: string) => Api.cr.delete(id), 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cr", "getMany"] }); 
+      queryClient.invalidateQueries({ queryKey: ["cr", "getMany"], exact: false }); 
     },
   });
 }

@@ -45,14 +45,21 @@ export default class GeneralValidator {
 
     return true;
   }
+
   public static validateCpf = (cpf: string): boolean => {
+    cpf = cpf.replace(/\D/g, "");
+    
     if (!cpf || cpf.length !== 11 || /\D/g.test(cpf)) {
       return false;
     }
-
+  
+    if (/^(\d)\1{10}$/.test(cpf)) {
+      return false;
+    }
+  
     let sum = 0;
     let remainder: number;
-
+  
     for (let i = 1; i <= 9; i++) {
       sum += parseInt(cpf.substring(i - 1, i)) * (11 - i);
     }
@@ -61,7 +68,7 @@ export default class GeneralValidator {
     if (remainder !== parseInt(cpf.substring(9, 10))) {
       return false;
     }
-
+  
     sum = 0;
     for (let i = 1; i <= 10; i++) {
       sum += parseInt(cpf.substring(i - 1, i)) * (12 - i);
@@ -71,9 +78,10 @@ export default class GeneralValidator {
     if (remainder !== parseInt(cpf.substring(10, 11))) {
       return false;
     }
-
+  
     return true;
   };
+  
 
   public static validateMoneyNumber = (value: number): boolean => {
     if (!Number.isFinite(value)) {
@@ -131,8 +139,8 @@ export default class GeneralValidator {
 
   public static validateDateUntilPresent = (date: string): boolean => {
     try {
-      const parsedDate = dateSchemaMin.parse(date);
-      return !!parsedDate;
+      const result = dateSchemaMin.safeParse(date);
+      return result.success;
     } catch (error) {
       console.error("Erro ao validar data até o presente:", error);
       return false;
@@ -142,16 +150,13 @@ export default class GeneralValidator {
 
   public static validateDatePostPresent = (date: string): boolean => {
     try {
-      const parsedDate = dateSchemaMaj.parse(date);
-      return !!parsedDate;
+      const result = dateSchemaMaj.safeParse(date);
+      return result.success;
     } catch (error) {
       console.error("Erro ao validar data após o presente:", error);
       return false;
     }
   };
-
-
-
 
   public static isValidPwd = (pwd: string): boolean => {
     // Expressão regular que valida:

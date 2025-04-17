@@ -77,7 +77,8 @@ export class CfService extends BaseService<
         ...data,
         user: { id: data.user } as User,
         type: { id: data.type } as Tcf,
-        balance: data.balance ? parseFloat(data.balance) : 0.0
+        firstBalance: data.balance ? parseFloat(data.balance) : 0.0,
+        currentBalance: data.balance ? parseFloat(data.balance) : 0.0
       });
       const createdCf = await this.repository.save(cf);
 
@@ -105,7 +106,6 @@ export class CfService extends BaseService<
       const updateData: Partial<Cf> = {
         ...data,
         type: data.type ? ({ id: data.type } as Tcf) : undefined,
-        balance: data.balance ? parseFloat(data.balance) : undefined,
       };
 
       await this.repository.update({ id }, updateData);
@@ -151,12 +151,21 @@ export class CfService extends BaseService<
         where.number = Like(`%${data.number}%`);
       }
 
-      if (data.balance) {
+      if (data.firstBalance) {
         const balanceValue = parseFloat(
-          data.balance.replace(/\./g, "").replace(",", "."),
+          data.firstBalance.replace(/\./g, "").replace(",", "."),
         );
         if (!isNaN(balanceValue)) {
-          where.balance = MoreThanOrEqual(balanceValue);
+          where.firstBalance = MoreThanOrEqual(balanceValue);
+        }
+      }
+
+      if (data.currentBalance) {
+        const balanceValue = parseFloat(
+          data.currentBalance.replace(/\./g, "").replace(",", "."),
+        );
+        if (!isNaN(balanceValue)) {
+          where.currentBalance = MoreThanOrEqual(balanceValue);
         }
       }
 

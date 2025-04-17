@@ -68,7 +68,10 @@ export class User extends Base {
 @Entity("cf")
 export class Cf extends Base {
   @Column({ type: "decimal", precision: 15, scale: 2, default: 0.0 })
-  balance!: number; // Create: no required; Update: no required; Response: required
+  firstBalance!: number; // Create: no required; Update: no required; Response: required
+
+  @Column({ type: "decimal", precision: 15, scale: 2, default: 0.0 })
+  currentBalance!: number; // Create: no required; Update: no required; Response: required
 
   @ManyToOne(() => Tcf, (tcf) => tcf.cfs)
   @JoinColumn({ name: "tcfId" })

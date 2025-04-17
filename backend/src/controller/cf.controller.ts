@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { CfService } from "../service/cf.service";
 import { BaseController } from "./base.controller";
-import { UpdateCf, CreateCf } from "../../../packages/dtos/cf.dto";
+import { UpdateCf, CreateCf, QueryCf } from "../../../packages/dtos/cf.dto";
 import { createCfSchema } from "../../../packages/validators/zod-schemas/create/create-cf.validator";
 import { updateCfSchema } from "../../../packages/validators/zod-schemas/update/update-cf.validator";
 import { QueryCat } from "../../../packages/dtos/cat.dto";
@@ -91,10 +91,12 @@ export default class CfController extends BaseController<CfService> {
         throw new ApiError(401, "Informar um valor Pt-Br válido");
       }
 
-      const cf = await this.service.create({
+      const validatedData: CreateCf = createCfSchema.parse({
         ...req.body,
         balance: normalizedBalance,
       });
+
+      const cf = await this.service.create(validatedData);
       res.status(201).json(cf);
       return 
     } catch (error) {
@@ -119,8 +121,10 @@ export default class CfController extends BaseController<CfService> {
         }
         req.body.balance = normalizedBalance;
       }
+
+      const validatedData: UpdateCf = updateCfSchema.parse(req.body);
       
-      const updatedCf = await this.service.update(id, req.body);
+      const updatedCf = await this.service.update(id, validatedData);
       res.status(200).json(updatedCf);
       return 
     } catch (error) {
@@ -154,7 +158,7 @@ export default class CfController extends BaseController<CfService> {
     next: NextFunction,
   ): Promise<void> => {
     try {
-      const validatedData: QueryCat = queryCfSchema.parse(req.body);
+      const validatedData: QueryCf = queryCfSchema.parse(req.body);
       const item: Cf[] = await this.service.query(validatedData);
       res.status(201).json(item);
       return;

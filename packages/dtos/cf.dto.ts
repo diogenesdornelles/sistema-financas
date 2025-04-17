@@ -16,7 +16,6 @@ export interface UpdateCf {
   // Todos opcionais na atualização
   number?: string;
   type?: string;
-  balance?: string;
   ag?: string;
   bank?: string;
   obs?: string;
@@ -26,7 +25,8 @@ export interface UpdateCf {
 export interface CfProps {
   id: string;
   number: string;
-  balance: number;
+  firstBalance: number;
+  currentBalance: number;
   // Aqui podemos retornar o objeto Tcf ou somente seu id; neste exemplo, usamos o DTO de resposta
   type: TcfProps;
   // ag e bank podem ser nulos, mas na resposta serão retornados (podem ser string ou null)
@@ -42,7 +42,8 @@ export interface CfProps {
 export interface QueryCf {
   id?: string;
   number?: string;
-  balance?: string;
+  firstBalance?: string;
+  currentBalance?: string;
   type?: string;
   ag?: string;
   bank?: string;

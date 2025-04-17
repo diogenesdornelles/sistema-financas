@@ -30,7 +30,8 @@ const CfSearchForm = ({ onSearch, onClear }: CfSearchFormProps): JSX.Element => 
     defaultValues: {
       id: '',
       number: '',
-      balance: '',
+      firstBalance: '',
+      currentBalance: '',
       type: '',
       ag: '',
       bank: '',
@@ -45,7 +46,7 @@ const CfSearchForm = ({ onSearch, onClear }: CfSearchFormProps): JSX.Element => 
 
   const onSubmit = (data: QueryCfFormData) => {
     const cleanedData: Partial<QueryCfFormData> = { ...data };
-    (['id', 'number', 'balance', 'type', 'ag', 'bank', 'createdAt', 'updatedAt'] as const).forEach((key) => {
+    (['id', 'number', 'firstBalance', 'currentBalance', 'type', 'ag', 'bank', 'createdAt', 'updatedAt'] as const).forEach((key) => {
       if (!cleanedData[key]) {
         delete cleanedData[key];
       }
@@ -89,10 +90,18 @@ const CfSearchForm = ({ onSearch, onClear }: CfSearchFormProps): JSX.Element => 
         />
         <TextField
           label="Saldo inicial"
-          {...register('balance')}
+          {...register('firstBalance')}
           variant="outlined"
-          error={!!errors.balance}
-          helperText={errors.balance?.message}
+          error={!!errors.firstBalance}
+          helperText={errors.firstBalance?.message}
+          size="small"
+        />
+        <TextField
+          label="Saldo atuaç"
+          {...register('currentBalance')}
+          variant="outlined"
+          error={!!errors.currentBalance}
+          helperText={errors.currentBalance?.message}
           size="small"
         />
         <TextField

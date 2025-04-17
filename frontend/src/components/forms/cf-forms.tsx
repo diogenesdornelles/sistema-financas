@@ -223,8 +223,7 @@ export function UpdateCfForm(): JSX.Element | null {
             ag: forms.cf.updateItem.ag || undefined,
             bank: forms.cf.updateItem.bank || undefined,
             obs: forms.cf.updateItem.obs || undefined,
-            status: forms.cf.updateItem.status,
-            balance: strToPtBrMoney(forms.cf.updateItem?.balance ?? '')
+            status: forms.cf.updateItem.status
         } : {},
     });
 
@@ -239,8 +238,7 @@ export function UpdateCfForm(): JSX.Element | null {
                 ag: data.ag || undefined,
                 bank: data.bank || undefined,
                 obs: data.obs || undefined,
-                status: data.status,
-                balance: strToPtBrMoney(data.balance ?? '')
+                status: data.status
             })
         } catch (err) {
             console.error("Erro ao atualizar Conta:", err);
@@ -283,16 +281,6 @@ export function UpdateCfForm(): JSX.Element | null {
                             variant="outlined"
                             error={!!errors.number}
                             helperText={errors.number?.message}
-                            sx={{ width: '100%' }}
-                            size="small"
-                        />
-                        <TextField
-                            label="Saldo(R$)"
-                            {...register("balance")}
-                            variant="outlined"
-                            error={!!errors.balance}
-                            helperText={errors.balance?.message}
-                            type="text"
                             sx={{ width: '100%' }}
                             size="small"
                         />

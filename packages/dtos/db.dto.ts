@@ -1,10 +1,10 @@
 export type ResultSet = {
     cfId: string;
     cfNumber: string;
-    totalIn: number;
-    totalOut: number;
-    balance: number;
-    cfInitial: number;
+    totalEntry: number;
+    totalOutflow: number;
+    firstBalance: number;
+    currentBalance: number;
 }
 
 export interface DbBalanceProps {

@@ -48,8 +48,7 @@ const CfList = (): JSX.Element => {
       ag: item.ag || undefined,
       bank: item.bank || undefined,
       obs: item.obs || undefined,
-      status: item.status,
-      balance: String(item.balance),
+      status: item.status
     });
   };
 
@@ -116,6 +115,7 @@ const CfList = (): JSX.Element => {
               <TableCell align="right" sx={{ fontWeight: 800 }}>Status</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Tipo</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Saldo original</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Saldo Atual</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Observações</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Criado em</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Atualizado em</TableCell>
@@ -148,7 +148,8 @@ const CfList = (): JSX.Element => {
                   <TableCell align="right">{item.bank || '-'}</TableCell>
                   <TableCell align="right">{item.status ? 'Ativo' : 'Inativo'}</TableCell>
                   <TableCell align="right">{item.type.name}</TableCell>
-                  <TableCell align="right">R$ {strToPtBrMoney(String(item.balance))}</TableCell>
+                  <TableCell align="right">R$ {strToPtBrMoney(String(item.firstBalance))}</TableCell>
+                  <TableCell align="right">R$ {strToPtBrMoney(String(item.currentBalance))}</TableCell>
                   <TableCell align="right">{item.obs || '-'}</TableCell>
                   <TableCell align="right">{new Date(item.createdAt).toLocaleDateString()}</TableCell>
                   <TableCell align="right">{new Date(item.updatedAt).toLocaleDateString()}</TableCell>
@@ -166,7 +167,7 @@ const CfList = (): JSX.Element => {
         </Table>
       </TableContainer>
       {data && data.length > 0 && (
-        <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', flex: 0.1}}>
+        <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', flex: 0.1 }}>
           <ButtonGroup
             variant="contained"
             aria-label="basic button group"

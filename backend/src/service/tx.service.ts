@@ -1,11 +1,9 @@
 import { BaseService } from "./base.service";
 import { Cat, Cf, Cp, Cr, Tx, User } from "../entity/entities";
 import { CreateTx, QueryTx, UpdateTx } from "../../../packages/dtos/tx.dto";
-import { FindOptionsWhere, ILike, Like, MoreThanOrEqual, Raw, Repository } from "typeorm";
+import { FindOptionsWhere, ILike, MoreThanOrEqual, Raw, Repository } from "typeorm";
 import { PaymentStatus, TransactionSearchType, TransactionType } from "../../../packages/dtos/utils/enums";
 import { AppDataSource } from "../config/db";
-import GeneralValidator from "../../../packages/validators/general.validator";
-import { ApiError } from "../utils/api-error.util";
 
 export class TxService extends BaseService<
   Tx,
@@ -16,11 +14,13 @@ export class TxService extends BaseService<
 > {
   private cpRepo: Repository<Cp>
   private crRepo: Repository<Cr>
+  private cfRepo: Repository<Cf>
   constructor() {
     super(Tx);
     this.relations = ["category", "cf", "cr", "cp"];
     this.cpRepo = AppDataSource.getRepository(Cp);
     this.crRepo = AppDataSource.getRepository(Cr);
+    this.cfRepo = AppDataSource.getRepository(Cf);
   }
 
   /**
@@ -77,8 +77,6 @@ export class TxService extends BaseService<
   public create = async (data: CreateTx): Promise<Tx> => {
     try {
 
-      console.log(data)
-
       // insere o tipo de transação, de acordo com a presença de CR ou CP
       const updatedData = {
         ...data,
@@ -97,18 +95,28 @@ export class TxService extends BaseService<
 
       const createdTx = await this.repository.save(newTx);
 
-      // atualiza CP ou CR para pago
+      // atualiza CP para pago e decrementa saldo em Cf
       if (updatedData.cp) {
         await this.cpRepo.update(
           updatedData.cp,
           { status: PaymentStatus.PAID },
         );
+        await this.cfRepo.decrement(
+          { id: updatedData.cf },
+          "currentBalance",
+          updatedData.value
+        );
       }
-
+      // atualiza CR para pago e incrementa saldo em Cf
       if (updatedData.cr) {
         await this.crRepo.update(
           updatedData.cr,
           { status: PaymentStatus.PAID },
+        );
+        await this.cfRepo.increment(
+          { id: updatedData.cf },
+          "currentBalance",
+          updatedData.value
         );
       }
 
@@ -133,6 +141,22 @@ export class TxService extends BaseService<
     if (newId && oldId !== newId) {
       // Define o novo como "PAID"
       await repo.update(newId, { status: PaymentStatus.PAID });
+    }
+  }
+
+  private async updateCurrentBalance(
+    oldCfId: string | undefined,
+    newCfId: string | undefined,
+    value: number,
+    repo: Repository<Cf>,
+  ): Promise<void> {
+    if (oldCfId && oldCfId !== newCfId) {
+      // Decrementa o saldo do CF antigo
+      await repo.decrement({ id: oldCfId }, "currentBalance", value);
+    }
+    if (newCfId && oldCfId !== newCfId) {
+      // Incrementa o saldo do CF novo
+      await repo.increment({ id: newCfId }, "currentBalance", value);
     }
   }
 
@@ -170,6 +194,16 @@ export class TxService extends BaseService<
       // Atualiza status de CP e CR
       await this.updatePaymentStatus(dbData.cp?.id, updateData.cp?.id, this.cpRepo);
       await this.updatePaymentStatus(dbData.cr?.id, updateData.cr?.id, this.crRepo);
+
+      // Atualiza o saldo de CF
+      if (updateData.value) {
+        await this.updateCurrentBalance(
+          dbData.cf?.id,
+          updateData.cf?.id,
+          updateData.value,
+          this.cfRepo,
+        );
+      }
 
       return await this.repository.findOne({
         where: { id },

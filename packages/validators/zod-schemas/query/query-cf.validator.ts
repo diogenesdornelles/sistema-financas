@@ -6,7 +6,8 @@ export const queryCfSchema = z
   .object({
     id: z.string().optional(),
     number: z.string().optional(),
-    balance: z.string().optional(),
+    firstBalance: z.string().optional(),
+    currentBalance: z.string().optional(),
     type: z.string().optional(),
     ag: z.string().optional(),
     bank: z.string().optional(),

@@ -27,14 +27,14 @@ export class DbService {
          `SELECT DISTINCT
             ttx."cfId" AS "cfId",
             tcf."number" AS "cfNumber",
-            tcf."balance" AS "cfInitial",
-            COALESCE(SUM(ttx."value") FILTER (WHERE ttx."cpId" IS NULL), 0) AS "totalIn",
-            COALESCE(SUM(ttx."value") FILTER (WHERE ttx."crId" IS NULL), 0) AS "totalOut",
-            COALESCE(SUM(ttx."value") FILTER (WHERE ttx."cpId" IS NULL), 0) - COALESCE(SUM(ttx."value") FILTER (WHERE ttx."crId" IS NULL), 0) + tcf."balance" AS "balance"
+            tcf."firstBalance" AS "firstBalance",
+            tcf."currentBalance" AS "currentBalance",
+            COALESCE(SUM(ttx."value") FILTER (WHERE ttx."cpId" IS NULL), 0) AS "totalEntry",
+            COALESCE(SUM(ttx."value") FILTER (WHERE ttx."crId" IS NULL), 0) AS "totalOutflow"
           FROM tx ttx
           INNER JOIN cf tcf ON tcf."id" = ttx."cfId"
           WHERE ttx."tdate" <= $1 AND ttx."status" = true
-          GROUP BY ttx."cfId", tcf."number", tcf."balance";`,
+          GROUP BY ttx."cfId", tcf."number", tcf."firstBalance", tcf."currentBalance";`,
         [date]
       );
 

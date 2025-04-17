@@ -75,10 +75,11 @@ function Home() {
             {cards.map((card) => (
                 <MotionCard
                     whileHover={{ scale: 1.02 }}
-                    transition={{ duration: 0.1 }}
+                    transition={{ duration: 0.2 }}
+                    elevation={3}
                     onClick={() => handleClick(card.path)}
                     key={card.title}
-                    sx={{ display: 'flex', flexDirection: 'column', maxWidth: 345, flexGrow: 1, flexShrink: 0, flexBasis: 0, minWidth: 200, minHeight: 300, transition: "none", cursor: 'pointer' }}
+                    sx={{ display: 'flex', flexDirection: 'column', maxWidth: 345, flexGrow: 1, flexShrink: 0, flexBasis: 0, minWidth: 200, minHeight: 350, transition: "none", cursor: 'pointer' }}
                 >
                         <CardMedia
                             sx={{ width: 150, height: 'auto', alignSelf: 'center', p: 1 }}

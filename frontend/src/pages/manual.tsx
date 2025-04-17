@@ -1,5 +1,4 @@
-import { Box, Typography, Paper } from "@mui/material";
-
+import { Box, Typography, Grid, Divider } from "@mui/material";
 
 const man = `
 # As contas financeiras (CF) são a alma do sistema. Possuem um atributo 'número' como campo principal a ser fornecido no cadastramento, além de um tipo (TCF) para melhor categorizá-las;
@@ -25,6 +24,8 @@ const man = `
 # Dentro de 'Gerenciar' há todas as funcionalidades necessárias à inclusão, exclusão, alteração e visualização de todas as entidades decritas acima;
 `
 
+
+
 function Manual() {
 
     const instructions = man
@@ -39,38 +40,59 @@ function Manual() {
                 flexDirection: "column",
                 alignItems: "center",
                 py: 4,
-                px: 2, 
+                px: 2,
                 width: '100%',
+                maxWidth: '70vw',
                 maxHeight: '80vh',
+                overflow: 'scroll',
+                alignSelf: 'center',
             }}
         >
-            <Typography variant="h2" component="h1" gutterBottom sx={{ mb: 4, color: 'primary.main' }}>
+            <Typography variant="h2" component="h1" gutterBottom sx={{ mb: 4, color: 'primary.dark' }}>
                 Manual de Instruções
             </Typography>
-
-            <Paper 
-                elevation={3}
-                sx={{
-                    p: 3, 
-                    maxWidth: '800px', 
-                    width: '100%', 
-                    textAlign: 'left', 
-                    overflow: 'scroll',
-                    maxHeight: '50%',
-                    cursor: 'all-scroll'
-                }}
-            >
-                <Typography variant="h4" component="h2" gutterBottom>
-                    Instruções Básicas da Aplicação
-                </Typography>
-
-                {instructions.map((instruction, index) => (
-                    <Typography key={index} variant="body1" component="p" gutterBottom>
-
-                        &bull; {instruction}
-                    </Typography>
-                ))}
-            </Paper>
+            
+            <Grid container spacing={1}>
+            
+                {instructions.map((instruction, index) => {
+                    if (index === 0 || (index + 1) % 4 === 0 || index % 4 === 0) {
+                        return (
+                            <Grid size={6} key={index}>
+                                <Box
+                                    sx={{
+                                        p: 2,
+                                        minHeight: 200,
+                                        textAlign: 'left',
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        justifyContent: 'center',
+                                        alignContent: 'center',
+                                        bgcolor: 'primary.dark',
+                                        color: 'white',
+                                        borderRadius: 1
+                                    }}
+                                >
+                                    <Typography  variant="body1" component="p" sx={{alignSelf: 'center', p: 4}}>
+                                        {instruction}
+                                    </Typography>
+                                </Box>
+                                
+                            </Grid>
+                        )
+                    } else {
+                        return (
+                            <Grid size={6} key={index}>
+                                <Box sx={{width: '100%', height: '100%'}}></Box>
+                                <Divider/>
+                            </Grid>
+                        )
+                    }
+                    
+                }
+                )}
+            
+            </Grid>
+            
         </Box>
     );
 }

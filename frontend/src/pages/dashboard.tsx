@@ -51,6 +51,8 @@ const colors = [
     '#0D47A1'
 ]
 
+// CP e CR em 30 dias, por série?
+
 function Dashboard() {
     const [balances, setBalances] = useState<DbBalanceProps | null>(null);
     const [dataPie, setDataPie] = useState<DataPie | null>({
@@ -198,7 +200,7 @@ function Dashboard() {
                     )
                 )}
             </Box>
-            <Box sx={{ flex: 1, display: "flex", flexDirection: 'column', justifyContent: 'center', alignItems: 'center', maxHeight: '50vh' }}>
+            <Box sx={{ flex: 1, display: "flex", flexDirection: 'column', justifyContent: 'center', alignItems: 'center', maxHeight: '45vh' }}>
                 <Typography variant="h5" gutterBottom sx={{ marginTop: 7, borderRadius: 2, alignSelf: 'center', color: 'white', p: 1, bgcolor: 'primary.dark', width: '90%', textAlign: 'center' }}>
                    Saldo por contas
                 </Typography>

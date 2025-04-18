@@ -5,7 +5,7 @@ import {
   UpdateCat,
   QueryCat,
 } from "../../../packages/dtos/cat.dto";
-import { FindOptionsWhere, ILike, Like, MoreThanOrEqual, Raw } from "typeorm";
+import { FindOptionsWhere, ILike, MoreThanOrEqual, Raw } from "typeorm";
 
 export class CatService extends BaseService<
   Cat,

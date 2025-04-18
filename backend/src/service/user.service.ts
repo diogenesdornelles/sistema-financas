@@ -6,7 +6,7 @@ import {
   UpdateUser,
 } from "../../../packages/dtos/user.dto";
 import hashPassword from "../utils/hash-pwd.util";
-import { FindOptionsWhere, ILike, Like, MoreThanOrEqual, Raw } from "typeorm";
+import { FindOptionsWhere, ILike, MoreThanOrEqual, Raw } from "typeorm";
 
 export class UserService extends BaseService<
   User,
@@ -15,18 +15,19 @@ export class UserService extends BaseService<
   UpdateUser,
   QueryUser
 > {
-  private readonly selection: string[]
+  private readonly selection: Record<string, boolean>
   constructor() {
     super(User);
-    this.selection = [
-      "id",
-      "name",
-      "status",
-      "surname",
-      "createdAt",
-      "updatedAt",
-      "cpf",
-    ]
+    this.selection = {
+      id: true,
+      name: true,
+      status: true,
+      surname: true,
+      createdAt: true,
+      updatedAt: true,
+      cpf: true,
+      pwd: false
+    }
   }
 
   /**
@@ -35,15 +36,7 @@ export class UserService extends BaseService<
   public getAll = async (): Promise<User[]> => {
     try {
       const users = await this.repository.find({
-        select: [
-          "id",
-          "name",
-          "status",
-          "surname",
-          "createdAt",
-          "updatedAt",
-          "cpf",
-        ],
+        select: this.selection,
         where: { status: true },
         relations: this.relations,
       });
@@ -60,15 +53,7 @@ export class UserService extends BaseService<
     try {
       const users = await this.repository.find({
         where: { status: true },
-        select: [
-          "id",
-          "name",
-          "status",
-          "surname",
-          "createdAt",
-          "updatedAt",
-          "cpf",
-        ],
+        select: this.selection,
         skip,
         take: 10,
         relations: this.relations,
@@ -88,15 +73,7 @@ export class UserService extends BaseService<
     try {
       const user = await this.repository.findOne({
         where: { id },
-        select: [
-          "id",
-          "name",
-          "status",
-          "surname",
-          "createdAt",
-          "updatedAt",
-          "cpf",
-        ],
+        select: this.selection,
         relations: this.relations,
       });
       return user;
@@ -141,15 +118,7 @@ export class UserService extends BaseService<
       await this.repository.update({ id }, data);
       const updatedUser = await this.repository.findOne({
         where: { id },
-        select: [
-          "id",
-          "name",
-          "status",
-          "surname",
-          "createdAt",
-          "updatedAt",
-          "cpf",
-        ],
+        select: this.selection,
         relations: this.relations,
       });
       return updatedUser;
@@ -213,15 +182,7 @@ export class UserService extends BaseService<
 
       return await this.repository.find({
         where,
-        select: [
-          "id",
-          "name",
-          "status",
-          "surname",
-          "createdAt",
-          "updatedAt",
-          "cpf",
-        ],
+        select: this.selection,
         relations: this.relations
       });
     } catch (error) {

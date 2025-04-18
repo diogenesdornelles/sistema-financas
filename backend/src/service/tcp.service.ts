@@ -1,7 +1,7 @@
 import { BaseService } from "./base.service";
 import { Tcp } from "../entity/entities";
 import { CreateTcp, UpdateTcp, QueryTcp } from "../../../packages/dtos/tcp.dto";
-import { FindOptionsWhere, ILike, Like, MoreThanOrEqual, Raw } from "typeorm";
+import { FindOptionsWhere, ILike, MoreThanOrEqual, Raw } from "typeorm";
 
 export class TcpService extends BaseService<
   Tcp,

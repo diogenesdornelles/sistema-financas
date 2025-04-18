@@ -1,7 +1,7 @@
 import { BaseService } from "./base.service";
 import { Tcf } from "../entity/entities";
 import { CreateTcf, UpdateTcf, QueryTcf } from "../../../packages/dtos/tcf.dto";
-import { FindOptionsWhere, ILike, Like, MoreThanOrEqual, Raw } from "typeorm";
+import { FindOptionsWhere, ILike, MoreThanOrEqual, Raw } from "typeorm";
 
 export class TcfService extends BaseService<
   Tcf,

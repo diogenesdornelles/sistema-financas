@@ -168,6 +168,7 @@ const CpList = (): JSX.Element => {
           </TableBody>
         </Table>
       </TableContainer>
+      
       {data && data.length > 0 && (
         <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', flex: 0.1}}>
         <ButtonGroup

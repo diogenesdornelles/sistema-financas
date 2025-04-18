@@ -13,7 +13,7 @@ export class CfService extends BaseService<
 > {
   constructor() {
     super(Cf);
-    this.relations = ["type"]
+    this.relations = {type: true}
   }
 
   /**

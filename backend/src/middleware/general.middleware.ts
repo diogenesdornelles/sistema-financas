@@ -85,7 +85,25 @@ export default class GeneralMiddleware {
       res,
       400,
       "Bad Request",
-      "Invalid DATE format. Please provide a valid DATE.",
+      "Invalid DATE format. Please provide a valid DATE and until current date.",
+    );
+  };
+
+  public static validateDatePostPresent = (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): void => {
+    let { date } = req.params;
+    if (GeneralValidator.validateDatePostPresent(date)) {
+      next();
+      return;
+    }
+    sendErrorResponse(
+      res,
+      400,
+      "Bad Request",
+      "Invalid DATE format. Please provide a valid DATE and until today or post.",
     );
   };
 

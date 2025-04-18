@@ -16,12 +16,12 @@ export abstract class BaseService<
   UpdateDTO,
   QueryDTO,
 > {
-  protected relations: string[];
+  protected relations: Record<string, boolean>;
   protected repository: Repository<T>;
 
   constructor(entity: EntityTarget<T>) {
     this.repository = AppDataSource.getRepository(entity);
-    this.relations = []
+    this.relations = {}
   }
 
   /**

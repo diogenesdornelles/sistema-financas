@@ -1,12 +1,19 @@
-import { QueryRunner } from "typeorm";
+import { Between, QueryRunner, Repository } from "typeorm";
 import { AppDataSource } from "../config/db";
-import { DbBalanceProps, ResultSet } from "../../../packages/dtos/db.dto";
+import { DbBalanceProps, ResultSet, DbCpsCrsProps } from "../../../packages/dtos/db.dto";
+import { Cp, Cr } from "../entity/entities";
+import { ApiError } from "../utils/api-error.util";
 
 
 export class DbService {
   public queryRunner: QueryRunner
+  public crRepo: Repository<Cr>
+  public cpRepo: Repository<Cp>
+
   constructor() {
     this.queryRunner = AppDataSource.createQueryRunner();
+    this.crRepo = AppDataSource.getRepository(Cr);
+    this.cpRepo = AppDataSource.getRepository(Cp);
   }
 
   /**
@@ -49,5 +56,35 @@ export class DbService {
       throw new Error(`Erro ao recuperar balanços com data ${date}: ${error}`);
     }
   };
+    /**
+   * Recupera CR e CP dentro de um intervalo.
+   *
+   * @param date - Data limite. Desconsidera transações do dia atual.
+   */
+   public getCpsCrs = async (date: string = new Date().toISOString()): Promise<DbCpsCrsProps | null> => {
 
+
+    const currentDate = new Date()
+    const targetDate = new Date(date);
+
+    if (currentDate > targetDate) {
+      throw new ApiError(401, 'Data deve ser maior ou igual que a atual')
+    }
+
+
+    const cps = await this.cpRepo.find({
+      where: {due: Between(currentDate, targetDate)},
+      select: { id: true,  value: true, due: true, status: true, createdAt: false, updatedAt: false, obs: false},
+      relations: {type: true, supplier: true},
+    });
+
+    const crs = await this.crRepo.find({
+      where: {due: Between(currentDate, targetDate)},
+      select: { id: true,  value: true, due: true, status: true, createdAt: false, updatedAt: false, obs: false},
+      relations: {type: true, customer: true},
+    });
+
+    return { cps, crs } as unknown as  DbCpsCrsProps
+   }
+      
 }

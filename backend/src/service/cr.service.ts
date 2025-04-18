@@ -2,10 +2,8 @@ import { BaseService } from "./base.service";
 import { Cr, Partner, Tcr, Tx, User } from "../entity/entities";
 import { CreateCr, UpdateCr, QueryCr } from "../../../packages/dtos/cr.dto";
 import { PaymentStatus } from "../../../packages/dtos/utils/enums";
-import { FindOptionsWhere, ILike, Like, MoreThanOrEqual, Not, Raw, Repository } from "typeorm";
+import { FindOptionsWhere, ILike, MoreThanOrEqual, Not, Raw, Repository } from "typeorm";
 import { AppDataSource } from "../config/db";
-import GeneralValidator from "../../../packages/validators/general.validator";
-import { ApiError } from "../utils/api-error.util";
 
 export class CrService extends BaseService<
   Cr,
@@ -17,7 +15,7 @@ export class CrService extends BaseService<
   public txRepo: Repository<Tx>
   constructor() {
     super(Cr);
-    this.relations = ["type", "customer"];
+    this.relations = {type: true, costumer: true};
     this.txRepo = AppDataSource.getRepository(Tx);
   }
 

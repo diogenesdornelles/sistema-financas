@@ -17,7 +17,7 @@ export class TxService extends BaseService<
   private cfRepo: Repository<Cf>
   constructor() {
     super(Tx);
-    this.relations = ["category", "cf", "cr", "cp"];
+    this.relations = {category: true, cf: true, cr: true, cp: true};
     this.cpRepo = AppDataSource.getRepository(Cp);
     this.crRepo = AppDataSource.getRepository(Cr);
     this.cfRepo = AppDataSource.getRepository(Cf);

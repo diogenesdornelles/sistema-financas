@@ -15,5 +15,14 @@ export default class DbRouter extends BaseRouter<DbController> {
             this.controller.getBalances,
             GeneralMiddleware.errorHandler,
         );
+        this.router.get(
+            "/cpscrs/:date",
+            GeneralMiddleware.authentication,
+            GeneralMiddleware.validateDatePostPresent,
+            this.controller.getCpsCrs,
+            GeneralMiddleware.errorHandler,
+        );
     }
+
+    
 }

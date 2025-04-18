@@ -97,7 +97,7 @@ const CfSearchForm = ({ onSearch, onClear }: CfSearchFormProps): JSX.Element => 
           size="small"
         />
         <TextField
-          label="Saldo atuaç"
+          label="Saldo atual"
           {...register('currentBalance')}
           variant="outlined"
           error={!!errors.currentBalance}

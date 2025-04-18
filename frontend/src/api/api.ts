@@ -61,7 +61,7 @@ import {
   UpdateCat,
 } from "../../../packages/dtos/cat.dto";
 
-import { DbBalanceProps } from "../../../packages/dtos/db.dto";
+import { DbBalanceProps, DbCpsCrsProps } from "../../../packages/dtos/db.dto";
 
 export const Api = {
   // Operações para TCF
@@ -377,6 +377,11 @@ export const Api = {
   db: {
     getBalances: async (date: string): Promise<DbBalanceProps> => {
       const { data } = await restClient.get(`db/balances/${date}`);
+      return data;
+    },
+
+    getCpsCrs: async (date: string): Promise<DbCpsCrsProps> => {
+      const { data } = await restClient.get(`db/cpscrs/${date}`);
       return data;
     },
   },

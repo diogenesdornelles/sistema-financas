@@ -26,17 +26,29 @@ import { queryCfSchema } from '../../../../packages/validators/zod-schemas/query
 import { z } from 'zod';
 import { strToPtBrMoney } from '../../utils/strToPtBrMoney';
 import CustomBackdrop from '../custom-backdrop';
+import ExcludeDialog from '../dialogs/exclude-dialog';
 
 type QueryCfFormData = z.infer<typeof queryCfSchema>;
 
-const CfList = (): JSX.Element => {
+const CfTable = (): JSX.Element => {
   const SKIP = 10;
   const [page, setPage] = useState(1);
   const [items, setItems] = useState<CfProps[] | null>(null);
-  const { isPending, error, data } = useGetManyCf((page - 1) * SKIP);
+  const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null);
+  const {
+    isPending,
+    error,
+    data,
+    isFetching,
+    isRefetching,
+    isLoading,
+    refetch,
+    isSuccess
+  } = useGetManyCf((page - 1) * SKIP);
   const queryCfMutation = useQueryCf();
   const { setFormType, setUpdateItem, setIsOpen } = useFormStore();
   const theme = useTheme();
+  const delMutation = useDeleteCf();
 
   const onEdit = (item: CfProps) => {
     setFormType('cf', 'update');
@@ -52,23 +64,34 @@ const CfList = (): JSX.Element => {
     });
   };
 
-  const delMutation = useDeleteCf();
-
   const handleSearch = (data: QueryCfFormData) => {
     queryCfMutation.mutate(data);
   };
 
-  const handleClearSearch = () => {
+  const handleClearSearch = async () => {
+    setPage(1)
     setItems(data || null);
   };
 
-  const onDelete = async (id: string) => {
-    if (confirm('Deseja deletar?')) {
-      try {
-        await delMutation.mutateAsync(id);
-      } catch (err) {
-        console.error('Erro ao deletar o item:', err);
-      }
+
+  const handleOpenDeleteDialog = (id: string) => {
+    setItemIdToDelete(id);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setItemIdToDelete(null);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!itemIdToDelete) return;
+
+    try {
+      await delMutation.mutateAsync(itemIdToDelete);
+    } catch (err) {
+      console.error('Erro ao deletar o item:', err);
+    } finally {
+      handleCloseDeleteDialog();
+      refetch();
     }
   };
 
@@ -76,26 +99,30 @@ const CfList = (): JSX.Element => {
     setPage((prev) => {
       const nextPage = prev + direction;
       if (nextPage < 1) return prev;
-      if (direction > 0 && (!data || data.length === 0)) return prev;
-
+      if (direction > 0 && ((!data || data.length === 0) && (!queryCfMutation.data || queryCfMutation.data.length === 0))) return prev;
       return nextPage;
     });
   };
 
-
   useEffect(() => {
-    if (queryCfMutation.data) {
+    if (queryCfMutation.isSuccess && queryCfMutation.data) {
       setItems(queryCfMutation.data);
-    } else if (data) {
+    } else if (isSuccess && data) {
       setItems(data);
+    } else if (!isPending && !isLoading && !isFetching && !queryCfMutation.isPending) {
+      setItems(null);
     }
-  }, [queryCfMutation.data, data]);
+  }, [queryCfMutation.data, data, queryCfMutation.isSuccess, queryCfMutation.isPending, isSuccess, isPending, isLoading, isFetching]);
+
 
   if (error) return <ErrorAlert message={error.message} />;
 
+  if (queryCfMutation.isError) return <ErrorAlert message={queryCfMutation.error.message} />;
+
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
-      {(isPending) && <CustomBackdrop isOpen={isPending} />}
+      {(isPending || isLoading || isFetching || isRefetching || delMutation.isPending || queryCfMutation.isPending) && <CustomBackdrop isOpen={true} />}
       <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline', gap: 4 }}>
         <Typography variant="h5">Filtro</Typography>
         <CfSearchForm onSearch={handleSearch} onClear={handleClearSearch} />
@@ -105,7 +132,7 @@ const CfList = (): JSX.Element => {
         Contas financeiras
       </Typography>
       <TableContainer component={Paper} sx={{ flex: 1, minHeight: '30vh', maxHeight: '50vh', overflow: 'scroll' }}>
-        <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table" >
+        <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table" stickyHeader>
           <TableHead>
             <TableRow>
               <TableCell align='left' sx={{ fontWeight: 800 }}>ID</TableCell>
@@ -127,6 +154,7 @@ const CfList = (): JSX.Element => {
               items.map((item: CfProps, i: number) => (
                 <TableRow
                   key={item.id}
+                  hover
                   sx={{
                     background:
                       i % 2 === 0
@@ -157,7 +185,7 @@ const CfList = (): JSX.Element => {
                     <IconButton edge="end" aria-label="edit" onClick={() => onEdit(item)}>
                       <EditIcon />
                     </IconButton>
-                    <IconButton edge="end" aria-label="delete" onClick={() => onDelete(item.id)}>
+                    <IconButton edge="end" aria-label="delete" onClick={() => handleOpenDeleteDialog(item.id)}>
                       <DeleteIcon />
                     </IconButton>
                   </TableCell>
@@ -166,7 +194,7 @@ const CfList = (): JSX.Element => {
           </TableBody>
         </Table>
       </TableContainer>
-      {data && data.length > 0 && (
+      {items && items.length > 0 && (
         <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', flex: 0.1 }}>
           <ButtonGroup
             variant="contained"
@@ -175,14 +203,22 @@ const CfList = (): JSX.Element => {
             <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
               Anterior
             </Button>
-            <Button onClick={() => handleChangePage(1)} disabled={!data || data.length === 0}>
+            <Button onClick={() => handleChangePage(1)} disabled={!items || items.length === 0}>
               Próximo
             </Button>
           </ButtonGroup>
         </Box>
       )}
+      {itemIdToDelete && (
+        <ExcludeDialog
+          open={!!itemIdToDelete}
+          itemId={itemIdToDelete}
+          onClose={handleCloseDeleteDialog}
+          onConfirmDelete={handleDeleteConfirm}
+        />
+      )}
     </Box>
   );
 };
 
-export default CfList;
+export default CfTable;

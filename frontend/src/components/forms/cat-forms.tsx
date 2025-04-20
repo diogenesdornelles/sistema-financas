@@ -144,7 +144,7 @@ export function UpdateCatForm(): JSX.Element | null {
 
             {mutation.isSuccess && (
                 <Alert severity="success" style={{ width: "100%" }}>
-                    Categoria atualizado com sucesso!
+                    Categoria atualizada com sucesso!
                 </Alert>
             )}
 

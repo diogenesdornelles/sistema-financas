@@ -1,28 +1,28 @@
 import { Box, Tab, Tabs, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { CreateTcfForm, UpdateTcfForm } from "../components/forms/tcf-forms";
-import TcfList from "../components/lists/tcf-list";
+import TcfTable from "../components/tables/tcf-table";
 import ManageArea from "../components/manage-area";
 import { TValue } from "../types/form-state";
 import { useFormStore } from "../hooks/use-form-store";
 import { CreateTcrForm, UpdateTcrForm } from "../components/forms/tcr-forms";
-import TcrList from "../components/lists/tcr-list";
+import TcrTable from "../components/tables/tcr-table";
 import { CreateTcpForm, UpdateTcpForm } from "../components/forms/tcp-forms";
-import TcpList from "../components/lists/tcp-list";
-import UserList from "../components/lists/user-list";
+import TcpTable from "../components/tables/tcp-table";
+import UserTable from "../components/tables/user-table";
 import { CreateUserForm, UpdateUserForm } from "../components/forms/user-forms";
 import { CreatePartnerForm, UpdatePartnerForm } from "../components/forms/partner-forms";
-import PartnerList from "../components/lists/partner-list";
+import PartnerTable from "../components/tables/partner-table";
 import { CreateCatForm, UpdateCatForm } from "../components/forms/cat-forms";
-import CatList from "../components/lists/cat-list";
 import { CreateCfForm, UpdateCfForm } from "../components/forms/cf-forms";
-import CfList from "../components/lists/cf-list";
+import CfTable from "../components/tables/cf-table";
 import { CreateCpForm, UpdateCpForm } from "../components/forms/cp-forms";
-import CpList from "../components/lists/cp-list";
+import CpTable from "../components/tables/cp-table";
 import { CreateCrForm, UpdateCrForm } from "../components/forms/cr-forms";
-import CrList from "../components/lists/cr-list";
+import CrTable from "../components/tables/cr-table";
 import { CreateTxForm, UpdateTxForm } from "../components/forms/tx-forms";
-import TxList from "../components/lists/tx-list";
+import TxTable from "../components/tables/tx-table";
+import CatTable from "../components/tables/cat-table";
 
 
 function Manage() {
@@ -40,70 +40,70 @@ function Manage() {
         return (
           <ManageArea
             Form={forms.cf.type === "create" ? <CreateCfForm /> : <UpdateCfForm />}
-            List={<CfList />}
+            Table={<CfTable />}
           />
         );
       case "tcf":
         return (
           <ManageArea
             Form={forms.tcf.type === "create" ? <CreateTcfForm /> : <UpdateTcfForm />}
-            List={<TcfList />}
+            Table={<TcfTable />}
           />
         );
       case "cr":
         return (
           <ManageArea
             Form={forms.cr.type === "create" ? <CreateCrForm /> : <UpdateCrForm />}
-            List={<CrList />}
+            Table={<CrTable />}
           />
         );
       case "tcr":
         return (
           <ManageArea
             Form={forms.tcr.type === "create" ? <CreateTcrForm /> : <UpdateTcrForm />}
-            List={<TcrList />}
+            Table={<TcrTable />}
           />
         );
       case "cp":
         return (
           <ManageArea
             Form={forms.cp.type === "create" ? <CreateCpForm /> : <UpdateCpForm />}
-            List={<CpList />}
+            Table={<CpTable />}
           />
         );
       case "tcp":
         return (
           <ManageArea
             Form={forms.tcp.type === "create" ? <CreateTcpForm /> : <UpdateTcpForm />}
-            List={<TcpList />}
+            Table={<TcpTable />}
           />
         );
       case "partner":
         return (
           <ManageArea
             Form={forms.partner.type === "create" ? <CreatePartnerForm /> : <UpdatePartnerForm />}
-            List={<PartnerList />}
+            Table={<PartnerTable />}
           />
         );
       case "tx":
         return (
           <ManageArea
             Form={forms.tx.type === "create" ? <CreateTxForm /> : <UpdateTxForm />}
-            List={<TxList />}
+            Table={<TxTable />}
           />
         );
       case "cat":
         return (
           <ManageArea
             Form={forms.cat.type === "create" ? <CreateCatForm /> : <UpdateCatForm />}
-            List={<CatList />}
+            Table={<CatTable />}
           />
         );
       case "user":
         return (
           <ManageArea
             Form={forms.user.type === "create" ? <CreateUserForm /> : <UpdateUserForm />}
-            List={<UserList />}
+            Table={<UserTable />}
           />
         );
       default:

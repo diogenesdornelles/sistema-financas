@@ -25,17 +25,27 @@ import TcpSearchForm from '../forms/search/tcp-search-form';
 import { queryTcpSchema } from '../../../../packages/validators/zod-schemas/query/query-tcp.validator';
 import { z } from 'zod';
 import CustomBackdrop from '../custom-backdrop';
+import ExcludeDialog from '../dialogs/exclude-dialog';
 
 type QueryTcpFormData = z.infer<typeof queryTcpSchema>;
 
-const TcpList = (): JSX.Element => {
+const TcpTable = (): JSX.Element => {
   const SKIP = 10;
   const [page, setPage] = useState(1);
   const [items, setItems] = useState<TcpProps[] | null>(null);
-  const { isPending, error, data } = useGetManyTcp((page - 1) * SKIP);
+  const { isPending,
+    error,
+    data,
+    isFetching,
+    isRefetching,
+    isLoading,
+    refetch,
+    isSuccess } = useGetManyTcp((page - 1) * SKIP);
   const queryTcpMutation = useQueryTcp();
   const { setFormType, setUpdateItem, setIsOpen } = useFormStore();
+  const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null);
   const theme = useTheme();
+  const delMutation = useDeleteTcp();
 
   const onEdit = (item: TcpProps) => {
     setFormType('tcp', 'update');
@@ -47,48 +57,67 @@ const TcpList = (): JSX.Element => {
     });
   };
 
-  const delMutation = useDeleteTcp();
 
   const handleSearch = (data: QueryTcpFormData) => {
     queryTcpMutation.mutate(data);
   };
 
-  const onDelete = async (id: string) => {
-    if (confirm('Deseja deletar?')) {
-      try {
-        await delMutation.mutateAsync(id);
-      } catch (err) {
-        console.error('Erro ao deletar o item:', err);
-      }
-    }
+  const handleClearSearch = async () => {
+    setPage(1);
+    setItems(data || null);
   };
 
-  const handleClearSearch = () => {
-    setItems(data || null);
+
+  const handleOpenDeleteDialog = (id: string) => {
+    setItemIdToDelete(id);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setItemIdToDelete(null);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!itemIdToDelete) return;
+
+    try {
+      await delMutation.mutateAsync(itemIdToDelete);
+    } catch (err) {
+      console.error('Erro ao deletar o item:', err);
+    } finally {
+      handleCloseDeleteDialog();
+      refetch();
+    }
   };
 
   const handleChangePage = (direction: number) => {
     setPage((prev) => {
       const nextPage = prev + direction;
       if (nextPage < 1) return prev;
-      if (direction > 0 && (!data || data.length === 0)) return prev;
+      if (direction > 0 && ((!data || data.length === 0) && (!queryTcpMutation.data || queryTcpMutation.data.length === 0))) return prev;
       return nextPage;
     });
   };
 
   useEffect(() => {
-    if (queryTcpMutation.data) {
+    if (queryTcpMutation.isSuccess && queryTcpMutation.data) {
       setItems(queryTcpMutation.data);
-    } else if (data) {
+    } else if (isSuccess && data) {
       setItems(data);
+    } else if (!isPending && !isLoading && !isFetching && !queryTcpMutation.isPending) {
+      setItems(null);
     }
-  }, [queryTcpMutation.data, data]);
+  }, [queryTcpMutation.data, data, queryTcpMutation.isSuccess, queryTcpMutation.isPending, isSuccess, isPending, isLoading, isFetching]);
+
 
   if (error) return <ErrorAlert message={error.message} />;
 
+  if (queryTcpMutation.isError) return <ErrorAlert message={queryTcpMutation.error.message} />;
+
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
-      {(isPending) && <CustomBackdrop isOpen={isPending} />}
+      {(isPending || isLoading || isFetching || isRefetching || delMutation.isPending || queryTcpMutation.isPending) && <CustomBackdrop isOpen={true} />}
+
       <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline', gap: 4 }}>
         <Typography variant="h5">Filtro</Typography>
         <TcpSearchForm onSearch={handleSearch} onClear={handleClearSearch} />
@@ -96,7 +125,7 @@ const TcpList = (): JSX.Element => {
       <Divider />
       <Typography variant="h5">Tipos de contas a pagar</Typography>
       <TableContainer component={Paper} sx={{ flex: 1, minHeight: '30vh', maxHeight: '50vh', overflow: 'scroll' }}>
-        <Table sx={{ minWidth: 650 }} size="small" aria-label="tabela de tipos de contas a pagar">
+        <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table" stickyHeader>
           <TableHead>
             <TableRow>
               <TableCell align='left' sx={{ fontWeight: 800 }}>ID</TableCell>
@@ -112,6 +141,7 @@ const TcpList = (): JSX.Element => {
               items.map((item: TcpProps, i: number) => (
                 <TableRow
                   key={item.id}
+                  hover
                   sx={{
                     background:
                       i % 2 === 0
@@ -134,7 +164,7 @@ const TcpList = (): JSX.Element => {
                     <IconButton edge="end" aria-label="edit" onClick={() => onEdit(item)}>
                       <EditIcon />
                     </IconButton>
-                    <IconButton edge="end" aria-label="delete" onClick={() => onDelete(item.id)}>
+                    <IconButton edge="end" aria-label="delete" onClick={() => handleOpenDeleteDialog(item.id)}>
                       <DeleteIcon />
                     </IconButton>
                   </TableCell>
@@ -143,23 +173,32 @@ const TcpList = (): JSX.Element => {
           </TableBody>
         </Table>
       </TableContainer>
-      {data && data.length > 0 && (
-        <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', flex: 0.1 }}>
-          <ButtonGroup
-            variant="contained"
-            aria-label="basic button group"
-          >
-            <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
-              Anterior
-            </Button>
-            <Button onClick={() => handleChangePage(1)} disabled={!data || data.length === 0}>
-              Próximo
-            </Button>
-          </ButtonGroup>
-        </Box>
+      {
+        items && items.length > 0 && (
+          <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', flex: 0.1 }}>
+            <ButtonGroup
+              variant="contained"
+              aria-label="basic button group"
+            >
+              <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
+                Anterior
+              </Button>
+              <Button onClick={() => handleChangePage(1)} disabled={!items || items.length === 0}>
+                Próximo
+              </Button>
+            </ButtonGroup>
+          </Box>
+        )}
+      {itemIdToDelete && (
+        <ExcludeDialog
+          open={!!itemIdToDelete}
+          itemId={itemIdToDelete}
+          onClose={handleCloseDeleteDialog}
+          onConfirmDelete={handleDeleteConfirm}
+        />
       )}
     </Box>
   );
 };
 
-export default TcpList;
+export default TcpTable;

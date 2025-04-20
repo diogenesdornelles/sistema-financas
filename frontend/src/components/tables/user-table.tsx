@@ -25,17 +25,27 @@ import UserSearchForm from '../forms/search/user-search-form';
 import { queryUserSchema } from '../../../../packages/validators/zod-schemas/query/query-user.validator';
 import { z } from 'zod';
 import CustomBackdrop from '../custom-backdrop';
+import ExcludeDialog from '../dialogs/exclude-dialog';
 
 type QueryUserFormData = z.infer<typeof queryUserSchema>;
 
-const UserList = (): JSX.Element => {
+const UserTable = (): JSX.Element => {
   const SKIP = 10;
   const [page, setPage] = useState(1);
   const [items, setItems] = useState<UserProps[] | null>(null);
-  const { isPending, error, data } = useGetManyUser((page - 1) * SKIP);
+  const { isPending,
+    error,
+    data,
+    isFetching,
+    isRefetching,
+    isLoading,
+    refetch,
+    isSuccess } = useGetManyUser((page - 1) * SKIP);
   const queryUserMutation = useQueryUser();
   const { setFormType, setUpdateItem, setIsOpen } = useFormStore();
+  const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null);
   const theme = useTheme();
+  const delMutation = useDeleteUser();
 
   const onEdit = (item: UserProps) => {
     setFormType('user', 'update');
@@ -49,23 +59,34 @@ const UserList = (): JSX.Element => {
     });
   };
 
-  const delMutation = useDeleteUser();
-
   const handleSearch = (data: QueryUserFormData) => {
     queryUserMutation.mutate(data);
   };
 
-  const handleClearSearch = () => {
+  const handleClearSearch = async () => {
+    setPage(1);
     setItems(data || null);
   };
 
-  const onDelete = async (id: string) => {
-    if (confirm('Deseja deletar?')) {
-      try {
-        await delMutation.mutateAsync(id);
-      } catch (err) {
-        console.error('Erro ao deletar o item:', err);
-      }
+
+  const handleOpenDeleteDialog = (id: string) => {
+    setItemIdToDelete(id);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setItemIdToDelete(null);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!itemIdToDelete) return;
+
+    try {
+      await delMutation.mutateAsync(itemIdToDelete);
+    } catch (err) {
+      console.error('Erro ao deletar o item:', err);
+    } finally {
+      handleCloseDeleteDialog();
+      refetch();
     }
   };
 
@@ -73,24 +94,31 @@ const UserList = (): JSX.Element => {
     setPage((prev) => {
       const nextPage = prev + direction;
       if (nextPage < 1) return prev;
-      if (direction > 0 && (!data || data.length === 0)) return prev;
+      if (direction > 0 && ((!data || data.length === 0) && (!queryUserMutation.data || queryUserMutation.data.length === 0))) return prev;
       return nextPage;
     });
   };
 
   useEffect(() => {
-    if (queryUserMutation.data) {
+    if (queryUserMutation.isSuccess && queryUserMutation.data) {
       setItems(queryUserMutation.data);
-    } else if (data) {
+    } else if (isSuccess && data) {
       setItems(data);
+    } else if (!isPending && !isLoading && !isFetching && !queryUserMutation.isPending) {
+      setItems(null);
     }
-  }, [queryUserMutation.data, data]);
+  }, [queryUserMutation.data, data, queryUserMutation.isSuccess, queryUserMutation.isPending, isSuccess, isPending, isLoading, isFetching]);
+
 
   if (error) return <ErrorAlert message={error.message} />;
 
+  if (queryUserMutation.isError) return <ErrorAlert message={queryUserMutation.error.message} />;
+
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
-      {(isPending) && <CustomBackdrop isOpen={isPending} />}
+      {(isPending || isLoading || isFetching || isRefetching || delMutation.isPending || queryUserMutation.isPending) && <CustomBackdrop isOpen={true} />}
+
       <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline', gap: 4 }}>
         <Typography variant="h5">Filtro</Typography>
         <UserSearchForm onSearch={handleSearch} onClear={handleClearSearch} />
@@ -98,7 +126,7 @@ const UserList = (): JSX.Element => {
       <Divider />
       <Typography variant="h5">Usuários</Typography>
       <TableContainer component={Paper} sx={{ flex: 1, minHeight: '30vh', maxHeight: '50vh', overflow: 'scroll' }}>
-        <Table sx={{ minWidth: 650 }} size="small" aria-label="tabela de usuários">
+        <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table" stickyHeader>
           <TableHead>
             <TableRow>
               <TableCell align='left' sx={{ fontWeight: 800 }}>ID</TableCell>
@@ -116,6 +144,7 @@ const UserList = (): JSX.Element => {
               items.map((item: UserProps, i: number) => (
                 <TableRow
                   key={item.id}
+                  hover
                   sx={{
                     background:
                       i % 2 === 0
@@ -140,7 +169,7 @@ const UserList = (): JSX.Element => {
                     <IconButton edge="end" aria-label="edit" onClick={() => onEdit(item)}>
                       <EditIcon />
                     </IconButton>
-                    <IconButton edge="end" aria-label="delete" onClick={() => onDelete(item.id)}>
+                    <IconButton edge="end" aria-label="delete" onClick={() => handleOpenDeleteDialog(item.id)}>
                       <DeleteIcon />
                     </IconButton>
                   </TableCell>
@@ -149,23 +178,32 @@ const UserList = (): JSX.Element => {
           </TableBody>
         </Table>
       </TableContainer>
-      {data && data.length > 0 && (
-        <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', flex: 0.1 }}>
-          <ButtonGroup
-            variant="contained"
-            aria-label="basic button group"
-          >
-            <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
-              Anterior
-            </Button>
-            <Button onClick={() => handleChangePage(1)} disabled={!data || data.length === 0}>
-              Próximo
-            </Button>
-          </ButtonGroup>
-        </Box>
+      {
+        items && items.length > 0 && (
+          <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', flex: 0.1 }}>
+            <ButtonGroup
+              variant="contained"
+              aria-label="basic button group"
+            >
+              <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
+                Anterior
+              </Button>
+              <Button onClick={() => handleChangePage(1)} disabled={!items || items.length === 0}>
+                Próximo
+              </Button>
+            </ButtonGroup>
+          </Box>
+        )}
+      {itemIdToDelete && (
+        <ExcludeDialog
+          open={!!itemIdToDelete}
+          itemId={itemIdToDelete}
+          onClose={handleCloseDeleteDialog}
+          onConfirmDelete={handleDeleteConfirm}
+        />
       )}
     </Box>
   );
 };
 
-export default UserList;
+export default UserTable;

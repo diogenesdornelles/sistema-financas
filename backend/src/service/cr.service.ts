@@ -15,7 +15,7 @@ export class CrService extends BaseService<
   public txRepo: Repository<Tx>
   constructor() {
     super(Cr);
-    this.relations = {type: true, costumer: true};
+    this.relations = {type: true, customer: true};
     this.txRepo = AppDataSource.getRepository(Tx);
   }
 

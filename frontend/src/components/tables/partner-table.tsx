@@ -26,17 +26,27 @@ import { PartnerType } from '../../../../packages/dtos/utils/enums';
 import { z } from 'zod';
 import { queryPartnerSchema } from '../../../../packages/validators/zod-schemas/query/query-partner.validator';
 import CustomBackdrop from '../custom-backdrop';
+import ExcludeDialog from '../dialogs/exclude-dialog';
 
 type QueryPartnerFormData = z.infer<typeof queryPartnerSchema>;
 
-const PartnerList = (): JSX.Element => {
+const PartnerTable = (): JSX.Element => {
   const SKIP = 10;
   const [page, setPage] = useState(1);
   const [items, setItems] = useState<PartnerProps[] | null>(null);
-  const { isPending, error, data } = useGetManyPartner((page - 1) * SKIP);
+  const { isPending,
+    error,
+    data,
+    isFetching,
+    isRefetching,
+    isLoading,
+    refetch,
+    isSuccess } = useGetManyPartner((page - 1) * SKIP);
   const queryPartnerMutation = useQueryPartner();
   const { setFormType, setUpdateItem, setIsOpen } = useFormStore();
+  const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null);
   const theme = useTheme();
+  const delMutation = useDeletePartner();
 
   const onEdit = (item: PartnerProps) => {
     setFormType('partner', 'update');
@@ -51,48 +61,66 @@ const PartnerList = (): JSX.Element => {
     });
   };
 
-  const delMutation = useDeletePartner();
-
   const handleSearch = (data: QueryPartnerFormData) => {
     queryPartnerMutation.mutate(data);
   };
 
-  const onDelete = async (id: string) => {
-    if (confirm('Deseja deletar?')) {
-      try {
-        await delMutation.mutateAsync(id);
-      } catch (err) {
-        console.error('Erro ao deletar o item:', err);
-      }
-    }
+  const handleClearSearch = async () => {
+    setPage(1);
+    setItems(data || null);
   };
 
-  const handleClearSearch = () => {
-    setItems(data || null);
+
+  const handleOpenDeleteDialog = (id: string) => {
+    setItemIdToDelete(id);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setItemIdToDelete(null);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!itemIdToDelete) return;
+
+    try {
+      await delMutation.mutateAsync(itemIdToDelete);
+    } catch (err) {
+      console.error('Erro ao deletar o item:', err);
+    } finally {
+      handleCloseDeleteDialog();
+      refetch();
+    }
   };
 
   const handleChangePage = (direction: number) => {
     setPage((prev) => {
       const nextPage = prev + direction;
       if (nextPage < 1) return prev;
-      if (direction > 0 && (!data || data.length === 0)) return prev;
+      if (direction > 0 && ((!data || data.length === 0) && (!queryPartnerMutation.data || queryPartnerMutation.data.length === 0))) return prev;
       return nextPage;
     });
   };
 
   useEffect(() => {
-    if (queryPartnerMutation.data) {
+    if (queryPartnerMutation.isSuccess && queryPartnerMutation.data) {
       setItems(queryPartnerMutation.data);
-    } else if (data) {
+    } else if (isSuccess && data) {
       setItems(data);
+    } else if (!isPending && !isLoading && !isFetching && !queryPartnerMutation.isPending) {
+      setItems(null);
     }
-  }, [queryPartnerMutation.data, data]);
+  }, [queryPartnerMutation.data, data, queryPartnerMutation.isSuccess, queryPartnerMutation.isPending, isSuccess, isPending, isLoading, isFetching]);
+
 
   if (error) return <ErrorAlert message={error.message} />;
 
+  if (queryPartnerMutation.isError) return <ErrorAlert message={queryPartnerMutation.error.message} />;
+
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
-      {(isPending) && <CustomBackdrop isOpen={isPending} />}
+      {(isPending || isLoading || isFetching || isRefetching || delMutation.isPending || queryPartnerMutation.isPending) && <CustomBackdrop isOpen={true} />}
+
       <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline', gap: 4 }}>
         <Typography variant="h5">Filtro</Typography>
         <PartnerSearchForm onSearch={handleSearch} onClear={handleClearSearch} />
@@ -100,7 +128,7 @@ const PartnerList = (): JSX.Element => {
       <Divider />
       <Typography variant="h5">Parceiros</Typography>
       <TableContainer component={Paper} sx={{ flex: 1, minHeight: '30vh', maxHeight: '50vh', overflow: 'scroll' }}>
-        <Table sx={{ minWidth: 650 }} size="small" aria-label="tabela de parceiros">
+        <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table" stickyHeader>
           <TableHead>
             <TableRow>
               <TableCell align='left' sx={{ fontWeight: 800 }}>ID</TableCell>
@@ -119,6 +147,7 @@ const PartnerList = (): JSX.Element => {
               items.map((item: PartnerProps, i: number) => (
                 <TableRow
                   key={item.id}
+                  hover
                   sx={{
                     background:
                       i % 2 === 0
@@ -146,7 +175,7 @@ const PartnerList = (): JSX.Element => {
                     <IconButton edge="end" aria-label="edit" onClick={() => onEdit(item)}>
                       <EditIcon />
                     </IconButton>
-                    <IconButton edge="end" aria-label="delete" onClick={() => onDelete(item.id)}>
+                    <IconButton edge="end" aria-label="delete" onClick={() => handleOpenDeleteDialog(item.id)}>
                       <DeleteIcon />
                     </IconButton>
                   </TableCell>
@@ -155,23 +184,32 @@ const PartnerList = (): JSX.Element => {
           </TableBody>
         </Table>
       </TableContainer>
-      {data && data.length > 0 && (
-        <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', flex: 0.1}}>
-        <ButtonGroup
-          variant="contained"
-          aria-label="basic button group"
-        >
-          <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
-            Anterior
-          </Button>
-          <Button onClick={() => handleChangePage(1)} disabled={!data || data.length === 0}>
-            Próximo
-          </Button>
-        </ButtonGroup>
-      </Box>
+      {
+        items && items.length > 0 && (
+          <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', flex: 0.1 }}>
+            <ButtonGroup
+              variant="contained"
+              aria-label="basic button group"
+            >
+              <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
+                Anterior
+              </Button>
+              <Button onClick={() => handleChangePage(1)} disabled={!items || items.length === 0}>
+                Próximo
+              </Button>
+            </ButtonGroup>
+          </Box>
+        )}
+      {itemIdToDelete && (
+        <ExcludeDialog
+          open={!!itemIdToDelete}
+          itemId={itemIdToDelete}
+          onClose={handleCloseDeleteDialog}
+          onConfirmDelete={handleDeleteConfirm}
+        />
       )}
     </Box>
   );
 };
 
-export default PartnerList;
+export default PartnerTable;

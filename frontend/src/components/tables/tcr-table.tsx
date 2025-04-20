@@ -16,54 +16,75 @@ import {
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { TcfProps } from '../../../../packages/dtos/tcf.dto';
-import { useDeleteTcf, useGetManyTcf, useQueryTcf } from '../../hooks/use-tcf';
+import { TcrProps } from '../../../../packages/dtos/tcr.dto';
+import { useDeleteTcr, useGetManyTcr, useQueryTcr } from '../../hooks/use-tcr';
 import { useFormStore } from '../../hooks/use-form-store';
 import ErrorAlert from '../alerts/error-alert';
 import { useTheme } from '@mui/material/styles';
-import TcfSearchForm from '../forms/search/tcf-search-form';
-import { queryTcfSchema } from '../../../../packages/validators/zod-schemas/query/query-tcf.validator';
+import TcrSearchForm from '../forms/search/tcr-search-form';
+import { queryTcrSchema } from '../../../../packages/validators/zod-schemas/query/query-tcr.validator';
 import { z } from 'zod';
 import CustomBackdrop from '../custom-backdrop';
+import ExcludeDialog from '../dialogs/exclude-dialog';
 
-type QueryTcfFormData = z.infer<typeof queryTcfSchema>;
+type QueryTcrFormData = z.infer<typeof queryTcrSchema>;
 
-const TcfList = (): JSX.Element => {
+const TcrTable = (): JSX.Element => {
   const SKIP = 10;
   const [page, setPage] = useState(1);
-  const [items, setItems] = useState<TcfProps[] | null>(null);
-  const { isPending, error, data } = useGetManyTcf((page - 1) * SKIP);
-  const queryTcfMutation = useQueryTcf();
+  const [items, setItems] = useState<TcrProps[] | null>(null);
+  const { isPending,
+    error,
+    data,
+    isFetching,
+    isRefetching,
+    isLoading,
+    refetch,
+    isSuccess } = useGetManyTcr((page - 1) * SKIP);
+  const queryTcrMutation = useQueryTcr();
   const { setFormType, setUpdateItem, setIsOpen } = useFormStore();
+  const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null);
   const theme = useTheme();
+  const delMutation = useDeleteTcr();
 
-  const onEdit = (item: TcfProps) => {
-    setFormType('tcf', 'update');
-    setIsOpen(true, 'tcf')
-    setUpdateItem('tcf', {
+  const onEdit = (item: TcrProps) => {
+    setFormType('tcr', 'update');
+    setIsOpen(true, 'tcr')
+    setUpdateItem('tcr', {
       ...item,
       name: item.name,
       status: item.status ? item.status : undefined,
     });
   };
 
-  const delMutation = useDeleteTcf();
-
-  const handleSearch = (data: QueryTcfFormData) => {
-    queryTcfMutation.mutate(data);
+  const handleSearch = (data: QueryTcrFormData) => {
+    queryTcrMutation.mutate(data);
   };
 
-  const handleClearSearch = () => {
+  const handleClearSearch = async () => {
+    setPage(1);
     setItems(data || null);
   };
 
-  const onDelete = async (id: string) => {
-    if (confirm('Deseja deletar?')) {
-      try {
-        await delMutation.mutateAsync(id);
-      } catch (err) {
-        console.error('Erro ao deletar o item:', err);
-      }
+
+  const handleOpenDeleteDialog = (id: string) => {
+    setItemIdToDelete(id);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setItemIdToDelete(null);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!itemIdToDelete) return;
+
+    try {
+      await delMutation.mutateAsync(itemIdToDelete);
+    } catch (err) {
+      console.error('Erro ao deletar o item:', err);
+    } finally {
+      handleCloseDeleteDialog();
+      refetch();
     }
   };
 
@@ -71,32 +92,38 @@ const TcfList = (): JSX.Element => {
     setPage((prev) => {
       const nextPage = prev + direction;
       if (nextPage < 1) return prev;
-      if (direction > 0 && (!data || data.length === 0)) return prev;
+      if (direction > 0 && ((!data || data.length === 0) && (!queryTcrMutation.data || queryTcrMutation.data.length === 0))) return prev;
       return nextPage;
     });
   };
 
   useEffect(() => {
-    if (queryTcfMutation.data) {
-      setItems(queryTcfMutation.data);
-    } else if (data) {
+    if (queryTcrMutation.isSuccess && queryTcrMutation.data) {
+      setItems(queryTcrMutation.data);
+    } else if (isSuccess && data) {
       setItems(data);
+    } else if (!isPending && !isLoading && !isFetching && !queryTcrMutation.isPending) {
+      setItems(null);
     }
-  }, [queryTcfMutation.data, data]);
+  }, [queryTcrMutation.data, data, queryTcrMutation.isSuccess, queryTcrMutation.isPending, isSuccess, isPending, isLoading, isFetching]);
+
 
   if (error) return <ErrorAlert message={error.message} />;
 
+  if (queryTcrMutation.isError) return <ErrorAlert message={queryTcrMutation.error.message} />;
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
-      {(isPending) && <CustomBackdrop isOpen={isPending} />}
+      {(isPending || isLoading || isFetching || isRefetching || delMutation.isPending || queryTcrMutation.isPending) && <CustomBackdrop isOpen={true} />}
+
       <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline', gap: 4 }}>
         <Typography variant="h5">Filtro</Typography>
-        <TcfSearchForm onSearch={handleSearch} onClear={handleClearSearch} />
+        <TcrSearchForm onSearch={handleSearch} onClear={handleClearSearch} />
       </Box>
       <Divider />
-      <Typography variant="h5">Tipos de contas financeiras</Typography>
+      <Typography variant="h5">Tipos de contas a receber</Typography>
       <TableContainer component={Paper} sx={{ flex: 1, minHeight: '30vh', maxHeight: '50vh', overflow: 'scroll' }}>
-        <Table sx={{ minWidth: 650 }} size="small" aria-label="tabela de tipos de contas financeiras">
+        <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table" stickyHeader>
           <TableHead>
             <TableRow>
               <TableCell align='left' sx={{ fontWeight: 800 }}>ID</TableCell>
@@ -109,9 +136,10 @@ const TcfList = (): JSX.Element => {
           </TableHead>
           <TableBody>
             {items &&
-              items.map((item: TcfProps, i: number) => (
+              items.map((item: TcrProps, i: number) => (
                 <TableRow
                   key={item.id}
+                  hover
                   sx={{
                     background:
                       i % 2 === 0
@@ -123,7 +151,6 @@ const TcfList = (): JSX.Element => {
                           : theme.palette.common.black,
                   }}
                 >
-
                   <TableCell scope="row" align='left' sx={{ fontWeight: 900 }}>
                     {item.id}
                   </TableCell>
@@ -135,7 +162,7 @@ const TcfList = (): JSX.Element => {
                     <IconButton edge="end" aria-label="edit" onClick={() => onEdit(item)}>
                       <EditIcon />
                     </IconButton>
-                    <IconButton edge="end" aria-label="delete" onClick={() => onDelete(item.id)}>
+                    <IconButton edge="end" aria-label="delete" onClick={() => handleOpenDeleteDialog(item.id)}>
                       <DeleteIcon />
                     </IconButton>
                   </TableCell>
@@ -144,23 +171,32 @@ const TcfList = (): JSX.Element => {
           </TableBody>
         </Table>
       </TableContainer>
-      {data && data.length > 0 && (
-        <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', flex: 0.1 }}>
-          <ButtonGroup
-            variant="contained"
-            aria-label="basic button group"
-          >
-            <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
-              Anterior
-            </Button>
-            <Button onClick={() => handleChangePage(1)} disabled={!data || data.length === 0}>
-              Próximo
-            </Button>
-          </ButtonGroup>
-        </Box>
+      {
+        items && items.length > 0 && (
+          <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', flex: 0.1 }}>
+            <ButtonGroup
+              variant="contained"
+              aria-label="basic button group"
+            >
+              <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
+                Anterior
+              </Button>
+              <Button onClick={() => handleChangePage(1)} disabled={!items || items.length === 0}>
+                Próximo
+              </Button>
+            </ButtonGroup>
+          </Box>
+        )}
+      {itemIdToDelete && (
+        <ExcludeDialog
+          open={!!itemIdToDelete}
+          itemId={itemIdToDelete}
+          onClose={handleCloseDeleteDialog}
+          onConfirmDelete={handleDeleteConfirm}
+        />
       )}
     </Box>
   );
 };
 
-export default TcfList;
+export default TcrTable;

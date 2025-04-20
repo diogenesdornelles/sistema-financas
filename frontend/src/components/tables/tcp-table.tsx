@@ -63,6 +63,7 @@ const TcpTable = (): JSX.Element => {
   };
 
   const handleClearSearch = async () => {
+    queryTcpMutation.reset();
     setPage(1);
     setItems(data || null);
   };
@@ -85,7 +86,8 @@ const TcpTable = (): JSX.Element => {
       console.error('Erro ao deletar o item:', err);
     } finally {
       handleCloseDeleteDialog();
-      refetch();
+      queryTcpMutation.reset()
+      await refetch();
     }
   };
 
@@ -99,12 +101,21 @@ const TcpTable = (): JSX.Element => {
   };
 
   useEffect(() => {
-    if (queryTcpMutation.isSuccess && queryTcpMutation.data) {
+    if (queryTcpMutation.data && queryTcpMutation.data.length > 0) {
       setItems(queryTcpMutation.data);
-    } else if (isSuccess && data) {
+      return
+    } else if (data && data.length > 0) {
       setItems(data);
+      return
     } else if (!isPending && !isLoading && !isFetching && !queryTcpMutation.isPending) {
       setItems(null);
+      return
+    } else if (!queryTcpMutation.data && !data) {
+      setItems(null);
+      return
+    } else {
+      setItems(null)
+      return
     }
   }, [queryTcpMutation.data, data, queryTcpMutation.isSuccess, queryTcpMutation.isPending, isSuccess, isPending, isLoading, isFetching]);
 

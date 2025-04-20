@@ -62,6 +62,7 @@ const TcfTable = (): JSX.Element => {
   };
 
   const handleClearSearch = async () => {
+    queryTcfMutation.reset();
     setPage(1);
     setItems(data || null);
   };
@@ -84,7 +85,8 @@ const TcfTable = (): JSX.Element => {
       console.error('Erro ao deletar o item:', err);
     } finally {
       handleCloseDeleteDialog();
-      refetch();
+      queryTcfMutation.reset();
+      await refetch();
     }
   };
 
@@ -98,12 +100,21 @@ const TcfTable = (): JSX.Element => {
   };
 
   useEffect(() => {
-    if (queryTcfMutation.isSuccess && queryTcfMutation.data) {
+    if (queryTcfMutation.data && queryTcfMutation.data.length > 0) {
       setItems(queryTcfMutation.data);
-    } else if (isSuccess && data) {
+      return
+    } else if (data && data.length > 0) {
       setItems(data);
+      return
     } else if (!isPending && !isLoading && !isFetching && !queryTcfMutation.isPending) {
       setItems(null);
+      return
+    } else if (!queryTcfMutation.data && !data) {
+      setItems(null);
+      return
+    } else {
+      setItems(null)
+      return
     }
   }, [queryTcfMutation.data, data, queryTcfMutation.isSuccess, queryTcfMutation.isPending, isSuccess, isPending, isLoading, isFetching]);
 

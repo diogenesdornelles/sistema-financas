@@ -66,6 +66,7 @@ const PartnerTable = (): JSX.Element => {
   };
 
   const handleClearSearch = async () => {
+    queryPartnerMutation.reset();
     setPage(1);
     setItems(data || null);
   };
@@ -88,7 +89,8 @@ const PartnerTable = (): JSX.Element => {
       console.error('Erro ao deletar o item:', err);
     } finally {
       handleCloseDeleteDialog();
-      refetch();
+      queryPartnerMutation.reset();
+      await refetch();
     }
   };
 
@@ -102,12 +104,21 @@ const PartnerTable = (): JSX.Element => {
   };
 
   useEffect(() => {
-    if (queryPartnerMutation.isSuccess && queryPartnerMutation.data) {
+    if (queryPartnerMutation.data && queryPartnerMutation.data.length > 0) {
       setItems(queryPartnerMutation.data);
-    } else if (isSuccess && data) {
+      return
+    } else if (data && data.length > 0) {
       setItems(data);
+      return
     } else if (!isPending && !isLoading && !isFetching && !queryPartnerMutation.isPending) {
       setItems(null);
+      return
+    } else if (!queryPartnerMutation.data && !data) {
+      setItems(null);
+      return
+    } else {
+      setItems(null)
+      return
     }
   }, [queryPartnerMutation.data, data, queryPartnerMutation.isSuccess, queryPartnerMutation.isPending, isSuccess, isPending, isLoading, isFetching]);
 

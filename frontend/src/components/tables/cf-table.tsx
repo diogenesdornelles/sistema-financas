@@ -69,7 +69,8 @@ const CfTable = (): JSX.Element => {
   };
 
   const handleClearSearch = async () => {
-    setPage(1)
+    queryCfMutation.reset();
+    setPage(1);
     setItems(data || null);
   };
 
@@ -91,7 +92,8 @@ const CfTable = (): JSX.Element => {
       console.error('Erro ao deletar o item:', err);
     } finally {
       handleCloseDeleteDialog();
-      refetch();
+      queryCfMutation.reset();
+      await refetch();
     }
   };
 
@@ -105,12 +107,21 @@ const CfTable = (): JSX.Element => {
   };
 
   useEffect(() => {
-    if (queryCfMutation.isSuccess && queryCfMutation.data) {
+    if (queryCfMutation.data && queryCfMutation.data.length > 0) {
       setItems(queryCfMutation.data);
-    } else if (isSuccess && data) {
+      return
+    } else if (data && data.length > 0) {
       setItems(data);
+      return
     } else if (!isPending && !isLoading && !isFetching && !queryCfMutation.isPending) {
       setItems(null);
+      return
+    } else if (!queryCfMutation.data && !data) {
+      setItems(null);
+      return
+    } else {
+      setItems(null)
+      return
     }
   }, [queryCfMutation.data, data, queryCfMutation.isSuccess, queryCfMutation.isPending, isSuccess, isPending, isLoading, isFetching]);
 

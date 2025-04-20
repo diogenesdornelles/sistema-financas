@@ -64,6 +64,7 @@ const UserTable = (): JSX.Element => {
   };
 
   const handleClearSearch = async () => {
+    queryUserMutation.reset();
     setPage(1);
     setItems(data || null);
   };
@@ -86,7 +87,8 @@ const UserTable = (): JSX.Element => {
       console.error('Erro ao deletar o item:', err);
     } finally {
       handleCloseDeleteDialog();
-      refetch();
+      queryUserMutation.reset()
+      await refetch();
     }
   };
 
@@ -94,18 +96,27 @@ const UserTable = (): JSX.Element => {
     setPage((prev) => {
       const nextPage = prev + direction;
       if (nextPage < 1) return prev;
-      if (direction > 0 && ((!data || data.length === 0) && (!queryUserMutation.data || queryUserMutation.data.length === 0))) return prev;
+      if (direction > 0 && (!data || data.length === 0) && (!queryUserMutation.data || queryUserMutation.data.length === 0)) return prev;
       return nextPage;
     });
   };
 
   useEffect(() => {
-    if (queryUserMutation.isSuccess && queryUserMutation.data) {
+    if (queryUserMutation.data && queryUserMutation.data.length > 0) {
       setItems(queryUserMutation.data);
-    } else if (isSuccess && data) {
+      return
+    } else if (data && data.length > 0) {
       setItems(data);
+      return
     } else if (!isPending && !isLoading && !isFetching && !queryUserMutation.isPending) {
       setItems(null);
+      return
+    } else if (!queryUserMutation.data && !data) {
+      setItems(null);
+      return
+    } else {
+      setItems(null)
+      return
     }
   }, [queryUserMutation.data, data, queryUserMutation.isSuccess, queryUserMutation.isPending, isSuccess, isPending, isLoading, isFetching]);
 

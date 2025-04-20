@@ -79,6 +79,7 @@ const CpTable = (): JSX.Element => {
   };
 
   const handleClearSearch = async () => {
+    queryCpMutation.reset();
     setPage(1);
     setItems(data || null);
   };
@@ -101,7 +102,8 @@ const CpTable = (): JSX.Element => {
       console.error('Erro ao deletar o item:', err);
     } finally {
       handleCloseDeleteDialog();
-      refetch();
+      queryCpMutation.reset();
+      await refetch();
     }
   };
 
@@ -115,12 +117,21 @@ const CpTable = (): JSX.Element => {
   };
 
   useEffect(() => {
-    if (queryCpMutation.isSuccess && queryCpMutation.data) {
+    if (queryCpMutation.data && queryCpMutation.data.length > 0) {
       setItems(queryCpMutation.data);
-    } else if (isSuccess && data) {
+      return
+    } else if (data && data.length > 0) {
       setItems(data);
+      return
     } else if (!isPending && !isLoading && !isFetching && !queryCpMutation.isPending) {
       setItems(null);
+      return
+    } else if (!queryCpMutation.data && !data) {
+      setItems(null);
+      return
+    } else {
+      setItems(null)
+      return
     }
   }, [queryCpMutation.data, data, queryCpMutation.isSuccess, queryCpMutation.isPending, isSuccess, isPending, isLoading, isFetching]);
 

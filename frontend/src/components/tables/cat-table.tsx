@@ -67,6 +67,7 @@ const CatTable = (): JSX.Element => {
   };
 
   const handleClearSearch = async () => {
+    queryCatMutation.reset();
     setPage(1);
     setItems(data || null);
   };
@@ -89,7 +90,8 @@ const CatTable = (): JSX.Element => {
       console.error('Erro ao deletar o item:', err);
     } finally {
       handleCloseDeleteDialog();
-      refetch();
+      queryCatMutation.reset();
+      await refetch();
     }
   };
 
@@ -97,18 +99,27 @@ const CatTable = (): JSX.Element => {
     setPage((prev) => {
       const nextPage = prev + direction;
       if (nextPage < 1) return prev;
-      if (direction > 0 && ((!data || data.length === 0) && (!queryCatMutation.data || queryCatMutation.data.length === 0))) return prev;
+      if (direction > 0 && (!data || data.length === 0) && (!queryCatMutation.data || queryCatMutation.data.length === 0)) return prev;
       return nextPage;
     });
   };
 
   useEffect(() => {
-    if (queryCatMutation.isSuccess && queryCatMutation.data) {
+    if (queryCatMutation.data && queryCatMutation.data.length > 0) {
       setItems(queryCatMutation.data);
-    } else if (isSuccess && data) {
+      return
+    } else if (data && data.length > 0) {
       setItems(data);
+      return
     } else if (!isPending && !isLoading && !isFetching && !queryCatMutation.isPending) {
       setItems(null);
+      return
+    } else if (!queryCatMutation.data && !data) {
+      setItems(null);
+      return
+    } else {
+      setItems(null)
+      return
     }
   }, [queryCatMutation.data, data, queryCatMutation.isSuccess, queryCatMutation.isPending, isSuccess, isPending, isLoading, isFetching]);
 

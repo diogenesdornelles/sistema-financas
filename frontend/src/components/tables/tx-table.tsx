@@ -70,6 +70,7 @@ const TxTable = (): JSX.Element => {
   };
 
   const handleClearSearch = async () => {
+    queryTxMutation.reset();
     setPage(1);
     setItems(data || null);
   };
@@ -92,7 +93,8 @@ const TxTable = (): JSX.Element => {
       console.error('Erro ao deletar o item:', err);
     } finally {
       handleCloseDeleteDialog();
-      refetch();
+      queryTxMutation.reset();
+      await refetch();
     }
   };
 
@@ -106,12 +108,21 @@ const TxTable = (): JSX.Element => {
   };
 
   useEffect(() => {
-    if (queryTxMutation.isSuccess && queryTxMutation.data) {
+    if (queryTxMutation.data && queryTxMutation.data.length > 0) {
       setItems(queryTxMutation.data);
-    } else if (isSuccess && data) {
+      return
+    } else if (data && data.length > 0) {
       setItems(data);
+      return
     } else if (!isPending && !isLoading && !isFetching && !queryTxMutation.isPending) {
       setItems(null);
+      return
+    } else if (!queryTxMutation.data && !data) {
+      setItems(null);
+      return
+    } else {
+      setItems(null)
+      return
     }
   }, [queryTxMutation.data, data, queryTxMutation.isSuccess, queryTxMutation.isPending, isSuccess, isPending, isLoading, isFetching]);
 
@@ -142,7 +153,7 @@ const TxTable = (): JSX.Element => {
               <TableCell align="right" sx={{ fontWeight: 800 }}>ID Conta a pagar</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>ID Conta a receber</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Descrição</TableCell>
-              <TableCell align="right" sx={{ fontWeight: 800 }}>Categoria</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 800 }}>Txegoria</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Obs</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Status</TableCell>
               <TableCell align="right" sx={{ fontWeight: 800 }}>Data</TableCell>

@@ -62,6 +62,7 @@ const TcrTable = (): JSX.Element => {
   };
 
   const handleClearSearch = async () => {
+    queryTcrMutation.reset();
     setPage(1);
     setItems(data || null);
   };
@@ -84,7 +85,8 @@ const TcrTable = (): JSX.Element => {
       console.error('Erro ao deletar o item:', err);
     } finally {
       handleCloseDeleteDialog();
-      refetch();
+      queryTcrMutation.reset()
+      await refetch();
     }
   };
 
@@ -98,12 +100,21 @@ const TcrTable = (): JSX.Element => {
   };
 
   useEffect(() => {
-    if (queryTcrMutation.isSuccess && queryTcrMutation.data) {
+    if (queryTcrMutation.data && queryTcrMutation.data.length > 0) {
       setItems(queryTcrMutation.data);
-    } else if (isSuccess && data) {
+      return
+    } else if (data && data.length > 0) {
       setItems(data);
+      return
     } else if (!isPending && !isLoading && !isFetching && !queryTcrMutation.isPending) {
       setItems(null);
+      return
+    } else if (!queryTcrMutation.data && !data) {
+      setItems(null);
+      return
+    } else {
+      setItems(null)
+      return
     }
   }, [queryTcrMutation.data, data, queryTcrMutation.isSuccess, queryTcrMutation.isPending, isSuccess, isPending, isLoading, isFetching]);
 

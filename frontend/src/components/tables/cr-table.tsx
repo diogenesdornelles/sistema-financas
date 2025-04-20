@@ -80,6 +80,7 @@ const CrTable = (): JSX.Element => {
   };
 
   const handleClearSearch = async () => {
+    queryCrMutation.reset();
     setPage(1);
     setItems(data || null);
   };
@@ -102,7 +103,8 @@ const CrTable = (): JSX.Element => {
       console.error('Erro ao deletar o item:', err);
     } finally {
       handleCloseDeleteDialog();
-      refetch();
+      queryCrMutation.reset();
+      await refetch();
     }
   };
 
@@ -116,12 +118,21 @@ const CrTable = (): JSX.Element => {
   };
 
   useEffect(() => {
-    if (queryCrMutation.isSuccess && queryCrMutation.data) {
+    if (queryCrMutation.data && queryCrMutation.data.length > 0) {
       setItems(queryCrMutation.data);
-    } else if (isSuccess && data) {
+      return
+    } else if (data && data.length > 0) {
       setItems(data);
+      return
     } else if (!isPending && !isLoading && !isFetching && !queryCrMutation.isPending) {
       setItems(null);
+      return
+    } else if (!queryCrMutation.data && !data) {
+      setItems(null);
+      return
+    } else {
+      setItems(null)
+      return
     }
   }, [queryCrMutation.data, data, queryCrMutation.isSuccess, queryCrMutation.isPending, isSuccess, isPending, isLoading, isFetching]);
 

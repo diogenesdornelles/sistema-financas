@@ -3,10 +3,20 @@ import GeneralMiddleware from "../middleware/general.middleware";
 import { BaseRouter } from "./base.route";
 
 export default class CatRouter extends BaseRouter<CatController> {
+  /**
+   * Creates an instance of CatRouter.
+   * @memberof CatRouter
+   */
   constructor() {
     super(new CatController());
   }
 
+  /**
+   * Inicializa as rotas do router
+   *
+   * @protected
+   * @memberof CatRouter
+   */
   protected initRoutes(): void {
     this.router.get(
       "/",

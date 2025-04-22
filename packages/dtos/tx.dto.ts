@@ -1,3 +1,7 @@
+/*
+Dtos para o trânsito de dados de tipo de transações
+*/
+
 import { CatProps } from "./cat.dto";
 import { CfProps } from "./cf.dto";
 import { CpProps } from "./cp.dto";

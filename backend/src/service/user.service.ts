@@ -15,7 +15,7 @@ export class UserService extends BaseService<
   UpdateUser,
   QueryUser
 > {
-  private readonly selection: Record<string, boolean>
+  private readonly selection: Record<string, boolean>;
   constructor() {
     super(User);
     this.selection = {
@@ -26,12 +26,12 @@ export class UserService extends BaseService<
       createdAt: true,
       updatedAt: true,
       cpf: true,
-      pwd: false
-    }
+      pwd: false,
+    };
   }
 
   /**
-   * Recupera todos os usuários.
+   * Recupera todos os usuários ativos.
    */
   public getAll = async (): Promise<User[]> => {
     try {
@@ -47,7 +47,7 @@ export class UserService extends BaseService<
   };
 
   /**
-   * Recupera 10 usuários, com skip.
+   * Recupera 10 usuários ativos, com skip.
    */
   public getMany = async (skip: number): Promise<User[]> => {
     try {
@@ -89,7 +89,9 @@ export class UserService extends BaseService<
    */
   public create = async (data: CreateUser): Promise<Omit<User, "pwd">> => {
     try {
+      // criptografa a senha
       const hashedPwd = await hashPassword(data.pwd);
+      // atualiza user
       const user = this.repository.create({ ...data, pwd: hashedPwd });
       const createdUser = await this.repository.save(user);
 
@@ -151,7 +153,9 @@ export class UserService extends BaseService<
       const where: FindOptionsWhere<User> = {};
 
       if (data.id) {
-        where.id = Raw((alias) => `CAST(${alias} AS TEXT) ILIKE :id`, { id: `%${data.id}%` });
+        where.id = Raw((alias) => `CAST(${alias} AS TEXT) ILIKE :id`, {
+          id: `%${data.id}%`,
+        });
       }
 
       if (data.name) {
@@ -183,7 +187,7 @@ export class UserService extends BaseService<
       return await this.repository.find({
         where,
         select: this.selection,
-        relations: this.relations
+        relations: this.relations,
       });
     } catch (error) {
       throw new Error(`Erro ao filtrar usuários: ${error}`);

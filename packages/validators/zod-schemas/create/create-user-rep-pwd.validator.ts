@@ -1,3 +1,8 @@
+/*
+Esquema de validação de crição para um usuário com repetição de senha
+*/
+
+
 import { z } from "zod";
 
 import { createUserSchema } from "./create-user.validator"

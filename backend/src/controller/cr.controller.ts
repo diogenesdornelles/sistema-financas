@@ -9,11 +9,30 @@ import { Cr } from "../entity/entities";
 import GeneralValidator from "../../../packages/validators/general.validator";
 import { ApiError } from "../utils/api-error.util";
 
+/**
+ * Controla o fluxo de requisições e respostas de Contas a pagar
+ *
+ * @export
+ * @class CrController
+ * @extends {BaseController<CrService>}
+ */
 export default class CrController extends BaseController<CrService> {
+  /**
+   * Creates an instance of CrController.
+   * @memberof CrController
+   */
   constructor() {
     super(new CrService());
   }
 
+  /**
+   *
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof CrController
+   */
   public getAll = async (
     req: Request,
     res: Response,
@@ -29,6 +48,14 @@ export default class CrController extends BaseController<CrService> {
     }
   };
 
+  /**
+   *
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof CrController
+   */
   public getMany = async (
     req: Request,
     res: Response,
@@ -57,6 +84,14 @@ export default class CrController extends BaseController<CrService> {
     }
   };
 
+  /**
+   *
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof CrController
+   */
   public getOne = async (
     req: Request,
     res: Response,
@@ -77,6 +112,14 @@ export default class CrController extends BaseController<CrService> {
     }
   };
 
+  /**
+   *
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof CrController
+   */
   public create = async (
     req: Request,
     res: Response,
@@ -85,11 +128,16 @@ export default class CrController extends BaseController<CrService> {
     try {
       const { value } = req.body;
 
-      const normalizedValue = GeneralValidator.validateAndNormalizeMoneyString(value || "");
+      const normalizedValue = GeneralValidator.validateAndNormalizeMoneyString(
+        value || "",
+      );
       if (!normalizedValue) {
         throw new ApiError(401, "Informar um valor Pt-Br válido");
       }
-      const validatedData: CreateCr = createCrSchema.parse({ ...req.body, value: normalizedValue });
+      const validatedData: CreateCr = createCrSchema.parse({
+        ...req.body,
+        value: normalizedValue,
+      });
       const item: Cr = await this.service.create(validatedData);
       res.status(201).json(item);
       return;
@@ -99,6 +147,14 @@ export default class CrController extends BaseController<CrService> {
     }
   };
 
+  /**
+   *
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof CrController
+   */
   public update = async (
     req: Request,
     res: Response,
@@ -109,7 +165,8 @@ export default class CrController extends BaseController<CrService> {
       const { value } = req.body;
 
       if (value) {
-        const normalizedValue = GeneralValidator.validateAndNormalizeMoneyString(value);
+        const normalizedValue =
+          GeneralValidator.validateAndNormalizeMoneyString(value);
         if (!normalizedValue) {
           throw new ApiError(401, "Informar um valor Pt-Br válido");
         }
@@ -132,6 +189,14 @@ export default class CrController extends BaseController<CrService> {
     }
   };
 
+  /**
+   *
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof CrController
+   */
   public delete = async (
     req: Request,
     res: Response,
@@ -152,12 +217,30 @@ export default class CrController extends BaseController<CrService> {
     }
   };
 
+  /**
+   *
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof CrController
+   */
   public query = async (
     req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<void> => {
     try {
+      const { value } = req.body;
+
+      if (value) {
+        const normalizedValue =
+          GeneralValidator.validateAndNormalizeMoneyString(value);
+        if (!normalizedValue) {
+          throw new ApiError(401, "Informar um valor Pt-Br válido");
+        }
+        req.body.value = normalizedValue;
+      }
       const validatedData: QueryCr = queryCrSchema.parse(req.body);
       const item: Cr[] = await this.service.query(validatedData);
       res.status(201).json(item);

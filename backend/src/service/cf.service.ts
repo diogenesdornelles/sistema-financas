@@ -3,7 +3,13 @@ import { Cf, Tcf, User } from "../entity/entities";
 import { CreateCf, UpdateCf, QueryCf } from "../../../packages/dtos/cf.dto";
 import { FindOptionsWhere, ILike, Like, MoreThanOrEqual, Raw } from "typeorm";
 
-
+/**
+ * Recupera todas as contas.
+ *
+ * @export
+ * @class CfService
+ * @extends {BaseService<Cf, Cf, CreateCf, UpdateCf, QueryCf>}
+ */
 export class CfService extends BaseService<
   Cf,
   Cf,
@@ -11,13 +17,17 @@ export class CfService extends BaseService<
   UpdateCf,
   QueryCf
 > {
+  /**
+   * Creates an instance of CfService.
+   * @memberof CfService
+   */
   constructor() {
     super(Cf);
-    this.relations = {type: true}
+    this.relations = { type: true };
   }
 
   /**
-   * Recupera todas as contas.
+   * Recupera todas as contas ativas.
    */
   public getAll = async (): Promise<Cf[]> => {
     try {
@@ -32,7 +42,7 @@ export class CfService extends BaseService<
   };
 
   /**
-   * Recupera 10 com skip.
+   * Recupera 10 ativas com skip.
    */
   public getMany = async (skip: number): Promise<Cf[]> => {
     try {
@@ -72,13 +82,13 @@ export class CfService extends BaseService<
    */
   public create = async (data: CreateCf): Promise<Cf> => {
     try {
-
       const cf = this.repository.create({
         ...data,
         user: { id: data.user } as User,
         type: { id: data.type } as Tcf,
+        // transforma para float e atribui balance tanto para first quanto current
         firstBalance: data.balance ? parseFloat(data.balance) : 0.0,
-        currentBalance: data.balance ? parseFloat(data.balance) : 0.0
+        currentBalance: data.balance ? parseFloat(data.balance) : 0.0,
       });
       const createdCf = await this.repository.save(cf);
 
@@ -102,7 +112,7 @@ export class CfService extends BaseService<
     data: UpdateCf,
   ): Promise<Partial<Cf> | null> => {
     try {
-
+      // Não admite a atualização de balanço
       const updateData: Partial<Cf> = {
         ...data,
         type: data.type ? ({ id: data.type } as Tcf) : undefined,
@@ -144,7 +154,9 @@ export class CfService extends BaseService<
       const where: FindOptionsWhere<Cf> = {};
 
       if (data.id) {
-        where.id = Raw((alias) => `CAST(${alias} AS TEXT) ILIKE :id`, { id: `%${data.id}%` });
+        where.id = Raw((alias) => `CAST(${alias} AS TEXT) ILIKE :id`, {
+          id: `%${data.id}%`,
+        });
       }
 
       if (data.number) {
@@ -152,18 +164,14 @@ export class CfService extends BaseService<
       }
 
       if (data.firstBalance) {
-        const balanceValue = parseFloat(
-          data.firstBalance.replace(/\./g, "").replace(",", "."),
-        );
+        const balanceValue = parseFloat(data.firstBalance);
         if (!isNaN(balanceValue)) {
           where.firstBalance = MoreThanOrEqual(balanceValue);
         }
       }
 
       if (data.currentBalance) {
-        const balanceValue = parseFloat(
-          data.currentBalance.replace(/\./g, "").replace(",", "."),
-        );
+        const balanceValue = parseFloat(data.currentBalance);
         if (!isNaN(balanceValue)) {
           where.currentBalance = MoreThanOrEqual(balanceValue);
         }

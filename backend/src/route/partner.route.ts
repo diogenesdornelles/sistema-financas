@@ -3,10 +3,19 @@ import GeneralMiddleware from "../middleware/general.middleware";
 import { BaseRouter } from "./base.route";
 
 export default class PartnerRouter extends BaseRouter<PartnerController> {
+  /**
+   * Creates an instance of PartnerRouter.
+   * @memberof PartnerRouter
+   */
   constructor() {
     super(new PartnerController());
   }
-
+  /**
+   * Inicializa as rotas do router
+   *
+   * @protected
+   * @memberof CatRouter
+   */
   protected initRoutes(): void {
     this.router.get(
       "/",

@@ -2,7 +2,14 @@ import { BaseService } from "./base.service";
 import { Cp, Partner, Tcp, Tx, User } from "../entity/entities";
 import { CreateCp, UpdateCp, QueryCp } from "../../../packages/dtos/cp.dto";
 import { PaymentStatus } from "../../../packages/dtos/utils/enums";
-import { FindOptionsWhere, ILike, MoreThanOrEqual, Not, Raw, Repository } from "typeorm";
+import {
+  FindOptionsWhere,
+  ILike,
+  MoreThanOrEqual,
+  Not,
+  Raw,
+  Repository,
+} from "typeorm";
 import { AppDataSource } from "../config/db";
 
 export class CpService extends BaseService<
@@ -12,10 +19,10 @@ export class CpService extends BaseService<
   UpdateCp,
   QueryCp
 > {
-  public txRepo: Repository<Tx>
+  public txRepo: Repository<Tx>;
   constructor() {
     super(Cp);
-    this.relations = {type: true, supplier: true};
+    this.relations = { type: true, supplier: true };
     this.txRepo = AppDataSource.getRepository(Tx);
   }
 
@@ -72,8 +79,6 @@ export class CpService extends BaseService<
    */
   public create = async (data: CreateCp): Promise<Cp> => {
     try {
-
-
       const newCp = this.repository.create({
         ...data,
         user: { id: data.user } as User,
@@ -104,7 +109,6 @@ export class CpService extends BaseService<
     data: UpdateCp,
   ): Promise<Partial<Cp> | null> => {
     try {
-
       const updateData: Partial<Cp> = {
         ...data,
         type: data.type ? ({ id: data.type } as Tcp) : undefined,
@@ -165,13 +169,13 @@ export class CpService extends BaseService<
       const where: FindOptionsWhere<Cp> = {};
 
       if (data.id) {
-        where.id = Raw((alias) => `CAST(${alias} AS TEXT) ILIKE :id`, { id: `%${data.id}%` });
+        where.id = Raw((alias) => `CAST(${alias} AS TEXT) ILIKE :id`, {
+          id: `%${data.id}%`,
+        });
       }
 
       if (data.value) {
-        const value = parseFloat(
-          data.value.replace(/\./g, "").replace(",", "."),
-        );
+        const value = parseFloat(data.value);
         if (!isNaN(value)) {
           where.value = MoreThanOrEqual(value);
         }
@@ -179,13 +183,17 @@ export class CpService extends BaseService<
 
       if (data.type) {
         where.type = {
-          name: Raw((alias) => `${alias} ILIKE :typeName`, { typeName: `%${data.type}%` }),
+          name: Raw((alias) => `${alias} ILIKE :typeName`, {
+            typeName: `%${data.type}%`,
+          }),
         };
       }
 
       if (data.supplier) {
         where.supplier = {
-          name: Raw((alias) => `${alias} ILIKE :supplierName`, { supplierName: `%${data.supplier}%` }),
+          name: Raw((alias) => `${alias} ILIKE :supplierName`, {
+            supplierName: `%${data.supplier}%`,
+          }),
         };
       }
 

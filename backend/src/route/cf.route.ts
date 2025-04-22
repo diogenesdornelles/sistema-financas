@@ -3,10 +3,19 @@ import GeneralMiddleware from "../middleware/general.middleware";
 import { BaseRouter } from "./base.route";
 
 export default class CfRouter extends BaseRouter<CfController> {
+  /**
+   * Creates an instance of CfRouter.
+   * @memberof CfRouter
+   */
   constructor() {
     super(new CfController());
   }
-
+  /**
+   * Inicializa as rotas do router
+   *
+   * @protected
+   * @memberof CatRouter
+   */
   protected initRoutes(): void {
     this.router.get(
       "/",

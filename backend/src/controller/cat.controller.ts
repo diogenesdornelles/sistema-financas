@@ -7,11 +7,29 @@ import { updateCatSchema } from "../../../packages/validators/zod-schemas/update
 import { queryCatSchema } from "../../../packages/validators/zod-schemas/query/query-cat.validator";
 import { Cat } from "../entity/entities";
 
+/**
+ * Controla o fluxo de requisições e respostas de Categorias
+ *
+ * @export
+ * @class CatController
+ * @extends {BaseController<CatService>}
+ */
 export default class CatController extends BaseController<CatService> {
+  /**
+   * Creates an instance of CatController.
+   * @memberof CatController
+   */
   constructor() {
     super(new CatService());
   }
-
+  /**
+   * Gerencia a devolução de todas as categorias
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof CatController
+   */
   public getAll = async (
     req: Request,
     res: Response,
@@ -26,7 +44,14 @@ export default class CatController extends BaseController<CatService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a devolução algumas categorias, de acordo com um skip
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof CatController
+   */
   public getMany = async (
     req: Request,
     res: Response,
@@ -54,7 +79,14 @@ export default class CatController extends BaseController<CatService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a obtenção de uma categoria pelo ID
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof CatController
+   */
   public getOne = async (
     req: Request,
     res: Response,
@@ -74,13 +106,21 @@ export default class CatController extends BaseController<CatService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a criação de uma categoria, de acordo com o body
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof CatController
+   */
   public create = async (
     req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<void> => {
     try {
+      // validação
       const validatedData: CreateCat = createCatSchema.parse(req.body);
       const item: Cat = await this.service.create(validatedData);
       res.status(201).json(item);
@@ -90,7 +130,14 @@ export default class CatController extends BaseController<CatService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a atualização de uma categoria, de acordo com o id e o body
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof CatController
+   */
   public update = async (
     req: Request,
     res: Response,
@@ -98,6 +145,7 @@ export default class CatController extends BaseController<CatService> {
   ): Promise<void> => {
     try {
       const { id } = req.params;
+      // validação
       const validatedData: UpdateCat = updateCatSchema.parse(req.body);
       const updatedItem: Partial<Cat> | null = await this.service.update(
         id,
@@ -114,7 +162,14 @@ export default class CatController extends BaseController<CatService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a deleção de uma categoria pelo ID
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof CatController
+   */
   public delete = async (
     req: Request,
     res: Response,
@@ -134,12 +189,22 @@ export default class CatController extends BaseController<CatService> {
       return;
     }
   };
+
+  /**
+   * Gerencia a requição de uma busca profunda
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof CatController
+   */
   public query = async (
     req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<void> => {
     try {
+      // validação
       const validatedData: QueryCat = queryCatSchema.parse(req.body);
       const item: Cat[] = await this.service.query(validatedData);
       res.status(201).json(item);

@@ -1,3 +1,7 @@
+/*
+Dtos para o trânsito de dados de parceiros
+*/
+
 import { PartnerSearchType, PartnerType } from "./utils/enums";
 
 

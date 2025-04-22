@@ -1,8 +1,11 @@
+/*
+Dtos para o trânsito de dados de token
+*/
+
 export interface CreateToken {
   cpf: string;
   pwd: string;
 }
-
 
 export interface UpdateToken {
   cpf?: string;

@@ -1,3 +1,7 @@
+/*
+Esquema de validação de crição para um tipo de conta a receber
+*/
+
 import { z } from "zod";
 
 

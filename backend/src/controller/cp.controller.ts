@@ -9,11 +9,30 @@ import { Cp } from "../entity/entities";
 import GeneralValidator from "../../../packages/validators/general.validator";
 import { ApiError } from "../utils/api-error.util";
 
+/**
+ * Controla o fluxo de requisições e respostas de Contas a pagar
+ *
+ * @export
+ * @class CpController
+ * @extends {BaseController<CpService>}
+ */
 export default class CpController extends BaseController<CpService> {
+  /**
+   * Creates an instance of CpController.
+   * @memberof CpController
+   */
   constructor() {
     super(new CpService());
   }
 
+  /**
+   * Gerencia a devolução de todas as contas a pagar
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof CpController
+   */
   public getAll = async (
     req: Request,
     res: Response,
@@ -29,6 +48,14 @@ export default class CpController extends BaseController<CpService> {
     }
   };
 
+  /**
+   * Gerencia a devolução algumas contas a pagar, de acordo com um skip
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof CpController
+   */
   public getMany = async (
     req: Request,
     res: Response,
@@ -57,6 +84,14 @@ export default class CpController extends BaseController<CpService> {
     }
   };
 
+  /**
+   * Gerencia a obtenção de uma conta a pagar pelo ID
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof CpController
+   */
   public getOne = async (
     req: Request,
     res: Response,
@@ -77,22 +112,34 @@ export default class CpController extends BaseController<CpService> {
     }
   };
 
+  /**
+   * Gerencia a criação de uma conta, de acordo com o body
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof CpController
+   */
   public create = async (
     req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<void> => {
     try {
-
       const { value } = req.body;
-
-      const normalizedValue = GeneralValidator.validateAndNormalizeMoneyString(value || "");
+      // normaliza string para float string
+      const normalizedValue = GeneralValidator.validateAndNormalizeMoneyString(
+        value || "",
+      );
 
       if (!normalizedValue) {
         throw new ApiError(401, "Informar um valor Pt-Br válido");
       }
-      
-      const validatedData: CreateCp = createCpSchema.parse({ ...req.body, value: normalizedValue });
+
+      const validatedData: CreateCp = createCpSchema.parse({
+        ...req.body,
+        value: normalizedValue,
+      });
       const item: Cp = await this.service.create(validatedData);
       res.status(201).json(item);
       return;
@@ -102,6 +149,14 @@ export default class CpController extends BaseController<CpService> {
     }
   };
 
+  /**
+   * Gerencia a atualização de uma conta, de acordo com o id e o body
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof CpController
+   */
   public update = async (
     req: Request,
     res: Response,
@@ -112,7 +167,9 @@ export default class CpController extends BaseController<CpService> {
       const { value } = req.body;
 
       if (value) {
-        const normalizedValue = GeneralValidator.validateAndNormalizeMoneyString(value);
+        // normaliza string para float string
+        const normalizedValue =
+          GeneralValidator.validateAndNormalizeMoneyString(value);
         if (!normalizedValue) {
           throw new ApiError(401, "Informar um valor Pt-Br válido");
         }
@@ -135,6 +192,14 @@ export default class CpController extends BaseController<CpService> {
     }
   };
 
+  /**
+   * Gerencia a deleção de uma conta pelo ID
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof CpController
+   */
   public delete = async (
     req: Request,
     res: Response,
@@ -155,12 +220,31 @@ export default class CpController extends BaseController<CpService> {
     }
   };
 
+  /**
+   * Gerencia a requição de uma busca profunda
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof CpController
+   */
   public query = async (
     req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<void> => {
     try {
+      const { value } = req.body;
+      // normaliza string para float string
+      if (value) {
+        const normalizedValue =
+          GeneralValidator.validateAndNormalizeMoneyString(value);
+        if (!normalizedValue) {
+          throw new ApiError(401, "Informar um valor Pt-Br válido");
+        }
+        req.body.value = normalizedValue;
+      }
+      // validação
       const validatedData: QueryCp = queryCpSchema.parse(req.body);
       const item: Cp[] = await this.service.query(validatedData);
       res.status(201).json(item);

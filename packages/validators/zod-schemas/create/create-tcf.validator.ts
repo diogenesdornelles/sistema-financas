@@ -1,3 +1,7 @@
+/*
+Esquema de validação de crição para um tipo de conta financeira
+*/
+
 import { z } from "zod";
 
 

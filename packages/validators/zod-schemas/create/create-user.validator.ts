@@ -1,3 +1,7 @@
+/*
+Esquema de validação de crição para um usuário
+*/
+
 import { z } from "zod";
 import GeneralValidator from "../../general.validator";
 

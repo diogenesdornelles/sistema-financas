@@ -1,41 +1,38 @@
 import { Router } from "express";
 
 /**
- * Abstract base class for defining API routes.
+ * Classe abstrata BaseRouter.
  *
- * This class provides a foundation for creating routers that are associated with a specific controller.
- * It sets up an Express Router instance and requires subclasses to implement the route initialization.
+ * Fornece a estrutura base para definição de rotas associadas a um controlador específico.
+ * Configura uma instância do Router do Express e exige que subclasses implementem a inicialização das rotas.
  *
- * @template T - The type of the controller associated with this router.
+ * @template T - Tipo do controlador associado a este router.
  */
 export abstract class BaseRouter<T> {
-  // Express Router instance used for defining routes.
+  // Instância do Router do Express usada para definir as rotas.
   public router: Router;
-  // Controller instance associated with this router.
+  // Instância do controlador associada a este router.
   public controller: T;
 
   /**
-   * Creates an instance of BaseRouter.
+   * Cria uma instância de BaseRouter.
    *
-   * @param {T} controller - The controller instance to be associated with this router.
+   * @param {T} controller - Controlador associado a este router.
    *
-   * The constructor initializes the router, assigns the controller, and calls the abstract method
-   * initRoutes() to set up the routes. Each subclass must provide its own implementation of initRoutes().
+   * O construtor inicializa o Router, associa o controlador e chama o método abstrato
+   * initRoutes() para configurar as rotas. Cada subclasse deve implementar initRoutes().
    */
   constructor(controller: T) {
-    // Initialize the Express Router.
     this.router = Router();
-    // Assign the controller.
     this.controller = controller;
-    // Initialize the routes defined by the subclass.
     this.initRoutes();
   }
 
   /**
-   * Abstract method for initializing routes.
+   * Método abstrato para inicializar as rotas.
    *
-   * Each subclass must implement this method to define its routes and attach the appropriate
-   * controller methods to the Express router.
+   * Cada subclasse deve implementar este método para definir suas rotas e associar
+   * os métodos do controlador ao Router do Express.
    */
   protected abstract initRoutes(): void;
 }

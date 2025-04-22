@@ -112,7 +112,9 @@ export class TcrService extends BaseService<
       const where: FindOptionsWhere<Tcr> = {};
 
       if (data.id) {
-        where.id = Raw((alias) => `CAST(${alias} AS TEXT) ILIKE :id`, { id: `%${data.id}%` });
+        where.id = Raw((alias) => `CAST(${alias} AS TEXT) ILIKE :id`, {
+          id: `%${data.id}%`,
+        });
       }
 
       if (data.name) {

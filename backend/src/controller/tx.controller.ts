@@ -9,11 +9,29 @@ import { Tx } from "../entity/entities";
 import GeneralValidator from "../../../packages/validators/general.validator";
 import { ApiError } from "../utils/api-error.util";
 
+/**
+ * Controla o fluxo de requisições e respostas de Transações
+ *
+ * @export
+ * @class TxController
+ * @extends {BaseController<TxService>}
+ */
 export default class TxController extends BaseController<TxService> {
+  /**
+   * Creates an instance of TxController.
+   * @memberof TxController
+   */
   constructor() {
     super(new TxService());
   }
-
+  /**
+   * Gerencia a criação de uma transação
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof TxController
+   */
   public getAll = async (
     req: Request,
     res: Response,
@@ -28,7 +46,14 @@ export default class TxController extends BaseController<TxService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a criação de uma transação
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof TxController
+   */
   public getMany = async (
     req: Request,
     res: Response,
@@ -56,7 +81,14 @@ export default class TxController extends BaseController<TxService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a criação de uma transação
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof TxController
+   */
   public getOne = async (
     req: Request,
     res: Response,
@@ -76,21 +108,32 @@ export default class TxController extends BaseController<TxService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a criação de uma transação
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof TxController
+   */
   public create = async (
     req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<void> => {
     try {
-
       const { value } = req.body;
 
-      const normalizedValue = GeneralValidator.validateAndNormalizeMoneyString(value || "");
+      const normalizedValue = GeneralValidator.validateAndNormalizeMoneyString(
+        value || "",
+      );
       if (!normalizedValue) {
         throw new ApiError(401, "Informar um valor Pt-Br válido");
       }
-      const validatedData: CreateTx = createTxSchema.parse({ ...req.body, value: normalizedValue });
+      const validatedData: CreateTx = createTxSchema.parse({
+        ...req.body,
+        value: normalizedValue,
+      });
       const item: Tx = await this.service.create(validatedData);
       res.status(201).json(item);
       return;
@@ -100,6 +143,14 @@ export default class TxController extends BaseController<TxService> {
     }
   };
 
+  /**
+   * Gerencia a atualização de uma transação
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof TxController
+   */
   public update = async (
     req: Request,
     res: Response,
@@ -110,7 +161,8 @@ export default class TxController extends BaseController<TxService> {
       const { value } = req.body;
 
       if (value) {
-        const normalizedValue = GeneralValidator.validateAndNormalizeMoneyString(value);
+        const normalizedValue =
+          GeneralValidator.validateAndNormalizeMoneyString(value);
         if (!normalizedValue) {
           throw new ApiError(401, "Informar um valor Pt-Br válido");
         }
@@ -132,7 +184,14 @@ export default class TxController extends BaseController<TxService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a criação de uma transação
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof TxController
+   */
   public delete = async (
     req: Request,
     res: Response,
@@ -152,12 +211,31 @@ export default class TxController extends BaseController<TxService> {
       return;
     }
   };
+
+  /**
+   * Gerencia a requição de uma busca profunda
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof TxController
+   */
   public query = async (
     req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<void> => {
     try {
+      const { value } = req.body;
+
+      if (value) {
+        const normalizedValue =
+          GeneralValidator.validateAndNormalizeMoneyString(value);
+        if (!normalizedValue) {
+          throw new ApiError(401, "Informar um valor Pt-Br válido");
+        }
+        req.body.value = normalizedValue;
+      }
       const validatedData: QueryTx = queryTxSchema.parse(req.body);
       const item: Tx[] = await this.service.query(validatedData);
       res.status(201).json(item);

@@ -118,7 +118,9 @@ export class TcfService extends BaseService<
       const where: FindOptionsWhere<Tcf> = {};
 
       if (data.id) {
-        where.id = Raw((alias) => `CAST(${alias} AS TEXT) ILIKE :id`, { id: `%${data.id}%` });
+        where.id = Raw((alias) => `CAST(${alias} AS TEXT) ILIKE :id`, {
+          id: `%${data.id}%`,
+        });
       }
 
       if (data.name) {

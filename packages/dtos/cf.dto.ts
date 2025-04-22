@@ -1,3 +1,7 @@
+/*
+Dtos para o trânsito de dados de Contas financeiras
+*/
+
 import { TcfProps } from "./tcf.dto";
 
 export interface CreateCf {

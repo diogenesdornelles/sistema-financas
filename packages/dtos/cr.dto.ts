@@ -1,3 +1,7 @@
+/*
+Dtos para o trânsito de dados de Contas a receber
+*/
+
 import { PartnerProps } from "./partner.dto";
 import { TcrProps } from "./tcr.dto";
 import { PaymentStatus } from "./utils/enums";

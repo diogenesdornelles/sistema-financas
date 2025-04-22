@@ -12,7 +12,7 @@ import appRoutes from "./app-routes";
 import App from "./app";
 
 /**
- * Receives route settings and makes the app listen, by default https.
+ * Recebe e rotas e faz com que o app escute, por default na porta 3000, http
  *
  * @export
  * @class Server

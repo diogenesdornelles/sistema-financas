@@ -1,3 +1,7 @@
+/*
+Dtos para o trânsito de dados de tipo de usuários
+*/
+
 export interface CreateUser {
   // required em create
   name: string;

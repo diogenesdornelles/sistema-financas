@@ -13,7 +13,7 @@ import UserRouter from "./route/user.route";
 import { BaseRouterType } from "./types/base-router.type";
 import { RouteConfigType } from "./types/route-config.type";
 
-// Registers routes and paths
+// Registra routers e suas respectivas rotas raízes
 const appRoutes: RouteConfigType[] = [
   {
     baseRouter: new UserRouter(),

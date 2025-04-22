@@ -3,10 +3,19 @@ import GeneralMiddleware from "../middleware/general.middleware";
 import { BaseRouter } from "./base.route";
 
 export default class TcfRouter extends BaseRouter<TcfController> {
+  /**
+   * Creates an instance of TcfRouter.
+   * @memberof TcfRouter
+   */
   constructor() {
     super(new TcfController());
   }
-
+  /**
+   * Inicializa as rotas do router
+   *
+   * @protected
+   * @memberof CatRouter
+   */
   protected initRoutes(): void {
     this.router.get(
       "/",

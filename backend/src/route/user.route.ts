@@ -3,10 +3,19 @@ import GeneralMiddleware from "../middleware/general.middleware";
 import { BaseRouter } from "./base.route";
 
 export default class UserRouter extends BaseRouter<UserController> {
+  /**
+   * Creates an instance of UserRouter.
+   * @memberof UserRouter
+   */
   constructor() {
     super(new UserController());
   }
-
+  /**
+   * Inicializa as rotas do router
+   *
+   * @protected
+   * @memberof CatRouter
+   */
   protected initRoutes(): void {
     this.router.get(
       "/",

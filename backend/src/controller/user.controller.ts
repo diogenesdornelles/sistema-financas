@@ -11,11 +11,25 @@ import { updateUserSchema } from "../../../packages/validators/zod-schemas/updat
 import { queryUserSchema } from "../../../packages/validators/zod-schemas/query/query-user.validator";
 import { User } from "../entity/entities";
 
+/**
+ * Controla o fluxo de requisições e respostas de Usuários
+ *
+ * @export
+ * @class UserController
+ * @extends {BaseController<UserService>}
+ */
 export default class UserController extends BaseController<UserService> {
   constructor() {
     super(new UserService());
   }
-
+  /**
+   * Gerencia a devolução de todos os usuários
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof UserController
+   */
   public getAll = async (
     req: Request,
     res: Response,
@@ -30,7 +44,14 @@ export default class UserController extends BaseController<UserService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a devolução de todos os usuários
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof UserController
+   */
   public getMany = async (
     req: Request,
     res: Response,
@@ -58,7 +79,14 @@ export default class UserController extends BaseController<UserService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a devolução de todos os usuários
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof UserController
+   */
   public getOne = async (
     req: Request,
     res: Response,
@@ -78,7 +106,14 @@ export default class UserController extends BaseController<UserService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a criação de um usuário
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof UserController
+   */
   public create = async (
     req: Request,
     res: Response,
@@ -94,7 +129,14 @@ export default class UserController extends BaseController<UserService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a criação de um usuário
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof UserController
+   */
   public update = async (
     req: Request,
     res: Response,
@@ -118,7 +160,14 @@ export default class UserController extends BaseController<UserService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a criação de um usuário
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof UserController
+   */
   public delete = async (
     req: Request,
     res: Response,
@@ -138,6 +187,15 @@ export default class UserController extends BaseController<UserService> {
       return;
     }
   };
+
+  /**
+   * Gerencia a requição de uma busca profunda
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof UserController
+   */
   public query = async (
     req: Request,
     res: Response,

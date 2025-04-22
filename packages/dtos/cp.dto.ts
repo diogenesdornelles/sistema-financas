@@ -1,3 +1,6 @@
+/*
+Dtos para o trânsito de dados de Contas a pagar
+*/
 
 import { PartnerProps } from "./partner.dto";
 import { TcpProps } from "./tcp.dto";

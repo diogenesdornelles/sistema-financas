@@ -1,3 +1,7 @@
+/*
+Esquema de validação de crição para um parceiro
+*/
+
 import { z } from "zod";
 
 import GeneralValidator from "../../general.validator";

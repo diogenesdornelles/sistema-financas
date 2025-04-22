@@ -1,12 +1,15 @@
 import { BaseService } from "./base.service";
 import { Cat, User } from "../entity/entities";
-import {
-  CreateCat,
-  UpdateCat,
-  QueryCat,
-} from "../../../packages/dtos/cat.dto";
+import { CreateCat, UpdateCat, QueryCat } from "../../../packages/dtos/cat.dto";
 import { FindOptionsWhere, ILike, MoreThanOrEqual, Raw } from "typeorm";
 
+/**
+ *
+ *
+ * @export
+ * @class CatService
+ * @extends {BaseService<Cat, Cat, CreateCat, UpdateCat, QueryCat>}
+ */
 export class CatService extends BaseService<
   Cat,
   Cat,
@@ -19,7 +22,7 @@ export class CatService extends BaseService<
   }
 
   /**
-   * Recupera todos.
+   * Recupera todos os ativos.
    */
   public getAll = async (): Promise<Cat[]> => {
     try {
@@ -32,7 +35,12 @@ export class CatService extends BaseService<
       throw new Error(`Erro ao recuperar categorias: ${error}`);
     }
   };
-
+  /**
+   * Recupera 10 ativos com paginação.
+   *
+   * @param {number} [skip=0]
+   * @memberof CatService
+   */
   public getMany = async (skip = 0): Promise<Cat[]> => {
     try {
       const cats = await this.repository.find({
@@ -73,7 +81,7 @@ export class CatService extends BaseService<
     try {
       const cat = this.repository.create({
         ...data,
-        user: { id: data.user } as User, 
+        user: { id: data.user } as User,
       });
       return await this.repository.save(cat);
     } catch (error) {
@@ -125,13 +133,17 @@ export class CatService extends BaseService<
    */
   public query = async (data: QueryCat): Promise<Cat[]> => {
     try {
-      
+      // Inicia o query builder
       const where: FindOptionsWhere<Cat> = {};
 
+      // id é UUID type, precisa converter para string para admitir consulta parcial
       if (data.id) {
-        where.id = Raw((alias) => `CAST(${alias} AS TEXT) ILIKE :id`, { id: `%${data.id}%` });
+        where.id = Raw((alias) => `CAST(${alias} AS TEXT) ILIKE :id`, {
+          id: `%${data.id}%`,
+        });
       }
 
+      // As buscas são parciais e case insensitive
       if (data.name) {
         where.name = ILike(`%${data.name}%`);
       }
@@ -148,6 +160,7 @@ export class CatService extends BaseService<
         where.status = data.status;
       }
 
+      // Retorna apenas os registros que foram criados ou atualizados a partir da data informada
       if (data.updatedAt) {
         const updatedDate = new Date(data.updatedAt);
         where.updatedAt = MoreThanOrEqual(updatedDate);

@@ -1,14 +1,17 @@
 import { Between, QueryRunner, Repository } from "typeorm";
 import { AppDataSource } from "../config/db";
-import { DbBalanceProps, ResultSet, DbCpsCrsProps } from "../../../packages/dtos/db.dto";
+import {
+  DbBalanceProps,
+  ResultSet,
+  DbCpsCrsProps,
+} from "../../../packages/dtos/db.dto";
 import { Cp, Cr } from "../entity/entities";
 import { ApiError } from "../utils/api-error.util";
 
-
 export class DbService {
-  public queryRunner: QueryRunner
-  public crRepo: Repository<Cr>
-  public cpRepo: Repository<Cp>
+  public queryRunner: QueryRunner;
+  public crRepo: Repository<Cr>;
+  public cpRepo: Repository<Cp>;
 
   constructor() {
     this.queryRunner = AppDataSource.createQueryRunner();
@@ -28,10 +31,9 @@ export class DbService {
    * @param date - Data limite. Desconsidera transações do dia atual.
    */
   public getBalances = async (date: string): Promise<DbBalanceProps | null> => {
-
     try {
       const result: ResultSet[] = await this.queryRunner.manager.query(
-         `SELECT DISTINCT
+        `SELECT DISTINCT
             ttx."cfId" AS "cfId",
             tcf."number" AS "cfNumber",
             tcf."firstBalance" AS "firstBalance",
@@ -42,49 +44,63 @@ export class DbService {
           INNER JOIN cf tcf ON tcf."id" = ttx."cfId"
           WHERE ttx."tdate" <= $1 AND ttx."status" = true
           GROUP BY ttx."cfId", tcf."number", tcf."firstBalance", tcf."currentBalance";`,
-        [date]
+        [date],
       );
 
       if (result) {
         return {
           result,
-          date
-        }
+          date,
+        };
       }
-      return null
+      return null;
     } catch (error) {
       throw new Error(`Erro ao recuperar balanços com data ${date}: ${error}`);
     }
   };
-    /**
+  /**
    * Recupera CR e CP dentro de um intervalo.
    *
    * @param date - Data limite. Desconsidera transações do dia atual.
    */
-   public getCpsCrs = async (date: string = new Date().toISOString()): Promise<DbCpsCrsProps | null> => {
-
-
-    const currentDate = new Date()
+  public getCpsCrs = async (
+    date: string = new Date().toISOString(),
+  ): Promise<DbCpsCrsProps | null> => {
+    const currentDate = new Date();
     const targetDate = new Date(date);
 
     if (currentDate > targetDate) {
-      throw new ApiError(401, 'Data deve ser maior ou igual que a atual')
+      throw new ApiError(401, "Data deve ser maior ou igual que a atual");
     }
 
-
     const cps = await this.cpRepo.find({
-      where: {due: Between(currentDate, targetDate)},
-      select: { id: true,  value: true, due: true, status: true, createdAt: false, updatedAt: false, obs: false},
-      relations: {type: true, supplier: true},
+      where: { due: Between(currentDate, targetDate) },
+      select: {
+        id: true,
+        value: true,
+        due: true,
+        status: true,
+        createdAt: false,
+        updatedAt: false,
+        obs: false,
+      },
+      relations: { type: true, supplier: true },
     });
 
     const crs = await this.crRepo.find({
-      where: {due: Between(currentDate, targetDate)},
-      select: { id: true,  value: true, due: true, status: true, createdAt: false, updatedAt: false, obs: false},
-      relations: {type: true, customer: true},
+      where: { due: Between(currentDate, targetDate) },
+      select: {
+        id: true,
+        value: true,
+        due: true,
+        status: true,
+        createdAt: false,
+        updatedAt: false,
+        obs: false,
+      },
+      relations: { type: true, customer: true },
     });
 
-    return { cps, crs } as unknown as  DbCpsCrsProps
-   }
-      
+    return { cps, crs } as unknown as DbCpsCrsProps;
+  };
 }

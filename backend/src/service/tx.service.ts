@@ -1,10 +1,27 @@
 import { BaseService } from "./base.service";
 import { Cat, Cf, Cp, Cr, Tx, User } from "../entity/entities";
 import { CreateTx, QueryTx, UpdateTx } from "../../../packages/dtos/tx.dto";
-import { FindOptionsWhere, ILike, MoreThanOrEqual, Raw, Repository } from "typeorm";
-import { PaymentStatus, TransactionSearchType, TransactionType } from "../../../packages/dtos/utils/enums";
+import {
+  FindOptionsWhere,
+  ILike,
+  MoreThanOrEqual,
+  Raw,
+  Repository,
+} from "typeorm";
+import {
+  PaymentStatus,
+  TransactionSearchType,
+  TransactionType,
+} from "../../../packages/dtos/utils/enums";
 import { AppDataSource } from "../config/db";
 
+/**
+ * Serviço para gerenciar transações financeiras.
+ *
+ * @export
+ * @class TxService
+ * @extends {BaseService<Tx, Tx, CreateTx, UpdateTx, QueryTx>}
+ */
 export class TxService extends BaseService<
   Tx,
   Tx,
@@ -12,12 +29,18 @@ export class TxService extends BaseService<
   UpdateTx,
   QueryTx
 > {
-  private cpRepo: Repository<Cp>
-  private crRepo: Repository<Cr>
-  private cfRepo: Repository<Cf>
+  private cpRepo: Repository<Cp>;
+  private crRepo: Repository<Cr>;
+  private cfRepo: Repository<Cf>;
+
+  /**
+   * Creates an instance of TxService.
+   * @memberof TxService
+   */
   constructor() {
     super(Tx);
-    this.relations = {category: true, cf: true, cr: true, cp: true};
+    // Vai retornar os registros filhos...
+    this.relations = { category: true, cf: true, cr: true, cp: true };
     this.cpRepo = AppDataSource.getRepository(Cp);
     this.crRepo = AppDataSource.getRepository(Cr);
     this.cfRepo = AppDataSource.getRepository(Cf);
@@ -76,12 +99,11 @@ export class TxService extends BaseService<
    */
   public create = async (data: CreateTx): Promise<Tx> => {
     try {
-
       // insere o tipo de transação, de acordo com a presença de CR ou CP
       const updatedData = {
         ...data,
-        type: data.cr ? TransactionType.ENTRY : TransactionType.OUTFLOW
-      }
+        type: data.cr ? TransactionType.ENTRY : TransactionType.OUTFLOW,
+      };
 
       const newTx = this.repository.create({
         ...updatedData,
@@ -97,26 +119,24 @@ export class TxService extends BaseService<
 
       // atualiza CP para pago e decrementa saldo em Cf
       if (updatedData.cp) {
-        await this.cpRepo.update(
-          updatedData.cp,
-          { status: PaymentStatus.PAID },
-        );
+        await this.cpRepo.update(updatedData.cp, {
+          status: PaymentStatus.PAID,
+        });
         await this.cfRepo.decrement(
           { id: updatedData.cf },
           "currentBalance",
-          updatedData.value
+          updatedData.value,
         );
       }
       // atualiza CR para pago e incrementa saldo em Cf
       if (updatedData.cr) {
-        await this.crRepo.update(
-          updatedData.cr,
-          { status: PaymentStatus.PAID },
-        );
+        await this.crRepo.update(updatedData.cr, {
+          status: PaymentStatus.PAID,
+        });
         await this.cfRepo.increment(
           { id: updatedData.cf },
           "currentBalance",
-          updatedData.value
+          updatedData.value,
         );
       }
 
@@ -128,7 +148,16 @@ export class TxService extends BaseService<
       throw new Error(`Erro ao criar transação: ${error}`);
     }
   };
-
+  /**
+   * Atualiza o status de pagamento de CP e CR.
+   *
+   * @private
+   * @param {(string | undefined)} oldId
+   * @param {(string | undefined)} newId
+   * @param {(Repository<Cr> | Repository<Cp>)} repo
+   * @return {*}  {Promise<void>}
+   * @memberof TxService
+   */
   private async updatePaymentStatus(
     oldId: string | undefined,
     newId: string | undefined,
@@ -144,6 +173,14 @@ export class TxService extends BaseService<
     }
   }
 
+  /**
+   * Atualiza o saldo atual de uma conta financeira.
+   *
+   * @param oldCfId - ID do CF antigo.
+   * @param newCfId - ID do CF novo.
+   * @param value - Valor a ser atualizado.
+   * @param repo - Repositório da conta financeira.
+   */
   private async updateCurrentBalance(
     oldCfId: string | undefined,
     newCfId: string | undefined,
@@ -160,7 +197,6 @@ export class TxService extends BaseService<
     }
   }
 
-
   /**
    * Atualiza uma transação existente.
    *
@@ -172,7 +208,6 @@ export class TxService extends BaseService<
     data: UpdateTx,
   ): Promise<Partial<Tx> | null> => {
     try {
-
       const dbData = await this.repository.findOneBy({ id });
       if (!dbData) {
         throw new Error(`Transação com ID ${id} não encontrada.`);
@@ -192,8 +227,16 @@ export class TxService extends BaseService<
       await this.repository.update({ id }, updateData);
 
       // Atualiza status de CP e CR
-      await this.updatePaymentStatus(dbData.cp?.id, updateData.cp?.id, this.cpRepo);
-      await this.updatePaymentStatus(dbData.cr?.id, updateData.cr?.id, this.crRepo);
+      await this.updatePaymentStatus(
+        dbData.cp?.id,
+        updateData.cp?.id,
+        this.cpRepo,
+      );
+      await this.updatePaymentStatus(
+        dbData.cr?.id,
+        updateData.cr?.id,
+        this.crRepo,
+      );
 
       // Atualiza o saldo de CF
       if (updateData.value) {
@@ -210,7 +253,9 @@ export class TxService extends BaseService<
         relations: this.relations,
       });
     } catch (error) {
-      throw new Error(`Erro ao atualizar transação com ID ${id}: ${String(error)}`);
+      throw new Error(
+        `Erro ao atualizar transação com ID ${id}: ${String(error)}`,
+      );
     }
   };
 
@@ -232,16 +277,22 @@ export class TxService extends BaseService<
 
       // Atualiza os estados de CP e CR, se existirem
       if (transaction.cp) {
-        await this.cpRepo.update(transaction.cp.id, { status: PaymentStatus.PENDING });
+        await this.cpRepo.update(transaction.cp.id, {
+          status: PaymentStatus.PENDING,
+        });
       }
       if (transaction.cr) {
-        await this.crRepo.update(transaction.cr.id, { status: PaymentStatus.PENDING });
+        await this.crRepo.update(transaction.cr.id, {
+          status: PaymentStatus.PENDING,
+        });
       }
 
       // Retorna true se a exclusão lógica foi bem-sucedida
       return true;
     } catch (error) {
-      throw new Error(`Erro ao remover transação com ID ${id}: ${String(error)}`);
+      throw new Error(
+        `Erro ao remover transação com ID ${id}: ${String(error)}`,
+      );
     }
   };
   /**
@@ -254,7 +305,9 @@ export class TxService extends BaseService<
       const where: FindOptionsWhere<Tx> = {};
 
       if (data.id) {
-        where.id = Raw((alias) => `CAST(${alias} AS TEXT) ILIKE :id`, { id: `%${data.id}%` });
+        where.id = Raw((alias) => `CAST(${alias} AS TEXT) ILIKE :id`, {
+          id: `%${data.id}%`,
+        });
       }
 
       if (data.value) {
@@ -272,19 +325,25 @@ export class TxService extends BaseService<
 
       if (data.cf) {
         where.cf = {
-          id: Raw((alias) => `CAST(${alias} AS TEXT) ILIKE :cfId`, { cfId: `%${data.cf}%` }),
+          id: Raw((alias) => `CAST(${alias} AS TEXT) ILIKE :cfId`, {
+            cfId: `%${data.cf}%`,
+          }),
         };
       }
 
       if (data.cp) {
         where.cp = {
-          id: Raw((alias) => `CAST(${alias} AS TEXT) ILIKE :cpId`, { cpId: `%${data.cp}%` }),
+          id: Raw((alias) => `CAST(${alias} AS TEXT) ILIKE :cpId`, {
+            cpId: `%${data.cp}%`,
+          }),
         };
       }
 
       if (data.cr) {
         where.cr = {
-          id: Raw((alias) => `CAST(${alias} AS TEXT) ILIKE :crId`, { crId: `%${data.cr}%` }),
+          id: Raw((alias) => `CAST(${alias} AS TEXT) ILIKE :crId`, {
+            crId: `%${data.cr}%`,
+          }),
         };
       }
 

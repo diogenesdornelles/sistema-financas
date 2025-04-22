@@ -70,7 +70,6 @@ export default class GeneralMiddleware {
     );
   };
 
-
   public static validateDateUntilPresent = (
     req: Request,
     res: Response,

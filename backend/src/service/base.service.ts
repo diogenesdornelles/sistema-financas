@@ -21,7 +21,7 @@ export abstract class BaseService<
 
   constructor(entity: EntityTarget<T>) {
     this.repository = AppDataSource.getRepository(entity);
-    this.relations = {}
+    this.relations = {};
   }
 
   /**

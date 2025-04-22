@@ -4,17 +4,35 @@ import { BaseController } from "./base.controller";
 import { UpdateCf, CreateCf, QueryCf } from "../../../packages/dtos/cf.dto";
 import { createCfSchema } from "../../../packages/validators/zod-schemas/create/create-cf.validator";
 import { updateCfSchema } from "../../../packages/validators/zod-schemas/update/update-cf.validator";
-import { QueryCat } from "../../../packages/dtos/cat.dto";
 import { queryCfSchema } from "../../../packages/validators/zod-schemas/query/query-cf.validator";
 import { Cf } from "../entity/entities";
 import GeneralValidator from "../../../packages/validators/general.validator";
 import { ApiError } from "../utils/api-error.util";
 
+/**
+ * Controla o fluxo de requisições e respostas de Contas financeiras
+ *
+ * @export
+ * @class CfController
+ * @extends {BaseController<CfService>}
+ */
 export default class CfController extends BaseController<CfService> {
+  /**
+   * Creates an instance of CfController.
+   * @memberof CfController
+   */
   constructor() {
     super(new CfService());
   }
 
+  /**
+   * Gerencia a devolução de todas as contas financeiras
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof CfController
+   */
   public getAll = async (
     req: Request,
     res: Response,
@@ -30,6 +48,14 @@ export default class CfController extends BaseController<CfService> {
     }
   };
 
+  /**
+   * Gerencia a devolução algumas contas financeiras, de acordo com um skip
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof CfController
+   */
   public getMany = async (
     req: Request,
     res: Response,
@@ -58,6 +84,14 @@ export default class CfController extends BaseController<CfService> {
     }
   };
 
+  /**
+   * Gerencia a obtenção de uma conta financeira pelo ID
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof CfController
+   */
   public getOne = async (
     req: Request,
     res: Response,
@@ -78,6 +112,14 @@ export default class CfController extends BaseController<CfService> {
     }
   };
 
+  /**
+   * Gerencia a criação de uma conta, de acordo com o body
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof CfController
+   */
   public create = async (
     req: Request,
     res: Response,
@@ -86,11 +128,14 @@ export default class CfController extends BaseController<CfService> {
     try {
       const { balance } = req.body;
 
-      const normalizedBalance = GeneralValidator.validateAndNormalizeMoneyString(balance || "0.0");
+      // Balance chega geralemnte como uma string monetária. Deve haver a normalização para uma string float.
+      const normalizedBalance =
+        GeneralValidator.validateAndNormalizeMoneyString(balance || "0.0");
       if (!normalizedBalance) {
         throw new ApiError(401, "Informar um valor Pt-Br válido");
       }
 
+      // validação
       const validatedData: CreateCf = createCfSchema.parse({
         ...req.body,
         balance: normalizedBalance,
@@ -98,13 +143,21 @@ export default class CfController extends BaseController<CfService> {
 
       const cf = await this.service.create(validatedData);
       res.status(201).json(cf);
-      return 
+      return;
     } catch (error) {
-      res.status(400).json({ error: error});
-      return 
+      res.status(400).json({ error: error });
+      return;
     }
   };
 
+  /**
+   * Gerencia a atualização de uma conta, de acordo com o id e o body
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof CfController
+   */
   public update = async (
     req: Request,
     res: Response,
@@ -114,8 +167,10 @@ export default class CfController extends BaseController<CfService> {
       const { id } = req.params;
       const { balance } = req.body;
 
+      // Balance chega geralemnte como uma string monetária. Deve haver a normalização para uma string float.
       if (balance) {
-        const normalizedBalance = GeneralValidator.validateAndNormalizeMoneyString(balance);
+        const normalizedBalance =
+          GeneralValidator.validateAndNormalizeMoneyString(balance);
         if (!normalizedBalance) {
           throw new ApiError(401, "Informar um valor Pt-Br válido");
         }
@@ -123,16 +178,24 @@ export default class CfController extends BaseController<CfService> {
       }
 
       const validatedData: UpdateCf = updateCfSchema.parse(req.body);
-      
+
       const updatedCf = await this.service.update(id, validatedData);
       res.status(200).json(updatedCf);
-      return 
+      return;
     } catch (error) {
       res.status(400).json({ error: error });
-      return 
+      return;
     }
   };
 
+  /**
+   * Gerencia a deleção de uma conta pelo ID
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof CfController
+   */
   public delete = async (
     req: Request,
     res: Response,
@@ -152,12 +215,32 @@ export default class CfController extends BaseController<CfService> {
       return;
     }
   };
+
+  /**
+   * Gerencia a requição de uma busca profunda
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof CfController
+   */
   public query = async (
     req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<void> => {
     try {
+      const { balance } = req.body;
+
+      // Balance chega geralemnte como uma string monetária. Deve haver a normalização para uma string float.
+      if (balance) {
+        const normalizedBalance =
+          GeneralValidator.validateAndNormalizeMoneyString(balance);
+        if (!normalizedBalance) {
+          throw new ApiError(401, "Informar um valor Pt-Br válido");
+        }
+        req.body.balance = normalizedBalance;
+      }
       const validatedData: QueryCf = queryCfSchema.parse(req.body);
       const item: Cf[] = await this.service.query(validatedData);
       res.status(201).json(item);

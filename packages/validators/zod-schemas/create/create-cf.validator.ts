@@ -1,3 +1,9 @@
+/*
+Esquema de validação de crição para uma conta financeira
+*/
+
+
+
 import { z } from "zod";
 
 export const createCfSchema = z

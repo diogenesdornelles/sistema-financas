@@ -7,11 +7,29 @@ import { updateTcrSchema } from "../../../packages/validators/zod-schemas/update
 import { queryTcrSchema } from "../../../packages/validators/zod-schemas/query/query-tcr.validator";
 import { Tcr } from "../entity/entities";
 
+/**
+ * Controla o fluxo de requisições e respostas de Tipo de contas
+ *
+ * @export
+ * @class TcrController
+ * @extends {BaseController<TcrService>}
+ */
 export default class TcrController extends BaseController<TcrService> {
+  /**
+   * Creates an instance of TcrController.
+   * @memberof TcrController
+   */
   constructor() {
     super(new TcrService());
   }
-
+  /**
+   * Controla o fluxo de requisições e respostas de Tipo de contas
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof TcrController
+   */
   public getAll = async (
     req: Request,
     res: Response,
@@ -26,7 +44,14 @@ export default class TcrController extends BaseController<TcrService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a devolução de todos os tipos de contas
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof TcrController
+   */
   public getMany = async (
     req: Request,
     res: Response,
@@ -55,6 +80,14 @@ export default class TcrController extends BaseController<TcrService> {
     }
   };
 
+  /**
+   * Gerencia a devolução de um tipo de conta
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof TcrController
+   */
   public getOne = async (
     req: Request,
     res: Response,
@@ -74,7 +107,14 @@ export default class TcrController extends BaseController<TcrService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a criação de um tipo de conta
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof TcrController
+   */
   public create = async (
     req: Request,
     res: Response,
@@ -90,7 +130,14 @@ export default class TcrController extends BaseController<TcrService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a criação de um tipo de conta
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof TcrController
+   */
   public update = async (
     req: Request,
     res: Response,
@@ -114,7 +161,14 @@ export default class TcrController extends BaseController<TcrService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a criação de um tipo de conta
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof TcrController
+   */
   public delete = async (
     req: Request,
     res: Response,
@@ -134,6 +188,15 @@ export default class TcrController extends BaseController<TcrService> {
       return;
     }
   };
+
+  /**
+   * Gerencia a devolução de todos os tipos de contas
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof TcrController
+   */
   public query = async (
     req: Request,
     res: Response,

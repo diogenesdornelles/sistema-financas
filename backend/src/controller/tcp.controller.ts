@@ -7,11 +7,30 @@ import { updateTcpSchema } from "../../../packages/validators/zod-schemas/update
 import { queryTcpSchema } from "../../../packages/validators/zod-schemas/query/query-tcp.validator";
 import { Tcp } from "../entity/entities";
 
+/**
+ * Controla o fluxo de requisições e respostas de Tipo de contas
+ *
+ * @export
+ * @class TcpController
+ * @extends {BaseController<TcpService>}
+ */
 export default class TcpController extends BaseController<TcpService> {
+  /**
+   * Creates an instance of TcpController.
+   * @memberof TcpController
+   */
   constructor() {
     super(new TcpService());
   }
 
+  /**
+   * Gerencia a devolução de todos os tipos de contas
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof TcpController
+   */
   public getAll = async (
     req: Request,
     res: Response,
@@ -26,7 +45,14 @@ export default class TcpController extends BaseController<TcpService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a devolução de todos os tipos de contas
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof TcpController
+   */
   public getMany = async (
     req: Request,
     res: Response,
@@ -54,7 +80,14 @@ export default class TcpController extends BaseController<TcpService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a devolução de um tipo de conta
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof TcpController
+   */
   public getOne = async (
     req: Request,
     res: Response,
@@ -74,7 +107,14 @@ export default class TcpController extends BaseController<TcpService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a devolução de um tipo de conta
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof TcpController
+   */
   public create = async (
     req: Request,
     res: Response,
@@ -90,7 +130,14 @@ export default class TcpController extends BaseController<TcpService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a criação de um tipo de conta
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof TcpController
+   */
   public update = async (
     req: Request,
     res: Response,
@@ -114,7 +161,14 @@ export default class TcpController extends BaseController<TcpService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a criação de um tipo de conta
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof TcpController
+   */
   public delete = async (
     req: Request,
     res: Response,
@@ -134,6 +188,15 @@ export default class TcpController extends BaseController<TcpService> {
       return;
     }
   };
+
+  /**
+   * Gerencia a requição de uma busca profunda
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof TcpController
+   */
   public query = async (
     req: Request,
     res: Response,

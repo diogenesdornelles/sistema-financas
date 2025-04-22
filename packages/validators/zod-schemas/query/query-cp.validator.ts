@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { PaymentStatus } from "../../../dtos/utils/enums";
-import GeneralValidator from "../../general.validator";
 
 
 export const queryCpSchema = z.object({

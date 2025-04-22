@@ -3,10 +3,19 @@ import GeneralMiddleware from "../middleware/general.middleware";
 import { BaseRouter } from "./base.route";
 
 export default class TxRouter extends BaseRouter<TxController> {
+  /**
+   * Creates an instance of TxRouter.
+   * @memberof TxRouter
+   */
   constructor() {
     super(new TxController());
   }
-
+  /**
+   * Inicializa as rotas do router
+   *
+   * @protected
+   * @memberof CatRouter
+   */
   protected initRoutes(): void {
     this.router.get(
       "/",

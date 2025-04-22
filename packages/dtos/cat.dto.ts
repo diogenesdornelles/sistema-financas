@@ -1,3 +1,7 @@
+/*
+Dtos para o trânsito de dados de Categorias
+*/
+
 export interface CreateCat {
   name: string;
   description?: string;

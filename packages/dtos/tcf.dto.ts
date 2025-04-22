@@ -1,3 +1,7 @@
+/*
+Dtos para o trânsito de dados de tipo de conta financeira
+*/
+
 export interface CreateTcf {
   // required na criação
   name: string;

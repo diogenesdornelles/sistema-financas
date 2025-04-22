@@ -1,3 +1,7 @@
+/*
+Dtos para o trânsito de dados de tipo de conta a receber
+*/
+
 export interface CreateTcr {
   name: string;
 }

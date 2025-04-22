@@ -1,3 +1,7 @@
+/*
+Dtos para o trânsito de dados de dashboard
+*/
+
 import { PartnerProps } from "./partner.dto";
 import { TcpProps } from "./tcp.dto";
 import { TcrProps } from "./tcr.dto";

@@ -7,11 +7,25 @@ import { updateTcfSchema } from "../../../packages/validators/zod-schemas/update
 import { queryTcfSchema } from "../../../packages/validators/zod-schemas/query/query-tcf.validator";
 import { Tcf } from "../entity/entities";
 
+/**
+ * Controla o fluxo de requisições e respostas de Tipo de contas
+ *
+ * @export
+ * @class TcfController
+ * @extends {BaseController<TcfService>}
+ */
 export default class TcfController extends BaseController<TcfService> {
   constructor() {
     super(new TcfService());
   }
-
+  /**
+   * Gerencia a devolução de todos os tipos de contas
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof TcfController
+   */
   public getAll = async (
     req: Request,
     res: Response,
@@ -26,7 +40,14 @@ export default class TcfController extends BaseController<TcfService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a devolução de todos os tipos de contas
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof TcfController
+   */
   public getMany = async (
     req: Request,
     res: Response,
@@ -54,7 +75,14 @@ export default class TcfController extends BaseController<TcfService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a devolução de todos os tipos de contas
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof TcfController
+   */
   public getOne = async (
     req: Request,
     res: Response,
@@ -74,7 +102,14 @@ export default class TcfController extends BaseController<TcfService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a devolução de todos os tipos de contas
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof TcfController
+   */
   public create = async (
     req: Request,
     res: Response,
@@ -90,7 +125,14 @@ export default class TcfController extends BaseController<TcfService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a devolução de todos os tipos de contas
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof TcfController
+   */
   public update = async (
     req: Request,
     res: Response,
@@ -114,7 +156,14 @@ export default class TcfController extends BaseController<TcfService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a devolução de todos os tipos de contas
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof TcfController
+   */
   public delete = async (
     req: Request,
     res: Response,
@@ -134,6 +183,15 @@ export default class TcfController extends BaseController<TcfService> {
       return;
     }
   };
+
+  /**
+   * Gerencia a requição de uma busca profunda
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @return {*}  {Promise<void>}
+   */
   public query = async (
     req: Request,
     res: Response,

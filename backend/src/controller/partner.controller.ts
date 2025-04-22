@@ -11,11 +11,29 @@ import { updatePartnerSchema } from "../../../packages/validators/zod-schemas/up
 import { queryPartnerSchema } from "../../../packages/validators/zod-schemas/query/query-partner.validator";
 import { Partner } from "../entity/entities";
 
+/**
+ * Controla o fluxo de requisições e respostas de Parceiros
+ *
+ * @export
+ * @class PartnerController
+ * @extends {BaseController<PartnerService>}
+ */
 export default class PartnerController extends BaseController<PartnerService> {
+  /**
+   * Creates an instance of PartnerController.
+   * @memberof PartnerController
+   */
   constructor() {
     super(new PartnerService());
   }
-
+  /**
+   * Gerencia a devolução de todos os parceiros
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof PartnerController
+   */
   public getAll = async (
     req: Request,
     res: Response,
@@ -30,7 +48,14 @@ export default class PartnerController extends BaseController<PartnerService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a devolução alguns parceiros, de acordo com um skip
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @return {*}  {Promise<void>}
+   */
   public getMany = async (
     req: Request,
     res: Response,
@@ -58,7 +83,14 @@ export default class PartnerController extends BaseController<PartnerService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a devolução de um parceiro
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof PartnerController
+   */
   public getOne = async (
     req: Request,
     res: Response,
@@ -78,7 +110,14 @@ export default class PartnerController extends BaseController<PartnerService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a criação de um parceiro
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof PartnerController
+   */
   public create = async (
     req: Request,
     res: Response,
@@ -94,7 +133,14 @@ export default class PartnerController extends BaseController<PartnerService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a criação de um parceiro
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof PartnerController
+   */
   public update = async (
     req: Request,
     res: Response,
@@ -118,7 +164,14 @@ export default class PartnerController extends BaseController<PartnerService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a deleção de um parceiro
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof PartnerController
+   */
   public delete = async (
     req: Request,
     res: Response,
@@ -138,7 +191,14 @@ export default class PartnerController extends BaseController<PartnerService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a requição de uma busca profunda
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof PartnerController
+   */
   public query = async (
     req: Request,
     res: Response,

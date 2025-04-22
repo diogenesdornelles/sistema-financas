@@ -6,11 +6,25 @@ import { TokenProps, CreateToken } from "../../../packages/dtos/token.dto";
 import LoginService from "../service/login.service";
 import { createTokenSchema } from "../../../packages/validators/zod-schemas/create/create-token.validator";
 
+/**
+ * Controla o fluxo de requisições e respostas de Login
+ *
+ * @export
+ * @class LoginController
+ * @extends {BaseController<LoginService>}
+ */
 export default class LoginController extends BaseController<LoginService> {
   constructor() {
     super(new LoginService());
   }
-
+  /**
+   * Gerencia a criação de um token
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @memberof LoginController
+   */
   public create = async (
     req: Request,
     res: Response,
@@ -26,7 +40,15 @@ export default class LoginController extends BaseController<LoginService> {
       return;
     }
   };
-
+  /**
+   * Gerencia a devolução de todos os tokens
+   *
+   * @param {Request} req
+   * @param {Response} res
+   * @param {NextFunction} next
+   * @return {*}  {Promise<void>}
+   * @memberof LoginController
+   */
   public getAll(
     req: Request,
     res: Response,

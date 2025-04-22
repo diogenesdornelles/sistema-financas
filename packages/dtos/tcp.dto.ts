@@ -1,3 +1,6 @@
+/*
+Dtos para o trânsito de dados de tipo de conta a pagar
+*/
 export interface CreateTcp {
   name: string;
 }

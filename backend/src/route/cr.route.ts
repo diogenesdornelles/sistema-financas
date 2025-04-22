@@ -3,10 +3,19 @@ import GeneralMiddleware from "../middleware/general.middleware";
 import { BaseRouter } from "./base.route";
 
 export default class CrRouter extends BaseRouter<CrController> {
+  /**
+   * Creates an instance of CrRouter.
+   * @memberof CrRouter
+   */
   constructor() {
     super(new CrController());
   }
-
+  /**
+   * Inicializa as rotas do router
+   *
+   * @protected
+   * @memberof CatRouter
+   */
   protected initRoutes(): void {
     this.router.get(
       "/",

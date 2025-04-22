@@ -2,9 +2,23 @@ import { BaseService } from "./base.service";
 import { Cr, Partner, Tcr, Tx, User } from "../entity/entities";
 import { CreateCr, UpdateCr, QueryCr } from "../../../packages/dtos/cr.dto";
 import { PaymentStatus } from "../../../packages/dtos/utils/enums";
-import { FindOptionsWhere, ILike, MoreThanOrEqual, Not, Raw, Repository } from "typeorm";
+import {
+  FindOptionsWhere,
+  ILike,
+  MoreThanOrEqual,
+  Not,
+  Raw,
+  Repository,
+} from "typeorm";
 import { AppDataSource } from "../config/db";
 
+/**
+ * Recupera todas as contas.
+ *
+ * @export
+ * @class CrService
+ * @extends {BaseService<Cr, Cr, CreateCr, UpdateCr, QueryCr>}
+ */
 export class CrService extends BaseService<
   Cr,
   Cr,
@@ -12,10 +26,10 @@ export class CrService extends BaseService<
   UpdateCr,
   QueryCr
 > {
-  public txRepo: Repository<Tx>
+  public txRepo: Repository<Tx>;
   constructor() {
     super(Cr);
-    this.relations = {type: true, customer: true};
+    this.relations = { type: true, customer: true };
     this.txRepo = AppDataSource.getRepository(Tx);
   }
 
@@ -72,7 +86,6 @@ export class CrService extends BaseService<
    */
   public create = async (data: CreateCr): Promise<Cr> => {
     try {
-
       const newCr = this.repository.create({
         ...data,
         user: { id: data.user } as User,
@@ -103,7 +116,6 @@ export class CrService extends BaseService<
     data: UpdateCr,
   ): Promise<Partial<Cr> | null> => {
     try {
-
       const updateData: Partial<Cr> = {
         ...data,
         type: data.type ? ({ id: data.type } as Tcr) : undefined,
@@ -161,11 +173,12 @@ export class CrService extends BaseService<
    */
   public query = async (data: QueryCr): Promise<Cr[]> => {
     try {
-
       const where: FindOptionsWhere<Cr> = {};
 
       if (data.id) {
-        where.id = Raw((alias) => `CAST(${alias} AS TEXT) ILIKE :id`, { id: `%${data.id}%` });
+        where.id = Raw((alias) => `CAST(${alias} AS TEXT) ILIKE :id`, {
+          id: `%${data.id}%`,
+        });
       }
 
       if (data.value) {

@@ -1,4 +1,3 @@
-import { z } from "zod";
 import { createCatSchema } from "../create/create-cat.validator";
 import { statusBoolSchema } from "../../utils/status-bool-schema";
 

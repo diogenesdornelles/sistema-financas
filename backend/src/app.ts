@@ -28,61 +28,54 @@ const corsOptions: cors.CorsOptions = {
   credentials: true, // Enable credentials (cookies, authorization headers, etc.)
 };
 
-// Set server port and host using environment variables or default values.
+// Seta o endereço do servidor e a porta em que vai rodar a aplicação
 const PORT = process.env.APP_PORT || 3000;
 const HOST = process.env.HOST || "";
 
 /**
- * App class encapsulates the Express application.
- * It configures middlewares, routes, and provides a method to start the server.
+ * Classe App.
+ *
+ * Encapsula a aplicação Express, configurando middlewares, rotas e conexão com o banco de dados.
+ * Também fornece um método para iniciar o servidor.
  */
 class App {
-  // The Express application instance.
+  // Instância da aplicação Express.
   public app: Express;
-  // Array of route configurations.
+  // Configurações de rotas.
   public routesConfig: RouteConfigType[];
-
-  public appDataSource: DataSource | null
+  // Conexão com o banco de dados.
+  public appDataSource: DataSource | null;
 
   /**
-   * Creates an instance of App.
-   * @param {RouteConfigType[]} routes - Array of route configurations.
+   * Cria uma instância da classe App.
+   * @param {RouteConfigType[]} routes - Configurações de rotas.
    */
   constructor(routes: RouteConfigType[]) {
     this.app = express();
     this.routesConfig = routes;
-    this.appDataSource = null
+    this.appDataSource = null;
     this.initializeMiddlewares();
     this.initializeRoutes();
   }
 
   /**
-   * Initializes all middlewares used by the application.
+   * Inicializa os middlewares da aplicação.
    */
   private initializeMiddlewares(): void {
-    // Middleware to parse incoming JSON requests.
     this.app.use(express.json());
-    // Middleware to parse URL-encoded data.
     this.app.use(express.urlencoded({ extended: true }));
-    // Enable CORS with the defined options.
     this.app.use(cors(corsOptions));
-    // Handle pre-flight CORS requests.
     this.app.options("*", cors(corsOptions));
-    // Secure the app by setting various HTTP headers using Helmet.
     this.app.use(
       helmet({
         crossOriginResourcePolicy: false,
       }),
     );
-    // Use Morgan to log HTTP requests in a developer-friendly format.
     this.app.use(morgan("dev"));
-    // Setup API documentation route.
-    // Accessible via: https://localhost:3000/api-docs/ or http://localhost:3000/api-docs/
-    // this.app.use("api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   }
 
   /**
-   * Initializes all routes defined in the route configuration.
+   * Configura as rotas definidas nas configurações.
    */
   private initializeRoutes(): void {
     this.routesConfig.forEach((config) => {
@@ -90,25 +83,27 @@ class App {
     });
   }
 
+  /**
+   * Inicializa a conexão com o banco de dados.
+   */
   private async initilizeDBConn(): Promise<DataSource> {
-    const appDataSource = AppDataSource.initialize()
-      appDataSource.then(async () => {
-        console.log("Initilizing database conn...");
+    const appDataSource = AppDataSource.initialize();
+    appDataSource
+      .then(async () => {
+        console.log("Inicializando conexão com o banco de dados...");
         await seedSuperUser();
       })
       .catch((error) => console.log(error));
-    return appDataSource
+    return appDataSource;
   }
 
   /**
-   * Starts the server and listens on the specified port using the given protocol.
-   *
-   * The server listens on the port specified by the `PORT` constant and logs the host and port information.
+   * Inicia o servidor e escuta na porta especificada.
    */
   public async listen(): Promise<void> {
-    this.appDataSource = await this.initilizeDBConn()
+    this.appDataSource = await this.initilizeDBConn();
     this.app.listen(PORT, () => {
-      console.log(`Host: ${HOST}. Listening on port ${PORT}`);
+      console.log(`Host: ${HOST}. Escutando na porta ${PORT}`);
     });
   }
 }

@@ -1,3 +1,7 @@
+/*
+Esquema de validação de crição para uma categoria
+*/
+
 import { z } from "zod";
 
 

@@ -1,5 +1,4 @@
 import { z } from "zod";
-import GeneralValidator from "../../general.validator";
 import { statusBoolSchema } from "../../utils/status-bool-schema";
 
 export const queryCfSchema = z

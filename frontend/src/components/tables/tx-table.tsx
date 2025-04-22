@@ -163,7 +163,7 @@ const TxTable = (): JSX.Element => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {items &&
+            {items && items.length > 0 ?
               items.map((item: TxProps, i: number) => (
                 <TableRow
                   key={item.id}
@@ -205,7 +205,13 @@ const TxTable = (): JSX.Element => {
                     </IconButton>
                   </TableCell>
                 </TableRow>
-              ))}
+              )) : (
+                <TableRow>
+                  <TableCell colSpan={20} align="center">
+                    Nenhuma transação encontrada.
+                  </TableCell>
+                </TableRow>
+              )}
           </TableBody>
         </Table>
       </TableContainer>

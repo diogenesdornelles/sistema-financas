@@ -167,7 +167,7 @@ const CpTable = (): JSX.Element => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {items &&
+            {items && items.length > 0 ?
               items.map((item: CpProps, i: number) => (
                 <TableRow
                   key={item.id}
@@ -203,7 +203,13 @@ const CpTable = (): JSX.Element => {
                     </IconButton>
                   </TableCell>
                 </TableRow>
-              ))}
+              )) : (
+                <TableRow>
+                  <TableCell colSpan={20} align="center">
+                    Nenhuma conta a pagar encontrada.
+                  </TableCell>
+                </TableRow>
+              )}
           </TableBody>
         </Table>
       </TableContainer>

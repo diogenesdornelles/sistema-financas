@@ -1,5 +1,5 @@
 import { BaseService } from "./base.service";
-import { Cr, Partner, Tcr, Tx, User } from "../entity/entities";
+import { Cf, Cr, Partner, Tcr, Tx, User } from "../entity/entities";
 import { CreateCr, UpdateCr, QueryCr } from "../../../packages/dtos/cr.dto";
 import { PaymentStatus } from "../../../packages/dtos/utils/enums";
 import {
@@ -27,10 +27,12 @@ export class CrService extends BaseService<
   QueryCr
 > {
   public txRepo: Repository<Tx>;
+  public cfRepo: Repository<Cf>;
   constructor() {
     super(Cr);
     this.relations = { type: true, customer: true };
     this.txRepo = AppDataSource.getRepository(Tx);
+    this.cfRepo = AppDataSource.getRepository(Cf);
   }
 
   /**
@@ -156,7 +158,10 @@ export class CrService extends BaseService<
       // Atualiza o status da transação associada, se existir
       const dbTx = await this.txRepo.findOne({ where: { cp: { id } } });
       if (dbTx) {
+        // coloca a transação para false
         await this.txRepo.update(dbTx.id, { status: false });
+        // decrementar o saldo da conta, pois a transação de receber foi cancelada
+        await this.cfRepo.decrement({ id: dbTx.cf.id }, "currentBalance", dbTx.value);
       }
 
       // Retorna true se a deleção lógica foi bem-sucedida

@@ -147,7 +147,7 @@ const TcfTable = (): JSX.Element => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {items &&
+            {items && items.length > 0 ?
               items.map((item: TcfProps, i: number) => (
                 <TableRow
                   key={item.id}
@@ -180,7 +180,13 @@ const TcfTable = (): JSX.Element => {
                     </IconButton>
                   </TableCell>
                 </TableRow>
-              ))}
+              )) : (
+                <TableRow>
+                  <TableCell colSpan={20} align="center">
+                    Nenhum tipo de conta financeira encontrado.
+                  </TableCell>
+                </TableRow>
+              )}
           </TableBody>
         </Table>
       </TableContainer>

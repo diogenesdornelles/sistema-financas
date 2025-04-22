@@ -280,11 +280,15 @@ export class TxService extends BaseService<
         await this.cpRepo.update(transaction.cp.id, {
           status: PaymentStatus.PENDING,
         });
+        // incrementar o saldo da conta, pois a transação de pagar foi cancelada
+        await this.cfRepo.increment({ id: transaction.cf.id }, "currentBalance", transaction.value);
       }
       if (transaction.cr) {
         await this.crRepo.update(transaction.cr.id, {
           status: PaymentStatus.PENDING,
         });
+        // decrementar o saldo da conta, pois a transação de receber foi cancelada
+        await this.cfRepo.decrement({ id: transaction.cf.id }, "currentBalance", transaction.value);
       }
 
       // Retorna true se a exclusão lógica foi bem-sucedida
@@ -312,7 +316,7 @@ export class TxService extends BaseService<
 
       if (data.value) {
         const value = parseFloat(
-          data.value.replace(/\./g, "").replace(",", "."),
+          data.value,
         );
         if (!isNaN(value)) {
           where.value = MoreThanOrEqual(value);

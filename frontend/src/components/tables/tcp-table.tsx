@@ -148,7 +148,7 @@ const TcpTable = (): JSX.Element => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {items &&
+            {items && items.length > 0 ?
               items.map((item: TcpProps, i: number) => (
                 <TableRow
                   key={item.id}
@@ -180,7 +180,13 @@ const TcpTable = (): JSX.Element => {
                     </IconButton>
                   </TableCell>
                 </TableRow>
-              ))}
+              )) : (
+                <TableRow>
+                  <TableCell colSpan={20} align="center">
+                    Nenhum tipo de conta a pagar encontrado.
+                  </TableCell>
+                </TableRow>
+              )}
           </TableBody>
         </Table>
       </TableContainer>

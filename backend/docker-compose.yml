@@ -9,7 +9,7 @@ services:
       - .env
     container_name: postgres_db_sys_finan
     ports:
-      - "5433:5432" # Porta externa 5433 -> interna 5432
+      - "5434:5432" # Porta externa 5434 -> interna 5432
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: always
@@ -21,7 +21,7 @@ services:
     image: adminer
     restart: always
     ports: 
-     - "8000:8000"
+     - "8040:8040"
     networks:
       - sistema_financas_net
 

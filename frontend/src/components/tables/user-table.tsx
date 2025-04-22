@@ -151,7 +151,7 @@ const UserTable = (): JSX.Element => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {items &&
+            {items && items.length > 0 ?
               items.map((item: UserProps, i: number) => (
                 <TableRow
                   key={item.id}
@@ -185,7 +185,13 @@ const UserTable = (): JSX.Element => {
                     </IconButton>
                   </TableCell>
                 </TableRow>
-              ))}
+              )) : (
+                <TableRow sx={{width: '100%', flex: 1}}>
+                  <TableCell colSpan={20} align="center">
+                    Nenhum usuário encontrado.
+                  </TableCell>
+                </TableRow>
+              )}
           </TableBody>
         </Table>
       </TableContainer>

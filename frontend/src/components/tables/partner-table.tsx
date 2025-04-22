@@ -154,7 +154,7 @@ const PartnerTable = (): JSX.Element => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {items &&
+            {items && items.length > 0 ?
               items.map((item: PartnerProps, i: number) => (
                 <TableRow
                   key={item.id}
@@ -191,7 +191,13 @@ const PartnerTable = (): JSX.Element => {
                     </IconButton>
                   </TableCell>
                 </TableRow>
-              ))}
+              )) : (
+                <TableRow>
+                  <TableCell colSpan={20} align="center">
+                    Nenhum parceiro encontrado.
+                  </TableCell>
+                </TableRow>
+              )}
           </TableBody>
         </Table>
       </TableContainer>

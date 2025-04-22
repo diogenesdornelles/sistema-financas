@@ -169,7 +169,7 @@ const CrTable = (): JSX.Element => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {items &&
+            {items && items.length > 0 ?
               items.map((item: CrProps, i: number) => (
                 <TableRow
                   key={item.id}
@@ -206,7 +206,13 @@ const CrTable = (): JSX.Element => {
                     </IconButton>
                   </TableCell>
                 </TableRow>
-              ))}
+              )) : (
+                <TableRow>
+                 <TableCell colSpan={20} align="center">
+                    Nenhuma conta a receber encontrada.
+                  </TableCell>
+                </TableRow>
+              )}
           </TableBody>
         </Table>
       </TableContainer>

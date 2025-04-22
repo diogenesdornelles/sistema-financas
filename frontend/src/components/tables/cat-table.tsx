@@ -187,7 +187,7 @@ const CatTable = (): JSX.Element => {
               </TableRow>
             )) : (
               <TableRow>
-                <TableCell colSpan={8} align="center">
+                <TableCell colSpan={20} align="center">
                   Nenhuma categoria encontrada.
                 </TableCell>
               </TableRow>

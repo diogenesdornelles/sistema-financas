@@ -174,3 +174,5 @@ A modularidade do sistema permite a inclusão de funcionalidades adicionais, com
 1) Rodar db postgres, em ./backend, `sudo docker-compose up -d --build`;
 2) Iniciar dev: `npm run dev`;
 3) Em ./frontend: `npm run dev`;
+4) Remover container `sudo docker compose -f docker-compose.yml down --remove-orphans`
+5) 

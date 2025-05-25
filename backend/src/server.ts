@@ -8,7 +8,7 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 
-import appRoutes from "./app-routes";
+import appRoutes from "./appRoutes";
 import App from "./app";
 
 /**

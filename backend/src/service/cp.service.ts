@@ -154,7 +154,11 @@ export class CpService extends BaseService<
         // Passa a transação ao status de falsa
         await this.txRepo.update(dbTx.id, { status: false });
         // incrementar o saldo da conta, pois a transação de pagamento foi cancelada
-        await this.cfRepo.increment({ id: dbTx.cf.id }, "currentBalance", dbTx.value);
+        await this.cfRepo.increment(
+          { id: dbTx.cf.id },
+          "currentBalance",
+          dbTx.value,
+        );
       }
       // Retorna true se a deleção lógica foi bem-sucedida
       return true;

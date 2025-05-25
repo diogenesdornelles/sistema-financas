@@ -11,7 +11,7 @@ export class TcpService extends BaseService<
   QueryTcp
 > {
   constructor() {
-    super(Tcp); 
+    super(Tcp);
   }
 
   /**

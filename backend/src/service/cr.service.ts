@@ -161,7 +161,11 @@ export class CrService extends BaseService<
         // coloca a transação para false
         await this.txRepo.update(dbTx.id, { status: false });
         // decrementar o saldo da conta, pois a transação de receber foi cancelada
-        await this.cfRepo.decrement({ id: dbTx.cf.id }, "currentBalance", dbTx.value);
+        await this.cfRepo.decrement(
+          { id: dbTx.cf.id },
+          "currentBalance",
+          dbTx.value,
+        );
       }
 
       // Retorna true se a deleção lógica foi bem-sucedida

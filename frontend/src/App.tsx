@@ -1,30 +1,28 @@
-import {
-  QueryClientProvider
-} from '@tanstack/react-query'
+import { QueryClientProvider } from '@tanstack/react-query';
 
-import './App.css'
-import { SessionProvider } from './providers/session-provider'
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
-import RootLayout from './layouts/root-layout';
-import Home from './pages/home';
-import Login from './pages/login';
-import { RequireAuth } from './components/require-auth';
-import { queryClient } from './utils/client';;
-import { ColorModeProvider } from './providers/color-mode-provider';
-import Manage from './pages/manage'
-import Manual from './pages/manual';
-import Dashboard from './pages/dashboard';
+import './App.css';
 
+import { RequireAuth } from '@/components/ui/RequireAuth';
+import RootLayout from '@/layouts/RootLayout';
+import Dashboard from '@/pages/Dashboard';
+import Home from '@/pages/Home';
+import Login from '@/pages/Login';
+import Manage from '@/pages/Manage';
+import Manual from '@/pages/Manual';
+import { ColorModeProvider } from '@/providers/ColorModeProvider';
+import { SessionProvider } from '@/providers/SessionProvider';
+import { queryClient } from '@/utils/clients';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <RootLayout />,
     children: [
       { index: true, element: <Navigate to="/home" replace /> },
-      { path: "/login", element: <Login /> },
+      { path: '/login', element: <Login /> },
       {
-        path: "/home",
+        path: '/home',
         element: (
           <RequireAuth>
             <Home />
@@ -32,7 +30,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/gerenciar",
+        path: '/gerenciar',
         element: (
           <RequireAuth>
             <Manage />
@@ -40,7 +38,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/dashboard",
+        path: '/dashboard',
         element: (
           <RequireAuth>
             <Dashboard />
@@ -48,7 +46,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/manual",
+        path: '/manual',
         element: (
           <RequireAuth>
             <Manual />
@@ -59,17 +57,14 @@ const router = createBrowserRouter([
   },
 ]);
 
-
 export default function App() {
-
   return (
     <QueryClientProvider client={queryClient}>
       <SessionProvider>
-      <ColorModeProvider>
-        <RouterProvider router={router} />
+        <ColorModeProvider>
+          <RouterProvider router={router} />
         </ColorModeProvider>
       </SessionProvider>
     </QueryClientProvider>
-
-  )
+  );
 }

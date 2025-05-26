@@ -13,7 +13,7 @@ import CustomBackdrop from '@/components/ui/CustomBackdrop';
 import FormContainer from '@/components/ui/FormContainer';
 import { usePutTcp } from '@/hooks/service/tcp/usePutTcp';
 import { useFormStore } from '@/hooks/useFormStore';
-import { updateTcpSchema } from '@packages/validators/zod-schemas/update/update-tcp.validator';
+import { updateTcpSchema } from '@packages/validators/zodSchemas/update/updateTcpValidator';
 
 type UpdateTcpFormData = z.infer<typeof updateTcpSchema>;
 

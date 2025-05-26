@@ -12,7 +12,7 @@ import { useGetAllPartner } from '@/hooks/service/partner/useGetAllPartner';
 import { useGetAllTcp } from '@/hooks/service/tcp/useGetAllTcp';
 import { useFormStore } from '@/hooks/useFormStore';
 import { strToPtBrMoney } from '@/utils/strToPtBrMoney';
-import { updateCpSchema } from '@packages/validators/zod-schemas/update/update-cp.validator';
+import { updateCpSchema } from '@packages/validators/zodSchemas/update/updateCpValidator';
 
 type UpdateCpFormData = z.infer<typeof updateCpSchema>;
 

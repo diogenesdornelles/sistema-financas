@@ -10,7 +10,7 @@ import {
   Raw,
   Repository,
 } from "typeorm";
-import { AppDataSource } from "../config/db";
+import { AppDataSource } from "../config/typeorm.db.config";
 
 export class CpService extends BaseService<
   Cp,

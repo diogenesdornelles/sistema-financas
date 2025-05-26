@@ -29,7 +29,7 @@ import { useQueryCf } from '@/hooks/service/cf/useQueryCf';
 import { useFormStore } from '@/hooks/useFormStore';
 import { strToPtBrMoney } from '@/utils/strToPtBrMoney';
 import { CfProps } from '@packages/dtos/cf.dto';
-import { queryCfSchema } from '@packages/validators/zod-schemas/query/query-cf.validator';
+import { queryCfSchema } from '@packages/validators/zodSchemas/query/queryCfValidator';
 
 type QueryCfFormData = z.infer<typeof queryCfSchema>;
 

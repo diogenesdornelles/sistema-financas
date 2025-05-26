@@ -12,7 +12,7 @@ import CustomBackdrop from '@/components/ui/CustomBackdrop';
 import FormContainer from '@/components/ui/FormContainer';
 import { usePostTcr } from '@/hooks/service/tcr/usePostTcr';
 import { useFormStore } from '@/hooks/useFormStore';
-import { createTcrSchema } from '@packages/validators/zod-schemas/create/create-tcr.validator';
+import { createTcrSchema } from '@packages/validators/zodSchemas/create/createTcrValidator';
 
 type CreateTcrFormData = z.infer<typeof createTcrSchema>;
 

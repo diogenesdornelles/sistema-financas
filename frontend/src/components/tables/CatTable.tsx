@@ -21,7 +21,7 @@ import { useGetManyCat } from '@/hooks/service/cat/useGetManyCat';
 import { useQueryCat } from '@/hooks/service/cat/useQueryCat';
 import { useFormStore } from '@/hooks/useFormStore';
 import { CatProps } from '@packages/dtos/cat.dto';
-import { queryCatSchema } from '@packages/validators/zod-schemas/query/query-cat.validator';
+import { queryCatSchema } from '@packages/validators/zodSchemas/query/queryCatValidator';
 
 type QueryCatFormData = z.infer<typeof queryCatSchema>;
 

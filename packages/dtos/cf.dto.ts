@@ -2,7 +2,7 @@
 Dtos para o trânsito de dados de Contas financeiras
 */
 
-import { TcfProps } from "./tcf.dto";
+import { TcfProps } from './tcf.dto';
 
 export interface CreateCf {
   // required na criação
@@ -41,7 +41,6 @@ export interface CfProps {
   createdAt: string;
   updatedAt: string;
 }
-
 
 export interface QueryCf {
   id?: string;

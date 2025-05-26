@@ -4,7 +4,7 @@ import { JSX } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { queryTcrSchema } from '@packages/validators/zod-schemas/query/query-tcr.validator';
+import { queryTcrSchema } from '@packages/validators/zodSchemas/query/queryTcrValidator';
 
 type QueryTcrFormData = z.infer<typeof queryTcrSchema>;
 

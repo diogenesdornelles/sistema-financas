@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Typography } from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -12,7 +12,8 @@ import CustomBackdrop from '@/components/ui/CustomBackdrop';
 import FormContainer from '@/components/ui/FormContainer';
 import { usePostUser } from '@/hooks/service/user/usePostUser';
 import { useFormStore } from '@/hooks/useFormStore';
-import { createUserRepPwdSchema } from '@packages/validators/zod-schemas/create/create-user-rep-pwd.validator';
+import { createUserRepPwdSchema } from '@packages/validators/zodSchemas/create/createUserRepPwdValidator';
+import { RoleType } from '@packages/dtos/utils/enums';
 
 type CreateUserFormData = z.infer<typeof createUserRepPwdSchema>;
 
@@ -24,6 +25,7 @@ export function CreateUserForm(): JSX.Element | null {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm<CreateUserFormData>({
     resolver: zodResolver(createUserRepPwdSchema),
@@ -33,8 +35,11 @@ export function CreateUserForm(): JSX.Element | null {
       cpf: '',
       pwd: '',
       confirmPwd: '',
+      role: RoleType.ASSISTANT,
     },
   });
+
+  const roleValue = watch('role');
 
   const onSubmit = async (data: CreateUserFormData) => {
     // Removemos o campo "confirmPwd" antes de enviar os dados
@@ -102,6 +107,26 @@ export function CreateUserForm(): JSX.Element | null {
             size="small"
             helperText={errors.pwd?.message}
           />
+          <FormControl variant="outlined" error={!!errors.role}>
+            <InputLabel size="small" id="role-type-label">
+              Função
+            </InputLabel>
+            <Select
+              size="small"
+              labelId="role-type-label"
+              label="Função"
+              defaultValue={roleValue}
+              {...register('role')}
+            >
+              <MenuItem value="assistant">Assistente</MenuItem>
+              <MenuItem value="manager">Gerente</MenuItem>
+              <MenuItem value="analist">Assistente</MenuItem>
+              <MenuItem value="admin">Administrador</MenuItem>
+            </Select>
+            {errors.role && (
+              <p style={{ color: '#d32f2f', fontSize: '0.75rem', margin: '3px 14px 0' }}>{errors.role.message}</p>
+            )}
+          </FormControl>
           <TextField
             label="Repita a Senha"
             type="password"

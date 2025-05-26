@@ -15,7 +15,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { PartnerSearchType } from '@packages/dtos/utils/enums';
-import { queryPartnerSchema } from '@packages/validators/zod-schemas/query/query-partner.validator';
+import { queryPartnerSchema } from '@packages/validators/zodSchemas/query/queryPartnerValidator';
 
 type QueryPartnerFormData = z.infer<typeof queryPartnerSchema>;
 

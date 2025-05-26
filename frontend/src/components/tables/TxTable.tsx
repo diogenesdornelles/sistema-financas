@@ -29,7 +29,7 @@ import { useQueryTx } from '@/hooks/service/tx/useQueryTx';
 import { useFormStore } from '@/hooks/useFormStore';
 import { strToPtBrMoney } from '@/utils/strToPtBrMoney';
 import { TxProps } from '@packages/dtos/tx.dto';
-import { queryTxSchema } from '@packages/validators/zod-schemas/query/query-tx.validator';
+import { queryTxSchema } from '@packages/validators/zodSchemas/query/queryTxValidator';
 
 type QueryTxFormData = z.infer<typeof queryTxSchema>;
 

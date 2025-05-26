@@ -2,9 +2,9 @@ import { Request, Response, NextFunction } from "express";
 import { TcfService } from "../service/tcf.service";
 import { BaseController } from "./base.controller";
 import { UpdateTcf, CreateTcf, QueryTcf } from "../../../packages/dtos/tcf.dto";
-import { createTcfSchema } from "../../../packages/validators/zod-schemas/create/create-tcf.validator";
-import { updateTcfSchema } from "../../../packages/validators/zod-schemas/update/update-tcf.validator";
-import { queryTcfSchema } from "../../../packages/validators/zod-schemas/query/query-tcf.validator";
+import { createTcfSchema } from "../../../packages/validators/zodSchemas/create/createTcfValidator";
+import { updateTcfSchema } from "../../../packages/validators/zodSchemas/update/updateTcfValidator";
+import { queryTcfSchema } from "../../../packages/validators/zodSchemas/query/queryTcfValidator";
 import { Tcf } from "../entity/entities";
 
 /**

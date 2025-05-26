@@ -13,7 +13,7 @@ import { useGetAllTcr } from '@/hooks/service/tcr/useGetAllTcr';
 import { useAuth } from '@/hooks/useAuth';
 import { useFormStore } from '@/hooks/useFormStore';
 import { strToPtBrMoney } from '@/utils/strToPtBrMoney';
-import { createCrSchema } from '@packages/validators/zod-schemas/create/create-cr.validator';
+import { createCrSchema } from '@packages/validators/zodSchemas/create/createCrValidator';
 
 type CreateCrFormData = z.infer<typeof createCrSchema>;
 

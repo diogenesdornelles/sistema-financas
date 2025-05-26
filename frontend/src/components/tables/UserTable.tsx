@@ -28,7 +28,7 @@ import { useGetManyUser } from '@/hooks/service/user/useGetManyUser';
 import { useQueryUser } from '@/hooks/service/user/useQueryUser';
 import { useFormStore } from '@/hooks/useFormStore';
 import { UserProps } from '@packages/dtos/user.dto';
-import { queryUserSchema } from '@packages/validators/zod-schemas/query/query-user.validator';
+import { queryUserSchema } from '@packages/validators/zodSchemas/query/queryUserValidator';
 
 type QueryUserFormData = z.infer<typeof queryUserSchema>;
 

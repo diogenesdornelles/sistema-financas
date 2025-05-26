@@ -29,7 +29,7 @@ import { useQueryPartner } from '@/hooks/service/partner/useQueryPartner';
 import { useFormStore } from '@/hooks/useFormStore';
 import { PartnerProps } from '@packages/dtos/partner.dto';
 import { PartnerType } from '@packages/dtos/utils/enums';
-import { queryPartnerSchema } from '@packages/validators/zod-schemas/query/query-partner.validator';
+import { queryPartnerSchema } from '@packages/validators/zodSchemas/query/queryPartnerValidator';
 
 type QueryPartnerFormData = z.infer<typeof queryPartnerSchema>;
 

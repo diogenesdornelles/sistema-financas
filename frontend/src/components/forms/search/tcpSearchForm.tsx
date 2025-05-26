@@ -4,7 +4,7 @@ import { JSX } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { queryTcpSchema } from '@packages/validators/zod-schemas/query/query-tcp.validator';
+import { queryTcpSchema } from '@packages/validators/zodSchemas/query/queryTcpValidator';
 
 type QueryTcpFormData = z.infer<typeof queryTcpSchema>;
 

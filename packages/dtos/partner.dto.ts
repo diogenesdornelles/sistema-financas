@@ -2,8 +2,7 @@
 Dtos para o trânsito de dados de parceiros
 */
 
-import { PartnerSearchType, PartnerType } from "./utils/enums";
-
+import { PartnerSearchType, PartnerType } from './utils/enums';
 
 // Enum para o tipo de Parceiro
 export interface CreatePartner {
@@ -33,7 +32,6 @@ export interface PartnerProps {
   updatedAt: string;
 }
 
-
 export interface QueryPartner {
   id?: string;
   name?: string;
@@ -44,4 +42,3 @@ export interface QueryPartner {
   createdAt?: string;
   updatedAt?: string;
 }
-

@@ -26,7 +26,6 @@ export interface CatProps {
   updatedAt: string;
 }
 
-
 export interface QueryCat {
   id?: string;
   name?: string;

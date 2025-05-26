@@ -4,7 +4,7 @@ import { JSX } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { queryCatSchema } from '@packages/validators/zod-schemas/query/query-cat.validator';
+import { queryCatSchema } from '@packages/validators/zodSchemas/query/queryCatValidator';
 
 type QueryCatFormData = z.infer<typeof queryCatSchema>;
 

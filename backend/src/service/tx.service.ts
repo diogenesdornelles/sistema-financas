@@ -13,7 +13,7 @@ import {
   TransactionSearchType,
   TransactionType,
 } from "../../../packages/dtos/utils/enums";
-import { AppDataSource } from "../config/db";
+import { AppDataSource } from "../config/typeorm.db.config";
 
 /**
  * Serviço para gerenciar transações financeiras.

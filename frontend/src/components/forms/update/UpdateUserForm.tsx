@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Checkbox, FormControlLabel } from '@mui/material';
+import { Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -13,7 +13,7 @@ import CustomBackdrop from '@/components/ui/CustomBackdrop';
 import FormContainer from '@/components/ui/FormContainer';
 import { usePutUser } from '@/hooks/service/user/usePutUser';
 import { useFormStore } from '@/hooks/useFormStore';
-import { updateUserSchema } from '@packages/validators/zod-schemas/update/update-user.validator';
+import { updateUserSchema } from '@packages/validators/zodSchemas/update/updateUserValidator';
 
 type UpdateUserFormData = z.infer<typeof updateUserSchema>;
 
@@ -35,12 +35,14 @@ export function UpdateUserForm(): JSX.Element | null {
           surname: forms.user.updateItem.surname,
           cpf: forms.user.updateItem.cpf,
           status: forms.user.updateItem.status,
+          role: forms.user.updateItem.role,
           pwd: '',
         }
       : {},
   });
 
   const statusValue = watch('status');
+  const roleValue = watch('role');
 
   const onSubmit = async (data: UpdateUserFormData) => {
     try {
@@ -50,6 +52,7 @@ export function UpdateUserForm(): JSX.Element | null {
         surname: data.surname,
         cpf: data.cpf,
         status: data.status,
+        role: data.role,
         pwd: '',
       });
     } catch (err) {
@@ -57,7 +60,6 @@ export function UpdateUserForm(): JSX.Element | null {
     }
   };
 
-  // Exibe este formulário somente se o formStore indicar modo "update" e houver dados para atualizar
   if (forms.user.type === 'create' || !forms.user.updateItem) return null;
 
   return (
@@ -104,6 +106,26 @@ export function UpdateUserForm(): JSX.Element | null {
             error={!!errors.cpf}
             helperText={errors.cpf?.message}
           />
+          <FormControl variant="outlined" error={!!errors.role}>
+            <InputLabel size="small" id="role-type-label">
+              Função
+            </InputLabel>
+            <Select
+              size="small"
+              labelId="role-type-label"
+              label="Função"
+              defaultValue={roleValue}
+              {...register('role')}
+            >
+              <MenuItem value="assistant">Assistente</MenuItem>
+              <MenuItem value="manager">Gerente</MenuItem>
+              <MenuItem value="analist">Assistente</MenuItem>
+              <MenuItem value="admin">Administrador</MenuItem>
+            </Select>
+            {errors.role && (
+              <p style={{ color: '#d32f2f', fontSize: '0.75rem', margin: '3px 14px 0' }}>{errors.role.message}</p>
+            )}
+          </FormControl>
           <TextField
             label="Senha"
             type="password"

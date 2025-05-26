@@ -12,7 +12,7 @@ import { useGetAllTcf } from '@/hooks/service/tcf/useGetAllTcf';
 import { useAuth } from '@/hooks/useAuth';
 import { useFormStore } from '@/hooks/useFormStore';
 import { strToPtBrMoney } from '@/utils/strToPtBrMoney';
-import { createCfSchema } from '@packages/validators/zod-schemas/create/create-cf.validator';
+import { createCfSchema } from '@packages/validators/zodSchemas/create/createCfValidator';
 
 type CreateCfFormData = z.infer<typeof createCfSchema>;
 

@@ -1,16 +1,11 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "target": "es6",
-        "esModuleInterop": true,
-        "outDir": "./dist",
-        "rootDir": ".",
-        "types": [
-            "jest",
-            "node"
-        ]
-    },
-    "include": [
-        "tests"
-    ],
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "esModuleInterop": true,
+    "outDir": "./dist",
+    "rootDir": ".",
+    "types": ["jest", "node"]
+  },
+  "include": ["tests"]
 }

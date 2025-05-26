@@ -19,7 +19,6 @@ export interface TcrProps {
   updatedAt: string;
 }
 
-
 export interface QueryTcr {
   id?: string;
   name?: string;

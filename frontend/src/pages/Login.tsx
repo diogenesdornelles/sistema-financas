@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 
 import { useAuth } from '@/hooks/useAuth';
-import { createTokenSchema } from '@packages/validators/zod-schemas/create/create-token.validator';
+import { createTokenSchema } from '@packages/validators/zodSchemas/create/createTokenValidator';
 
 type LoginFormData = z.infer<typeof createTokenSchema>;
 

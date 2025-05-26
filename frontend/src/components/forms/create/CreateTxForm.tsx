@@ -27,7 +27,7 @@ import { usePostTx } from '@/hooks/service/tx/usePostTx';
 import { useAuth } from '@/hooks/useAuth';
 import { useFormStore } from '@/hooks/useFormStore';
 import { strToPtBrMoney } from '@/utils/strToPtBrMoney';
-import { createTxSchema } from '@packages/validators/zod-schemas/create/create-tx.validator';
+import { createTxSchema } from '@packages/validators/zodSchemas/create/createTxValidator';
 
 type CreateTxFormData = z.infer<typeof createTxSchema>;
 type RadioInput = 'cp' | 'cr';

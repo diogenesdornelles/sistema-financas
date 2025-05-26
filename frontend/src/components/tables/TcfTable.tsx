@@ -28,7 +28,7 @@ import { useGetManyTcf } from '@/hooks/service/tcf/useGetManyTcf';
 import { useQueryTcf } from '@/hooks/service/tcf/useQueryTcf';
 import { useFormStore } from '@/hooks/useFormStore';
 import { TcfProps } from '@packages/dtos/tcf.dto';
-import { queryTcfSchema } from '@packages/validators/zod-schemas/query/query-tcf.validator';
+import { queryTcfSchema } from '@packages/validators/zodSchemas/query/queryTcfValidator';
 
 type QueryTcfFormData = z.infer<typeof queryTcfSchema>;
 

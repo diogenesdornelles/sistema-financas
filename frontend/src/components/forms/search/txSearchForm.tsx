@@ -15,7 +15,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { TransactionSearchType } from '@packages/dtos/utils/enums';
-import { queryTxSchema } from '@packages/validators/zod-schemas/query/query-tx.validator';
+import { queryTxSchema } from '@packages/validators/zodSchemas/query/queryTxValidator';
 
 type QueryTxFormData = z.infer<typeof queryTxSchema>;
 

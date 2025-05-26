@@ -14,9 +14,9 @@ import swaggerUi from "swagger-ui-express";
 // @ts-ignore
 import swaggerDocument from "./swagger.json";
 import { RouteConfigType } from "./types/route-config.type";
-import { AppDataSource } from "./config/db";
-import { seedSuperUser } from "./config/seedSuperUser";
+import { AppDataSource } from "./config/typeorm.db.config";
 import { DataSource } from "typeorm";
+import { runAllSeeds } from "./seeds/runAllSeeds";
 
 dotenv.config();
 
@@ -84,17 +84,27 @@ class App {
   }
 
   /**
-   * Inicializa a conexão com o banco de dados.
+   * Inicializa a conexão com o banco de dados e cria as tabelas, se necessário.
    */
   private async initilizeDBConn(): Promise<DataSource> {
-    const appDataSource = AppDataSource.initialize();
-    appDataSource
-      .then(async () => {
-        console.log("Inicializando conexão com o banco de dados...");
-        await seedSuperUser();
-      })
-      .catch((error) => console.log(error));
-    return appDataSource;
+    try {
+      const appDataSource = await AppDataSource.initialize();
+      console.log("Conexão com o banco inicializada");
+
+      const pendingMigrations = await appDataSource.showMigrations();
+      if (pendingMigrations) {
+        console.log("Executando migrations pendentes...");
+        await appDataSource.runMigrations();
+        console.log("Migrations executadas com sucesso");
+      } else {
+        console.log("Nenhuma migration pendente");
+      }
+      await runAllSeeds();
+      return appDataSource;
+    } catch (error) {
+      console.error("Erro na inicialização:", error);
+      throw error;
+    }
   }
 
   /**

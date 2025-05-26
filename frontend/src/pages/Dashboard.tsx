@@ -15,7 +15,7 @@ import { useGetBalances } from '@/hooks/service/db/useGetBalances';
 import { useGetCpsCrs } from '@/hooks/service/db/useGetCpsCrs';
 import { strToPtBrMoney } from '@/utils/strToPtBrMoney';
 import { DbBalanceProps } from '@packages/dtos/db.dto';
-import { queryDbSchema } from '@packages/validators/zod-schemas/query/query-db.validator';
+import { queryDbSchema } from '@packages/validators/zodSchemas/query/queryDbValidator';
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title, LinearScale, CategoryScale, BarElement);
 

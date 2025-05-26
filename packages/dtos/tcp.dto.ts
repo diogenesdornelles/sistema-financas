@@ -18,7 +18,6 @@ export interface TcpProps {
   updatedAt: string;
 }
 
-
 export interface QueryTcp {
   id?: string;
   name?: string;

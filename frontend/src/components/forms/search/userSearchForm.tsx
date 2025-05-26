@@ -1,10 +1,21 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Box, Button, FormControlLabel, Switch, TextField } from '@mui/material';
+import {
+  Box,
+  Button,
+  FormControl,
+  FormControlLabel,
+  InputLabel,
+  MenuItem,
+  Select,
+  Switch,
+  TextField,
+} from '@mui/material';
 import { JSX } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { queryUserSchema } from '@packages/validators/zod-schemas/query/query-user.validator';
+import { queryUserSchema } from '@packages/validators/zodSchemas/query/queryUserValidator';
+import { RoleSearchType } from '@packages/dtos/utils/enums';
 
 type QueryUserFormData = z.infer<typeof queryUserSchema>;
 
@@ -30,6 +41,7 @@ const UserSearchForm = ({ onSearch, onClear }: UserSearchFormProps): JSX.Element
       status: false, // não mostrar inativos
       createdAt: '',
       updatedAt: '',
+      role: RoleSearchType.ALL,
     },
   });
 
@@ -37,7 +49,7 @@ const UserSearchForm = ({ onSearch, onClear }: UserSearchFormProps): JSX.Element
 
   const onSubmit = (data: QueryUserFormData) => {
     const cleanedData: Partial<QueryUserFormData> = { ...data };
-    (['id', 'name', 'surname', 'cpf', 'createdAt', 'updatedAt'] as const).forEach((key) => {
+    (['id', 'name', 'surname', 'cpf', 'createdAt', 'updatedAt', 'role'] as const).forEach((key) => {
       if (!cleanedData[key]) {
         delete cleanedData[key];
       }
@@ -94,6 +106,28 @@ const UserSearchForm = ({ onSearch, onClear }: UserSearchFormProps): JSX.Element
           helperText={errors.cpf?.message}
           size="small"
         />
+        <FormControl variant="outlined" error={!!errors.role}>
+          <InputLabel id="role-type-label-search" size="small">
+            Função
+          </InputLabel>
+          <Select
+            sx={{ width: 100 }}
+            labelId="role-type-label-search"
+            label="Função"
+            size="small"
+            defaultValue={RoleSearchType.ALL}
+            {...register('role')}
+          >
+            <MenuItem value="all">Todos</MenuItem>
+            <MenuItem value="assistant">Assistente</MenuItem>
+            <MenuItem value="manager">Gerente</MenuItem>
+            <MenuItem value="admin">Administrador</MenuItem>
+            <MenuItem value="analist">Analista</MenuItem>
+          </Select>
+          {errors.role && (
+            <p style={{ color: '#d32f2f', fontSize: '0.75rem', margin: '3px 14px 0' }}>{errors.role.message}</p>
+          )}
+        </FormControl>
         <TextField
           label="Criado em"
           {...register('createdAt')}
@@ -106,6 +140,7 @@ const UserSearchForm = ({ onSearch, onClear }: UserSearchFormProps): JSX.Element
           helperText={errors.createdAt?.message}
           size="small"
         />
+
         <TextField
           label="Alterado em"
           {...register('updatedAt')}

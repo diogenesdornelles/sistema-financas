@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { PaymentStatus } from '@packages/dtos/utils/enums';
-import { queryCpSchema } from '@packages/validators/zod-schemas/query/query-cp.validator';
+import { queryCpSchema } from '@packages/validators/zodSchemas/query/queryCpValidator';
 
 type QueryCpFormData = z.infer<typeof queryCpSchema>;
 

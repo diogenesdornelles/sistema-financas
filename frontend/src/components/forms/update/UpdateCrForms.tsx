@@ -12,7 +12,7 @@ import { useGetAllPartner } from '@/hooks/service/partner/useGetAllPartner';
 import { useGetAllTcr } from '@/hooks/service/tcr/useGetAllTcr';
 import { useFormStore } from '@/hooks/useFormStore';
 import { strToPtBrMoney } from '@/utils/strToPtBrMoney';
-import { updateCrSchema } from '@packages/validators/zod-schemas/update/update-cr.validator';
+import { updateCrSchema } from '@packages/validators/zodSchemas/update/updateCrValidator';
 
 type UpdateCrFormData = z.infer<typeof updateCrSchema>;
 

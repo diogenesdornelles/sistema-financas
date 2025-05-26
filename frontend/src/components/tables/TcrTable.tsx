@@ -28,7 +28,7 @@ import { useGetManyTcr } from '@/hooks/service/tcr/useGetManyTcr';
 import { useQueryTcr } from '@/hooks/service/tcr/useQueryTcr';
 import { useFormStore } from '@/hooks/useFormStore';
 import { TcrProps } from '@packages/dtos/tcr.dto';
-import { queryTcrSchema } from '@packages/validators/zod-schemas/query/query-tcr.validator';
+import { queryTcrSchema } from '@packages/validators/zodSchemas/query/queryTcrValidator';
 
 type QueryTcrFormData = z.infer<typeof queryTcrSchema>;
 

@@ -1,5 +1,5 @@
 import { Between, QueryRunner, Repository } from "typeorm";
-import { AppDataSource } from "../config/db";
+import { AppDataSource } from "../config/typeorm.db.config";
 import {
   DbBalanceProps,
   ResultSet,

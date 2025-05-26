@@ -1,4 +1,4 @@
-import GeneralValidator from '../validators/general.validator'
+import GeneralValidator from '../validators/general.validator';
 
 describe('GeneralValidator', () => {
   describe('validateCNPJ', () => {
@@ -7,8 +7,8 @@ describe('GeneralValidator', () => {
     });
 
     it('should return true for a valid CNPJ 2', () => {
-        expect(GeneralValidator.validateCNPJ('11444777000161')).toBe(true);
-      });
+      expect(GeneralValidator.validateCNPJ('11444777000161')).toBe(true);
+    });
 
     it('should return false for an invalid CNPJ', () => {
       expect(GeneralValidator.validateCNPJ('11.444.777/0001-00')).toBe(false);
@@ -25,8 +25,8 @@ describe('GeneralValidator', () => {
     });
 
     it('should return true for a valid CPF 2', () => {
-        expect(GeneralValidator.validateCpf('529.982.247-25')).toBe(true);
-      });
+      expect(GeneralValidator.validateCpf('529.982.247-25')).toBe(true);
+    });
 
     it('should return false for an invalid CPF', () => {
       expect(GeneralValidator.validateCpf('12345678900')).toBe(false);
@@ -58,24 +58,24 @@ describe('GeneralValidator', () => {
     });
 
     it('should parse BR formatted value correctly 2', () => {
-        expect(GeneralValidator.validateAndNormalizeMoneyString('4,56')).toBe('4.56');
-      });
+      expect(GeneralValidator.validateAndNormalizeMoneyString('4,56')).toBe('4.56');
+    });
 
-      it('should parse BR formatted value correctly 3', () => {
-        expect(GeneralValidator.validateAndNormalizeMoneyString('4,5')).toBe('4.50');
-      });
+    it('should parse BR formatted value correctly 3', () => {
+      expect(GeneralValidator.validateAndNormalizeMoneyString('4,5')).toBe('4.50');
+    });
 
-      it('should parse BR formatted value correctly 4', () => {
-        expect(GeneralValidator.validateAndNormalizeMoneyString('1.231.234,56')).toBe('1231234.56');
-      });
+    it('should parse BR formatted value correctly 4', () => {
+      expect(GeneralValidator.validateAndNormalizeMoneyString('1.231.234,56')).toBe('1231234.56');
+    });
 
     it('should parse standard formatted value correctly 1', () => {
       expect(GeneralValidator.validateAndNormalizeMoneyString('1234.56')).toBe('1234.56');
     });
 
     it('should parse standard formatted value correctly 2', () => {
-        expect(GeneralValidator.validateAndNormalizeMoneyString('1234.5')).toBe('1234.50');
-      });
+      expect(GeneralValidator.validateAndNormalizeMoneyString('1234.5')).toBe('1234.50');
+    });
 
     it('should return false for badly formatted values', () => {
       expect(GeneralValidator.validateAndNormalizeMoneyString('12,34.56')).toBe(false);

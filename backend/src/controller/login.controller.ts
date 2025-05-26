@@ -4,7 +4,7 @@ import { BaseController } from "./base.controller";
 
 import { TokenProps, CreateToken } from "../../../packages/dtos/token.dto";
 import LoginService from "../service/login.service";
-import { createTokenSchema } from "../../../packages/validators/zod-schemas/create/create-token.validator";
+import { createTokenSchema } from "../../../packages/validators/zodSchemas/create/createTokenValidator";
 
 /**
  * Controla o fluxo de requisições e respostas de Login

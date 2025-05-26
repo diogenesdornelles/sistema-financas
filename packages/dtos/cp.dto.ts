@@ -2,14 +2,14 @@
 Dtos para o trânsito de dados de Contas a pagar
 */
 
-import { PartnerProps } from "./partner.dto";
-import { TcpProps } from "./tcp.dto";
-import { PaymentStatus } from "./utils/enums";
+import { PartnerProps } from './partner.dto';
+import { TcpProps } from './tcp.dto';
+import { PaymentStatus } from './utils/enums';
 
 export interface CreateCp {
   // required na criação
   value: string; // monetário como string.
-  type: string; // Identificador de Tcp. É o UUID. Autocomplete input. 
+  type: string; // Identificador de Tcp. É o UUID. Autocomplete input.
   supplier: string; // Identificador de Partner. È o UUID. Autocomplete input.
   due: string; // data do vencimento
   obs?: string;
@@ -35,7 +35,6 @@ export interface CpProps {
   createdAt: string;
   updatedAt: string;
 }
-
 
 export interface QueryCp {
   id?: string;

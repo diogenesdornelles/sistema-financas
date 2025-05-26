@@ -6,9 +6,9 @@ import {
   CreatePartner,
   QueryPartner,
 } from "../../../packages/dtos/partner.dto";
-import { createPartnerSchema } from "../../../packages/validators/zod-schemas/create/create-partner.validator";
-import { updatePartnerSchema } from "../../../packages/validators/zod-schemas/update/update-partner.validator";
-import { queryPartnerSchema } from "../../../packages/validators/zod-schemas/query/query-partner.validator";
+import { createPartnerSchema } from "../../../packages/validators/zodSchemas/create/createPartnerValidator";
+import { updatePartnerSchema } from "../../../packages/validators/zodSchemas/update/updatePartnerValidator";
+import { queryPartnerSchema } from "../../../packages/validators/zodSchemas/query/queryPartnerValidator";
 import { Partner } from "../entity/entities";
 
 /**

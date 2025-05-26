@@ -28,7 +28,7 @@ import { useGetManyTcp } from '@/hooks/service/tcp/useGetManyTcp';
 import { useQueryTcp } from '@/hooks/service/tcp/useQueryTcp';
 import { useFormStore } from '@/hooks/useFormStore';
 import { TcpProps } from '@packages/dtos/tcp.dto';
-import { queryTcpSchema } from '@packages/validators/zod-schemas/query/query-tcp.validator';
+import { queryTcpSchema } from '@packages/validators/zodSchemas/query/queryTcpValidator';
 
 type QueryTcpFormData = z.infer<typeof queryTcpSchema>;
 

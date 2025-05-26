@@ -6,9 +6,9 @@ import {
   CreateUser,
   QueryUser,
 } from "../../../packages/dtos/user.dto";
-import { createUserSchema } from "../../../packages/validators/zod-schemas/create/create-user.validator";
-import { updateUserSchema } from "../../../packages/validators/zod-schemas/update/update-user.validator";
-import { queryUserSchema } from "../../../packages/validators/zod-schemas/query/query-user.validator";
+import { createUserSchema } from "../../../packages/validators/zodSchemas/create/createUserValidator";
+import { updateUserSchema } from "../../../packages/validators/zodSchemas/update/updateUserValidator";
+import { queryUserSchema } from "../../../packages/validators/zodSchemas/query/queryUserValidator";
 import { User } from "../entity/entities";
 
 /**

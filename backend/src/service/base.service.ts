@@ -1,5 +1,5 @@
 import { Repository, EntityTarget, ObjectLiteral } from "typeorm";
-import { AppDataSource } from "../config/db";
+import { AppDataSource } from "../config/typeorm.db.config";
 
 /**
  * Classe abstrata de serviço base que fornece a estrutura para operações CRUD.

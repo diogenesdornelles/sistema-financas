@@ -20,7 +20,7 @@ import CustomBackdrop from '@/components/ui/CustomBackdrop';
 import FormContainer from '@/components/ui/FormContainer';
 import { usePutPartner } from '@/hooks/service/partner/usePutPartner';
 import { useFormStore } from '@/hooks/useFormStore';
-import { updatePartnerSchema } from '@packages/validators/zod-schemas/update/update-partner.validator';
+import { updatePartnerSchema } from '@packages/validators/zodSchemas/update/updatePartnerValidator';
 
 type UpdatePartnerFormData = z.infer<typeof updatePartnerSchema>;
 

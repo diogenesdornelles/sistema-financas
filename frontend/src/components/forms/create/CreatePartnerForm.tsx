@@ -10,7 +10,7 @@ import { usePostPartner } from '@/hooks/service/partner/usePostPartner';
 import { useAuth } from '@/hooks/useAuth';
 import { useFormStore } from '@/hooks/useFormStore';
 import { PartnerType } from '@packages/dtos/utils/enums';
-import { createPartnerSchema } from '@packages/validators/zod-schemas/create/create-partner.validator';
+import { createPartnerSchema } from '@packages/validators/zodSchemas/create/createPartnerValidator';
 
 type CreatePartnerFormData = z.infer<typeof createPartnerSchema>;
 

@@ -30,7 +30,7 @@ import { useFormStore } from '@/hooks/useFormStore';
 import { strToPtBrMoney } from '@/utils/strToPtBrMoney';
 import { CrProps } from '@packages/dtos/cr.dto';
 import { PaymentStatus } from '@packages/dtos/utils/enums';
-import { queryCrSchema } from '@packages/validators/zod-schemas/query/query-cr.validator';
+import { queryCrSchema } from '@packages/validators/zodSchemas/query/queryCrValidator';
 
 type QueryCrFormData = z.infer<typeof queryCrSchema>;
 

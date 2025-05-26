@@ -27,4 +27,3 @@ export interface QueryTcf {
   createdAt?: string;
   updatedAt?: string;
 }
-

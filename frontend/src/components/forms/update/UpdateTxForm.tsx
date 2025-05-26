@@ -27,7 +27,7 @@ import { useGetAllCr } from '@/hooks/service/cr/useGetAllCr';
 import { usePutTx } from '@/hooks/service/tx/usePutTx';
 import { useFormStore } from '@/hooks/useFormStore';
 import { strToPtBrMoney } from '@/utils/strToPtBrMoney';
-import { updateTxSchema } from '@packages/validators/zod-schemas/update/update-tx.validator';
+import { updateTxSchema } from '@packages/validators/zodSchemas/update/updateTxValidator';
 
 type UpdateTxFormData = z.infer<typeof updateTxSchema>;
 type RadioInput = 'cp' | 'cr';

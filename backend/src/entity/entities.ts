@@ -11,6 +11,7 @@ import {
 import {
   PartnerType,
   PaymentStatus,
+  RoleType,
   TransactionType,
 } from "../../../packages/dtos/utils/enums";
 
@@ -38,6 +39,9 @@ export class User extends Base {
 
   @Column({ type: "varchar", length: 11, unique: true })
   cpf!: string; // Create: required; Update: optional; Response: required
+
+  @Column({ type: "enum", enum: RoleType })
+  role!: RoleType; // Create: required; Update: no required; Response: required
 
   @Column({ type: "varchar", length: 128 })
   pwd!: string; // Create: required; Update: optional; Response: no required

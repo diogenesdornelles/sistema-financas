@@ -7,6 +7,7 @@ import {
 } from "../../../packages/dtos/user.dto";
 import hashPassword from "../utils/hash-pwd.util";
 import { FindOptionsWhere, ILike, MoreThanOrEqual, Raw } from "typeorm";
+import { RoleSearchType, RoleType } from "../../../packages/dtos/utils/enums";
 
 export class UserService extends BaseService<
   User,
@@ -25,6 +26,7 @@ export class UserService extends BaseService<
       surname: true,
       createdAt: true,
       updatedAt: true,
+      role: true,
       cpf: true,
       pwd: false,
     };
@@ -172,6 +174,10 @@ export class UserService extends BaseService<
 
       if (data.status) {
         where.status = data.status;
+      }
+
+      if (data.role && data.role !== RoleSearchType.ALL) {
+        where.role = data.role as unknown as RoleType;
       }
 
       if (data.updatedAt) {

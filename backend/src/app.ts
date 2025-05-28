@@ -1,18 +1,11 @@
 import express, { Express } from "express";
-// Importing morgan for HTTP request logging
-// @ts-ignore
+
 import morgan from "morgan";
-// Importing cors to handle Cross-Origin Resource Sharing (CORS)
-// @ts-ignore
+
 import cors from "cors";
 import * as dotenv from "dotenv";
 import helmet from "helmet";
 
-// Importing Swagger UI for API documentation
-// @ts-ignore
-import swaggerUi from "swagger-ui-express";
-// @ts-ignore
-import swaggerDocument from "./swagger.json";
 import { RouteConfigType } from "./types/route-config.type";
 import { AppDataSource } from "./config/typeorm.db.config";
 import { DataSource } from "typeorm";
@@ -20,15 +13,13 @@ import { runAllSeeds } from "./seeds/runAllSeeds";
 
 dotenv.config();
 
-// CORS configuration options
 const corsOptions: cors.CorsOptions = {
-  origin: "*", // Allow all origins
-  methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
-  allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
-  credentials: true, // Enable credentials (cookies, authorization headers, etc.)
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
 };
 
-// Seta o endereço do servidor e a porta em que vai rodar a aplicação
 const PORT = process.env.APP_PORT || 3000;
 const HOST = process.env.HOST || "";
 
@@ -39,11 +30,10 @@ const HOST = process.env.HOST || "";
  * Também fornece um método para iniciar o servidor.
  */
 class App {
-  // Instância da aplicação Express.
   public app: Express;
-  // Configurações de rotas.
+
   public routesConfig: RouteConfigType[];
-  // Conexão com o banco de dados.
+
   public appDataSource: DataSource | null;
 
   /**
@@ -84,26 +74,56 @@ class App {
   }
 
   /**
-   * Inicializa a conexão com o banco de dados e cria as tabelas, se necessário.
+   * Inicializa a conexão com o banco de dados e executa migrations/seeds.
    */
-  private async initilizeDBConn(): Promise<DataSource> {
+  private async initializeDBConn(): Promise<DataSource> {
     try {
+      console.log("Inicializando conexão com o banco de dados...");
       const appDataSource = await AppDataSource.initialize();
-      console.log("Conexão com o banco inicializada");
+      console.log("Conexão com o banco estabelecida");
 
-      const pendingMigrations = await appDataSource.showMigrations();
-      if (pendingMigrations) {
-        console.log("Executando migrations pendentes...");
-        await appDataSource.runMigrations();
-        console.log("Migrations executadas com sucesso");
+      console.log("Executando migrations...");
+      const executedMigrations = await appDataSource.runMigrations();
+
+      if (executedMigrations.length > 0) {
+        console.log(`${executedMigrations.length} migration(s) executada(s):`);
+        executedMigrations.forEach((migration) => {
+          console.log(`  - ${migration.name}`);
+        });
       } else {
-        console.log("Nenhuma migration pendente");
+        console.log("ℹNenhuma migration pendente");
       }
+
+      await this.verifyDatabaseStructure(appDataSource);
+
+      console.log("Executando seeds...");
       await runAllSeeds();
+      console.log("Seeds executados com sucesso");
+
+      console.log("Inicialização do banco concluída!");
       return appDataSource;
     } catch (error) {
-      console.error("Erro na inicialização:", error);
+      console.error("Erro na inicialização do banco:", error);
       throw error;
+    }
+  }
+
+  /**
+   * Verifica se a estrutura básica do banco está correta
+   */
+  private async verifyDatabaseStructure(dataSource: DataSource): Promise<void> {
+    try {
+      const userCount = await dataSource.query(
+        'SELECT COUNT(*) as count FROM "user"',
+      );
+      console.log(`Usuários cadastrados: ${userCount[0].count}`);
+
+      const migrationsCount = await dataSource.query(
+        'SELECT COUNT(*) as count FROM "migrations"',
+      );
+      console.log(`Migrations executadas: ${migrationsCount[0].count}`);
+    } catch (error) {
+      console.warn("Não foi possível verificar estrutura:", error);
     }
   }
 
@@ -111,7 +131,7 @@ class App {
    * Inicia o servidor e escuta na porta especificada.
    */
   public async listen(): Promise<void> {
-    this.appDataSource = await this.initilizeDBConn();
+    this.appDataSource = await this.initializeDBConn();
     this.app.listen(PORT, () => {
       console.log(`Host: ${HOST}. Escutando na porta ${PORT}`);
     });

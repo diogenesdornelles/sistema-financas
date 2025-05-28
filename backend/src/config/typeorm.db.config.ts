@@ -13,6 +13,7 @@ import {
   Tx,
 } from "../entity/entities";
 import * as dotenv from "dotenv";
+// import {InitialMigrationTIMESTAMP} from '../migrations/forTypeorm/InicitalMigration'
 
 dotenv.config();
 
@@ -30,9 +31,9 @@ export const AppDataSource = new DataSource({
   password: POSTGRES_PASSWORD,
   database: POSTGRES_DATABASE,
   synchronize: false, // usado para produção, com migrações
-  logging: false,
+  logging: true,
   entities: [User, Tcf, Tcp, Tcr, Cat, Cf, Cp, Cr, Partner, Tx],
-  migrations: ["src/migrations/_typeorm/*.ts"],
+  migrations: ["src/migrations/forTypeorm/*.ts"],
   subscribers: [],
   migrationsTableName: "migrations",
 });

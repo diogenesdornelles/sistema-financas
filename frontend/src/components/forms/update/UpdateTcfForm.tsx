@@ -13,7 +13,7 @@ import CustomBackdrop from '@/components/ui/CustomBackdrop';
 import FormContainer from '@/components/ui/FormContainer';
 import { usePutTcf } from '@/hooks/service/tcf/usePutTcf';
 import { useFormStore } from '@/hooks/useFormStore';
-import { updateTcfSchema } from '@packages/validators/zodSchemas/update/updateTcfValidator';
+import { updateTcfSchema } from '@monorepo/packages';
 
 type UpdateTcfFormData = z.infer<typeof updateTcfSchema>;
 

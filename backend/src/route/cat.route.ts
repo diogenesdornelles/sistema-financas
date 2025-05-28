@@ -1,5 +1,5 @@
 import CatController from "../controller/cat.controller";
-import GeneralMiddleware from "../middleware/general.middleware";
+import GeneralMiddleware from "../middleware/GeneralMiddleware";
 import { BaseRouter } from "./base.route";
 
 export default class CatRouter extends BaseRouter<CatController> {

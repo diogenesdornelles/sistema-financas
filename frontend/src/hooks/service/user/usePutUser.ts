@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Api } from '@/api/Api';
-import { UpdateUser } from '@packages/dtos/user.dto';
+import { UpdateUser } from '@monorepo/packages';
 
 export function usePutUser(id: string) {
   const queryClient = useQueryClient();

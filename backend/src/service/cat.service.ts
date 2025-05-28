@@ -1,6 +1,6 @@
 import { BaseService } from "./base.service";
 import { Cat, User } from "../entity/entities";
-import { CreateCat, UpdateCat, QueryCat } from "../../../packages/dtos/cat.dto";
+import { CreateCat, UpdateCat, QueryCat } from "@monorepo/packages";
 import { FindOptionsWhere, ILike, MoreThanOrEqual, Raw } from "typeorm";
 
 /**

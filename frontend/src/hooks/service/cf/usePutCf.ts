@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Api } from '@/api/Api';
-import { UpdateCf } from '@packages/dtos/cf.dto';
+import { UpdateCf } from '@monorepo/packages';
 
 // Hook para atualizar um 'cf' existente (PUT)
 export function usePutCf(id: string) {

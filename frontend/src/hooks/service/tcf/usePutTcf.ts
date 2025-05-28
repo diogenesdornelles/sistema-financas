@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Api } from '@/api/Api';
-import { UpdateTcf } from '@packages/dtos/tcf.dto';
+import { UpdateTcf } from '@monorepo/packages';
 
 export function usePutTcf(id: string) {
   const queryClient = useQueryClient();

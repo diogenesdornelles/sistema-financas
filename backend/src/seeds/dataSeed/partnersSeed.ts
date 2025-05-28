@@ -1,4 +1,4 @@
-import { PartnerType } from "../../../../packages/dtos/utils/enums";
+import { PartnerType } from "@monorepo/packages";
 import { generateValidCNPJ } from "../utils/generateValidCNPJ";
 import { generateValidCPF } from "../utils/generateValidCPF";
 

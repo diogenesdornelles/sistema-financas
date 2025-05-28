@@ -14,8 +14,7 @@ import { JSX } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { queryUserSchema } from '@packages/validators/zodSchemas/query/queryUserValidator';
-import { RoleSearchType } from '@packages/dtos/utils/enums';
+import { queryUserSchema, RoleSearchType } from '@monorepo/packages';
 
 type QueryUserFormData = z.infer<typeof queryUserSchema>;
 

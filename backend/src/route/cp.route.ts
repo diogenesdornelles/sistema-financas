@@ -1,5 +1,5 @@
 import CpController from "../controller/cp.controller";
-import GeneralMiddleware from "../middleware/general.middleware";
+import GeneralMiddleware from "../middleware/GeneralMiddleware";
 import { BaseRouter } from "./base.route";
 
 export default class CpRouter extends BaseRouter<CpController> {

@@ -1,7 +1,6 @@
 import { BaseService } from "./base.service";
 import { Cf, Cr, Partner, Tcr, Tx, User } from "../entity/entities";
-import { CreateCr, UpdateCr, QueryCr } from "../../../packages/dtos/cr.dto";
-import { PaymentStatus } from "../../../packages/dtos/utils/enums";
+import { CreateCr, UpdateCr, QueryCr,PaymentStatus } from "@monorepo/packages";
 import {
   FindOptionsWhere,
   ILike,

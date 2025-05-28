@@ -27,8 +27,7 @@ import { useDeleteTcf } from '@/hooks/service/tcf/useDeleteTcf';
 import { useGetManyTcf } from '@/hooks/service/tcf/useGetManyTcf';
 import { useQueryTcf } from '@/hooks/service/tcf/useQueryTcf';
 import { useFormStore } from '@/hooks/useFormStore';
-import { TcfProps } from '@packages/dtos/tcf.dto';
-import { queryTcfSchema } from '@packages/validators/zodSchemas/query/queryTcfValidator';
+import { queryTcfSchema, TcfProps } from '@monorepo/packages';
 
 type QueryTcfFormData = z.infer<typeof queryTcfSchema>;
 

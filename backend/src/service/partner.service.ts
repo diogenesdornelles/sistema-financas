@@ -4,12 +4,10 @@ import {
   CreatePartner,
   QueryPartner,
   UpdatePartner,
-} from "../../../packages/dtos/partner.dto";
-import { FindOptionsWhere, ILike, Like, MoreThanOrEqual, Raw } from "typeorm";
-import {
   PartnerSearchType,
   PartnerType,
-} from "../../../packages/dtos/utils/enums";
+} from "@monorepo/packages";
+import { FindOptionsWhere, ILike, Like, MoreThanOrEqual, Raw } from "typeorm";
 
 export class PartnerService extends BaseService<
   Partner,

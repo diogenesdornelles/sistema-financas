@@ -2,9 +2,8 @@ import { Request, Response, NextFunction } from "express";
 
 import { BaseController } from "./base.controller";
 
-import { TokenProps, CreateToken } from "../../../packages/dtos/token.dto";
 import LoginService from "../service/login.service";
-import { createTokenSchema } from "../../../packages/validators/zodSchemas/create/createTokenValidator";
+import { createTokenSchema, TokenProps, CreateToken } from "@monorepo/packages";
 
 /**
  * Controla o fluxo de requisições e respostas de Login

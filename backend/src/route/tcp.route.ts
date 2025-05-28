@@ -1,5 +1,5 @@
 import TcpController from "../controller/tcp.controller";
-import GeneralMiddleware from "../middleware/general.middleware";
+import GeneralMiddleware from "../middleware/GeneralMiddleware";
 import { BaseRouter } from "./base.route";
 
 export default class TcpRouter extends BaseRouter<TcpController> {

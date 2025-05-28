@@ -1,15 +1,49 @@
-import { CatProps, CreateCat, QueryCat, UpdateCat } from '@packages/dtos/cat.dto';
-import { CfProps, CreateCf, QueryCf, UpdateCf } from '@packages/dtos/cf.dto';
-import { CpProps, CreateCp, QueryCp, UpdateCp } from '@packages/dtos/cp.dto';
-import { CrProps, CreateCr, QueryCr, UpdateCr } from '@packages/dtos/cr.dto';
-import { DbBalanceProps, DbCpsCrsProps } from '@packages/dtos/db.dto';
-import { CreatePartner, PartnerProps, QueryPartner, UpdatePartner } from '@packages/dtos/partner.dto';
-import { CreateTcf, QueryTcf, TcfProps, UpdateTcf } from '@packages/dtos/tcf.dto';
-import { CreateTcp, QueryTcp, TcpProps, UpdateTcp } from '@packages/dtos/tcp.dto';
-import { CreateTcr, QueryTcr, TcrProps, UpdateTcr } from '@packages/dtos/tcr.dto';
-import { CreateToken, TokenProps } from '@packages/dtos/token.dto';
-import { CreateTx, QueryTx, TxProps, UpdateTx } from '@packages/dtos/tx.dto';
-import { CreateUser, QueryUser, UpdateUser, UserProps } from '@packages/dtos/user.dto';
+import {
+  CreateUser,
+  QueryUser,
+  UpdateUser,
+  UserProps,
+  CreateTx,
+  QueryTx,
+  TxProps,
+  UpdateTx,
+  CreateToken,
+  TokenProps,
+  CreateTcr,
+  QueryTcr,
+  TcrProps,
+  UpdateTcr,
+  CreateTcp,
+  QueryTcp,
+  TcpProps,
+  UpdateTcp,
+  CreateTcf,
+  QueryTcf,
+  TcfProps,
+  UpdateTcf,
+  CreatePartner,
+  PartnerProps,
+  QueryPartner,
+  UpdatePartner,
+  DbBalanceProps,
+  DbCpsCrsProps,
+  CrProps,
+  CreateCr,
+  QueryCr,
+  UpdateCr,
+  CpProps,
+  CreateCp,
+  QueryCp,
+  UpdateCp,
+  CfProps,
+  CreateCf,
+  QueryCf,
+  UpdateCf,
+  CatProps,
+  CreateCat,
+  QueryCat,
+  UpdateCat,
+} from '@monorepo/packages';
 import { restClient } from '../utils/clients';
 
 export const Api = {

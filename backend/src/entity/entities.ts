@@ -13,7 +13,7 @@ import {
   PaymentStatus,
   RoleType,
   TransactionType,
-} from "../../../packages/dtos/utils/enums";
+} from "@monorepo/packages";
 
 // Classe base com id, createdAt e updatedAt
 @Entity()

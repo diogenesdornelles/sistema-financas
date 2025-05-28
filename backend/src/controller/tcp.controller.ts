@@ -1,10 +1,14 @@
 import { Request, Response, NextFunction } from "express";
 import { TcpService } from "../service/tcp.service";
 import { BaseController } from "./base.controller";
-import { UpdateTcp, CreateTcp, QueryTcp } from "../../../packages/dtos/tcp.dto";
-import { createTcpSchema } from "../../../packages/validators/zodSchemas/create/createTcpValidator";
-import { updateTcpSchema } from "../../../packages/validators/zodSchemas/update/updateTcpValidator";
-import { queryTcpSchema } from "../../../packages/validators/zodSchemas/query/queryTcpValidator";
+import {
+  queryTcpSchema,
+  updateTcpSchema,
+  createTcpSchema,
+  UpdateTcp,
+  CreateTcp,
+  QueryTcp,
+} from "@monorepo/packages";
 import { Tcp } from "../entity/entities";
 
 /**

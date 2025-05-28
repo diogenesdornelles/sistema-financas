@@ -4,7 +4,7 @@ import { JSX } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { queryTcfSchema } from '@packages/validators/zodSchemas/query/queryTcfValidator';
+import { queryTcfSchema } from '@monorepo/packages';
 
 type QueryTcfFormData = z.infer<typeof queryTcfSchema>;
 

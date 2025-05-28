@@ -13,9 +13,7 @@ import { colors, optionsCpsCrs, optionsPie } from '@/constants/dashboard';
 import { useGetAllCf } from '@/hooks/service/cf/useGetAllCf';
 import { useGetBalances } from '@/hooks/service/db/useGetBalances';
 import { useGetCpsCrs } from '@/hooks/service/db/useGetCpsCrs';
-import { strToPtBrMoney } from '@/utils/strToPtBrMoney';
-import { DbBalanceProps } from '@packages/dtos/db.dto';
-import { queryDbSchema } from '@packages/validators/zodSchemas/query/queryDbValidator';
+import { queryDbSchema, DbBalanceProps, strToPtBrMoney } from '@monorepo/packages';
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title, LinearScale, CategoryScale, BarElement);
 

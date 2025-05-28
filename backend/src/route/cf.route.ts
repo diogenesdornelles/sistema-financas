@@ -1,5 +1,5 @@
 import CfController from "../controller/cf.controller";
-import GeneralMiddleware from "../middleware/general.middleware";
+import GeneralMiddleware from "../middleware/GeneralMiddleware";
 import { BaseRouter } from "./base.route";
 
 export default class CfRouter extends BaseRouter<CfController> {

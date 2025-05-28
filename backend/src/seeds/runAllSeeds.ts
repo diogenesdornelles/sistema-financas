@@ -1,11 +1,11 @@
 import { SeedManager } from "./SeedManager";
-import { createSeedSuperUser } from "./_typeorm/createSeedSuperUser";
-import { createSeedUser } from "./_typeorm/createSeedUser";
-import { createSeedPartner } from "./_typeorm/createSeedPartner";
-import { createSeedTcr } from "./_typeorm/createSeedTcr";
-import { createSeedCat } from "./_typeorm/createSeedCat";
-import { createSeedTcf } from "./_typeorm/createSeedTcf";
-import { createSeedTcp } from "./_typeorm/createSeedTcp";
+import { createSeedSuperUser } from "./create/createSeedSuperUser";
+import { createSeedUser } from "./create/createSeedUser";
+import { createSeedPartner } from "./create/createSeedPartner";
+import { createSeedTcr } from "./create/createSeedTcr";
+import { createSeedCat } from "./create/createSeedCat";
+import { createSeedTcf } from "./create/createSeedTcf";
+import { createSeedTcp } from "./create/createSeedTcp";
 
 export const runAllSeeds = async () => {
   const seedManager = new SeedManager();

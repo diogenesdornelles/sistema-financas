@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Api } from '@/api/Api';
-import { CreatePartner } from '@packages/dtos/partner.dto';
+import { CreatePartner } from '@monorepo/packages';
 
 // Hook para criar um novo 'partner' (POST)
 export function usePostPartner() {

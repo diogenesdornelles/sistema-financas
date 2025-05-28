@@ -9,7 +9,7 @@ import FormContainer from '@/components/ui/FormContainer';
 import { usePostCat } from '@/hooks/service/cat/usePostCat';
 import { useAuth } from '@/hooks/useAuth';
 import { useFormStore } from '@/hooks/useFormStore';
-import { createCatSchema } from '@packages/validators/zodSchemas/create/createCatValidator';
+import { createCatSchema } from '@monorepo/packages';
 
 type CreateCatFormData = z.infer<typeof createCatSchema>;
 

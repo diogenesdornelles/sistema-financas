@@ -12,8 +12,7 @@ import { useGetAllPartner } from '@/hooks/service/partner/useGetAllPartner';
 import { useGetAllTcr } from '@/hooks/service/tcr/useGetAllTcr';
 import { useAuth } from '@/hooks/useAuth';
 import { useFormStore } from '@/hooks/useFormStore';
-import { strToPtBrMoney } from '@/utils/strToPtBrMoney';
-import { createCrSchema } from '@packages/validators/zodSchemas/create/createCrValidator';
+import { createCrSchema, strToPtBrMoney } from '@monorepo/packages';
 
 type CreateCrFormData = z.infer<typeof createCrSchema>;
 

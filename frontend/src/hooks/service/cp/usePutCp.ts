@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Api } from '@/api/Api';
-import { UpdateCp } from '@packages/dtos/cp.dto';
+import { UpdateCp } from '@monorepo/packages';
 
 // Hook para atualizar um 'cp' existente (PUT)
 export function usePutCp(id: string) {

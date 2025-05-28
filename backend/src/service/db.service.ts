@@ -4,9 +4,9 @@ import {
   DbBalanceProps,
   ResultSet,
   DbCpsCrsProps,
-} from "../../../packages/dtos/db.dto";
+} from "@monorepo/packages";
 import { Cp, Cr } from "../entity/entities";
-import { ApiError } from "../utils/api-error.util";
+import { ApiError } from "../utils/apiError.util";
 
 export class DbService {
   public queryRunner: QueryRunner;

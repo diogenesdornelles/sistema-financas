@@ -2,16 +2,18 @@ export type TValue = 'cf' | 'tcf' | 'cr' | 'tcr' | 'cp' | 'tcp' | 'partner' | 't
 
 export type TopType = 'update' | 'create';
 
-import { UpdateCat } from '@packages/dtos/cat.dto';
-import { UpdateCf } from '@packages/dtos/cf.dto';
-import { UpdateCp } from '@packages/dtos/cp.dto';
-import { UpdateCr } from '@packages/dtos/cr.dto';
-import { UpdatePartner } from '@packages/dtos/partner.dto';
-import { UpdateTcf } from '@packages/dtos/tcf.dto';
-import { UpdateTcp } from '@packages/dtos/tcp.dto';
-import { UpdateTcr } from '@packages/dtos/tcr.dto';
-import { UpdateTx } from '@packages/dtos/tx.dto';
-import { UpdateUser } from '@packages/dtos/user.dto';
+import {
+  UpdateUser,
+  UpdateCat,
+  UpdateCf,
+  UpdateCp,
+  UpdatePartner,
+  UpdateCr,
+  UpdateTcf,
+  UpdateTcp,
+  UpdateTcr,
+  UpdateTx,
+} from '@monorepo/packages';
 
 type UpdateItemMap = {
   cf: UpdateCf;

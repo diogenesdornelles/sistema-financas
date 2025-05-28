@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Api } from '@/api/Api';
-import { CreateTx } from '@packages/dtos/tx.dto';
+import { CreateTx } from '@monorepo/packages';
 
 export function usePostTx() {
   const queryClient = useQueryClient();

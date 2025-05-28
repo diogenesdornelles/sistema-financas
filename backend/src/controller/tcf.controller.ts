@@ -1,10 +1,14 @@
 import { Request, Response, NextFunction } from "express";
 import { TcfService } from "../service/tcf.service";
 import { BaseController } from "./base.controller";
-import { UpdateTcf, CreateTcf, QueryTcf } from "../../../packages/dtos/tcf.dto";
-import { createTcfSchema } from "../../../packages/validators/zodSchemas/create/createTcfValidator";
-import { updateTcfSchema } from "../../../packages/validators/zodSchemas/update/updateTcfValidator";
-import { queryTcfSchema } from "../../../packages/validators/zodSchemas/query/queryTcfValidator";
+import {
+  queryTcfSchema,
+  updateTcfSchema,
+  createTcfSchema,
+  UpdateTcf,
+  CreateTcf,
+  QueryTcf,
+} from "@monorepo/packages";
 import { Tcf } from "../entity/entities";
 
 /**

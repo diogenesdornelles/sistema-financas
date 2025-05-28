@@ -1,6 +1,6 @@
 import { BaseService } from "./base.service";
 import { Tcr } from "../entity/entities";
-import { CreateTcr, UpdateTcr, QueryTcr } from "../../../packages/dtos/tcr.dto";
+import { CreateTcr, UpdateTcr, QueryTcr } from "@monorepo/packages";
 import { FindOptionsWhere, ILike, MoreThanOrEqual, Raw } from "typeorm";
 
 export class TcrService extends BaseService<

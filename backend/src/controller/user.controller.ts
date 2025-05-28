@@ -2,13 +2,13 @@ import { Request, Response, NextFunction } from "express";
 import { UserService } from "../service/user.service";
 import { BaseController } from "./base.controller";
 import {
+  queryUserSchema,
+  updateUserSchema,
+  createUserSchema,
   UpdateUser,
   CreateUser,
   QueryUser,
-} from "../../../packages/dtos/user.dto";
-import { createUserSchema } from "../../../packages/validators/zodSchemas/create/createUserValidator";
-import { updateUserSchema } from "../../../packages/validators/zodSchemas/update/updateUserValidator";
-import { queryUserSchema } from "../../../packages/validators/zodSchemas/query/queryUserValidator";
+} from "@monorepo/packages";
 import { User } from "../entity/entities";
 
 /**

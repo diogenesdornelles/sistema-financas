@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Api } from '@/api/Api';
-import { CreateUser } from '@packages/dtos/user.dto';
+import { CreateUser } from '@monorepo/packages';
 
 export function usePostUser() {
   const queryClient = useQueryClient();

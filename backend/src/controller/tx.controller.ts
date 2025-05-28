@@ -1,13 +1,17 @@
 import { Request, Response, NextFunction } from "express";
 import { TxService } from "../service/tx.service";
 import { BaseController } from "./base.controller";
-import { UpdateTx, CreateTx, QueryTx } from "../../../packages/dtos/tx.dto";
-import { createTxSchema } from "../../../packages/validators/zodSchemas/create/createTxValidator";
-import { updateTxSchema } from "../../../packages/validators/zodSchemas/update/updateTxValidator";
-import { queryTxSchema } from "../../../packages/validators/zodSchemas/query/queryTxValidator";
+import {
+  queryTxSchema,
+  updateTxSchema,
+  createTxSchema,
+  UpdateTx,
+  CreateTx,
+  QueryTx,
+  GeneralValidator
+} from "@monorepo/packages";
 import { Tx } from "../entity/entities";
-import GeneralValidator from "../../../packages/validators/general.validator";
-import { ApiError } from "../utils/api-error.util";
+import { ApiError } from "../utils/apiError.util";
 
 /**
  * Controla o fluxo de requisições e respostas de Transações

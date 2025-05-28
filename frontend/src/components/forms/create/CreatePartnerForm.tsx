@@ -9,8 +9,7 @@ import FormContainer from '@/components/ui/FormContainer';
 import { usePostPartner } from '@/hooks/service/partner/usePostPartner';
 import { useAuth } from '@/hooks/useAuth';
 import { useFormStore } from '@/hooks/useFormStore';
-import { PartnerType } from '@packages/dtos/utils/enums';
-import { createPartnerSchema } from '@packages/validators/zodSchemas/create/createPartnerValidator';
+import { createPartnerSchema, PartnerType } from '@monorepo/packages';
 
 type CreatePartnerFormData = z.infer<typeof createPartnerSchema>;
 

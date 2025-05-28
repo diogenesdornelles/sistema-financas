@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Api } from '@/api/Api';
-import { CreateTcp } from '@packages/dtos/tcp.dto';
+import { CreateTcp } from '@monorepo/packages';
 
 export function usePostTcp() {
   const queryClient = useQueryClient();

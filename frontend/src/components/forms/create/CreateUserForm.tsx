@@ -12,8 +12,7 @@ import CustomBackdrop from '@/components/ui/CustomBackdrop';
 import FormContainer from '@/components/ui/FormContainer';
 import { usePostUser } from '@/hooks/service/user/usePostUser';
 import { useFormStore } from '@/hooks/useFormStore';
-import { createUserRepPwdSchema } from '@packages/validators/zodSchemas/create/createUserRepPwdValidator';
-import { RoleType } from '@packages/dtos/utils/enums';
+import { createUserRepPwdSchema, RoleType } from'@monorepo/packages';
 
 type CreateUserFormData = z.infer<typeof createUserRepPwdSchema>;
 

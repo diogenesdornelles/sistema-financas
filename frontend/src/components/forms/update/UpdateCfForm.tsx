@@ -10,7 +10,7 @@ import FormContainer from '@/components/ui/FormContainer';
 import { usePutCf } from '@/hooks/service/cf/usePutCf';
 import { useGetAllTcf } from '@/hooks/service/tcf/useGetAllTcf';
 import { useFormStore } from '@/hooks/useFormStore';
-import { updateCfSchema } from '@packages/validators/zodSchemas/update/updateCfValidator';
+import { updateCfSchema } from '@monorepo/packages';
 
 type UpdateCfFormData = z.infer<typeof updateCfSchema>;
 

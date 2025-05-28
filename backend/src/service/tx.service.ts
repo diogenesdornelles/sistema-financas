@@ -1,6 +1,5 @@
 import { BaseService } from "./base.service";
 import { Cat, Cf, Cp, Cr, Tx, User } from "../entity/entities";
-import { CreateTx, QueryTx, UpdateTx } from "../../../packages/dtos/tx.dto";
 import {
   FindOptionsWhere,
   ILike,
@@ -12,7 +11,10 @@ import {
   PaymentStatus,
   TransactionSearchType,
   TransactionType,
-} from "../../../packages/dtos/utils/enums";
+  CreateTx,
+  QueryTx,
+  UpdateTx,
+} from "@monorepo/packages";
 import { AppDataSource } from "../config/typeorm.db.config";
 
 /**

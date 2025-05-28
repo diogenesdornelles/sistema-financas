@@ -4,10 +4,11 @@ import {
   CreateUser,
   QueryUser,
   UpdateUser,
-} from "../../../packages/dtos/user.dto";
-import hashPassword from "../utils/hash-pwd.util";
+  RoleSearchType,
+  RoleType,
+} from "@monorepo/packages";
+import hashPassword from "../utils/hashPwd.util";
 import { FindOptionsWhere, ILike, MoreThanOrEqual, Raw } from "typeorm";
-import { RoleSearchType, RoleType } from "../../../packages/dtos/utils/enums";
 
 export class UserService extends BaseService<
   User,

@@ -13,7 +13,7 @@ import CustomBackdrop from '@/components/ui/CustomBackdrop';
 import FormContainer from '@/components/ui/FormContainer';
 import { usePutUser } from '@/hooks/service/user/usePutUser';
 import { useFormStore } from '@/hooks/useFormStore';
-import { updateUserSchema } from '@packages/validators/zodSchemas/update/updateUserValidator';
+import { updateUserSchema } from '@monorepo/packages';
 
 type UpdateUserFormData = z.infer<typeof updateUserSchema>;
 

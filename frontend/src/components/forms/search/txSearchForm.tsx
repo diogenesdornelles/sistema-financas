@@ -14,8 +14,7 @@ import { JSX } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { TransactionSearchType } from '@packages/dtos/utils/enums';
-import { queryTxSchema } from '@packages/validators/zodSchemas/query/queryTxValidator';
+import { queryTxSchema, TransactionSearchType  } from '@monorepo/packages';
 
 type QueryTxFormData = z.infer<typeof queryTxSchema>;
 

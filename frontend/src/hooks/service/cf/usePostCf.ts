@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Api } from '@/api/Api';
-import { CreateCf } from '@packages/dtos/cf.dto';
+import { CreateCf } from '@monorepo/packages';
 
 // Hook para criar um novo 'cf' (POST)
 export function usePostCf() {

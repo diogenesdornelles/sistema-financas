@@ -5,12 +5,12 @@ import { BaseService } from "./base.service";
 import { User } from "../entity/entities";
 
 import ms from "ms";
-import { ApiError } from "../utils/api-error.util";
+import { ApiError } from "../utils/apiError.util";
 import {
   CreateToken,
   TokenProps,
   UpdateToken,
-} from "../../../packages/dtos/token.dto";
+} from "@monorepo/packages";
 
 dotenv.config();
 

@@ -1,4 +1,4 @@
-import GeneralMiddleware from "../middleware/general.middleware";
+import GeneralMiddleware from "../middleware/GeneralMiddleware";
 import DbController from "../controller/db.controller";
 import { BaseRouter } from "./base.route";
 

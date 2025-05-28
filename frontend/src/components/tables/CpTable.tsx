@@ -27,10 +27,7 @@ import { useDeleteCp } from '@/hooks/service/cp/useDeleteCp';
 import { useGetManyCp } from '@/hooks/service/cp/useGetManyCp';
 import { useQueryCp } from '@/hooks/service/cp/useQueryCp';
 import { useFormStore } from '@/hooks/useFormStore';
-import { strToPtBrMoney } from '@/utils/strToPtBrMoney';
-import { CpProps } from '@packages/dtos/cp.dto';
-import { PaymentStatus } from '@packages/dtos/utils/enums';
-import { queryCpSchema } from '@packages/validators/zodSchemas/query/queryCpValidator';
+import { queryCpSchema, PaymentStatus, CpProps, strToPtBrMoney } from '@monorepo/packages';
 
 type QueryCpFormData = z.infer<typeof queryCpSchema>;
 

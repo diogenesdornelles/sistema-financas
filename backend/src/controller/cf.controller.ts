@@ -1,13 +1,17 @@
 import { Request, Response, NextFunction } from "express";
 import { CfService } from "../service/cf.service";
 import { BaseController } from "./base.controller";
-import { UpdateCf, CreateCf, QueryCf } from "../../../packages/dtos/cf.dto";
-import { createCfSchema } from "../../../packages/validators/zodSchemas/create/createCfValidator";
-import { updateCfSchema } from "../../../packages/validators/zodSchemas/update/updateCfValidator";
-import { queryCfSchema } from "../../../packages/validators/zodSchemas/query/queryCfValidator";
+import {
+  GeneralValidator,
+  queryCfSchema,
+  updateCfSchema,
+  createCfSchema,
+  UpdateCf,
+  CreateCf,
+  QueryCf,
+} from "@monorepo/packages";
 import { Cf } from "../entity/entities";
-import GeneralValidator from "../../../packages/validators/general.validator";
-import { ApiError } from "../utils/api-error.util";
+import { ApiError } from "../utils/apiError.util";
 
 /**
  * Controla o fluxo de requisições e respostas de Contas financeiras

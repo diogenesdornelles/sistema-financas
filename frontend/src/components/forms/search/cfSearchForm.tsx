@@ -4,7 +4,7 @@ import { JSX } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { queryCfSchema } from '@packages/validators/zodSchemas/query/queryCfValidator';
+import { queryCfSchema } from '@monorepo/packages';
 
 type QueryCfFormData = z.infer<typeof queryCfSchema>;
 

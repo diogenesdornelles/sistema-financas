@@ -11,8 +11,7 @@ import { usePutCp } from '@/hooks/service/cp/usePutCp';
 import { useGetAllPartner } from '@/hooks/service/partner/useGetAllPartner';
 import { useGetAllTcp } from '@/hooks/service/tcp/useGetAllTcp';
 import { useFormStore } from '@/hooks/useFormStore';
-import { strToPtBrMoney } from '@/utils/strToPtBrMoney';
-import { updateCpSchema } from '@packages/validators/zodSchemas/update/updateCpValidator';
+import { updateCpSchema, strToPtBrMoney } from '@monorepo/packages';
 
 type UpdateCpFormData = z.infer<typeof updateCpSchema>;
 

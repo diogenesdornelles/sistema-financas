@@ -1,10 +1,14 @@
 import { Request, Response, NextFunction } from "express";
 import { TcrService } from "../service/tcr.service";
 import { BaseController } from "./base.controller";
-import { UpdateTcr, CreateTcr, QueryTcr } from "../../../packages/dtos/tcr.dto";
-import { createTcrSchema } from "../../../packages/validators/zodSchemas/create/createTcrValidator";
-import { updateTcrSchema } from "../../../packages/validators/zodSchemas/update/updateTcrValidator";
-import { queryTcrSchema } from "../../../packages/validators/zodSchemas/query/queryTcrValidator";
+import {
+  queryTcrSchema,
+  updateTcrSchema,
+  createTcrSchema,
+  UpdateTcr,
+  CreateTcr,
+  QueryTcr,
+} from "@monorepo/packages";
 import { Tcr } from "../entity/entities";
 
 /**

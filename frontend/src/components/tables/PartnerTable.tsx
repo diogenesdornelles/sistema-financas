@@ -27,9 +27,7 @@ import { useDeletePartner } from '@/hooks/service/partner/useDeletePartner';
 import { useGetManyPartner } from '@/hooks/service/partner/useGetManyPartner';
 import { useQueryPartner } from '@/hooks/service/partner/useQueryPartner';
 import { useFormStore } from '@/hooks/useFormStore';
-import { PartnerProps } from '@packages/dtos/partner.dto';
-import { PartnerType } from '@packages/dtos/utils/enums';
-import { queryPartnerSchema } from '@packages/validators/zodSchemas/query/queryPartnerValidator';
+import { queryPartnerSchema, PartnerProps, PartnerType } from '@monorepo/packages';
 
 type QueryPartnerFormData = z.infer<typeof queryPartnerSchema>;
 

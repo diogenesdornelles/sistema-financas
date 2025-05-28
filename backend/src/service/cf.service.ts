@@ -1,6 +1,6 @@
 import { BaseService } from "./base.service";
 import { Cf, Tcf, User } from "../entity/entities";
-import { CreateCf, UpdateCf, QueryCf } from "../../../packages/dtos/cf.dto";
+import { CreateCf, UpdateCf, QueryCf } from "@monorepo/packages";
 import { FindOptionsWhere, ILike, Like, MoreThanOrEqual, Raw } from "typeorm";
 
 /**

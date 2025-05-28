@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { DbBalanceProps, DbCpsCrsProps } from "../../../packages/dtos/db.dto";
+import { DbBalanceProps, DbCpsCrsProps } from "@monorepo/packages";
 import { DbService } from "../service/db.service";
 
 /**

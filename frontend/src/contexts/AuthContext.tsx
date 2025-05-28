@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 
-import { TokenProps } from '@packages/dtos/token.dto';
+import { TokenProps } from '@monorepo/packages';
 
 // cria um contexto que define quais valores e funções estarão disponíveis globalmente no seu app
 export const AuthContext = createContext<{

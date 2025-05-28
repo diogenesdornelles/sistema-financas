@@ -1,10 +1,14 @@
 import { Request, Response, NextFunction } from "express";
 import { CatService } from "../service/cat.service";
 import { BaseController } from "./base.controller";
-import { UpdateCat, CreateCat, QueryCat } from "../../../packages/dtos/cat.dto";
-import { createCatSchema } from "../../../packages/validators/zodSchemas/create/createCatValidator";
-import { updateCatSchema } from "../../../packages/validators/zodSchemas/update/updateCatCalidator";
-import { queryCatSchema } from "../../../packages/validators/zodSchemas/query/queryCatValidator";
+import {
+  queryCatSchema,
+  updateCatSchema,
+  createCatSchema,
+  UpdateCat,
+  CreateCat,
+  QueryCat,
+} from "@monorepo/packages";
 import { Cat } from "../entity/entities";
 
 /**

@@ -4,8 +4,7 @@ import { JSX } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { PaymentStatus } from '@packages/dtos/utils/enums';
-import { queryCpSchema } from '@packages/validators/zodSchemas/query/queryCpValidator';
+import { queryCpSchema, PaymentStatus } from '@monorepo/packages';
 
 type QueryCpFormData = z.infer<typeof queryCpSchema>;
 

@@ -1,5 +1,5 @@
 import PartnerController from "../controller/partner.controller";
-import GeneralMiddleware from "../middleware/general.middleware";
+import GeneralMiddleware from "../middleware/GeneralMiddleware";
 import { BaseRouter } from "./base.route";
 
 export default class PartnerRouter extends BaseRouter<PartnerController> {

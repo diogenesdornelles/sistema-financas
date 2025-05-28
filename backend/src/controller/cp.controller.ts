@@ -1,13 +1,17 @@
 import { Request, Response, NextFunction } from "express";
 import { CpService } from "../service/cp.service";
 import { BaseController } from "./base.controller";
-import { UpdateCp, CreateCp, QueryCp } from "../../../packages/dtos/cp.dto";
-import { createCpSchema } from "../../../packages/validators/zodSchemas/create/createCpValidator";
-import { updateCpSchema } from "../../../packages/validators/zodSchemas/update/updateCpValidator";
-import { queryCpSchema } from "../../../packages/validators/zodSchemas/query/queryCpValidator";
+import {
+  GeneralValidator,
+  queryCpSchema,
+  updateCpSchema,
+  createCpSchema,
+  UpdateCp,
+  CreateCp,
+  QueryCp,
+} from "@monorepo/packages";
 import { Cp } from "../entity/entities";
-import GeneralValidator from "../../../packages/validators/general.validator";
-import { ApiError } from "../utils/api-error.util";
+import { ApiError } from "../utils/apiError.util";
 
 /**
  * Controla o fluxo de requisições e respostas de Contas a pagar

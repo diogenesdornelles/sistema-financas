@@ -1,4 +1,4 @@
-import { RoleType } from "../../../../packages/dtos/utils/enums";
+import { RoleType } from "@monorepo/packages";
 
 export const usersSeed = [
   {

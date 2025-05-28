@@ -2,13 +2,13 @@ import { Request, Response, NextFunction } from "express";
 import { PartnerService } from "../service/partner.service";
 import { BaseController } from "./base.controller";
 import {
+  queryPartnerSchema,
+  updatePartnerSchema,
+  createPartnerSchema,
   UpdatePartner,
   CreatePartner,
   QueryPartner,
-} from "../../../packages/dtos/partner.dto";
-import { createPartnerSchema } from "../../../packages/validators/zodSchemas/create/createPartnerValidator";
-import { updatePartnerSchema } from "../../../packages/validators/zodSchemas/update/updatePartnerValidator";
-import { queryPartnerSchema } from "../../../packages/validators/zodSchemas/query/queryPartnerValidator";
+} from "@monorepo/packages";
 import { Partner } from "../entity/entities";
 
 /**

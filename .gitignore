@@ -137,3 +137,5 @@ dist
 
 
 .turbo
+.env
+node_modules

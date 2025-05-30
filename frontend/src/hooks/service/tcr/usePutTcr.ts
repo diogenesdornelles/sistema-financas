@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Api } from '@/api/Api';
-import { UpdateTcr } from '@monorepo/packages';
+import type { UpdateTcr } from '@monorepo/packages';
 
 export function usePutTcr(id: string) {
   const queryClient = useQueryClient();

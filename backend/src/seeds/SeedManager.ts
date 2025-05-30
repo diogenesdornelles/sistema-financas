@@ -1,5 +1,4 @@
-import { AppDataSource } from "../config/typeorm.db.config";
-
+import { AppDataSource } from "../config/typeorm.db.config.js";
 export class SeedManager {
   private async createSeedTable() {
     await AppDataSource.query(`
@@ -16,7 +15,7 @@ export class SeedManager {
   private async isSeedExecuted(seedName: string): Promise<boolean> {
     const result = await AppDataSource.query(
       `SELECT COUNT(*) as count FROM "seeds_executed" WHERE "name" = $1`,
-      [seedName]
+      [seedName],
     );
     return parseInt(result[0].count) > 0;
   }
@@ -24,13 +23,13 @@ export class SeedManager {
   private async markSeedAsExecuted(seedName: string) {
     await AppDataSource.query(
       `INSERT INTO "seeds_executed" ("name") VALUES ($1)`,
-      [seedName]
+      [seedName],
     );
   }
 
   async runSeed(seedName: string, seedFunction: () => Promise<void>) {
     await this.createSeedTable();
-    
+
     if (await this.isSeedExecuted(seedName)) {
       console.log(`Seed '${seedName}' já foi executado.`);
       return;

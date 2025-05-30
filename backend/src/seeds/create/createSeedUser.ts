@@ -1,13 +1,15 @@
-import { User } from "../../entity/entities";
-import hashPassword from "../../utils/hashPwd.util";
-import { AppDataSource } from "../../config/typeorm.db.config";
-import { usersSeed } from "../dataSeed/usersSeed";
+import { AppDataSource } from "../../config/typeorm.db.config.js";
+import { User } from "../../entity/entities.js";
+import hashPassword from "../../utils/hashPwd.util.js";
+import { usersSeed } from "../dataSeed/usersSeed.js";
 
 export const createSeedUser = async () => {
   const userRepository = AppDataSource.getRepository(User);
 
   usersSeed.forEach(async (userData) => {
-    const existingUser = await userRepository.findOne({ where: { cpf: userData.cpf } });
+    const existingUser = await userRepository.findOne({
+      where: { cpf: userData.cpf },
+    });
 
     if (existingUser) {
       console.log(`Usuário já existe: ${userData.name} ${userData.surname}`);
@@ -24,6 +26,8 @@ export const createSeedUser = async () => {
     });
 
     await userRepository.save(user);
-    console.log(`Usuário criado com sucesso: ${userData.name} ${userData.surname}`);
+    console.log(
+      `Usuário criado com sucesso: ${userData.name} ${userData.surname}`,
+    );
   });
 };

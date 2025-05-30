@@ -1,6 +1,6 @@
-import LoginController from "../controller/login.controller";
-import GeneralMiddleware from "../middleware/GeneralMiddleware";
-import { BaseRouter } from "./base.route";
+import LoginController from "../controller/login.controller.js";
+import GeneralMiddleware from "../middleware/GeneralMiddleware.js";
+import { BaseRouter } from "./base.route.js";
 
 export default class LoginRouter extends BaseRouter<LoginController> {
   /**

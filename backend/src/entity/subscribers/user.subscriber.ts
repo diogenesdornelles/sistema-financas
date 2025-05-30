@@ -3,7 +3,7 @@ import {
   EventSubscriber,
   InsertEvent,
 } from "typeorm";
-import { User } from "../entities";
+import { User } from "../entities.js";
 
 // Se precisar de acesso ao DB, use subscriber: https://typeorm.io/listeners-and-subscribers#what-is-a-subscriber
 @EventSubscriber()

@@ -11,7 +11,8 @@ import { usePostCf } from '@/hooks/service/cf/usePostCf';
 import { useGetAllTcf } from '@/hooks/service/tcf/useGetAllTcf';
 import { useAuth } from '@/hooks/useAuth';
 import { useFormStore } from '@/hooks/useFormStore';
-import { createCfSchema, strToPtBrMoney } from '@monorepo/packages';
+import * as packages from '@monorepo/packages';
+const { createCfSchema, strToPtBrMoney } = packages;
 
 type CreateCfFormData = z.infer<typeof createCfSchema>;
 

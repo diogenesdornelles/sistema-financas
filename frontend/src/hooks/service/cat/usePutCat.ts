@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Api } from '@/api/Api';
-import { UpdateCat } from '@monorepo/packages';
+import type { UpdateCat } from '@monorepo/packages';
 
 // Hook para atualizar um 'cat' existente (PUT)
 export function usePutCat(id: string) {

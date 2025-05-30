@@ -1,6 +1,6 @@
-import GeneralMiddleware from "../middleware/GeneralMiddleware";
-import DbController from "../controller/db.controller";
-import { BaseRouter } from "./base.route";
+import DbController from "../controller/db.controller.js";
+import GeneralMiddleware from "../middleware/GeneralMiddleware.js";
+import { BaseRouter } from "./base.route.js";
 
 export default class DbRouter extends BaseRouter<DbController> {
   /**

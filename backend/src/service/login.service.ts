@@ -1,16 +1,12 @@
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 import * as dotenv from "dotenv";
-import { BaseService } from "./base.service";
-import { User } from "../entity/entities";
+import jwt from "jsonwebtoken";
+import { User } from "../entity/entities.js";
+import { BaseService } from "./base.service.js";
 
+import { CreateToken, TokenProps, UpdateToken } from "@monorepo/packages";
 import ms from "ms";
-import { ApiError } from "../utils/apiError.util";
-import {
-  CreateToken,
-  TokenProps,
-  UpdateToken,
-} from "@monorepo/packages";
+import { ApiError } from "../utils/apiError.util.js";
 
 dotenv.config();
 

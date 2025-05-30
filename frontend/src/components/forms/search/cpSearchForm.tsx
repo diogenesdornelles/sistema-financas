@@ -1,10 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import * as packages from '@monorepo/packages';
 import { Box, Button, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { JSX } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-
-import { queryCpSchema, PaymentStatus } from '@monorepo/packages';
+const { queryCpSchema, PaymentStatus } = packages;
 
 type QueryCpFormData = z.infer<typeof queryCpSchema>;
 

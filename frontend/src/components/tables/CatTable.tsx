@@ -20,7 +20,7 @@ import { useDeleteCat } from '@/hooks/service/cat/useDeleteCat';
 import { useGetManyCat } from '@/hooks/service/cat/useGetManyCat';
 import { useQueryCat } from '@/hooks/service/cat/useQueryCat';
 import { useFormStore } from '@/hooks/useFormStore';
-import { queryCatSchema, CatProps } from '@monorepo/packages';
+import type { CatProps, queryCatSchema } from '@monorepo/packages';
 
 type QueryCatFormData = z.infer<typeof queryCatSchema>;
 

@@ -1,19 +1,18 @@
+import * as dotenv from "dotenv";
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 import {
-  User,
-  Tcf,
-  Tcp,
-  Tcr,
   Cat,
   Cf,
   Cp,
   Cr,
   Partner,
+  Tcf,
+  Tcp,
+  Tcr,
   Tx,
-} from "../entity/entities";
-import * as dotenv from "dotenv";
-// import {InitialMigrationTIMESTAMP} from '../migrations/forTypeorm/InicitalMigration'
+  User,
+} from "../entity/entities.js";
 
 dotenv.config();
 
@@ -31,7 +30,7 @@ export const AppDataSource = new DataSource({
   password: POSTGRES_PASSWORD,
   database: POSTGRES_DATABASE,
   synchronize: false, // usado para produção, com migrações
-  logging: true,
+  logging: false,
   entities: [User, Tcf, Tcp, Tcr, Cat, Cf, Cp, Cr, Partner, Tx],
   migrations: ["src/migrations/forTypeorm/*.ts"],
   subscribers: [],

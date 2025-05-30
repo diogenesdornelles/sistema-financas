@@ -13,7 +13,7 @@ import {
   UpdateTcp,
   UpdateTcr,
   UpdateTx,
-} from '@monorepo/packages';
+} = packages;;
 
 type UpdateItemMap = {
   cf: UpdateCf;

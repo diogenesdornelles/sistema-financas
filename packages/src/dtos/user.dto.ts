@@ -2,7 +2,7 @@
 Dtos para o trânsito de dados de tipo de usuários
 */
 
-import { RoleSearchType, RoleType } from './utils/enums';
+import { RoleSearchType, RoleType } from './utils/enums.js';
 
 export interface CreateUser {
   // required em create

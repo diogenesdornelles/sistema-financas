@@ -6,10 +6,10 @@ import cors from "cors";
 import * as dotenv from "dotenv";
 import helmet from "helmet";
 
-import { RouteConfigType } from "./types/route-config.type";
-import { AppDataSource } from "./config/typeorm.db.config";
 import { DataSource } from "typeorm";
-import { runAllSeeds } from "./seeds/runAllSeeds";
+import { AppDataSource } from "./config/typeorm.db.config.js";
+import { runAllSeeds } from "./seeds/runAllSeeds.js";
+import { RouteConfigType } from "./types/routeConfig.type.js";
 
 dotenv.config();
 
@@ -23,12 +23,6 @@ const corsOptions: cors.CorsOptions = {
 const PORT = process.env.APP_PORT || 3000;
 const HOST = process.env.HOST || "";
 
-/**
- * Classe App.
- *
- * Encapsula a aplicação Express, configurando middlewares, rotas e conexão com o banco de dados.
- * Também fornece um método para iniciar o servidor.
- */
 class App {
   public app: Express;
 
@@ -36,10 +30,6 @@ class App {
 
   public appDataSource: DataSource | null;
 
-  /**
-   * Cria uma instância da classe App.
-   * @param {RouteConfigType[]} routes - Configurações de rotas.
-   */
   constructor(routes: RouteConfigType[]) {
     this.app = express();
     this.routesConfig = routes;
@@ -91,7 +81,7 @@ class App {
           console.log(`  - ${migration.name}`);
         });
       } else {
-        console.log("ℹNenhuma migration pendente");
+        console.log("Nenhuma migration pendente");
       }
 
       await this.verifyDatabaseStructure(appDataSource);

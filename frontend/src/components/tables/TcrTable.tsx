@@ -27,8 +27,7 @@ import { useDeleteTcr } from '@/hooks/service/tcr/useDeleteTcr';
 import { useGetManyTcr } from '@/hooks/service/tcr/useGetManyTcr';
 import { useQueryTcr } from '@/hooks/service/tcr/useQueryTcr';
 import { useFormStore } from '@/hooks/useFormStore';
-import { TcrProps } from '@packages/src/src/dtos/tcr.dto';
-import { queryTcrSchema } from '@monorepo/packages';
+import type { queryTcrSchema, TcrProps } from '@monorepo/packages';
 
 type QueryTcrFormData = z.infer<typeof queryTcrSchema>;
 

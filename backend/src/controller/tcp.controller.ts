@@ -1,15 +1,15 @@
-import { Request, Response, NextFunction } from "express";
-import { TcpService } from "../service/tcp.service";
-import { BaseController } from "./base.controller";
 import {
-  queryTcpSchema,
-  updateTcpSchema,
-  createTcpSchema,
-  UpdateTcp,
   CreateTcp,
+  createTcpSchema,
   QueryTcp,
+  queryTcpSchema,
+  UpdateTcp,
+  updateTcpSchema,
 } from "@monorepo/packages";
-import { Tcp } from "../entity/entities";
+import { NextFunction, Request, Response } from "express";
+import { Tcp } from "../entity/entities.js";
+import { TcpService } from "../service/tcp.service.js";
+import { BaseController } from "./base.controller.js";
 
 /**
  * Controla o fluxo de requisições e respostas de Tipo de contas

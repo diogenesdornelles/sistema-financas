@@ -13,7 +13,8 @@ import CustomBackdrop from '@/components/ui/CustomBackdrop';
 import FormContainer from '@/components/ui/FormContainer';
 import { usePutTcp } from '@/hooks/service/tcp/usePutTcp';
 import { useFormStore } from '@/hooks/useFormStore';
-import { updateTcpSchema } from '@monorepo/packages';
+import * as packages from '@monorepo/packages';
+const { updateTcpSchema } = packages;
 
 type UpdateTcpFormData = z.infer<typeof updateTcpSchema>;
 

@@ -1,6 +1,6 @@
-import CfController from "../controller/cf.controller";
-import GeneralMiddleware from "../middleware/GeneralMiddleware";
-import { BaseRouter } from "./base.route";
+import CfController from "../controller/cf.controller.js";
+import GeneralMiddleware from "../middleware/GeneralMiddleware.js";
+import { BaseRouter } from "./base.route.js";
 
 export default class CfRouter extends BaseRouter<CfController> {
   /**

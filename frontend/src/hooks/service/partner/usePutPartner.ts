@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Api } from '@/api/Api';
-import { UpdatePartner } from '@monorepo/packages';
+import type { UpdatePartner } from '@monorepo/packages';
 
 // Hook para atualizar um 'partner' existente (PUT)
 export function usePutPartner(id: string) {

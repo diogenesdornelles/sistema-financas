@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Api } from '@/api/Api';
-import { QueryTx } from '@monorepo/packages';
+import type { QueryTx } from '@monorepo/packages';
 
 // Hook para criar uma consulta via POST
 export function useQueryTx() {

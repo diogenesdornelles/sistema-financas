@@ -1,7 +1,7 @@
-import { Partner, User } from "../../entity/entities";
-import { AppDataSource } from "../../config/typeorm.db.config";
-import { partnersSeed } from "../dataSeed/partnersSeed";
 import * as dotenv from "dotenv";
+import { AppDataSource } from "../../config/typeorm.db.config.js";
+import { Partner, User } from "../../entity/entities.js";
+import { partnersSeed } from "../dataSeed/partnersSeed.js";
 
 dotenv.config();
 

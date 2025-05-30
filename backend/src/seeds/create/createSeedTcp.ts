@@ -1,6 +1,6 @@
-import { Tcp } from "../../entity/entities";
-import { AppDataSource } from "../../config/typeorm.db.config";
-import { tcpsSeed } from "../dataSeed/tcpsSeed";
+import { AppDataSource } from "../../config/typeorm.db.config.js";
+import { Tcp } from "../../entity/entities.js";
+import { tcpsSeed } from "../dataSeed/tcpsSeed.js";
 
 export const createSeedTcp = async () => {
   const repo = AppDataSource.getRepository(Tcp);
@@ -18,6 +18,8 @@ export const createSeedTcp = async () => {
     });
 
     await repo.save(newData);
-    console.log(`Dado salvo com sucesso: ${data.name} em ${repo.metadata.name}`);
+    console.log(
+      `Dado salvo com sucesso: ${data.name} em ${repo.metadata.name}`,
+    );
   });
 };

@@ -1,2 +1,2 @@
-export * from './dateSchema';
-export * from './statusBoolSchema';
+export * from './dateSchema.js';
+export * from './statusBoolSchema.js';

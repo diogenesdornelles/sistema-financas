@@ -1,6 +1,4 @@
-import { BaseService } from "./base.service";
-import { Cf, Cp, Partner, Tcp, Tx, User } from "../entity/entities";
-import { CreateCp, UpdateCp, QueryCp, PaymentStatus } from "@monorepo/packages";
+import { CreateCp, PaymentStatus, QueryCp, UpdateCp } from "@monorepo/packages";
 import {
   FindOptionsWhere,
   ILike,
@@ -9,7 +7,9 @@ import {
   Raw,
   Repository,
 } from "typeorm";
-import { AppDataSource } from "../config/typeorm.db.config";
+import { AppDataSource } from "../config/typeorm.db.config.js";
+import { Cf, Cp, Partner, Tcp, Tx, User } from "../entity/entities.js";
+import { BaseService } from "./base.service.js";
 
 export class CpService extends BaseService<
   Cp,

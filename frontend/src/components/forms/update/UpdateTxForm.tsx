@@ -26,7 +26,8 @@ import { useGetAllCp } from '@/hooks/service/cp/useGetAllCp';
 import { useGetAllCr } from '@/hooks/service/cr/useGetAllCr';
 import { usePutTx } from '@/hooks/service/tx/usePutTx';
 import { useFormStore } from '@/hooks/useFormStore';
-import { updateTxSchema, strToPtBrMoney } from '@monorepo/packages';
+import * as packages from '@monorepo/packages';
+const { updateTxSchema, strToPtBrMoney } = packages;
 
 type UpdateTxFormData = z.infer<typeof updateTxSchema>;
 type RadioInput = 'cp' | 'cr';

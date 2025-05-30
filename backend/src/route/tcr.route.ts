@@ -1,6 +1,6 @@
-import TcrController from "../controller/tcr.controller";
-import GeneralMiddleware from "../middleware/GeneralMiddleware";
-import { BaseRouter } from "./base.route";
+import TcrController from "../controller/tcr.controller.js";
+import GeneralMiddleware from "../middleware/GeneralMiddleware.js";
+import { BaseRouter } from "./base.route.js";
 
 export default class TcrRouter extends BaseRouter<TcrController> {
   /**

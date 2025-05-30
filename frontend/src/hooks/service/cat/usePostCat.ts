@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Api } from '@/api/Api';
-import { CreateCat } from '@monorepo/packages';
+import type { CreateCat } from '@monorepo/packages';
 
 // Hook para criar um novo 'cat' (POST)
 export function usePostCat() {

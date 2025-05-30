@@ -1,9 +1,9 @@
-import { Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 
-import { BaseController } from "./base.controller";
+import { BaseController } from "./base.controller.js";
 
-import LoginService from "../service/login.service";
-import { createTokenSchema, TokenProps, CreateToken } from "@monorepo/packages";
+import { CreateToken, createTokenSchema, TokenProps } from "@monorepo/packages";
+import LoginService from "../service/login.service.js";
 
 /**
  * Controla o fluxo de requisições e respostas de Login

@@ -2,7 +2,7 @@
 Dtos para o trânsito de dados de parceiros
 */
 
-import { PartnerSearchType, PartnerType } from './utils/enums';
+import { PartnerSearchType, PartnerType } from './utils/enums.js';
 
 // Enum para o tipo de Parceiro
 export interface CreatePartner {

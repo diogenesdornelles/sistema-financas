@@ -1,7 +1,7 @@
-import { BaseService } from "./base.service";
-import { Tcp } from "../entity/entities";
-import { CreateTcp, UpdateTcp, QueryTcp } from "@monorepo/packages";
+import { CreateTcp, QueryTcp, UpdateTcp } from "@monorepo/packages";
 import { FindOptionsWhere, ILike, MoreThanOrEqual, Raw } from "typeorm";
+import { Tcp } from "../entity/entities.js";
+import { BaseService } from "./base.service.js";
 
 export class TcpService extends BaseService<
   Tcp,

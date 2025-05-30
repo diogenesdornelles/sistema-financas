@@ -1,7 +1,7 @@
-import { Cat, User } from "../../entity/entities";
-import { AppDataSource } from "../../config/typeorm.db.config";
-import { catsSeed } from "../dataSeed/catsSeed";
 import * as dotenv from "dotenv";
+import { AppDataSource } from "../../config/typeorm.db.config.js";
+import { Cat, User } from "../../entity/entities.js";
+import { catsSeed } from "../dataSeed/catsSeed.js";
 
 dotenv.config();
 
@@ -29,7 +29,7 @@ export const createSeedCat = async () => {
       name: data.name,
       description: data.description,
       obs: data.obs,
-      user: existingUser
+      user: existingUser,
     });
 
     await catRepo.save(newData);

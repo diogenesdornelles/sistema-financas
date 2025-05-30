@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import * as packages from '@monorepo/packages';
 import {
   Box,
   Button,
@@ -13,8 +14,7 @@ import {
 import { JSX } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-
-import { queryTxSchema, TransactionSearchType  } from '@monorepo/packages';
+const { queryTxSchema, TransactionSearchType } = packages;
 
 type QueryTxFormData = z.infer<typeof queryTxSchema>;
 

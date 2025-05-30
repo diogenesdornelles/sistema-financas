@@ -27,7 +27,7 @@ import { useDeleteUser } from '@/hooks/service/user/useDeleteUser';
 import { useGetManyUser } from '@/hooks/service/user/useGetManyUser';
 import { useQueryUser } from '@/hooks/service/user/useQueryUser';
 import { useFormStore } from '@/hooks/useFormStore';
-import { queryUserSchema, UserProps } from '@monorepo/packages';
+import type { queryUserSchema, UserProps } from '@monorepo/packages';
 
 type QueryUserFormData = z.infer<typeof queryUserSchema>;
 

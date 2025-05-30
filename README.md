@@ -212,7 +212,7 @@ cd ./frontend
 npm install
 ```
 
-1.Tem que entrar em packages e gerar a build `npm run build`;
-2. entrar em backend e em frontend e `npm i ; npm i ../packages`
+1.Tem que entrar em packages e gerar a build `npm i ; npm run build`;
+2. entrar em backend e em frontend e em cada um `npm i ; npm i ../packages`
 3. Iniciar dev: `npm run dev`;
 4. Em ./frontend: `npm run dev`;

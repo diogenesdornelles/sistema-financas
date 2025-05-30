@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Api } from '@/api/Api';
-import { CreateCp } from '@monorepo/packages';
+import type { CreateCp } from '@monorepo/packages';
 
 // Hook para criar um novo 'cp' (POST)
 export function usePostCp() {

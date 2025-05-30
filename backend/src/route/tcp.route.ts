@@ -1,6 +1,6 @@
-import TcpController from "../controller/tcp.controller";
-import GeneralMiddleware from "../middleware/GeneralMiddleware";
-import { BaseRouter } from "./base.route";
+import TcpController from "../controller/tcp.controller.js";
+import GeneralMiddleware from "../middleware/GeneralMiddleware.js";
+import { BaseRouter } from "./base.route.js";
 
 export default class TcpRouter extends BaseRouter<TcpController> {
   /**

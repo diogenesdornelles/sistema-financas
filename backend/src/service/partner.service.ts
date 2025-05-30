@@ -1,13 +1,13 @@
-import { BaseService } from "./base.service";
-import { Partner, User } from "../entity/entities";
 import {
   CreatePartner,
-  QueryPartner,
-  UpdatePartner,
   PartnerSearchType,
   PartnerType,
+  QueryPartner,
+  UpdatePartner,
 } from "@monorepo/packages";
 import { FindOptionsWhere, ILike, Like, MoreThanOrEqual, Raw } from "typeorm";
+import { Partner, User } from "../entity/entities.js";
+import { BaseService } from "./base.service.js";
 
 export class PartnerService extends BaseService<
   Partner,

@@ -2,9 +2,9 @@
 Dtos para o trânsito de dados de Contas a receber
 */
 
-import { PartnerProps } from './partner.dto';
-import { TcrProps } from './tcr.dto';
-import { PaymentStatus } from './utils/enums';
+import { PartnerProps } from './partner.dto.js';
+import { TcrProps } from './tcr.dto.js';
+import { PaymentStatus } from './utils/enums.js';
 
 export interface CreateCr {
   value: string; // campo text com valor monetário

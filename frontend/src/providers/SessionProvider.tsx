@@ -2,7 +2,7 @@ import { PropsWithChildren, useEffect, useState } from 'react';
 
 import { AuthContext } from '@/contexts/AuthContext';
 import { useLogin } from '@/hooks/service/login/useLogin';
-import { TokenProps } from '@monorepo/packages';
+import type { TokenProps } from '@monorepo/packages';
 
 export function SessionProvider({ children }: PropsWithChildren) {
   const [session, setSession] = useState<TokenProps | null>(null);

@@ -1,17 +1,17 @@
-import CatRouter from "./route/cat.route";
-import CfRouter from "./route/cf.route";
-import CpRouter from "./route/cp.route";
-import CrRouter from "./route/cr.route";
-import DbRouter from "./route/db.route";
-import LoginRouter from "./route/login.routes";
-import PartnerRouter from "./route/partner.route";
-import TcfRouter from "./route/tcf.route";
-import TcpRouter from "./route/tcp.route";
-import TcrRouter from "./route/tcr.route";
-import TxRouter from "./route/tx.route";
-import UserRouter from "./route/user.route";
-import { BaseRouterType } from "./types/base-router.type";
-import { RouteConfigType } from "./types/route-config.type";
+import CatRouter from "./route/cat.route.js";
+import CfRouter from "./route/cf.route.js";
+import CpRouter from "./route/cp.route.js";
+import CrRouter from "./route/cr.route.js";
+import DbRouter from "./route/db.route.js";
+import LoginRouter from "./route/login.routes.js";
+import PartnerRouter from "./route/partner.route.js";
+import TcfRouter from "./route/tcf.route.js";
+import TcpRouter from "./route/tcp.route.js";
+import TcrRouter from "./route/tcr.route.js";
+import TxRouter from "./route/tx.route.js";
+import UserRouter from "./route/user.route.js";
+import { BaseRouterType } from "./types/baseRouter.type.js";
+import { RouteConfigType } from "./types/routeConfig.type.js";
 
 // Registra routers e suas respectivas rotas raízes
 const appRoutes: RouteConfigType[] = [

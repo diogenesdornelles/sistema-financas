@@ -1,6 +1,6 @@
-import PartnerController from "../controller/partner.controller";
-import GeneralMiddleware from "../middleware/GeneralMiddleware";
-import { BaseRouter } from "./base.route";
+import PartnerController from "../controller/partner.controller.js";
+import GeneralMiddleware from "../middleware/GeneralMiddleware.js";
+import { BaseRouter } from "./base.route.js";
 
 export default class PartnerRouter extends BaseRouter<PartnerController> {
   /**

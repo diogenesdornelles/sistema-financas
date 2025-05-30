@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from "express";
 import { DbBalanceProps, DbCpsCrsProps } from "@monorepo/packages";
-import { DbService } from "../service/db.service";
+import { NextFunction, Request, Response } from "express";
+import { DbService } from "../service/db.service.js";
 
 /**
  * Controla o fluxo de requisições e respostas de Dashboard

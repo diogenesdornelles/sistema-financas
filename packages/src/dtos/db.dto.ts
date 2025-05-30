@@ -2,10 +2,10 @@
 Dtos para o trânsito de dados de dashboard
 */
 
-import { PartnerProps } from './partner.dto';
-import { TcpProps } from './tcp.dto';
-import { TcrProps } from './tcr.dto';
-import { PaymentStatus } from './utils/enums';
+import { PartnerProps } from './partner.dto.js';
+import { TcpProps } from './tcp.dto.js';
+import { TcrProps } from './tcr.dto.js';
+import { PaymentStatus } from './utils/enums.js';
 
 export type ResultSet = {
   cfId: string;

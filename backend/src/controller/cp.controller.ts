@@ -1,17 +1,17 @@
-import { Request, Response, NextFunction } from "express";
-import { CpService } from "../service/cp.service";
-import { BaseController } from "./base.controller";
 import {
-  GeneralValidator,
-  queryCpSchema,
-  updateCpSchema,
-  createCpSchema,
-  UpdateCp,
   CreateCp,
+  createCpSchema,
+  GeneralValidator,
   QueryCp,
+  queryCpSchema,
+  UpdateCp,
+  updateCpSchema,
 } from "@monorepo/packages";
-import { Cp } from "../entity/entities";
-import { ApiError } from "../utils/apiError.util";
+import { NextFunction, Request, Response } from "express";
+import { Cp } from "../entity/entities.js";
+import { CpService } from "../service/cp.service.js";
+import { ApiError } from "../utils/apiError.util.js";
+import { BaseController } from "./base.controller.js";
 
 /**
  * Controla o fluxo de requisições e respostas de Contas a pagar

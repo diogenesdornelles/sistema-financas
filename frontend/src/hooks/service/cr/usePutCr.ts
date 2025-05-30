@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Api } from '@/api/Api';
-import { UpdateCr } from '@monorepo/packages';
+import type { UpdateCr } from '@monorepo/packages';
 
 // Hook para atualizar um 'cr' existente (PUT)
 export function usePutCr(id: string) {

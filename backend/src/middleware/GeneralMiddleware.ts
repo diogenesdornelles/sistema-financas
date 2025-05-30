@@ -1,17 +1,12 @@
-import { Request, Response, NextFunction } from "express";
-import { QueryFailedError, EntityNotFoundError } from "typeorm";
-import jwt, {
-  JsonWebTokenError,
-  NotBeforeError,
-  Secret,
-  TokenExpiredError,
-} from "jsonwebtoken";
-import * as dotenv from "dotenv";
-import { z } from "zod";
-import { AuthPayloadInterface } from "../interfaces/AuthPayload.interface";
-import { CustomRequestInterface } from "../interfaces/CustomRequest.interface";
-import { ApiError } from "../utils/apiError.util";
 import { GeneralValidator } from "@monorepo/packages";
+import * as dotenv from "dotenv";
+import { NextFunction, Request, Response } from "express";
+import jwt, { Secret } from "jsonwebtoken";
+import { EntityNotFoundError, QueryFailedError } from "typeorm";
+import { z } from "zod";
+import { AuthPayloadInterface } from "../interfaces/AuthPayload.interface.js";
+import { CustomRequestInterface } from "../interfaces/CustomRequest.interface.js";
+import { ApiError } from "../utils/apiError.util.js";
 
 dotenv.config();
 
@@ -228,7 +223,7 @@ export default class GeneralMiddleware {
 
       next();
     } catch (err) {
-      if (err instanceof TokenExpiredError) {
+      if (err instanceof Error && err.name === "TokenExpiredError") {
         sendErrorResponse(
           res,
           401,
@@ -238,7 +233,7 @@ export default class GeneralMiddleware {
         return;
       }
 
-      if (err instanceof JsonWebTokenError) {
+      if (err instanceof Error && err.name === "JsonWebTokenError") {
         sendErrorResponse(
           res,
           401,
@@ -248,7 +243,7 @@ export default class GeneralMiddleware {
         return;
       }
 
-      if (err instanceof NotBeforeError) {
+      if (err instanceof Error && err.name === "NotBeforeError") {
         sendErrorResponse(
           res,
           401,

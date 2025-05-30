@@ -1,15 +1,15 @@
-import { Request, Response, NextFunction } from "express";
-import { TcrService } from "../service/tcr.service";
-import { BaseController } from "./base.controller";
 import {
-  queryTcrSchema,
-  updateTcrSchema,
-  createTcrSchema,
-  UpdateTcr,
   CreateTcr,
+  createTcrSchema,
   QueryTcr,
+  queryTcrSchema,
+  UpdateTcr,
+  updateTcrSchema,
 } from "@monorepo/packages";
-import { Tcr } from "../entity/entities";
+import { NextFunction, Request, Response } from "express";
+import { Tcr } from "../entity/entities.js";
+import { TcrService } from "../service/tcr.service.js";
+import { BaseController } from "./base.controller.js";
 
 /**
  * Controla o fluxo de requisições e respostas de Tipo de contas

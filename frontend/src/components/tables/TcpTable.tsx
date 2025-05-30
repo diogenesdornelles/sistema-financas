@@ -27,7 +27,7 @@ import { useDeleteTcp } from '@/hooks/service/tcp/useDeleteTcp';
 import { useGetManyTcp } from '@/hooks/service/tcp/useGetManyTcp';
 import { useQueryTcp } from '@/hooks/service/tcp/useQueryTcp';
 import { useFormStore } from '@/hooks/useFormStore';
-import { queryTcpSchema, TcpProps } from '@monorepo/packages';
+import type { queryTcpSchema, TcpProps } from '@monorepo/packages';
 
 type QueryTcpFormData = z.infer<typeof queryTcpSchema>;
 

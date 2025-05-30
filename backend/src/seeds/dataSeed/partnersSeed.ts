@@ -2,7 +2,6 @@ import { PartnerType } from "@monorepo/packages";
 import { generateValidCNPJ } from "../utils/generateValidCNPJ";
 import { generateValidCPF } from "../utils/generateValidCPF";
 
-
 export const partnersSeed = [
   // Clientes Pessoa Física
   {

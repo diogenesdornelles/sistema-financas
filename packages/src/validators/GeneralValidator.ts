@@ -1,5 +1,5 @@
 import { validate as isUuid } from 'uuid';
-import { dateSchemaMaj, dateSchemaMin } from './utils/dateSchema';
+import { dateSchemaMaj, dateSchemaMin } from './utils/dateSchema.js';
 
 export class GeneralValidator {
   public static validateCNPJ(cnpj: string): boolean {

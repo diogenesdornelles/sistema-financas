@@ -1,6 +1,4 @@
-import { BaseService } from "./base.service";
-import { Cf, Cr, Partner, Tcr, Tx, User } from "../entity/entities";
-import { CreateCr, UpdateCr, QueryCr,PaymentStatus } from "@monorepo/packages";
+import { CreateCr, PaymentStatus, QueryCr, UpdateCr } from "@monorepo/packages";
 import {
   FindOptionsWhere,
   ILike,
@@ -9,7 +7,9 @@ import {
   Raw,
   Repository,
 } from "typeorm";
-import { AppDataSource } from "../config/typeorm.db.config";
+import { AppDataSource } from "../config/typeorm.db.config.js";
+import { Cf, Cr, Partner, Tcr, Tx, User } from "../entity/entities.js";
+import { BaseService } from "./base.service.js";
 
 /**
  * Recupera todas as contas.

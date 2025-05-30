@@ -1,15 +1,15 @@
-import { Request, Response, NextFunction } from "express";
-import { PartnerService } from "../service/partner.service";
-import { BaseController } from "./base.controller";
 import {
-  queryPartnerSchema,
-  updatePartnerSchema,
-  createPartnerSchema,
-  UpdatePartner,
   CreatePartner,
+  createPartnerSchema,
   QueryPartner,
+  queryPartnerSchema,
+  UpdatePartner,
+  updatePartnerSchema,
 } from "@monorepo/packages";
-import { Partner } from "../entity/entities";
+import { NextFunction, Request, Response } from "express";
+import { Partner } from "../entity/entities.js";
+import { PartnerService } from "../service/partner.service.js";
+import { BaseController } from "./base.controller.js";
 
 /**
  * Controla o fluxo de requisições e respostas de Parceiros

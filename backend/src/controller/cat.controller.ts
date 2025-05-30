@@ -1,15 +1,15 @@
-import { Request, Response, NextFunction } from "express";
-import { CatService } from "../service/cat.service";
-import { BaseController } from "./base.controller";
 import {
-  queryCatSchema,
-  updateCatSchema,
-  createCatSchema,
-  UpdateCat,
   CreateCat,
+  createCatSchema,
   QueryCat,
+  queryCatSchema,
+  UpdateCat,
+  updateCatSchema,
 } from "@monorepo/packages";
-import { Cat } from "../entity/entities";
+import { NextFunction, Request, Response } from "express";
+import { Cat } from "../entity/entities.js";
+import { CatService } from "../service/cat.service.js";
+import { BaseController } from "./base.controller.js";
 
 /**
  * Controla o fluxo de requisições e respostas de Categorias

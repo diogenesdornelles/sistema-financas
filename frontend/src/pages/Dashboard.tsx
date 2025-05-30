@@ -13,7 +13,9 @@ import { colors, optionsCpsCrs, optionsPie } from '@/constants/dashboard';
 import { useGetAllCf } from '@/hooks/service/cf/useGetAllCf';
 import { useGetBalances } from '@/hooks/service/db/useGetBalances';
 import { useGetCpsCrs } from '@/hooks/service/db/useGetCpsCrs';
-import { queryDbSchema, DbBalanceProps, strToPtBrMoney } from '@monorepo/packages';
+import type { DbBalanceProps } from '@monorepo/packages';
+import * as packages from '@monorepo/packages';
+const { queryDbSchema, strToPtBrMoney } = packages;
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title, LinearScale, CategoryScale, BarElement);
 

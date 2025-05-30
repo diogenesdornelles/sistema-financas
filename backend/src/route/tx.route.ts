@@ -1,6 +1,6 @@
-import TxController from "../controller/tx.controller";
-import GeneralMiddleware from "../middleware/GeneralMiddleware";
-import { BaseRouter } from "./base.route";
+import TxController from "../controller/tx.controller.js";
+import GeneralMiddleware from "../middleware/GeneralMiddleware.js";
+import { BaseRouter } from "./base.route.js";
 
 export default class TxRouter extends BaseRouter<TxController> {
   /**

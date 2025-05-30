@@ -1,6 +1,6 @@
-import { Tcr } from "../../entity/entities";
-import { AppDataSource } from "../../config/typeorm.db.config";
-import { tcrsSeed } from "../dataSeed/tcrsSeed";
+import { AppDataSource } from "../../config/typeorm.db.config.js";
+import { Tcr } from "../../entity/entities.js";
+import { tcrsSeed } from "../dataSeed/tcrsSeed.js";
 
 export const createSeedTcr = async () => {
   const repo = AppDataSource.getRepository(Tcr);
@@ -18,6 +18,8 @@ export const createSeedTcr = async () => {
     });
 
     await repo.save(newData);
-    console.log(`Dado salvo com sucesso: ${data.name} em ${repo.metadata.name}`);
+    console.log(
+      `Dado salvo com sucesso: ${data.name} em ${repo.metadata.name}`,
+    );
   });
 };

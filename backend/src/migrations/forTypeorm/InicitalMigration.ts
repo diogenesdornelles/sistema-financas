@@ -4,24 +4,62 @@ export class InitialMigrationTIMESTAMP implements MigrationInterface {
   name = `InitialMigration-${new Date().getTime()}`;
 
   public async up(queryRunner: QueryRunner): Promise<void> {
+    const result = await queryRunner.query(
+      `SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'migrations');`,
+    );
+
+    if (result[0].exists) {
+      console.log("Initial migration already applied, skipping...");
+      return;
+    }
+
     await queryRunner.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`);
 
-    await queryRunner.query(
-      `CREATE TYPE "cp_status_enum" AS ENUM('pending', 'paid', 'cancelled')`,
+    // Verificar e criar ENUMs apenas se não existirem
+    const cpStatusExists = await queryRunner.query(
+      `SELECT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'cp_status_enum');`,
     );
-    await queryRunner.query(
-      `CREATE TYPE "cr_status_enum" AS ENUM('pending', 'paid', 'cancelled')`,
-    );
-    await queryRunner.query(
-      `CREATE TYPE "tx_type_enum" AS ENUM('entry', 'outflow')`,
-    );
-    await queryRunner.query(
-      `CREATE TYPE "partner_type_enum" AS ENUM('PJ', 'PF')`,
-    );
+    if (!cpStatusExists[0].exists) {
+      await queryRunner.query(
+        `CREATE TYPE "cp_status_enum" AS ENUM('pending', 'paid', 'cancelled')`,
+      );
+    }
 
-    await queryRunner.query(
-      `CREATE TYPE "role_type_enum" AS ENUM('admin', 'manager', 'analist', 'assistant')`,
+    const crStatusExists = await queryRunner.query(
+      `SELECT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'cr_status_enum');`,
     );
+    if (!crStatusExists[0].exists) {
+      await queryRunner.query(
+        `CREATE TYPE "cr_status_enum" AS ENUM('pending', 'paid', 'cancelled')`,
+      );
+    }
+
+    const txTypeExists = await queryRunner.query(
+      `SELECT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'tx_type_enum');`,
+    );
+    if (!txTypeExists[0].exists) {
+      await queryRunner.query(
+        `CREATE TYPE "tx_type_enum" AS ENUM('entry', 'outflow')`,
+      );
+    }
+
+    const partnerTypeExists = await queryRunner.query(
+      `SELECT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'partner_type_enum');`,
+    );
+    if (!partnerTypeExists[0].exists) {
+      await queryRunner.query(
+        `CREATE TYPE "partner_type_enum" AS ENUM('PJ', 'PF')`,
+      );
+    }
+
+    const roleTypeExists = await queryRunner.query(
+      `SELECT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'role_type_enum');`,
+    );
+    if (!roleTypeExists[0].exists) {
+      await queryRunner.query(
+        `CREATE TYPE "role_type_enum" AS ENUM('admin', 'manager', 'analist', 'assistant')`,
+      );
+    }
 
     await queryRunner.query(`
       CREATE TABLE IF NOT EXISTS "user" (

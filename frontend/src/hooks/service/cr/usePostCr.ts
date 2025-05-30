@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Api } from '@/api/Api';
-import { CreateCr } from '@monorepo/packages';
+import type { CreateCr } from '@monorepo/packages';
 
 // Hook para criar um novo 'cr' (POST)
 export function usePostCr() {

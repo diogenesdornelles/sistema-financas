@@ -9,7 +9,8 @@ import CustomBackdrop from '@/components/ui/CustomBackdrop';
 import FormContainer from '@/components/ui/FormContainer';
 import { usePutCat } from '@/hooks/service/cat/usePutCat';
 import { useFormStore } from '@/hooks/useFormStore';
-import { updateCatSchema } from '@monorepo/packages';
+import * as packages from '@monorepo/packages';
+const { updateCatSchema } = packages;
 
 type UpdateCatFormData = z.infer<typeof updateCatSchema>;
 

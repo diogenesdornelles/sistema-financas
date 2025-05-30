@@ -2,9 +2,9 @@
 Dtos para o trânsito de dados de Contas a pagar
 */
 
-import { PartnerProps } from './partner.dto';
-import { TcpProps } from './tcp.dto';
-import { PaymentStatus } from './utils/enums';
+import { PartnerProps } from './partner.dto.js';
+import { TcpProps } from './tcp.dto.js';
+import { PaymentStatus } from './utils/enums.js';
 
 export interface CreateCp {
   // required na criação

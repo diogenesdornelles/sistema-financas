@@ -1,5 +1,5 @@
-import { AuthPayloadInterface } from "./AuthPayload.interface";
 import { Request } from "express";
+import { AuthPayloadInterface } from "./AuthPayload.interface.js";
 
 export interface CustomRequestInterface extends Request {
   token: AuthPayloadInterface;

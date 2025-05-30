@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from "express";
-import { BaseService } from "../service/base.service";
-import { Base } from "../entity/entities";
+import { NextFunction, Request, Response } from "express";
+import { Base } from "../entity/entities.js";
+import { BaseService } from "../service/base.service.js";
 
 /**
  * Classe abstrata BaseController.

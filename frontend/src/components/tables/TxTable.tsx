@@ -27,8 +27,9 @@ import { useDeleteTx } from '@/hooks/service/tx/useDeleteTx';
 import { useGetManyTx } from '@/hooks/service/tx/useGetManyTx';
 import { useQueryTx } from '@/hooks/service/tx/useQueryTx';
 import { useFormStore } from '@/hooks/useFormStore';
-import { TxProps } from '@packages/src/src/dtos/tx.dto';
-import { queryTxSchema, strToPtBrMoney } from '@monorepo/packages';
+import type { TxProps, queryTxSchema } from '@monorepo/packages';
+import * as packages from '@monorepo/packages';
+const { strToPtBrMoney } = packages;
 
 type QueryTxFormData = z.infer<typeof queryTxSchema>;
 

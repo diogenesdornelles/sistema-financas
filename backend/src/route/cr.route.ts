@@ -1,6 +1,6 @@
-import CrController from "../controller/cr.controller";
-import GeneralMiddleware from "../middleware/GeneralMiddleware";
-import { BaseRouter } from "./base.route";
+import CrController from "../controller/cr.controller.js";
+import GeneralMiddleware from "../middleware/GeneralMiddleware.js";
+import { BaseRouter } from "./base.route.js";
 
 export default class CrRouter extends BaseRouter<CrController> {
   /**

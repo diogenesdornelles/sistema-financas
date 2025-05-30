@@ -1,15 +1,15 @@
-import { Request, Response, NextFunction } from "express";
-import { UserService } from "../service/user.service";
-import { BaseController } from "./base.controller";
 import {
-  queryUserSchema,
-  updateUserSchema,
-  createUserSchema,
-  UpdateUser,
   CreateUser,
+  createUserSchema,
   QueryUser,
+  queryUserSchema,
+  UpdateUser,
+  updateUserSchema,
 } from "@monorepo/packages";
-import { User } from "../entity/entities";
+import { NextFunction, Request, Response } from "express";
+import { User } from "../entity/entities.js";
+import { UserService } from "../service/user.service.js";
+import { BaseController } from "./base.controller.js";
 
 /**
  * Controla o fluxo de requisições e respostas de Usuários

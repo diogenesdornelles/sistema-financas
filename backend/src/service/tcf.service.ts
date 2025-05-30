@@ -1,7 +1,7 @@
-import { BaseService } from "./base.service";
-import { Tcf } from "../entity/entities";
-import { CreateTcf, UpdateTcf, QueryTcf } from "@monorepo/packages";
+import { CreateTcf, QueryTcf, UpdateTcf } from "@monorepo/packages";
 import { FindOptionsWhere, ILike, MoreThanOrEqual, Raw } from "typeorm";
+import { Tcf } from "../entity/entities.js";
+import { BaseService } from "./base.service.js";
 
 export class TcfService extends BaseService<
   Tcf,

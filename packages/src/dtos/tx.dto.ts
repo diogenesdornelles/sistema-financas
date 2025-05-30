@@ -2,11 +2,11 @@
 Dtos para o trânsito de dados de tipo de transações
 */
 
-import { CatProps } from './cat.dto';
-import { CfProps } from './cf.dto';
-import { CpProps } from './cp.dto';
-import { CrProps } from './cr.dto';
-import { TransactionSearchType, TransactionType } from './utils/enums';
+import { CatProps } from './cat.dto.js';
+import { CfProps } from './cf.dto.js';
+import { CpProps } from './cp.dto.js';
+import { CrProps } from './cr.dto.js';
+import { TransactionSearchType, TransactionType } from './utils/enums.js';
 
 export interface CreateTx {
   value: string;

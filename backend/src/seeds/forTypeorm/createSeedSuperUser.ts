@@ -1,8 +1,8 @@
-import { User } from "../../entity/entities";
-import hashPassword from "../../utils/hashPwd.util";
-import { AppDataSource } from "../../config/typeorm.db.config";
-import * as dotenv from "dotenv";
 import { RoleType } from "@monorepo/packages";
+import * as dotenv from "dotenv";
+import { AppDataSource } from "../../config/typeorm.db.config.js";
+import { User } from "../../entity/entities.js";
+import hashPassword from "../../utils/hashPwd.util.js";
 
 dotenv.config();
 

@@ -27,7 +27,9 @@ import { useDeleteCf } from '@/hooks/service/cf/useDeleteCf';
 import { useGetManyCf } from '@/hooks/service/cf/useGetManyCf';
 import { useQueryCf } from '@/hooks/service/cf/useQueryCf';
 import { useFormStore } from '@/hooks/useFormStore';
-import { queryCfSchema, CfProps, strToPtBrMoney } from '@monorepo/packages';
+import type { CfProps, queryCfSchema } from '@monorepo/packages';
+import * as packages from '@monorepo/packages';
+const { strToPtBrMoney } = packages;
 
 type QueryCfFormData = z.infer<typeof queryCfSchema>;
 

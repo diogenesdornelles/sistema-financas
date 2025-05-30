@@ -1,21 +1,22 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "commonjs",
-    "lib": ["ES2020"],
+    "target": "ES2022", // Atualizado
+    "module": "NodeNext", // Atualizado
+    "moduleResolution": "NodeNext", // Atualizado
+    "lib": ["ES2022"], // Atualizado (ou ["ESNext"] se preferir)
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
+    // "allowSyntheticDefaultImports": true, // esModuleInterop já cobre isso
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
     "removeComments": false,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true, // Necessário para TypeORM e outros
+    "emitDecoratorMetadata": true,   // Necessário para TypeORM e outros
     "resolveJsonModule": true,
     "allowJs": false,
     "types": ["jest", "node"]

@@ -27,7 +27,9 @@ import { useDeleteCp } from '@/hooks/service/cp/useDeleteCp';
 import { useGetManyCp } from '@/hooks/service/cp/useGetManyCp';
 import { useQueryCp } from '@/hooks/service/cp/useQueryCp';
 import { useFormStore } from '@/hooks/useFormStore';
-import { queryCpSchema, PaymentStatus, CpProps, strToPtBrMoney } from '@monorepo/packages';
+import type { CpProps, queryCpSchema } from '@monorepo/packages';
+import * as packages from '@monorepo/packages';
+const { PaymentStatus, strToPtBrMoney } = packages;
 
 type QueryCpFormData = z.infer<typeof queryCpSchema>;
 
@@ -56,7 +58,7 @@ const CpTable = (): JSX.Element => {
     });
   };
 
-  const getPaymentStatusText = (status: PaymentStatus): string => {
+  const getPaymentStatusText = (status: (typeof PaymentStatus)[keyof typeof PaymentStatus]): string => {
     switch (status) {
       case PaymentStatus.PENDING:
         return 'Pendente';

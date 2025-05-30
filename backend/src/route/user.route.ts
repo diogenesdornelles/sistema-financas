@@ -1,6 +1,6 @@
-import UserController from "../controller/user.controller";
-import GeneralMiddleware from "../middleware/GeneralMiddleware";
-import { BaseRouter } from "./base.route";
+import UserController from "../controller/user.controller.js";
+import GeneralMiddleware from "../middleware/GeneralMiddleware.js";
+import { BaseRouter } from "./base.route.js";
 
 export default class UserRouter extends BaseRouter<UserController> {
   /**

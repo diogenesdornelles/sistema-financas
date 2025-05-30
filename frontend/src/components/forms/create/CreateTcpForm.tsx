@@ -12,7 +12,8 @@ import CustomBackdrop from '@/components/ui/CustomBackdrop';
 import FormContainer from '@/components/ui/FormContainer';
 import { usePostTcp } from '@/hooks/service/tcp/usePostTcp';
 import { useFormStore } from '@/hooks/useFormStore';
-import { createTcpSchema } from '@monorepo/packages';
+import * as packages from '@monorepo/packages';
+const { createTcpSchema } = packages;
 
 type CreateTcpFormData = z.infer<typeof createTcpSchema>;
 

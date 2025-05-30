@@ -27,7 +27,9 @@ import { useDeleteCr } from '@/hooks/service/cr/useDeleteCr';
 import { useGetManyCr } from '@/hooks/service/cr/useGetManyCr';
 import { useQueryCr } from '@/hooks/service/cr/useQueryCr';
 import { useFormStore } from '@/hooks/useFormStore';
-import { queryCrSchema, PaymentStatus, CrProps, strToPtBrMoney } from '@monorepo/packages';
+import type { CrProps, queryCrSchema } from '@monorepo/packages';
+import * as packages from '@monorepo/packages';
+const { PaymentStatus, strToPtBrMoney } = packages;
 
 type QueryCrFormData = z.infer<typeof queryCrSchema>;
 
@@ -44,7 +46,7 @@ const CrTable = (): JSX.Element => {
   const theme = useTheme();
   const delMutation = useDeleteCr();
 
-  const getPaymentStatusText = (status: PaymentStatus): string => {
+  const getPaymentStatusText = (status: (typeof PaymentStatus)[keyof typeof PaymentStatus]): string => {
     switch (status) {
       case PaymentStatus.PENDING:
         return 'Pendente';

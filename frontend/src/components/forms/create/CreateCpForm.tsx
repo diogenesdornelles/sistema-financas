@@ -12,7 +12,8 @@ import { useGetAllPartner } from '@/hooks/service/partner/useGetAllPartner';
 import { useGetAllTcp } from '@/hooks/service/tcp/useGetAllTcp';
 import { useAuth } from '@/hooks/useAuth';
 import { useFormStore } from '@/hooks/useFormStore';
-import { createCpSchema, strToPtBrMoney } from '@monorepo/packages';
+import * as packages from '@monorepo/packages';
+const { createCpSchema, strToPtBrMoney } = packages;
 
 type CreateCpFormData = z.infer<typeof createCpSchema>;
 

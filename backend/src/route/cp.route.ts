@@ -1,6 +1,6 @@
-import CpController from "../controller/cp.controller";
-import GeneralMiddleware from "../middleware/GeneralMiddleware";
-import { BaseRouter } from "./base.route";
+import CpController from "../controller/cp.controller.js";
+import GeneralMiddleware from "../middleware/GeneralMiddleware.js";
+import { BaseRouter } from "./base.route.js";
 
 export default class CpRouter extends BaseRouter<CpController> {
   /**

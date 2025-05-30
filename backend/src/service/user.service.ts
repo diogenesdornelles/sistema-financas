@@ -1,14 +1,14 @@
-import { BaseService } from "./base.service";
-import { User } from "../entity/entities";
 import {
   CreateUser,
   QueryUser,
-  UpdateUser,
   RoleSearchType,
   RoleType,
+  UpdateUser,
 } from "@monorepo/packages";
-import hashPassword from "../utils/hashPwd.util";
 import { FindOptionsWhere, ILike, MoreThanOrEqual, Raw } from "typeorm";
+import { User } from "../entity/entities.js";
+import hashPassword from "../utils/hashPwd.util.js";
+import { BaseService } from "./base.service.js";
 
 export class UserService extends BaseService<
   User,

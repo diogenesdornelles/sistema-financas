@@ -1,10 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import * as packages from '@monorepo/packages';
 import { Box, Button, FormControlLabel, Switch, TextField } from '@mui/material';
 import { JSX } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-
-import { queryTcpSchema } from '@monorepo/packages';
+const { queryTcpSchema } = packages;
 
 type QueryTcpFormData = z.infer<typeof queryTcpSchema>;
 

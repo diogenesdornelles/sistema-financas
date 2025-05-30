@@ -1,5 +1,11 @@
-import { BaseService } from "./base.service";
-import { Cat, Cf, Cp, Cr, Tx, User } from "../entity/entities";
+import {
+  CreateTx,
+  PaymentStatus,
+  QueryTx,
+  TransactionSearchType,
+  TransactionType,
+  UpdateTx,
+} from "@monorepo/packages";
 import {
   FindOptionsWhere,
   ILike,
@@ -7,15 +13,9 @@ import {
   Raw,
   Repository,
 } from "typeorm";
-import {
-  PaymentStatus,
-  TransactionSearchType,
-  TransactionType,
-  CreateTx,
-  QueryTx,
-  UpdateTx,
-} from "@monorepo/packages";
-import { AppDataSource } from "../config/typeorm.db.config";
+import { AppDataSource } from "../config/typeorm.db.config.js";
+import { Cat, Cf, Cp, Cr, Tx, User } from "../entity/entities.js";
+import { BaseService } from "./base.service.js";
 
 /**
  * Serviço para gerenciar transações financeiras.

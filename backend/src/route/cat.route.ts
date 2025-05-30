@@ -1,7 +1,6 @@
-import CatController from "../controller/cat.controller";
-import GeneralMiddleware from "../middleware/GeneralMiddleware";
-import { BaseRouter } from "./base.route";
-
+import CatController from "../controller/cat.controller.js";
+import GeneralMiddleware from "../middleware/GeneralMiddleware.js";
+import { BaseRouter } from "./base.route.js";
 export default class CatRouter extends BaseRouter<CatController> {
   /**
    * Creates an instance of CatRouter.

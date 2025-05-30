@@ -1,12 +1,8 @@
+import { DbBalanceProps, DbCpsCrsProps, ResultSet } from "@monorepo/packages";
 import { Between, QueryRunner, Repository } from "typeorm";
-import { AppDataSource } from "../config/typeorm.db.config";
-import {
-  DbBalanceProps,
-  ResultSet,
-  DbCpsCrsProps,
-} from "@monorepo/packages";
-import { Cp, Cr } from "../entity/entities";
-import { ApiError } from "../utils/apiError.util";
+import { AppDataSource } from "../config/typeorm.db.config.js";
+import { Cp, Cr } from "../entity/entities.js";
+import { ApiError } from "../utils/apiError.util.js";
 
 export class DbService {
   public queryRunner: QueryRunner;

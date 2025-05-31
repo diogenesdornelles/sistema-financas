@@ -19,7 +19,6 @@ import { useTheme } from '@mui/material/styles';
 import { JSX, useEffect, useState } from 'react';
 import { z } from 'zod';
 
-import ErrorAlert from '@/components/alerts/ErrorAlert';
 import ExcludeDialog from '@/components/dialogs/ExcludeDialog';
 import TcrSearchForm from '@/components/forms/search/tcrSearchForm';
 import CustomBackdrop from '@/components/ui/CustomBackdrop';
@@ -28,6 +27,7 @@ import { useGetManyTcr } from '@/hooks/service/tcr/useGetManyTcr';
 import { useQueryTcr } from '@/hooks/service/tcr/useQueryTcr';
 import { useFormStore } from '@/hooks/useFormStore';
 import type { queryTcrSchema, TcrProps } from '@monorepo/packages';
+import ToastAlert from '@/components/alerts/ToastAlert';
 
 type QueryTcrFormData = z.infer<typeof queryTcrSchema>;
 
@@ -128,12 +128,9 @@ const TcrTable = (): JSX.Element => {
     isFetching,
   ]);
 
-  if (error) return <ErrorAlert message={error.message} />;
-
-  if (queryTcrMutation.isError) return <ErrorAlert message={queryTcrMutation.error.message} />;
-
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
+      {(error || queryTcrMutation.isError) && <ToastAlert severity="error" title="Erro" message={'Erro ao obter dados.'} open />}
       {(isPending ||
         isLoading ||
         isFetching ||

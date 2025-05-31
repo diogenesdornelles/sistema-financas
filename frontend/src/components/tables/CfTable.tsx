@@ -19,7 +19,6 @@ import { useTheme } from '@mui/material/styles';
 import { JSX, useEffect, useState } from 'react';
 import { z } from 'zod';
 
-import ErrorAlert from '@/components/alerts/ErrorAlert';
 import ExcludeDialog from '@/components/dialogs/ExcludeDialog';
 import CfSearchForm from '@/components/forms/search/cfSearchForm';
 import CustomBackdrop from '@/components/ui/CustomBackdrop';
@@ -29,6 +28,7 @@ import { useQueryCf } from '@/hooks/service/cf/useQueryCf';
 import { useFormStore } from '@/hooks/useFormStore';
 import type { CfProps, queryCfSchema } from '@monorepo/packages';
 import * as packages from '@monorepo/packages';
+import ToastAlert from '@/components/alerts/ToastAlert';
 const { strToPtBrMoney } = packages;
 
 type QueryCfFormData = z.infer<typeof queryCfSchema>;
@@ -130,12 +130,9 @@ const CfTable = (): JSX.Element => {
     isFetching,
   ]);
 
-  if (error) return <ErrorAlert message={error.message} />;
-
-  if (queryCfMutation.isError) return <ErrorAlert message={queryCfMutation.error.message} />;
-
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
+      {(error || queryCfMutation.isError) && <ToastAlert severity="error" title="Erro" message={'Erro ao obter dados.'} open />}
       {(isPending || isLoading || isFetching || isRefetching || delMutation.isPending || queryCfMutation.isPending) && (
         <CustomBackdrop isOpen={true} />
       )}

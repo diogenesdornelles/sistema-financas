@@ -1,10 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Alert, Autocomplete, Box, Button, TextField, Typography } from '@mui/material';
+import { Autocomplete, Box, Button, TextField, Typography } from '@mui/material';
 import { JSX } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
-
-import ErrorAlert from '@/components/alerts/ErrorAlert';
+import DoneIcon from '@mui/icons-material/Done';
 import CustomBackdrop from '@/components/ui/CustomBackdrop';
 import FormContainer from '@/components/ui/FormContainer';
 import { usePostCp } from '@/hooks/service/cp/usePostCp';
@@ -13,6 +12,7 @@ import { useGetAllTcp } from '@/hooks/service/tcp/useGetAllTcp';
 import { useAuth } from '@/hooks/useAuth';
 import { useFormStore } from '@/hooks/useFormStore';
 import * as packages from '@monorepo/packages';
+import ToastAlert from '@/components/alerts/ToastAlert';
 const { createCpSchema, strToPtBrMoney } = packages;
 
 type CreateCpFormData = z.infer<typeof createCpSchema>;
@@ -54,26 +54,23 @@ export function CreateCpForm(): JSX.Element | null {
 
   if (forms.cp.type === 'update') return null;
 
-  if (errorTcp || errorPartner) {
-    const errorMessage = errorTcp?.message || errorPartner?.message;
-    return <ErrorAlert message={errorMessage ? errorMessage : 'Ocorreu um erro!'} />;
-  }
-
   return (
     <FormContainer formName="cp">
       <Typography variant="h4">Nova Conta a Pagar</Typography>
 
+      {(errorTcp || errorPartner) && <ToastAlert severity="error" title="Erro" message={'Erro ao criar conta.'} open />}
+
       {mutation.isSuccess && (
-        <Alert severity="success" style={{ width: '100%' }}>
-          Conta criada com sucesso!
-        </Alert>
+        <ToastAlert
+          severity="success"
+          title="Sucesso"
+          message="Conta criada com sucesso!"
+          open
+          icon={<DoneIcon />}
+        />
       )}
 
-      {mutation.isError && (
-        <Alert severity="error" style={{ width: '100%' }}>
-          Ocorreu um erro ao criar o Conta. Tente novamente.
-        </Alert>
-      )}
+      {mutation.isError && <ToastAlert severity="error" title="Erro" message={'Erro ao criar conta.'} open />}
 
       {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
 

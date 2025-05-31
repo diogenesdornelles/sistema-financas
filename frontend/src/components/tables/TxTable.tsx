@@ -19,7 +19,6 @@ import { useTheme } from '@mui/material/styles';
 import { JSX, useEffect, useState } from 'react';
 import { z } from 'zod';
 
-import ErrorAlert from '@/components/alerts/ErrorAlert';
 import ExcludeDialog from '@/components/dialogs/ExcludeDialog';
 import TxSearchForm from '@/components/forms/search/txSearchForm';
 import CustomBackdrop from '@/components/ui/CustomBackdrop';
@@ -29,6 +28,7 @@ import { useQueryTx } from '@/hooks/service/tx/useQueryTx';
 import { useFormStore } from '@/hooks/useFormStore';
 import type { TxProps, queryTxSchema } from '@monorepo/packages';
 import * as packages from '@monorepo/packages';
+import ToastAlert from '@/components/alerts/ToastAlert';
 const { strToPtBrMoney } = packages;
 
 type QueryTxFormData = z.infer<typeof queryTxSchema>;
@@ -133,12 +133,9 @@ const TxTable = (): JSX.Element => {
     isFetching,
   ]);
 
-  if (error) return <ErrorAlert message={error.message} />;
-
-  if (queryTxMutation.isError) return <ErrorAlert message={queryTxMutation.error.message} />;
-
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
+      {(error || queryTxMutation.isError) && <ToastAlert severity="error" title="Erro" message={'Erro ao obter dados.'} open />}
       {(isPending || isLoading || isFetching || isRefetching || delMutation.isPending || queryTxMutation.isPending) && (
         <CustomBackdrop isOpen={true} />
       )}

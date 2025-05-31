@@ -43,7 +43,6 @@ const CpSearchForm = ({ onSearch, onClear }: CpSearchFormProps): JSX.Element => 
   };
 
   const onSubmit = (data: QueryCpFormData) => {
-    console.log(data);
     const cleanedData: Partial<QueryCpFormData> = { ...data };
     (['id', 'value', 'supplier', 'type', 'due', 'obs', 'createdAt', 'updatedAt'] as const).forEach((key) => {
       if (!cleanedData[key]) {

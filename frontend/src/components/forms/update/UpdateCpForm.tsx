@@ -1,9 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Alert, Autocomplete, Box, Button, InputLabel, TextField } from '@mui/material';
+import { Autocomplete, Box, Button, InputLabel, TextField } from '@mui/material';
 import { JSX } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
-
+import DoneIcon from '@mui/icons-material/Done';
 import ButtonUpdateForm from '@/components//ui/ButtonUpdateForm';
 import CustomBackdrop from '@/components/ui/CustomBackdrop';
 import FormContainer from '@/components/ui/FormContainer';
@@ -12,6 +12,7 @@ import { useGetAllPartner } from '@/hooks/service/partner/useGetAllPartner';
 import { useGetAllTcp } from '@/hooks/service/tcp/useGetAllTcp';
 import { useFormStore } from '@/hooks/useFormStore';
 import * as packages from '@monorepo/packages';
+import ToastAlert from '@/components/alerts/ToastAlert';
 const { updateCpSchema, strToPtBrMoney } = packages;
 
 type UpdateCpFormData = z.infer<typeof updateCpSchema>;
@@ -56,32 +57,25 @@ export function UpdateCpForm(): JSX.Element | null {
 
   if (forms.cp.type === 'create' || !forms.cp.updateItem) return null;
 
-  if (errorTcp || errorPartner) {
-    const errorMessage = errorTcp?.message || errorPartner?.message;
-    return (
-      <Alert severity="error" style={{ width: '100%' }}>
-        {`'Ocorreu um erro: ' + ${errorMessage}`}
-      </Alert>
-    );
-  }
-
   return (
     <FormContainer formName="cp">
       <ButtonUpdateForm name="cp" title="Atualizar Conta a Pagar" />
 
+      {(errorTcp || errorPartner) && <ToastAlert severity="error" title="Erro" message={'Erro ao alterar conta.'} open />}
+      
       {(isPendingTcp || isPendingPartner) && <CustomBackdrop isOpen={true} />}
 
       {mutation.isSuccess && (
-        <Alert severity="success" style={{ width: '100%' }}>
-          Conta atualizada com sucesso!
-        </Alert>
+        <ToastAlert
+          severity="success"
+          title="Sucesso"
+          message="Conta alterada com sucesso!"
+          open
+          icon={<DoneIcon />}
+        />
       )}
 
-      {mutation.isError && (
-        <Alert severity="error" style={{ width: '100%' }}>
-          Ocorreu um erro ao atualizar o Conta. Tente novamente.
-        </Alert>
-      )}
+      {mutation.isError && <ToastAlert severity="error" title="Erro" message={'Erro ao alterar conta.'} open />}
 
       {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
 

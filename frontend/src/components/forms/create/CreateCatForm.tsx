@@ -1,15 +1,16 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Alert, Box, Button, TextField, Typography } from '@mui/material';
+import { Box, Button, TextField, Typography } from '@mui/material';
 import { JSX } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-
+import DoneIcon from '@mui/icons-material/Done';
 import CustomBackdrop from '@/components/ui/CustomBackdrop';
 import FormContainer from '@/components/ui/FormContainer';
 import { usePostCat } from '@/hooks/service/cat/usePostCat';
 import { useAuth } from '@/hooks/useAuth';
 import { useFormStore } from '@/hooks/useFormStore';
 import * as packages from '@monorepo/packages';
+import ToastAlert from '@/components/alerts/ToastAlert';
 const { createCatSchema } = packages;
 
 type CreateCatFormData = z.infer<typeof createCatSchema>;
@@ -50,17 +51,11 @@ export function CreateCatForm(): JSX.Element | null {
       <Typography variant="h4">Nova Categoria</Typography>
 
       {mutation.isSuccess && (
-        <Alert severity="success" style={{ width: '100%' }}>
-          Categoria criada com sucesso!
-        </Alert>
+        <ToastAlert severity="success" title="Sucesso" message="Categoria criada com sucesso!" open icon={<DoneIcon/>}/>
       )}
-
       {mutation.isError && (
-        <Alert severity="error" style={{ width: '100%' }}>
-          {mutation.error?.message || 'Ocorreu um erro ao criar categoria. Tente novamente.'}
-        </Alert>
+        <ToastAlert severity="error" title="Erro" message={'Erro ao criar categoria.'} open />
       )}
-
       {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
 
       <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%', minWidth: 500 }}>

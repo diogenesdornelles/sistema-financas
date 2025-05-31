@@ -19,7 +19,6 @@ import { useTheme } from '@mui/material/styles';
 import { JSX, useEffect, useState } from 'react';
 import { z } from 'zod';
 
-import ErrorAlert from '@/components/alerts/ErrorAlert';
 import ExcludeDialog from '@/components/dialogs/ExcludeDialog';
 import TcpSearchForm from '@/components/forms/search/tcpSearchForm';
 import CustomBackdrop from '@/components/ui/CustomBackdrop';
@@ -28,6 +27,7 @@ import { useGetManyTcp } from '@/hooks/service/tcp/useGetManyTcp';
 import { useQueryTcp } from '@/hooks/service/tcp/useQueryTcp';
 import { useFormStore } from '@/hooks/useFormStore';
 import type { queryTcpSchema, TcpProps } from '@monorepo/packages';
+import ToastAlert from '@/components/alerts/ToastAlert';
 
 type QueryTcpFormData = z.infer<typeof queryTcpSchema>;
 
@@ -128,12 +128,9 @@ const TcpTable = (): JSX.Element => {
     isFetching,
   ]);
 
-  if (error) return <ErrorAlert message={error.message} />;
-
-  if (queryTcpMutation.isError) return <ErrorAlert message={queryTcpMutation.error.message} />;
-
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
+      {(error || queryTcpMutation.isError) && <ToastAlert severity="error" title="Erro" message={'Erro ao obter dados.'} open />}
       {(isPending ||
         isLoading ||
         isFetching ||

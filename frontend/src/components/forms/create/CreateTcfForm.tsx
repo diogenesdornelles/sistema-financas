@@ -1,18 +1,18 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Typography } from '@mui/material';
-import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { JSX } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-
+import DoneIcon from '@mui/icons-material/Done';
 import CustomBackdrop from '@/components/ui/CustomBackdrop';
 import FormContainer from '@/components/ui/FormContainer';
 import { usePostTcf } from '@/hooks/service/tcf/usePostTcf';
 import { useFormStore } from '@/hooks/useFormStore';
 import * as packages from '@monorepo/packages';
+import ToastAlert from '@/components/alerts/ToastAlert';
 const { createTcfSchema } = packages;
 
 type CreateTcfFormData = z.infer<typeof createTcfSchema>;
@@ -48,16 +48,16 @@ export function CreateTcfForm(): JSX.Element | null {
     <FormContainer formName="tcf">
       <Typography variant="h4">Novo Tipo de conta Financeira</Typography>
       {mutation.isSuccess && (
-        <Alert severity="success" style={{ width: '100%' }}>
-          Formulário enviado com sucesso!
-        </Alert>
+        <ToastAlert
+          severity="success"
+          title="Sucesso"
+          message="Tipo criado com sucesso!"
+          open
+          icon={<DoneIcon />}
+        />
       )}
 
-      {mutation.isError && (
-        <Alert severity="error" style={{ width: '100%' }}>
-          Ocorreu um erro ao enviar o formulário. Tente novamente.
-        </Alert>
-      )}
+      {mutation.isError && <ToastAlert severity="error" title="Erro" message={'Erro ao criar tipo.'} open />}
 
       {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
 

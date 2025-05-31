@@ -1,10 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Alert, Autocomplete, Box, Button, TextField, Typography } from '@mui/material';
+import { Autocomplete, Box, Button, TextField, Typography } from '@mui/material';
 import { JSX } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import DoneIcon from '@mui/icons-material/Done';
 
-import ErrorAlert from '@/components/alerts/ErrorAlert';
 import CustomBackdrop from '@/components/ui/CustomBackdrop';
 import FormContainer from '@/components/ui/FormContainer';
 import { usePostCf } from '@/hooks/service/cf/usePostCf';
@@ -12,6 +12,7 @@ import { useGetAllTcf } from '@/hooks/service/tcf/useGetAllTcf';
 import { useAuth } from '@/hooks/useAuth';
 import { useFormStore } from '@/hooks/useFormStore';
 import * as packages from '@monorepo/packages';
+import ToastAlert from '@/components/alerts/ToastAlert';
 const { createCfSchema, strToPtBrMoney } = packages;
 
 type CreateCfFormData = z.infer<typeof createCfSchema>;
@@ -53,25 +54,21 @@ export function CreateCfForm(): JSX.Element | null {
 
   if (forms.cf.type === 'update') return null;
 
-  if (error) return <ErrorAlert message={error.message} />;
+  if (error) return <ToastAlert severity="error" title="Erro" message={'Erro ao criar conta.'} open />;
 
   return (
     <FormContainer formName="cf">
       <Typography variant="h4">Nova Conta Financeira</Typography>
 
-      {isPending && <CustomBackdrop isOpen={mutation.isPending} />}
+      {error && <ToastAlert severity="error" title="Erro" message={'Erro ao criar conta.'} open />}
 
       {mutation.isSuccess && (
-        <Alert severity="success" style={{ width: '100%' }}>
-          Conta criada com sucesso!
-        </Alert>
+        <ToastAlert severity="success" title="Sucesso" message="Conta criada com sucesso!" open icon={<DoneIcon/>}/>
       )}
 
-      {mutation.isError && (
-        <Alert severity="error" style={{ width: '100%' }}>
-          Ocorreu um erro ao criar o Conta. Tente novamente.
-        </Alert>
-      )}
+      {mutation.isError && <ToastAlert severity="error" title="Erro" message={'Erro ao criar conta.'} open />}
+
+      {isPending && <CustomBackdrop isOpen={mutation.isPending} />}
 
       {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
 

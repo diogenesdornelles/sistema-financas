@@ -1,6 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  Alert,
   Autocomplete,
   Box,
   Button,
@@ -16,7 +15,7 @@ import { JSX, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import ErrorAlert from '@/components/alerts/ErrorAlert';
+import DoneIcon from '@mui/icons-material/Done';
 import ButtonUpdateForm from '@/components/ui/ButtonUpdateForm';
 import CustomBackdrop from '@/components/ui/CustomBackdrop';
 import FormContainer from '@/components/ui/FormContainer';
@@ -27,6 +26,7 @@ import { useGetAllCr } from '@/hooks/service/cr/useGetAllCr';
 import { usePutTx } from '@/hooks/service/tx/usePutTx';
 import { useFormStore } from '@/hooks/useFormStore';
 import * as packages from '@monorepo/packages';
+import ToastAlert from '@/components/alerts/ToastAlert';
 const { updateTxSchema, strToPtBrMoney } = packages;
 
 type UpdateTxFormData = z.infer<typeof updateTxSchema>;
@@ -88,24 +88,22 @@ export function UpdateTxForm(): JSX.Element | null | string {
 
   if (forms.tx.type === 'create' || !forms.tx.updateItem) return null;
 
-  if (errorCf || errorCat || errorCp || errorCr) {
-    const errorMessage = errorCf?.message || errorCat?.message || errorCp?.message || errorCr?.message;
-    return <ErrorAlert message={errorMessage ? errorMessage : 'Ocorreu um erro!'} />;
-  }
 
   return (
     <FormContainer formName="tx">
       <ButtonUpdateForm name="tx" title="Atualizar Transação" />
+      {(errorCf || errorCat || errorCp || errorCr) && <ToastAlert severity="error" title="Erro" message={'Erro ao alterar transação.'} open />}
       {mutation.isSuccess && (
-        <Alert severity="success" style={{ width: '100%' }}>
-          Transação atualizada com sucesso!
-        </Alert>
+        <ToastAlert
+          severity="success"
+          title="Sucesso"
+          message="Transação alterada com sucesso!"
+          open
+          icon={<DoneIcon />}
+        />
       )}
-      {mutation.isError && (
-        <Alert severity="error" style={{ width: '100%' }}>
-          Ocorreu um erro ao atualizar a Transação. Tente novamente.
-        </Alert>
-      )}
+
+      {mutation.isError && <ToastAlert severity="error" title="Erro" message={'Erro ao alterar transação.'} open />}
 
       {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
 

@@ -19,7 +19,6 @@ import { useTheme } from '@mui/material/styles';
 import { JSX, useEffect, useState } from 'react';
 import { z } from 'zod';
 
-import ErrorAlert from '@/components/alerts/ErrorAlert';
 import ExcludeDialog from '@/components/dialogs/ExcludeDialog';
 import CrSearchForm from '@/components/forms/search/crSearchForm';
 import CustomBackdrop from '@/components/ui/CustomBackdrop';
@@ -29,6 +28,7 @@ import { useQueryCr } from '@/hooks/service/cr/useQueryCr';
 import { useFormStore } from '@/hooks/useFormStore';
 import type { CrProps, queryCrSchema } from '@monorepo/packages';
 import * as packages from '@monorepo/packages';
+import ToastAlert from '@/components/alerts/ToastAlert';
 const { PaymentStatus, strToPtBrMoney } = packages;
 
 type QueryCrFormData = z.infer<typeof queryCrSchema>;
@@ -142,12 +142,9 @@ const CrTable = (): JSX.Element => {
     isFetching,
   ]);
 
-  if (error) return <ErrorAlert message={error.message} />;
-
-  if (queryCrMutation.isError) return <ErrorAlert message={queryCrMutation.error.message} />;
-
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
+      {(error || queryCrMutation.isError) && <ToastAlert severity="error" title="Erro" message={'Erro ao obter dados.'} open />}
       {(isPending || isLoading || isFetching || isRefetching || delMutation.isPending || queryCrMutation.isPending) && (
         <CustomBackdrop isOpen={true} />
       )}

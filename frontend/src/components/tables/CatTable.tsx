@@ -12,7 +12,6 @@ import TableRow from '@mui/material/TableRow';
 import { JSX, useEffect, useState } from 'react';
 import { z } from 'zod';
 
-import ErrorAlert from '@/components/alerts/ErrorAlert';
 import ExcludeDialog from '@/components/dialogs/ExcludeDialog';
 import CatSearchForm from '@/components/forms/search/catSearchForm';
 import CustomBackdrop from '@/components/ui/CustomBackdrop';
@@ -21,6 +20,7 @@ import { useGetManyCat } from '@/hooks/service/cat/useGetManyCat';
 import { useQueryCat } from '@/hooks/service/cat/useQueryCat';
 import { useFormStore } from '@/hooks/useFormStore';
 import type { CatProps, queryCatSchema } from '@monorepo/packages';
+import ToastAlert from '@/components/alerts/ToastAlert';
 
 type QueryCatFormData = z.infer<typeof queryCatSchema>;
 
@@ -123,12 +123,9 @@ const CatTable = (): JSX.Element => {
     isFetching,
   ]);
 
-  if (error) return <ErrorAlert message={error.message} />;
-
-  if (queryCatMutation.isError) return <ErrorAlert message={queryCatMutation.error.message} />;
-
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
+      {(error || queryCatMutation.isError) && <ToastAlert severity="error" title="Erro" message={'Erro ao obter dados.'} open />}
       {(isPending ||
         isLoading ||
         isFetching ||

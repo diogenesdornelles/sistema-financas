@@ -19,7 +19,6 @@ import { useTheme } from '@mui/material/styles';
 import { JSX, useEffect, useState } from 'react';
 import { z } from 'zod';
 
-import ErrorAlert from '@/components/alerts/ErrorAlert';
 import ExcludeDialog from '@/components/dialogs/ExcludeDialog';
 import UserSearchForm from '@/components/forms/search/userSearchForm';
 import CustomBackdrop from '@/components/ui/CustomBackdrop';
@@ -28,6 +27,7 @@ import { useGetManyUser } from '@/hooks/service/user/useGetManyUser';
 import { useQueryUser } from '@/hooks/service/user/useQueryUser';
 import { useFormStore } from '@/hooks/useFormStore';
 import type { queryUserSchema, UserProps } from '@monorepo/packages';
+import ToastAlert from '@/components/alerts/ToastAlert';
 
 type QueryUserFormData = z.infer<typeof queryUserSchema>;
 
@@ -130,12 +130,9 @@ const UserTable = (): JSX.Element => {
     isFetching,
   ]);
 
-  if (error) return <ErrorAlert message={error.message} />;
-
-  if (queryUserMutation.isError) return <ErrorAlert message={queryUserMutation.error.message} />;
-
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
+      {(error || queryUserMutation.isError) && <ToastAlert severity="error" title="Erro" message={'Erro ao obter dados.'} open />}
       {(isPending ||
         isLoading ||
         isFetching ||

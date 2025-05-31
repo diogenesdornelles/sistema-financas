@@ -1,9 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Alert, Autocomplete, Box, Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
+import { Autocomplete, Box, Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
 import { JSX } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
-
+import DoneIcon from '@mui/icons-material/Done';
 import ButtonUpdateForm from '@/components/ui/ButtonUpdateForm';
 import CustomBackdrop from '@/components/ui/CustomBackdrop';
 import FormContainer from '@/components/ui/FormContainer';
@@ -12,6 +12,7 @@ import { useGetAllTcf } from '@/hooks/service/tcf/useGetAllTcf';
 import { useFormStore } from '@/hooks/useFormStore';
 
 import * as packages from '@monorepo/packages';
+import ToastAlert from '@/components/alerts/ToastAlert';
 const { updateCfSchema } = packages;
 
 type UpdateCfFormData = z.infer<typeof updateCfSchema>;
@@ -63,30 +64,23 @@ export function UpdateCfForm(): JSX.Element | null {
   // Exibe apenas se o formStore estiver em modo update e houver item para atualizar
   if (forms.cf.type === 'create' || !forms.cf.updateItem) return null;
 
-  if (error)
-    return (
-      <Alert severity="error" style={{ width: '100%' }}>
-        {`'Ocorreu um erro: ' + ${error.message}`}
-      </Alert>
-    );
-
   return (
     <FormContainer formName="cf">
       <ButtonUpdateForm name="cf" title="Atualizar Conta Financeira" />
 
       {isPending && <CustomBackdrop isOpen={true} />}
-
+      {error && <ToastAlert severity="error" title="Erro" message={'Erro ao alterar conta.'} open />}
       {mutation.isSuccess && (
-        <Alert severity="success" style={{ width: '100%' }}>
-          Conta atualizado com sucesso!
-        </Alert>
+        <ToastAlert
+          severity="success"
+          title="Sucesso"
+          message="Conta alterada com sucesso!"
+          open
+          icon={<DoneIcon />}
+        />
       )}
 
-      {mutation.isError && (
-        <Alert severity="error" style={{ width: '100%' }}>
-          Ocorreu um erro ao atualizar o Conta. Tente novamente.
-        </Alert>
-      )}
+      {mutation.isError && <ToastAlert severity="error" title="Erro" message={'Erro ao alterar conta.'} open />}
 
       <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%', minWidth: 500 }}>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>

@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Checkbox, FormControlLabel } from '@mui/material';
-import Alert from '@mui/material/Alert';
+import DoneIcon from '@mui/icons-material/Done';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -14,6 +14,7 @@ import FormContainer from '@/components/ui/FormContainer';
 import { usePutTcr } from '@/hooks/service/tcr/usePutTcr';
 import { useFormStore } from '@/hooks/useFormStore';
 import * as packages from '@monorepo/packages';
+import ToastAlert from '@/components/alerts/ToastAlert';
 const { updateTcrSchema } = packages;
 
 type UpdateTcrFormData = z.infer<typeof updateTcrSchema>;
@@ -60,16 +61,16 @@ export function UpdateTcrForm(): JSX.Element | null {
       <ButtonUpdateForm title="Atualizar Tipo de conta a receber" name="tcr" />
 
       {mutation.isSuccess && (
-        <Alert severity="success" style={{ width: '100%' }}>
-          Tipo de conta a receber atualizado com sucesso!
-        </Alert>
+        <ToastAlert
+          severity="success"
+          title="Sucesso"
+          message="Tipo alterado com sucesso!"
+          open
+          icon={<DoneIcon />}
+        />
       )}
 
-      {mutation.isError && (
-        <Alert severity="error" style={{ width: '100%' }}>
-          Ocorreu um erro ao atualizar o Tipo de conta a receber. Tente novamente.
-        </Alert>
-      )}
+      {mutation.isError && <ToastAlert severity="error" title="Erro" message={'Erro ao alterar tipo.'} open />}
 
       {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
 

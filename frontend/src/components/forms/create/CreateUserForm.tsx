@@ -1,18 +1,18 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material';
-import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { JSX } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-
+import DoneIcon from '@mui/icons-material/Done';
 import CustomBackdrop from '@/components/ui/CustomBackdrop';
 import FormContainer from '@/components/ui/FormContainer';
 import { usePostUser } from '@/hooks/service/user/usePostUser';
 import { useFormStore } from '@/hooks/useFormStore';
 import * as packages from '@monorepo/packages';
+import ToastAlert from '@/components/alerts/ToastAlert';
 const { createUserRepPwdSchema, RoleType } = packages;
 
 type CreateUserFormData = z.infer<typeof createUserRepPwdSchema>;
@@ -59,16 +59,16 @@ export function CreateUserForm(): JSX.Element | null {
     <FormContainer formName="user">
       <Typography variant="h4">Novo Usuário</Typography>
       {mutation.isSuccess && (
-        <Alert severity="success" style={{ width: '100%' }}>
-          Usuário criado com sucesso!
-        </Alert>
+        <ToastAlert
+          severity="success"
+          title="Sucesso"
+          message="usuário criado com sucesso!"
+          open
+          icon={<DoneIcon />}
+        />
       )}
 
-      {mutation.isError && (
-        <Alert severity="error" style={{ width: '100%' }}>
-          Ocorreu um erro ao criar o usuário. Tente novamente.
-        </Alert>
-      )}
+      {mutation.isError && <ToastAlert severity="error" title="Erro" message={'Erro ao criar usuário.'} open />}
 
       {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
 

@@ -1,15 +1,16 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Alert, Box, Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
+import { Box, Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
 import { JSX } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-
+import DoneIcon from '@mui/icons-material/Done';
 import ButtonUpdateForm from '@/components/ui/ButtonUpdateForm';
 import CustomBackdrop from '@/components/ui/CustomBackdrop';
 import FormContainer from '@/components/ui/FormContainer';
 import { usePutCat } from '@/hooks/service/cat/usePutCat';
 import { useFormStore } from '@/hooks/useFormStore';
 import * as packages from '@monorepo/packages';
+import ToastAlert from '@/components/alerts/ToastAlert';
 const { updateCatSchema } = packages;
 
 type UpdateCatFormData = z.infer<typeof updateCatSchema>;
@@ -59,16 +60,16 @@ export function UpdateCatForm(): JSX.Element | null {
       <ButtonUpdateForm name="cat" title="Atualizar categoria" />
 
       {mutation.isSuccess && (
-        <Alert severity="success" style={{ width: '100%' }}>
-          Categoria atualizada com sucesso!
-        </Alert>
+        <ToastAlert
+          severity="success"
+          title="Sucesso"
+          message="Categoria alterada com sucesso!"
+          open
+          icon={<DoneIcon />}
+        />
       )}
 
-      {mutation.isError && (
-        <Alert severity="error" style={{ width: '100%' }}>
-          Ocorreu um erro ao atualizar o Categoria. Tente novamente.
-        </Alert>
-      )}
+      {mutation.isError && <ToastAlert severity="error" title="Erro" message={'Erro ao alterar categoria.'} open />}
 
       {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
 

@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { useTheme } from '@mui/material/styles';
@@ -11,6 +10,7 @@ import { z } from 'zod';
 
 import { useAuth } from '@/hooks/useAuth';
 import * as packages from '@monorepo/packages';
+import ToastAlert from '@/components/alerts/ToastAlert';
 const { createTokenSchema } = packages;
 
 type LoginFormData = z.infer<typeof createTokenSchema>;
@@ -68,13 +68,8 @@ function Login() {
       >
         <h1>Login</h1>
 
-        {error && (
-          <Alert severity="error" style={{ width: '100%' }}>
-            CPF ou senha inválidos.
-          </Alert>
-        )}
-
         <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
+          {error && <ToastAlert severity="error" title="Erro" message={'Usuário ou senha errados.'} open />}
           <Box display="flex" flexDirection="column" gap={2}>
             <TextField
               label="CPF"

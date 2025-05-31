@@ -19,7 +19,6 @@ import { useTheme } from '@mui/material/styles';
 import { JSX, useEffect, useState } from 'react';
 import { z } from 'zod';
 
-import ErrorAlert from '@/components/alerts/ErrorAlert';
 import ExcludeDialog from '@/components/dialogs/ExcludeDialog';
 import TcfSearchForm from '@/components/forms/search/tcfSearchForm';
 import CustomBackdrop from '@/components/ui/CustomBackdrop';
@@ -28,6 +27,7 @@ import { useGetManyTcf } from '@/hooks/service/tcf/useGetManyTcf';
 import { useQueryTcf } from '@/hooks/service/tcf/useQueryTcf';
 import { useFormStore } from '@/hooks/useFormStore';
 import type { queryTcfSchema, TcfProps } from '@monorepo/packages';
+import ToastAlert from '@/components/alerts/ToastAlert';
 
 type QueryTcfFormData = z.infer<typeof queryTcfSchema>;
 
@@ -128,12 +128,9 @@ const TcfTable = (): JSX.Element => {
     isFetching,
   ]);
 
-  if (error) return <ErrorAlert message={error.message} />;
-
-  if (queryTcfMutation.isError) return <ErrorAlert message={queryTcfMutation.error.message} />;
-
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
+      {(error || queryTcfMutation.isError) && <ToastAlert severity="error" title="Erro" message={'Erro ao obter dados.'} open />}
       {(isPending ||
         isLoading ||
         isFetching ||

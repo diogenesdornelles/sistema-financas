@@ -19,7 +19,6 @@ import { useTheme } from '@mui/material/styles';
 import { JSX, useEffect, useState } from 'react';
 import { z } from 'zod';
 
-import ErrorAlert from '@/components/alerts/ErrorAlert';
 import ExcludeDialog from '@/components/dialogs/ExcludeDialog';
 import PartnerSearchForm from '@/components/forms/search/partnerSearchForm';
 import CustomBackdrop from '@/components/ui/CustomBackdrop';
@@ -29,6 +28,7 @@ import { useQueryPartner } from '@/hooks/service/partner/useQueryPartner';
 import { useFormStore } from '@/hooks/useFormStore';
 import type { PartnerProps, queryPartnerSchema } from '@monorepo/packages';
 import * as packages from '@monorepo/packages';
+import ToastAlert from '@/components/alerts/ToastAlert';
 const { PartnerType } = packages;
 
 type QueryPartnerFormData = z.infer<typeof queryPartnerSchema>;
@@ -133,12 +133,9 @@ const PartnerTable = (): JSX.Element => {
     isFetching,
   ]);
 
-  if (error) return <ErrorAlert message={error.message} />;
-
-  if (queryPartnerMutation.isError) return <ErrorAlert message={queryPartnerMutation.error.message} />;
-
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
+      {(error || queryPartnerMutation.isError) && <ToastAlert severity="error" title="Erro" message={'Erro ao obter dados.'} open />}
       {(isPending ||
         isLoading ||
         isFetching ||

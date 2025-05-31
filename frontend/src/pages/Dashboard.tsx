@@ -7,7 +7,7 @@ import { Bar, Pie } from 'react-chartjs-2';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import ErrorAlert from '@/components/alerts/ErrorAlert';
+
 import CustomBackdrop from '@/components/ui/CustomBackdrop';
 import { colors, optionsCpsCrs, optionsPie } from '@/constants/dashboard';
 import { useGetAllCf } from '@/hooks/service/cf/useGetAllCf';
@@ -15,6 +15,7 @@ import { useGetBalances } from '@/hooks/service/db/useGetBalances';
 import { useGetCpsCrs } from '@/hooks/service/db/useGetCpsCrs';
 import type { DbBalanceProps } from '@monorepo/packages';
 import * as packages from '@monorepo/packages';
+import ToastAlert from '@/components/alerts/ToastAlert';
 const { queryDbSchema, strToPtBrMoney } = packages;
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title, LinearScale, CategoryScale, BarElement);
@@ -208,12 +209,9 @@ function Dashboard() {
     }
   }, [dataCpsCrs]);
 
-  if (errorBalances) return <ErrorAlert message={errorBalances.message} />;
-  if (errorCpsCrs) return <ErrorAlert message={errorCpsCrs.message} />;
-  if (errorCfs) return <ErrorAlert message={errorCfs.message} />;
-
   return (
     <Grid container sx={{ padding: 1, width: '100%', maxHeight: '85vh', overflow: 'scroll' }}>
+      {(errorBalances || errorCpsCrs || errorCfs) && <ToastAlert severity="error" title="Erro" message={'Erro ao obter dados.'} open />}
       <Grid size={6}>
         <Box
           sx={{

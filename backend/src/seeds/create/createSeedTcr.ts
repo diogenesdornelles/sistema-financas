@@ -1,6 +1,6 @@
-import { AppDataSource } from "../../config/typeorm.db.config.js";
-import { Tcr } from "../../entity/entities.js";
-import { tcrsSeed } from "../dataSeed/tcrsSeed.js";
+import { AppDataSource } from '../../config/typeorm.db.config.js';
+import { Tcr } from '../../entity/entities.js';
+import { tcrsSeed } from '../dataSeed/tcrsSeed.js';
 
 export const createSeedTcr = async () => {
   const repo = AppDataSource.getRepository(Tcr);

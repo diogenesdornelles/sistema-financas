@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class InitialMigrationTIMESTAMP implements MigrationInterface {
   name = `InitialMigration-${new Date().getTime()}`;
@@ -9,7 +9,7 @@ export class InitialMigrationTIMESTAMP implements MigrationInterface {
     );
 
     if (result[0].exists) {
-      console.log("Initial migration already applied, skipping...");
+      console.log('Initial migration already applied, skipping...');
       return;
     }
 

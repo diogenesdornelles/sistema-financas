@@ -19,5 +19,5 @@ export const generateValidCPF = (): string => {
   remainder = sum % 11;
   cpf[10] = remainder < 2 ? 0 : 11 - remainder;
 
-  return cpf.join("");
+  return cpf.join('');
 };

@@ -1,7 +1,7 @@
-import * as dotenv from "dotenv";
-import { AppDataSource } from "../../config/typeorm.db.config.js";
-import { Cat, User } from "../../entity/entities.js";
-import { catsSeed } from "../dataSeed/catsSeed.js";
+import * as dotenv from 'dotenv';
+import { AppDataSource } from '../../config/typeorm.db.config.js';
+import { Cat, User } from '../../entity/entities.js';
+import { catsSeed } from '../dataSeed/catsSeed.js';
 
 dotenv.config();
 
@@ -13,7 +13,7 @@ export const createSeedCat = async () => {
   const existingUser = await userRepo.findOne({ where: { cpf: CPF } });
 
   if (!existingUser) {
-    console.log("Superusuário não existe.");
+    console.log('Superusuário não existe.');
     return;
   }
 

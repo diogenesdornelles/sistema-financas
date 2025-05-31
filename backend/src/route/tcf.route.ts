@@ -1,6 +1,6 @@
-import TcfController from "../controller/tcf.controller.js";
-import GeneralMiddleware from "../middleware/GeneralMiddleware.js";
-import { BaseRouter } from "./base.route.js";
+import TcfController from '../controller/tcf.controller.js';
+import GeneralMiddleware from '../middleware/GeneralMiddleware.js';
+import { BaseRouter } from './base.route.js';
 
 export default class TcfRouter extends BaseRouter<TcfController> {
   /**
@@ -18,21 +18,21 @@ export default class TcfRouter extends BaseRouter<TcfController> {
    */
   protected initRoutes(): void {
     this.router.get(
-      "/",
+      '/',
       GeneralMiddleware.authentication,
       this.controller.getAll,
       GeneralMiddleware.errorHandler,
     );
 
     this.router.get(
-      "/many/:skip",
+      '/many/:skip',
       GeneralMiddleware.authentication,
       this.controller.getMany,
       GeneralMiddleware.errorHandler,
     );
 
     this.router.get(
-      "/:id",
+      '/:id',
       GeneralMiddleware.authentication,
       GeneralMiddleware.validateUUID,
       this.controller.getOne,
@@ -40,7 +40,7 @@ export default class TcfRouter extends BaseRouter<TcfController> {
     );
 
     this.router.post(
-      "/",
+      '/',
       GeneralMiddleware.authentication,
       GeneralMiddleware.validateBodyRequest,
       this.controller.create,
@@ -48,7 +48,7 @@ export default class TcfRouter extends BaseRouter<TcfController> {
     );
 
     this.router.put(
-      "/:id",
+      '/:id',
       GeneralMiddleware.authentication,
       GeneralMiddleware.validateUUID,
       GeneralMiddleware.validateBodyRequest,
@@ -57,14 +57,14 @@ export default class TcfRouter extends BaseRouter<TcfController> {
     );
 
     this.router.delete(
-      "/:id",
+      '/:id',
       GeneralMiddleware.authentication,
       GeneralMiddleware.validateUUID,
       this.controller.delete,
       GeneralMiddleware.errorHandler,
     );
     this.router.post(
-      "/query",
+      '/query',
       GeneralMiddleware.authentication,
       GeneralMiddleware.validateBodyRequest,
       this.controller.query,

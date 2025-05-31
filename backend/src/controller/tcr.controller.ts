@@ -5,11 +5,11 @@ import {
   queryTcrSchema,
   UpdateTcr,
   updateTcrSchema,
-} from "@monorepo/packages";
-import { NextFunction, Request, Response } from "express";
-import { Tcr } from "../entity/entities.js";
-import { TcrService } from "../service/tcr.service.js";
-import { BaseController } from "./base.controller.js";
+} from '@monorepo/packages';
+import { NextFunction, Request, Response } from 'express';
+import { Tcr } from '../entity/entities.js';
+import { TcrService } from '../service/tcr.service.js';
+import { BaseController } from './base.controller.js';
 
 /**
  * Controla o fluxo de requisições e respostas de Tipo de contas
@@ -67,14 +67,14 @@ export default class TcrController extends BaseController<TcrService> {
       if (skipInt >= 0) {
         const items: Tcr[] | null = await this.service.getMany(skipInt);
         if (!items) {
-          res.status(404).json({ message: "Tipo de contas não encontradas" });
+          res.status(404).json({ message: 'Tipo de contas não encontradas' });
           return;
         }
         res.status(200).json(items);
       } else {
         res
           .status(404)
-          .json({ message: "Skip deve ser um número inteiro positivo" });
+          .json({ message: 'Skip deve ser um número inteiro positivo' });
         return;
       }
       return;
@@ -101,7 +101,7 @@ export default class TcrController extends BaseController<TcrService> {
       const { id } = req.params;
       const item: Tcr | null = await this.service.getOne(id);
       if (!item) {
-        res.status(404).json({ message: "Tipo conta não encontrada" });
+        res.status(404).json({ message: 'Tipo conta não encontrada' });
         return;
       }
       res.status(200).json(item);
@@ -155,7 +155,7 @@ export default class TcrController extends BaseController<TcrService> {
         validatedData,
       );
       if (!updatedItem) {
-        res.status(404).json({ message: "Tipo conta não encontrada" });
+        res.status(404).json({ message: 'Tipo conta não encontrada' });
         return;
       }
       res.status(200).json(updatedItem);
@@ -182,10 +182,10 @@ export default class TcrController extends BaseController<TcrService> {
       const { id } = req.params;
       const success: boolean = await this.service.delete(id);
       if (!success) {
-        res.status(404).json({ message: "Tipo conta não encontrada" });
+        res.status(404).json({ message: 'Tipo conta não encontrada' });
         return;
       }
-      res.status(200).json({ message: "Tipo conta deletado!" });
+      res.status(200).json({ message: 'Tipo conta deletado!' });
       return;
     } catch (error) {
       next(error);

@@ -5,11 +5,11 @@ import {
   queryUserSchema,
   UpdateUser,
   updateUserSchema,
-} from "@monorepo/packages";
-import { NextFunction, Request, Response } from "express";
-import { User } from "../entity/entities.js";
-import { UserService } from "../service/user.service.js";
-import { BaseController } from "./base.controller.js";
+} from '@monorepo/packages';
+import { NextFunction, Request, Response } from 'express';
+import { User } from '../entity/entities.js';
+import { UserService } from '../service/user.service.js';
+import { BaseController } from './base.controller.js';
 
 /**
  * Controla o fluxo de requisições e respostas de Usuários
@@ -63,14 +63,14 @@ export default class UserController extends BaseController<UserService> {
       if (skipInt >= 0) {
         const items: User[] | null = await this.service.getMany(skipInt);
         if (!items) {
-          res.status(404).json({ message: "Usuários não encontrados" });
+          res.status(404).json({ message: 'Usuários não encontrados' });
           return;
         }
         res.status(200).json(items);
       } else {
         res
           .status(404)
-          .json({ message: "Skip deve ser um número inteiro positivo" });
+          .json({ message: 'Skip deve ser um número inteiro positivo' });
         return;
       }
       return;
@@ -96,7 +96,7 @@ export default class UserController extends BaseController<UserService> {
       const { id } = req.params;
       const item: User | null = await this.service.getOne(id);
       if (!item) {
-        res.status(404).json({ message: "Usuário não encontrado" });
+        res.status(404).json({ message: 'Usuário não encontrado' });
         return;
       }
       res.status(200).json(item);
@@ -121,7 +121,7 @@ export default class UserController extends BaseController<UserService> {
   ): Promise<void> => {
     try {
       const validatedData: CreateUser = createUserSchema.parse(req.body);
-      const user: Omit<User, "pwd"> = await this.service.create(validatedData);
+      const user: Omit<User, 'pwd'> = await this.service.create(validatedData);
       res.status(201).json(user);
       return;
     } catch (error) {
@@ -150,7 +150,7 @@ export default class UserController extends BaseController<UserService> {
         validatedData,
       );
       if (!updatedUser) {
-        res.status(404).json({ message: "Usuário não encontrado" });
+        res.status(404).json({ message: 'Usuário não encontrado' });
         return;
       }
       res.status(200).json(updatedUser);
@@ -177,10 +177,10 @@ export default class UserController extends BaseController<UserService> {
       const { id } = req.params;
       const success: boolean = await this.service.delete(id);
       if (!success) {
-        res.status(404).json({ message: "Usuário não encontrado" });
+        res.status(404).json({ message: 'Usuário não encontrado' });
         return;
       }
-      res.status(200).json({ message: "Usuário deletado!" });
+      res.status(200).json({ message: 'Usuário deletado!' });
       return;
     } catch (error) {
       next(error);

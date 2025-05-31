@@ -1,279 +1,279 @@
 export const tcpsSeed = [
   // Fornecedores e Compras
   {
-    name: "Compras à Vista",
+    name: 'Compras à Vista',
   },
   {
-    name: "Compras a Prazo",
+    name: 'Compras a Prazo',
   },
   {
-    name: "Fornecedores",
+    name: 'Fornecedores',
   },
   {
-    name: "Material de Consumo",
+    name: 'Material de Consumo',
   },
   {
-    name: "Matéria Prima",
+    name: 'Matéria Prima',
   },
   {
-    name: "Mercadorias",
+    name: 'Mercadorias',
   },
 
   // Pessoal e Encargos
   {
-    name: "Salários",
+    name: 'Salários',
   },
   {
-    name: "13º Salário",
+    name: '13º Salário',
   },
   {
-    name: "Férias",
+    name: 'Férias',
   },
   {
-    name: "FGTS",
+    name: 'FGTS',
   },
   {
-    name: "INSS",
+    name: 'INSS',
   },
   {
-    name: "Vale Transporte",
+    name: 'Vale Transporte',
   },
   {
-    name: "Vale Refeição",
+    name: 'Vale Refeição',
   },
   {
-    name: "Vale Alimentação",
+    name: 'Vale Alimentação',
   },
   {
-    name: "Plano de Saúde",
+    name: 'Plano de Saúde',
   },
   {
-    name: "Seguro de Vida",
+    name: 'Seguro de Vida',
   },
 
   // Impostos e Taxas
   {
-    name: "IRPJ",
+    name: 'IRPJ',
   },
   {
-    name: "CSLL",
+    name: 'CSLL',
   },
   {
-    name: "PIS",
+    name: 'PIS',
   },
   {
-    name: "COFINS",
+    name: 'COFINS',
   },
   {
-    name: "ICMS",
+    name: 'ICMS',
   },
   {
-    name: "IPI",
+    name: 'IPI',
   },
   {
-    name: "ISS",
+    name: 'ISS',
   },
   {
-    name: "Simples Nacional",
+    name: 'Simples Nacional',
   },
   {
-    name: "IPTU",
+    name: 'IPTU',
   },
   {
-    name: "IPVA",
+    name: 'IPVA',
   },
   {
-    name: "Taxa de Licença",
+    name: 'Taxa de Licença',
   },
   {
-    name: "Multas e Juros",
+    name: 'Multas e Juros',
   },
 
   // Despesas Operacionais
   {
-    name: "Aluguel",
+    name: 'Aluguel',
   },
   {
-    name: "Condomínio",
+    name: 'Condomínio',
   },
   {
-    name: "Energia Elétrica",
+    name: 'Energia Elétrica',
   },
   {
-    name: "Água e Esgoto",
+    name: 'Água e Esgoto',
   },
   {
-    name: "Telefone",
+    name: 'Telefone',
   },
   {
-    name: "Internet",
+    name: 'Internet',
   },
   {
-    name: "Gás",
+    name: 'Gás',
   },
   {
-    name: "Limpeza e Conservação",
+    name: 'Limpeza e Conservação',
   },
   {
-    name: "Segurança",
+    name: 'Segurança',
   },
   {
-    name: "Material de Escritório",
+    name: 'Material de Escritório',
   },
   {
-    name: "Material de Limpeza",
+    name: 'Material de Limpeza',
   },
 
   // Financeiro
   {
-    name: "Financiamentos",
+    name: 'Financiamentos',
   },
   {
-    name: "Empréstimos",
+    name: 'Empréstimos',
   },
   {
-    name: "Cartão de Crédito",
+    name: 'Cartão de Crédito',
   },
   {
-    name: "Juros Bancários",
+    name: 'Juros Bancários',
   },
   {
-    name: "Tarifas Bancárias",
+    name: 'Tarifas Bancárias',
   },
   {
-    name: "IOF",
+    name: 'IOF',
   },
 
   // Veículos e Transporte
   {
-    name: "Combustível",
+    name: 'Combustível',
   },
   {
-    name: "Manutenção de Veículos",
+    name: 'Manutenção de Veículos',
   },
   {
-    name: "Seguro de Veículos",
+    name: 'Seguro de Veículos',
   },
   {
-    name: "Licenciamento",
+    name: 'Licenciamento',
   },
   {
-    name: "Pedágio",
+    name: 'Pedágio',
   },
   {
-    name: "Estacionamento",
+    name: 'Estacionamento',
   },
 
   // Marketing e Vendas
   {
-    name: "Publicidade",
+    name: 'Publicidade',
   },
   {
-    name: "Marketing Digital",
+    name: 'Marketing Digital',
   },
   {
-    name: "Eventos",
+    name: 'Eventos',
   },
   {
-    name: "Brindes",
+    name: 'Brindes',
   },
   {
-    name: "Comissões de Vendas",
+    name: 'Comissões de Vendas',
   },
 
   // Tecnologia
   {
-    name: "Software/Licenças",
+    name: 'Software/Licenças',
   },
   {
-    name: "Hospedagem de Sites",
+    name: 'Hospedagem de Sites',
   },
   {
-    name: "Equipamentos de TI",
+    name: 'Equipamentos de TI',
   },
   {
-    name: "Manutenção de TI",
+    name: 'Manutenção de TI',
   },
 
   // Profissionais e Serviços
   {
-    name: "Consultoria",
+    name: 'Consultoria',
   },
   {
-    name: "Advocacia",
+    name: 'Advocacia',
   },
   {
-    name: "Contabilidade",
+    name: 'Contabilidade',
   },
   {
-    name: "Auditoria",
+    name: 'Auditoria',
   },
   {
-    name: "Despachante",
+    name: 'Despachante',
   },
   {
-    name: "Correios",
+    name: 'Correios',
   },
   {
-    name: "Courier",
+    name: 'Courier',
   },
 
   // Seguros
   {
-    name: "Seguro Empresarial",
+    name: 'Seguro Empresarial',
   },
   {
-    name: "Seguro de Equipamentos",
+    name: 'Seguro de Equipamentos',
   },
   {
-    name: "Seguro de Responsabilidade",
+    name: 'Seguro de Responsabilidade',
   },
 
   // Viagens e Representação
   {
-    name: "Viagens",
+    name: 'Viagens',
   },
   {
-    name: "Hospedagem",
+    name: 'Hospedagem',
   },
   {
-    name: "Refeições",
+    name: 'Refeições',
   },
   {
-    name: "Representação",
+    name: 'Representação',
   },
 
   // Manutenção e Reparos
   {
-    name: "Manutenção Predial",
+    name: 'Manutenção Predial',
   },
   {
-    name: "Manutenção de Equipamentos",
+    name: 'Manutenção de Equipamentos',
   },
   {
-    name: "Reformas",
+    name: 'Reformas',
   },
 
   // Diversos
   {
-    name: "Doações",
+    name: 'Doações',
   },
   {
-    name: "Assinaturas",
+    name: 'Assinaturas',
   },
   {
-    name: "Treinamentos",
+    name: 'Treinamentos',
   },
   {
-    name: "Cursos",
+    name: 'Cursos',
   },
   {
-    name: "Livros e Periódicos",
+    name: 'Livros e Periódicos',
   },
   {
-    name: "Despesas Médicas",
+    name: 'Despesas Médicas',
   },
   {
-    name: "Outras Despesas",
+    name: 'Outras Despesas',
   },
 ];

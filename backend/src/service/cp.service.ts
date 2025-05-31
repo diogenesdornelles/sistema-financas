@@ -1,4 +1,4 @@
-import { CreateCp, PaymentStatus, QueryCp, UpdateCp } from "@monorepo/packages";
+import { CreateCp, PaymentStatus, QueryCp, UpdateCp } from '@monorepo/packages';
 import {
   FindOptionsWhere,
   ILike,
@@ -6,10 +6,10 @@ import {
   Not,
   Raw,
   Repository,
-} from "typeorm";
-import { AppDataSource } from "../config/typeorm.db.config.js";
-import { Cf, Cp, Partner, Tcp, Tx, User } from "../entity/entities.js";
-import { BaseService } from "./base.service.js";
+} from 'typeorm';
+import { AppDataSource } from '../config/typeorm.db.config.js';
+import { Cf, Cp, Partner, Tcp, Tx, User } from '../entity/entities.js';
+import { BaseService } from './base.service.js';
 
 export class CpService extends BaseService<
   Cp,
@@ -155,7 +155,7 @@ export class CpService extends BaseService<
         // incrementar o saldo da conta, pois a transação de pagamento foi cancelada
         await this.cfRepo.increment(
           { id: dbTx.cf.id },
-          "currentBalance",
+          'currentBalance',
           dbTx.value,
         );
       }

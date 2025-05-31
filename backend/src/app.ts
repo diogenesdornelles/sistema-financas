@@ -1,33 +1,33 @@
-import express, { Express } from "express";
+import express from 'express';
 
-import morgan from "morgan";
+import morgan from 'morgan';
 
-import cors from "cors";
-import * as dotenv from "dotenv";
-import helmet from "helmet";
+import cors from 'cors';
+import * as dotenv from 'dotenv';
+import helmet from 'helmet';
 
-import swaggerUi from "swagger-ui-express";
-import { DataSource } from "typeorm";
-import { AppDataSource } from "./config/typeorm.db.config.js";
-import { runAllSeeds } from "./seeds/runAllSeeds.js";
-import { RouteConfigType } from "./types/routeConfig.type.js";
+import swaggerUi from 'swagger-ui-express';
+import { DataSource } from 'typeorm';
+import { AppDataSource } from './config/typeorm.db.config.js';
+import { runAllSeeds } from './seeds/runAllSeeds.js';
+import { RouteConfigType } from './types/routeConfig.type.js';
 
 dotenv.config();
 
-import swaggerDocument from "../swagger.json" with { type: "json" };
+import swaggerDocument from '../swagger.json' with { type: 'json' };
 
 const corsOptions: cors.CorsOptions = {
-  origin: "*",
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 };
 
 const PORT = process.env.APP_PORT || 3000;
-const HOST = process.env.HOST || "";
+const HOST = process.env.HOST || '';
 
 class App {
-  public app: Express;
+  public app: express.Application;
 
   public routesConfig: RouteConfigType[];
 
@@ -49,36 +49,42 @@ class App {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cors(corsOptions));
-    this.app.options("*", cors(corsOptions));
+    this.app.options('*', cors(corsOptions));
     this.app.use(
       helmet({
         crossOriginResourcePolicy: false,
       }),
     );
-    this.app.use(morgan("dev"));
+    this.app.use(morgan('dev'));
   }
 
-    /**
+  /**
    * Configura o Swagger UI
    */
   private initializeSwagger(): void {
     const swaggerOptions = {
       explorer: true,
       swaggerOptions: {
-        docExpansion: "none",
+        docExpansion: 'none',
         filter: true,
         showRequestHeaders: true,
       },
     };
 
-    this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swaggerOptions));
-    
+    this.app.use(
+      '/api-docs',
+      swaggerUi.serve,
+      swaggerUi.setup(swaggerDocument, swaggerOptions),
+    );
+
     this.app.get('/swagger.json', (req, res) => {
       res.setHeader('Content-Type', 'application/json');
       res.send(swaggerDocument);
     });
 
-    console.log('Swagger UI disponível em: http://localhost:' + PORT + '/api-docs');
+    console.log(
+      'Swagger UI disponível em: http://localhost:' + PORT + '/api-docs',
+    );
   }
 
   /**
@@ -95,11 +101,11 @@ class App {
    */
   private async initializeDBConn(): Promise<DataSource> {
     try {
-      console.log("Inicializando conexão com o banco de dados...");
+      console.log('Inicializando conexão com o banco de dados...');
       const appDataSource = await AppDataSource.initialize();
-      console.log("Conexão com o banco estabelecida");
+      console.log('Conexão com o banco estabelecida');
 
-      console.log("Executando migrations...");
+      console.log('Executando migrations...');
       const executedMigrations = await appDataSource.runMigrations();
 
       if (executedMigrations.length > 0) {
@@ -108,19 +114,19 @@ class App {
           console.log(`  - ${migration.name}`);
         });
       } else {
-        console.log("Nenhuma migration pendente");
+        console.log('Nenhuma migration pendente');
       }
 
       await this.verifyDatabaseStructure(appDataSource);
 
-      console.log("Executando seeds...");
+      console.log('Executando seeds...');
       await runAllSeeds();
-      console.log("Seeds executados com sucesso");
+      console.log('Seeds executados com sucesso');
 
-      console.log("Inicialização do banco concluída!");
+      console.log('Inicialização do banco concluída!');
       return appDataSource;
     } catch (error) {
-      console.error("Erro na inicialização do banco:", error);
+      console.error('Erro na inicialização do banco:', error);
       throw error;
     }
   }
@@ -140,7 +146,7 @@ class App {
       );
       console.log(`Migrations executadas: ${migrationsCount[0].count}`);
     } catch (error) {
-      console.warn("Não foi possível verificar estrutura:", error);
+      console.warn('Não foi possível verificar estrutura:', error);
     }
   }
 

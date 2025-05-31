@@ -1,62 +1,62 @@
 export const tcrsSeed = [
   {
-    name: "Vendas à Vista",
+    name: 'Vendas à Vista',
   },
   {
-    name: "Vendas a Prazo",
+    name: 'Vendas a Prazo',
   },
   {
-    name: "Prestação de Serviços",
+    name: 'Prestação de Serviços',
   },
   {
-    name: "Consultoria",
+    name: 'Consultoria',
   },
   {
-    name: "Comissões",
+    name: 'Comissões',
   },
   {
-    name: "Royalties",
+    name: 'Royalties',
   },
   {
-    name: "Licenciamento",
+    name: 'Licenciamento',
   },
   {
-    name: "Juros de Aplicações",
+    name: 'Juros de Aplicações',
   },
   {
-    name: "Dividendos",
+    name: 'Dividendos',
   },
   {
-    name: "Aluguel a Receber",
+    name: 'Aluguel a Receber',
   },
   {
-    name: "Devolução de Impostos",
+    name: 'Devolução de Impostos',
   },
   {
-    name: "Reembolsos",
+    name: 'Reembolsos',
   },
   {
-    name: "Bonificações",
+    name: 'Bonificações',
   },
   {
-    name: "Prêmios",
+    name: 'Prêmios',
   },
   {
-    name: "Venda de Ativos",
+    name: 'Venda de Ativos',
   },
   {
-    name: "Empréstimos a Receber",
+    name: 'Empréstimos a Receber',
   },
   {
-    name: "Parcerias",
+    name: 'Parcerias',
   },
   {
-    name: "Assinatura de Serviços",
+    name: 'Assinatura de Serviços',
   },
   {
-    name: "Mensalidades",
+    name: 'Mensalidades',
   },
   {
-    name: "Outros Recebimentos",
+    name: 'Outros Recebimentos',
   },
 ];

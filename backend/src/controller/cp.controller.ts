@@ -6,12 +6,12 @@ import {
   queryCpSchema,
   UpdateCp,
   updateCpSchema,
-} from "@monorepo/packages";
-import { NextFunction, Request, Response } from "express";
-import { Cp } from "../entity/entities.js";
-import { CpService } from "../service/cp.service.js";
-import { ApiError } from "../utils/apiError.util.js";
-import { BaseController } from "./base.controller.js";
+} from '@monorepo/packages';
+import { NextFunction, Request, Response } from 'express';
+import { Cp } from '../entity/entities.js';
+import { CpService } from '../service/cp.service.js';
+import { ApiError } from '../utils/apiError.util.js';
+import { BaseController } from './base.controller.js';
 
 /**
  * Controla o fluxo de requisições e respostas de Contas a pagar
@@ -71,14 +71,14 @@ export default class CpController extends BaseController<CpService> {
       if (skipInt >= 0) {
         const items: Cp[] | null = await this.service.getMany(skipInt);
         if (!items) {
-          res.status(404).json({ message: "Contas não encontradas" });
+          res.status(404).json({ message: 'Contas não encontradas' });
           return;
         }
         res.status(200).json(items);
       } else {
         res
           .status(404)
-          .json({ message: "Skip deve ser um número inteiro positivo" });
+          .json({ message: 'Skip deve ser um número inteiro positivo' });
         return;
       }
       return;
@@ -105,7 +105,7 @@ export default class CpController extends BaseController<CpService> {
       const { id } = req.params;
       const item: Cp | null = await this.service.getOne(id);
       if (!item) {
-        res.status(404).json({ message: "Conta não encontrada" });
+        res.status(404).json({ message: 'Conta não encontrada' });
         return;
       }
       res.status(200).json(item);
@@ -133,11 +133,11 @@ export default class CpController extends BaseController<CpService> {
       const { value } = req.body;
       // normaliza string para float string
       const normalizedValue = GeneralValidator.validateAndNormalizeMoneyString(
-        value || "",
+        value || '',
       );
 
       if (!normalizedValue) {
-        throw new ApiError(401, "Informar um valor Pt-Br válido");
+        throw new ApiError(401, 'Informar um valor Pt-Br válido');
       }
 
       const validatedData: CreateCp = createCpSchema.parse({
@@ -175,7 +175,7 @@ export default class CpController extends BaseController<CpService> {
         const normalizedValue =
           GeneralValidator.validateAndNormalizeMoneyString(value);
         if (!normalizedValue) {
-          throw new ApiError(401, "Informar um valor Pt-Br válido");
+          throw new ApiError(401, 'Informar um valor Pt-Br válido');
         }
         req.body.value = normalizedValue;
       }
@@ -185,7 +185,7 @@ export default class CpController extends BaseController<CpService> {
         validatedData,
       );
       if (!updateditem) {
-        res.status(404).json({ message: "Conta não encontrada" });
+        res.status(404).json({ message: 'Conta não encontrada' });
         return;
       }
       res.status(200).json(updateditem);
@@ -213,10 +213,10 @@ export default class CpController extends BaseController<CpService> {
       const { id } = req.params;
       const success: boolean = await this.service.delete(id);
       if (!success) {
-        res.status(404).json({ message: "Conta não encontrada" });
+        res.status(404).json({ message: 'Conta não encontrada' });
         return;
       }
-      res.status(200).json({ message: "Conta deletada!" });
+      res.status(200).json({ message: 'Conta deletada!' });
       return;
     } catch (error) {
       next(error);
@@ -244,7 +244,7 @@ export default class CpController extends BaseController<CpService> {
         const normalizedValue =
           GeneralValidator.validateAndNormalizeMoneyString(value);
         if (!normalizedValue) {
-          throw new ApiError(401, "Informar um valor Pt-Br válido");
+          throw new ApiError(401, 'Informar um valor Pt-Br válido');
         }
         req.body.value = normalizedValue;
       }

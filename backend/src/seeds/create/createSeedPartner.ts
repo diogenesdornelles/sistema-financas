@@ -1,7 +1,7 @@
-import * as dotenv from "dotenv";
-import { AppDataSource } from "../../config/typeorm.db.config.js";
-import { Partner, User } from "../../entity/entities.js";
-import { partnersSeed } from "../dataSeed/partnersSeed.js";
+import * as dotenv from 'dotenv';
+import { AppDataSource } from '../../config/typeorm.db.config.js';
+import { Partner, User } from '../../entity/entities.js';
+import { partnersSeed } from '../dataSeed/partnersSeed.js';
 
 dotenv.config();
 
@@ -13,7 +13,7 @@ export const createSeedPartner = async () => {
   const existingUser = await userRepo.findOne({ where: { cpf: CPF } });
 
   if (!existingUser) {
-    console.log("Superusuário não existe.");
+    console.log('Superusuário não existe.');
     return;
   }
 

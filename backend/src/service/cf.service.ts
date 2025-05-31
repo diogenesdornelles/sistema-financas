@@ -1,7 +1,7 @@
-import { CreateCf, QueryCf, UpdateCf } from "@monorepo/packages";
-import { FindOptionsWhere, ILike, Like, MoreThanOrEqual, Raw } from "typeorm";
-import { Cf, Tcf, User } from "../entity/entities.js";
-import { BaseService } from "./base.service.js";
+import { CreateCf, QueryCf, UpdateCf } from '@monorepo/packages';
+import { FindOptionsWhere, ILike, Like, MoreThanOrEqual, Raw } from 'typeorm';
+import { Cf, Tcf, User } from '../entity/entities.js';
+import { BaseService } from './base.service.js';
 
 /**
  * Recupera todas as contas.

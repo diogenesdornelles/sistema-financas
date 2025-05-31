@@ -1,20 +1,17 @@
-// filepath: /home/dio/programacao/sys_finan/backend/tsconfig.json
 {
   "compilerOptions": {
-    "lib": ["ES2022"], // Atualizado
-    "target": "ES2022", // Atualizado
-    "module": "NodeNext", // Atualizado
-    "moduleResolution": "NodeNext", // Atualizado
+    "lib": ["ES2022"],
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "outDir": "./build",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "sourceMap": true,
     "esModuleInterop": true,
-    // "allowSyntheticDefaultImports": true, // esModuleInterop já cobre
     "strict": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true // Adicionado para importar JSON se necessário
+    "resolveJsonModule": true
   }
-  // Removido "ts-node": { "esm": true } pois "module": "NodeNext" já implica ESM.
 }

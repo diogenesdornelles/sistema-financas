@@ -1,4 +1,4 @@
-import { AppDataSource } from "../config/typeorm.db.config.js";
+import { AppDataSource } from '../config/typeorm.db.config.js';
 export class SeedManager {
   private async createSeedTable() {
     await AppDataSource.query(`

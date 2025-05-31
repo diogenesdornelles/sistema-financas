@@ -1,6 +1,6 @@
-import { AppDataSource } from "../../config/typeorm.db.config.js";
-import { Tcf } from "../../entity/entities.js";
-import { tcfsSeed } from "../dataSeed/tcfsSeed.js";
+import { AppDataSource } from '../../config/typeorm.db.config.js';
+import { Tcf } from '../../entity/entities.js';
+import { tcfsSeed } from '../dataSeed/tcfsSeed.js';
 
 export const createSeedTcf = async () => {
   const repo = AppDataSource.getRepository(Tcf);

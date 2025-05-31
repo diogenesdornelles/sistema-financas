@@ -5,11 +5,11 @@ import {
   queryCatSchema,
   UpdateCat,
   updateCatSchema,
-} from "@monorepo/packages";
-import { NextFunction, Request, Response } from "express";
-import { Cat } from "../entity/entities.js";
-import { CatService } from "../service/cat.service.js";
-import { BaseController } from "./base.controller.js";
+} from '@monorepo/packages';
+import { NextFunction, Request, Response } from 'express';
+import { Cat } from '../entity/entities.js';
+import { CatService } from '../service/cat.service.js';
+import { BaseController } from './base.controller.js';
 
 /**
  * Controla o fluxo de requisições e respostas de Categorias
@@ -67,14 +67,14 @@ export default class CatController extends BaseController<CatService> {
       if (skipInt >= 0) {
         const items: Cat[] | null = await this.service.getMany(skipInt);
         if (!items) {
-          res.status(404).json({ message: "Categorias não encontradas" });
+          res.status(404).json({ message: 'Categorias não encontradas' });
           return;
         }
         res.status(200).json(items);
       } else {
         res
           .status(404)
-          .json({ message: "Skip deve ser um número inteiro positivo" });
+          .json({ message: 'Skip deve ser um número inteiro positivo' });
         return;
       }
       return;
@@ -100,7 +100,7 @@ export default class CatController extends BaseController<CatService> {
       const { id } = req.params;
       const item: Cat | null = await this.service.getOne(id);
       if (!item) {
-        res.status(404).json({ message: "Categoria não encontrada" });
+        res.status(404).json({ message: 'Categoria não encontrada' });
         return;
       }
       res.status(200).json(item);
@@ -156,7 +156,7 @@ export default class CatController extends BaseController<CatService> {
         validatedData,
       );
       if (!updatedItem) {
-        res.status(404).json({ message: "Categoria não encontrada" });
+        res.status(404).json({ message: 'Categoria não encontrada' });
         return;
       }
       res.status(200).json(updatedItem);
@@ -183,10 +183,10 @@ export default class CatController extends BaseController<CatService> {
       const { id } = req.params;
       const success: boolean = await this.service.delete(id);
       if (!success) {
-        res.status(404).json({ message: "Categoria não encontrada" });
+        res.status(404).json({ message: 'Categoria não encontrada' });
         return;
       }
-      res.status(200).json({ message: "Categoria deletada!" });
+      res.status(200).json({ message: 'Categoria deletada!' });
       return;
     } catch (error) {
       next(error);

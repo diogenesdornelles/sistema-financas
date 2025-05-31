@@ -5,17 +5,17 @@ import {
   TransactionSearchType,
   TransactionType,
   UpdateTx,
-} from "@monorepo/packages";
+} from '@monorepo/packages';
 import {
   FindOptionsWhere,
   ILike,
   MoreThanOrEqual,
   Raw,
   Repository,
-} from "typeorm";
-import { AppDataSource } from "../config/typeorm.db.config.js";
-import { Cat, Cf, Cp, Cr, Tx, User } from "../entity/entities.js";
-import { BaseService } from "./base.service.js";
+} from 'typeorm';
+import { AppDataSource } from '../config/typeorm.db.config.js';
+import { Cat, Cf, Cp, Cr, Tx, User } from '../entity/entities.js';
+import { BaseService } from './base.service.js';
 
 /**
  * Serviço para gerenciar transações financeiras.
@@ -126,7 +126,7 @@ export class TxService extends BaseService<
         });
         await this.cfRepo.decrement(
           { id: updatedData.cf },
-          "currentBalance",
+          'currentBalance',
           updatedData.value,
         );
       }
@@ -137,7 +137,7 @@ export class TxService extends BaseService<
         });
         await this.cfRepo.increment(
           { id: updatedData.cf },
-          "currentBalance",
+          'currentBalance',
           updatedData.value,
         );
       }
@@ -191,11 +191,11 @@ export class TxService extends BaseService<
   ): Promise<void> {
     if (oldCfId && oldCfId !== newCfId) {
       // Decrementa o saldo do CF antigo
-      await repo.decrement({ id: oldCfId }, "currentBalance", value);
+      await repo.decrement({ id: oldCfId }, 'currentBalance', value);
     }
     if (newCfId && oldCfId !== newCfId) {
       // Incrementa o saldo do CF novo
-      await repo.increment({ id: newCfId }, "currentBalance", value);
+      await repo.increment({ id: newCfId }, 'currentBalance', value);
     }
   }
 
@@ -285,7 +285,7 @@ export class TxService extends BaseService<
         // incrementar o saldo da conta, pois a transação de pagar foi cancelada
         await this.cfRepo.increment(
           { id: transaction.cf.id },
-          "currentBalance",
+          'currentBalance',
           transaction.value,
         );
       }
@@ -296,7 +296,7 @@ export class TxService extends BaseService<
         // decrementar o saldo da conta, pois a transação de receber foi cancelada
         await this.cfRepo.decrement(
           { id: transaction.cf.id },
-          "currentBalance",
+          'currentBalance',
           transaction.value,
         );
       }

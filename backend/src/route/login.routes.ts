@@ -1,6 +1,6 @@
-import LoginController from "../controller/login.controller.js";
-import GeneralMiddleware from "../middleware/GeneralMiddleware.js";
-import { BaseRouter } from "./base.route.js";
+import LoginController from '../controller/login.controller.js';
+import GeneralMiddleware from '../middleware/GeneralMiddleware.js';
+import { BaseRouter } from './base.route.js';
 
 export default class LoginRouter extends BaseRouter<LoginController> {
   /**
@@ -18,7 +18,7 @@ export default class LoginRouter extends BaseRouter<LoginController> {
    */
   protected initRoutes(): void {
     this.router.post(
-      "/",
+      '/',
       GeneralMiddleware.validateBodyRequest,
       this.controller.create,
       GeneralMiddleware.errorHandler,

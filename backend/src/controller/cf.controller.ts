@@ -6,12 +6,12 @@ import {
   queryCfSchema,
   UpdateCf,
   updateCfSchema,
-} from "@monorepo/packages";
-import { NextFunction, Request, Response } from "express";
-import { Cf } from "../entity/entities.js";
-import { CfService } from "../service/cf.service.js";
-import { ApiError } from "../utils/apiError.util.js";
-import { BaseController } from "./base.controller.js";
+} from '@monorepo/packages';
+import { NextFunction, Request, Response } from 'express';
+import { Cf } from '../entity/entities.js';
+import { CfService } from '../service/cf.service.js';
+import { ApiError } from '../utils/apiError.util.js';
+import { BaseController } from './base.controller.js';
 
 /**
  * Controla o fluxo de requisições e respostas de Contas financeiras
@@ -71,14 +71,14 @@ export default class CfController extends BaseController<CfService> {
       if (skipInt >= 0) {
         const items: Cf[] | null = await this.service.getMany(skipInt);
         if (!items) {
-          res.status(404).json({ message: "Contas não encontradas" });
+          res.status(404).json({ message: 'Contas não encontradas' });
           return;
         }
         res.status(200).json(items);
       } else {
         res
           .status(404)
-          .json({ message: "Skip deve ser um número inteiro positivo" });
+          .json({ message: 'Skip deve ser um número inteiro positivo' });
         return;
       }
       return;
@@ -105,7 +105,7 @@ export default class CfController extends BaseController<CfService> {
       const { id } = req.params;
       const item: Cf | null = await this.service.getOne(id);
       if (!item) {
-        res.status(404).json({ message: "Conta não encontrada" });
+        res.status(404).json({ message: 'Conta não encontrada' });
         return;
       }
       res.status(200).json(item);
@@ -134,9 +134,9 @@ export default class CfController extends BaseController<CfService> {
 
       // Balance chega geralemnte como uma string monetária. Deve haver a normalização para uma string float.
       const normalizedBalance =
-        GeneralValidator.validateAndNormalizeMoneyString(balance || "0.0");
+        GeneralValidator.validateAndNormalizeMoneyString(balance || '0.0');
       if (!normalizedBalance) {
-        throw new ApiError(401, "Informar um valor Pt-Br válido");
+        throw new ApiError(401, 'Informar um valor Pt-Br válido');
       }
 
       // validação
@@ -176,7 +176,7 @@ export default class CfController extends BaseController<CfService> {
         const normalizedBalance =
           GeneralValidator.validateAndNormalizeMoneyString(balance);
         if (!normalizedBalance) {
-          throw new ApiError(401, "Informar um valor Pt-Br válido");
+          throw new ApiError(401, 'Informar um valor Pt-Br válido');
         }
         req.body.balance = normalizedBalance;
       }
@@ -209,10 +209,10 @@ export default class CfController extends BaseController<CfService> {
       const { id } = req.params;
       const success: boolean = await this.service.delete(id);
       if (!success) {
-        res.status(404).json({ message: "Conta não encontrada" });
+        res.status(404).json({ message: 'Conta não encontrada' });
         return;
       }
-      res.status(200).json({ message: "Conta deletada!" });
+      res.status(200).json({ message: 'Conta deletada!' });
       return;
     } catch (error) {
       next(error);
@@ -241,7 +241,7 @@ export default class CfController extends BaseController<CfService> {
         const normalizedBalance =
           GeneralValidator.validateAndNormalizeMoneyString(balance);
         if (!normalizedBalance) {
-          throw new ApiError(401, "Informar um valor Pt-Br válido");
+          throw new ApiError(401, 'Informar um valor Pt-Br válido');
         }
         req.body.balance = normalizedBalance;
       }

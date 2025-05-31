@@ -1,7 +1,7 @@
-import { AppDataSource } from "../../config/typeorm.db.config.js";
-import { User } from "../../entity/entities.js";
-import hashPassword from "../../utils/hashPwd.util.js";
-import { usersSeed } from "../dataSeed/usersSeed.js";
+import { AppDataSource } from '../../config/typeorm.db.config.js';
+import { User } from '../../entity/entities.js';
+import hashPassword from '../../utils/hashPwd.util.js';
+import { usersSeed } from '../dataSeed/usersSeed.js';
 
 export const createSeedUser = async () => {
   const userRepository = AppDataSource.getRepository(User);

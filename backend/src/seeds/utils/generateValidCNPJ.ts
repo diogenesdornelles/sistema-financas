@@ -21,5 +21,5 @@ export const generateValidCNPJ = (): string => {
   remainder = sum % 11;
   cnpj[13] = remainder < 2 ? 0 : 11 - remainder;
 
-  return cnpj.join("");
+  return cnpj.join('');
 };

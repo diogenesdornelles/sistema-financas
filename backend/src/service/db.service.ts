@@ -1,8 +1,8 @@
-import { DbBalanceProps, DbCpsCrsProps, ResultSet } from "@monorepo/packages";
-import { Between, QueryRunner, Repository } from "typeorm";
-import { AppDataSource } from "../config/typeorm.db.config.js";
-import { Cp, Cr } from "../entity/entities.js";
-import { ApiError } from "../utils/apiError.util.js";
+import { DbBalanceProps, DbCpsCrsProps, ResultSet } from '@monorepo/packages';
+import { Between, QueryRunner, Repository } from 'typeorm';
+import { AppDataSource } from '../config/typeorm.db.config.js';
+import { Cp, Cr } from '../entity/entities.js';
+import { ApiError } from '../utils/apiError.util.js';
 
 export class DbService {
   public queryRunner: QueryRunner;
@@ -66,7 +66,7 @@ export class DbService {
     const targetDate = new Date(date);
 
     if (currentDate > targetDate) {
-      throw new ApiError(401, "Data deve ser maior ou igual que a atual");
+      throw new ApiError(401, 'Data deve ser maior ou igual que a atual');
     }
 
     const cps = await this.cpRepo.find({

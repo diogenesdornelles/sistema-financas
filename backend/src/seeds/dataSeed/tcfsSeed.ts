@@ -1,162 +1,162 @@
 export const tcfsSeed = [
   // Contas Bancárias Tradicionais
   {
-    name: "Conta Corrente",
+    name: 'Conta Corrente',
   },
   {
-    name: "Conta Poupança",
+    name: 'Conta Poupança',
   },
   {
-    name: "Conta Salário",
+    name: 'Conta Salário',
   },
   {
-    name: "Conta Empresarial",
+    name: 'Conta Empresarial',
   },
   {
-    name: "Conta MEI",
+    name: 'Conta MEI',
   },
   {
-    name: "Conta Digital",
+    name: 'Conta Digital',
   },
 
   // Investimentos
   {
-    name: "Conta Investimento",
+    name: 'Conta Investimento',
   },
   {
-    name: "CDB",
+    name: 'CDB',
   },
   {
-    name: "Tesouro Direto",
+    name: 'Tesouro Direto',
   },
   {
-    name: "Fundos de Investimento",
+    name: 'Fundos de Investimento',
   },
   {
-    name: "Ações",
+    name: 'Ações',
   },
   {
-    name: "Previdência Privada",
+    name: 'Previdência Privada',
   },
 
   // Dinheiro em Espécie
   {
-    name: "Dinheiro",
+    name: 'Dinheiro',
   },
   {
-    name: "Cofre",
+    name: 'Cofre',
   },
   {
-    name: "Caixa Pequeno",
+    name: 'Caixa Pequeno',
   },
 
   // Cartões
   {
-    name: "Cartão de Débito",
+    name: 'Cartão de Débito',
   },
   {
-    name: "Cartão de Crédito",
+    name: 'Cartão de Crédito',
   },
   {
-    name: "Cartão Pré-pago",
+    name: 'Cartão Pré-pago',
   },
   {
-    name: "Cartão Empresarial",
+    name: 'Cartão Empresarial',
   },
 
   // Carteiras Digitais
   {
-    name: "PayPal",
+    name: 'PayPal',
   },
   {
-    name: "PagSeguro",
+    name: 'PagSeguro',
   },
   {
-    name: "Mercado Pago",
+    name: 'Mercado Pago',
   },
   {
-    name: "PicPay",
+    name: 'PicPay',
   },
   {
-    name: "Nubank",
+    name: 'Nubank',
   },
   {
-    name: "Inter",
+    name: 'Inter',
   },
   {
-    name: "C6 Bank",
+    name: 'C6 Bank',
   },
   {
-    name: "99Pay",
+    name: '99Pay',
   },
   {
-    name: "Ame Digital",
+    name: 'Ame Digital',
   },
 
   // PIX e Transferências
   {
-    name: "PIX",
+    name: 'PIX',
   },
   {
-    name: "TED",
+    name: 'TED',
   },
   {
-    name: "DOC",
+    name: 'DOC',
   },
 
   // Vale-Benefícios
   {
-    name: "Vale Refeição",
+    name: 'Vale Refeição',
   },
   {
-    name: "Vale Alimentação",
+    name: 'Vale Alimentação',
   },
   {
-    name: "Vale Transporte",
+    name: 'Vale Transporte',
   },
   {
-    name: "Vale Combustível",
+    name: 'Vale Combustível',
   },
   {
-    name: "Plano de Saúde",
+    name: 'Plano de Saúde',
   },
 
   // Criptomoedas
   {
-    name: "Bitcoin",
+    name: 'Bitcoin',
   },
   {
-    name: "Ethereum",
+    name: 'Ethereum',
   },
   {
-    name: "Criptomoedas",
+    name: 'Criptomoedas',
   },
 
   // Financiamentos e Empréstimos
   {
-    name: "Financiamento Imobiliário",
+    name: 'Financiamento Imobiliário',
   },
   {
-    name: "Financiamento Veicular",
+    name: 'Financiamento Veicular',
   },
   {
-    name: "Empréstimo Pessoal",
+    name: 'Empréstimo Pessoal',
   },
   {
-    name: "Crédito Consignado",
+    name: 'Crédito Consignado',
   },
 
   // Outros
   {
-    name: "Cheque",
+    name: 'Cheque',
   },
   {
-    name: "Boleto",
+    name: 'Boleto',
   },
   {
-    name: "Nota Promissória",
+    name: 'Nota Promissória',
   },
   {
-    name: "Outros",
+    name: 'Outros',
   },
 ];

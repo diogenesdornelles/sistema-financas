@@ -1,9 +1,9 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from 'express';
 
-import { BaseController } from "./base.controller.js";
+import { BaseController } from './base.controller.js';
 
-import { CreateToken, createTokenSchema, TokenProps } from "@monorepo/packages";
-import LoginService from "../service/login.service.js";
+import { CreateToken, createTokenSchema, TokenProps } from '@monorepo/packages';
+import LoginService from '../service/login.service.js';
 
 /**
  * Controla o fluxo de requisições e respostas de Login
@@ -53,7 +53,7 @@ export default class LoginController extends BaseController<LoginService> {
     res: Response,
     next: NextFunction,
   ): Promise<void> {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
 
   public getMany(
@@ -61,30 +61,30 @@ export default class LoginController extends BaseController<LoginService> {
     res: Response,
     next: NextFunction,
   ): Promise<void> {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
   public getOne(
     req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<void> {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
   public update(
     req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<void> {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
   public delete(
     req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<void> {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
   public query(req: Request, res: Response, next: NextFunction): Promise<void> {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
 }

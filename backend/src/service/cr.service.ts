@@ -1,4 +1,4 @@
-import { CreateCr, PaymentStatus, QueryCr, UpdateCr } from "@monorepo/packages";
+import { CreateCr, PaymentStatus, QueryCr, UpdateCr } from '@monorepo/packages';
 import {
   FindOptionsWhere,
   ILike,
@@ -6,10 +6,10 @@ import {
   Not,
   Raw,
   Repository,
-} from "typeorm";
-import { AppDataSource } from "../config/typeorm.db.config.js";
-import { Cf, Cr, Partner, Tcr, Tx, User } from "../entity/entities.js";
-import { BaseService } from "./base.service.js";
+} from 'typeorm';
+import { AppDataSource } from '../config/typeorm.db.config.js';
+import { Cf, Cr, Partner, Tcr, Tx, User } from '../entity/entities.js';
+import { BaseService } from './base.service.js';
 
 /**
  * Recupera todas as contas.
@@ -162,7 +162,7 @@ export class CrService extends BaseService<
         // decrementar o saldo da conta, pois a transação de receber foi cancelada
         await this.cfRepo.decrement(
           { id: dbTx.cf.id },
-          "currentBalance",
+          'currentBalance',
           dbTx.value,
         );
       }
@@ -191,7 +191,7 @@ export class CrService extends BaseService<
 
       if (data.value) {
         const value = parseFloat(
-          data.value.replace(/\./g, "").replace(",", "."),
+          data.value.replace(/\./g, '').replace(',', '.'),
         );
         if (!isNaN(value)) {
           where.value = MoreThanOrEqual(value);

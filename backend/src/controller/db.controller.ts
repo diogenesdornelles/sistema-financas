@@ -1,6 +1,6 @@
-import { DbBalanceProps, DbCpsCrsProps } from "@monorepo/packages";
-import { NextFunction, Request, Response } from "express";
-import { DbService } from "../service/db.service.js";
+import { DbBalanceProps, DbCpsCrsProps } from '@monorepo/packages';
+import { NextFunction, Request, Response } from 'express';
+import { DbService } from '../service/db.service.js';
 
 /**
  * Controla o fluxo de requisições e respostas de Dashboard
@@ -37,7 +37,7 @@ export default class DbController {
       if (items) {
         res.status(200).json(items);
       } else {
-        res.status(404).json({ message: "Balanços não encontrados" });
+        res.status(404).json({ message: 'Balanços não encontrados' });
       }
       return;
     } catch (error) {
@@ -64,7 +64,7 @@ export default class DbController {
       if (items) {
         res.status(200).json(items);
       } else {
-        res.status(404).json({ message: "Balanços não encontrados" });
+        res.status(404).json({ message: 'Balanços não encontrados' });
       }
       return;
     } catch (error) {

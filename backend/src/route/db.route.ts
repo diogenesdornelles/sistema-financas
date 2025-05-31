@@ -1,6 +1,6 @@
-import DbController from "../controller/db.controller.js";
-import GeneralMiddleware from "../middleware/GeneralMiddleware.js";
-import { BaseRouter } from "./base.route.js";
+import DbController from '../controller/db.controller.js';
+import GeneralMiddleware from '../middleware/GeneralMiddleware.js';
+import { BaseRouter } from './base.route.js';
 
 export default class DbRouter extends BaseRouter<DbController> {
   /**
@@ -18,14 +18,14 @@ export default class DbRouter extends BaseRouter<DbController> {
    */
   protected initRoutes(): void {
     this.router.get(
-      "/balances/:date",
+      '/balances/:date',
       GeneralMiddleware.authentication,
       GeneralMiddleware.validateDateUntilPresent,
       this.controller.getBalances,
       GeneralMiddleware.errorHandler,
     );
     this.router.get(
-      "/cpscrs/:date",
+      '/cpscrs/:date',
       GeneralMiddleware.authentication,
       GeneralMiddleware.validateDatePostPresent,
       this.controller.getCpsCrs,

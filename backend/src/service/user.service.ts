@@ -4,15 +4,15 @@ import {
   RoleSearchType,
   RoleType,
   UpdateUser,
-} from "@monorepo/packages";
-import { FindOptionsWhere, ILike, MoreThanOrEqual, Raw } from "typeorm";
-import { User } from "../entity/entities.js";
-import hashPassword from "../utils/hashPwd.util.js";
-import { BaseService } from "./base.service.js";
+} from '@monorepo/packages';
+import { FindOptionsWhere, ILike, MoreThanOrEqual, Raw } from 'typeorm';
+import { User } from '../entity/entities.js';
+import hashPassword from '../utils/hashPwd.util.js';
+import { BaseService } from './base.service.js';
 
 export class UserService extends BaseService<
   User,
-  Omit<User, "pwd">,
+  Omit<User, 'pwd'>,
   CreateUser,
   UpdateUser,
   QueryUser
@@ -90,7 +90,7 @@ export class UserService extends BaseService<
    *
    * @param data - Dados para criação do usuário.
    */
-  public create = async (data: CreateUser): Promise<Omit<User, "pwd">> => {
+  public create = async (data: CreateUser): Promise<Omit<User, 'pwd'>> => {
     try {
       // criptografa a senha
       const hashedPwd = await hashPassword(data.pwd);

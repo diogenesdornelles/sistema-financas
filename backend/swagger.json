@@ -1,0 +1,2048 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Sys-Finan API",
+    "description": "Sistema de gerenciamento financeiro com operações CRUD para controle de fluxo de caixa, contas a pagar, contas a receber e parceiros.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "API Support",
+      "url": "http://127.0.0.1:3000"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:3000",
+      "description": "Servidor de desenvolvimento"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Users",
+      "description": "Operações de usuários"
+    },
+    {
+      "name": "Financial Accounts",
+      "description": "Operações de contas financeiras"
+    },
+    {
+      "name": "Accounts Receivable",
+      "description": "Operações de contas a receber"
+    },
+    {
+      "name": "Accounts Payable",
+      "description": "Operações de contas a pagar"
+    },
+    {
+      "name": "Account Types",
+      "description": "Operações de tipos de contas"
+    },
+    {
+      "name": "Partners",
+      "description": "Operações de parceiros"
+    },
+    {
+      "name": "Transactions",
+      "description": "Operações de transações"
+    },
+    {
+      "name": "Categories",
+      "description": "Operações de categorias"
+    },
+    {
+      "name": "Dashboard",
+      "description": "Relatórios e consultas especiais"
+    },
+    {
+      "name": "Authentication",
+      "description": "Operações de autenticação"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "RoleType": {
+        "type": "string",
+        "enum": ["admin", "manager", "analist", "assistant"],
+        "description": "Tipos de papel do usuário"
+      },
+      "RoleSearchType": {
+        "type": "string",
+        "enum": ["admin", "manager", "analist", "assistant", "all"],
+        "description": "Tipos de papel para busca"
+      },
+      "PaymentStatus": {
+        "type": "string",
+        "enum": ["pending", "paid", "cancelled"],
+        "description": "Status de pagamento"
+      },
+      "TransactionType": {
+        "type": "string",
+        "enum": ["entry", "outflow"],
+        "description": "Tipo de transação"
+      },
+      "PartnerType": {
+        "type": "string",
+        "enum": ["PJ", "PF"],
+        "description": "Tipo de parceiro (Pessoa Jurídica ou Física)"
+      },
+      "CreateUser": {
+        "type": "object",
+        "required": ["name", "surname", "cpf", "pwd", "role"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nome do usuário"
+          },
+          "surname": {
+            "type": "string",
+            "description": "Sobrenome do usuário"
+          },
+          "cpf": {
+            "type": "string",
+            "description": "CPF do usuário"
+          },
+          "pwd": {
+            "type": "string",
+            "description": "Senha do usuário"
+          },
+          "role": {
+            "$ref": "#/components/schemas/RoleType"
+          }
+        }
+      },
+      "UpdateUser": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "surname": {
+            "type": "string"
+          },
+          "cpf": {
+            "type": "string"
+          },
+          "pwd": {
+            "type": "string"
+          },
+          "status": {
+            "type": "boolean"
+          },
+          "role": {
+            "$ref": "#/components/schemas/RoleType"
+          }
+        }
+      },
+      "UserProps": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "surname": {
+            "type": "string"
+          },
+          "cpf": {
+            "type": "string"
+          },
+          "status": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "role": {
+            "$ref": "#/components/schemas/RoleType"
+          }
+        }
+      },
+      "CreateCf": {
+        "type": "object",
+        "required": ["number", "type", "user"],
+        "properties": {
+          "number": {
+            "type": "string",
+            "description": "Número da conta financeira"
+          },
+          "type": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID do tipo de conta financeira"
+          },
+          "user": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID do usuário"
+          },
+          "balance": {
+            "type": "string",
+            "description": "Saldo inicial (default 0.0)"
+          },
+          "ag": {
+            "type": "string",
+            "description": "Agência bancária"
+          },
+          "bank": {
+            "type": "string",
+            "description": "Nome do banco"
+          },
+          "obs": {
+            "type": "string",
+            "description": "Observações"
+          }
+        }
+      },
+      "UpdateCf": {
+        "type": "object",
+        "properties": {
+          "number": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ag": {
+            "type": "string"
+          },
+          "bank": {
+            "type": "string"
+          },
+          "obs": {
+            "type": "string"
+          },
+          "status": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CreateCp": {
+        "type": "object",
+        "required": ["value", "type", "supplier", "due", "user"],
+        "properties": {
+          "value": {
+            "type": "string",
+            "description": "Valor monetário como string"
+          },
+          "type": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID do tipo de conta a pagar"
+          },
+          "supplier": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID do fornecedor (parceiro)"
+          },
+          "due": {
+            "type": "string",
+            "format": "date",
+            "description": "Data de vencimento"
+          },
+          "obs": {
+            "type": "string",
+            "description": "Observações"
+          },
+          "user": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID do usuário"
+          }
+        }
+      },
+      "UpdateCp": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "supplier": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "due": {
+            "type": "string",
+            "format": "date"
+          },
+          "obs": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateCat": {
+        "type": "object",
+        "required": ["name", "user"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nome da categoria"
+          },
+          "description": {
+            "type": "string",
+            "description": "Descrição da categoria"
+          },
+          "user": {
+            "type": "string",
+            "format": "uuid",
+            "description": "ID do usuário"
+          },
+          "obs": {
+            "type": "string",
+            "description": "Observações"
+          }
+        }
+      },
+      "UpdateCat": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "obs": {
+            "type": "string"
+          },
+          "status": {
+            "type": "boolean"
+          }
+        }
+      },
+      "CatProps": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "status": {
+            "type": "boolean"
+          },
+          "obs": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "DbBalanceProps": {
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "cfId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "cfNumber": {
+                  "type": "string"
+                },
+                "totalEntry": {
+                  "type": "number"
+                },
+                "totalOutflow": {
+                  "type": "number"
+                },
+                "firstBalance": {
+                  "type": "number"
+                },
+                "currentBalance": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "DbCpsCrsProps": {
+        "type": "object",
+        "properties": {
+          "cps": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "value": {
+                  "type": "number"
+                },
+                "type": {
+                  "type": "object"
+                },
+                "supplier": {
+                  "type": "object"
+                },
+                "due": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "status": {
+                  "$ref": "#/components/schemas/PaymentStatus"
+                }
+              }
+            }
+          },
+          "crs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "value": {
+                  "type": "number"
+                },
+                "type": {
+                  "type": "object"
+                },
+                "customer": {
+                  "type": "object"
+                },
+                "due": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "obs": {
+                  "type": "string"
+                },
+                "status": {
+                  "$ref": "#/components/schemas/PaymentStatus"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ApiResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "object"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "ApiError": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": false
+          },
+          "error": {
+            "type": "string"
+          },
+          "statusCode": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "parameters": {
+      "IdParam": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "description": "UUID do registro"
+      },
+      "DateParam": {
+        "name": "date",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "date"
+        },
+        "description": "Data no formato YYYY-MM-DD"
+      },
+      "SkipParam": {
+        "name": "skip",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "description": "Número de registros a pular para paginação"
+      }
+    }
+  },
+  "paths": {
+    "/user": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Obter todos os usuários",
+        "responses": {
+          "200": {
+            "description": "Lista de usuários",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/UserProps"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Users"],
+        "summary": "Criar novo usuário",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUser"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Usuário criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro de validação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/{id}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Obter usuário específico por ID",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/UserProps"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Usuário não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Users"],
+        "summary": "Atualizar usuário específico",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUser"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Usuário atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Users"],
+        "summary": "Remover usuário específico",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário removido com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/many/{skip}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Obter usuários com paginação",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SkipParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada de usuários",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cf": {
+      "get": {
+        "tags": ["Financial Accounts"],
+        "summary": "Obter todas as contas financeiras",
+        "responses": {
+          "200": {
+            "description": "Lista de contas financeiras",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Financial Accounts"],
+        "summary": "Criar nova conta financeira",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCf"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Conta financeira criada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cf/{id}": {
+      "get": {
+        "tags": ["Financial Accounts"],
+        "summary": "Obter conta financeira específica por ID",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Conta financeira encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Financial Accounts"],
+        "summary": "Atualizar conta financeira específica",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCf"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Conta financeira atualizada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Financial Accounts"],
+        "summary": "Remover conta financeira específica",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Conta financeira removida com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cf/many/{skip}": {
+      "get": {
+        "tags": ["Financial Accounts"],
+        "summary": "Obter contas financeiras com paginação",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SkipParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada de contas financeiras",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cp": {
+      "get": {
+        "tags": ["Accounts Payable"],
+        "summary": "Obter todas as contas a pagar",
+        "responses": {
+          "200": {
+            "description": "Lista de contas a pagar",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Accounts Payable"],
+        "summary": "Criar nova conta a pagar",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCp"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Conta a pagar criada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cp/{id}": {
+      "get": {
+        "tags": ["Accounts Payable"],
+        "summary": "Obter conta a pagar específica por ID",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Conta a pagar encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Accounts Payable"],
+        "summary": "Atualizar conta a pagar específica",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCp"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Conta a pagar atualizada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Accounts Payable"],
+        "summary": "Remover conta a pagar específica",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Conta a pagar removida com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cp/many/{skip}": {
+      "get": {
+        "tags": ["Accounts Payable"],
+        "summary": "Obter contas a pagar com paginação",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SkipParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada de contas a pagar",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cr": {
+      "get": {
+        "tags": ["Accounts Receivable"],
+        "summary": "Obter todas as contas a receber",
+        "responses": {
+          "200": {
+            "description": "Lista de contas a receber",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Accounts Receivable"],
+        "summary": "Criar nova conta a receber",
+        "responses": {
+          "201": {
+            "description": "Conta a receber criada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cr/{id}": {
+      "get": {
+        "tags": ["Accounts Receivable"],
+        "summary": "Obter conta a receber específica por ID",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Conta a receber encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Accounts Receivable"],
+        "summary": "Atualizar conta a receber específica",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Conta a receber atualizada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Accounts Receivable"],
+        "summary": "Remover conta a receber específica",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Conta a receber removida com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cr/many/{skip}": {
+      "get": {
+        "tags": ["Accounts Receivable"],
+        "summary": "Obter contas a receber com paginação",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SkipParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada de contas a receber",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tcf": {
+      "get": {
+        "tags": ["Account Types"],
+        "summary": "Obter todos os tipos de contas financeiras",
+        "responses": {
+          "200": {
+            "description": "Lista de tipos de contas financeiras",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Account Types"],
+        "summary": "Criar novo tipo de conta financeira",
+        "responses": {
+          "201": {
+            "description": "Tipo de conta financeira criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tcf/{id}": {
+      "get": {
+        "tags": ["Account Types"],
+        "summary": "Obter tipo de conta financeira específico por ID",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tipo de conta financeira encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Account Types"],
+        "summary": "Atualizar tipo de conta financeira específico",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tipo de conta financeira atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Account Types"],
+        "summary": "Remover tipo de conta financeira específico",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tipo de conta financeira removido com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tcf/many/{skip}": {
+      "get": {
+        "tags": ["Account Types"],
+        "summary": "Obter tipos de contas financeiras com paginação",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SkipParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada de tipos de contas financeiras",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tcp": {
+      "get": {
+        "tags": ["Account Types"],
+        "summary": "Obter todos os tipos de contas a pagar",
+        "responses": {
+          "200": {
+            "description": "Lista de tipos de contas a pagar",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Account Types"],
+        "summary": "Criar novo tipo de conta a pagar",
+        "responses": {
+          "201": {
+            "description": "Tipo de conta a pagar criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tcp/{id}": {
+      "get": {
+        "tags": ["Account Types"],
+        "summary": "Obter tipo de conta a pagar específico por ID",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tipo de conta a pagar encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Account Types"],
+        "summary": "Atualizar tipo de conta a pagar específico",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tipo de conta a pagar atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Account Types"],
+        "summary": "Remover tipo de conta a pagar específico",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tipo de conta a pagar removido com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tcp/many/{skip}": {
+      "get": {
+        "tags": ["Account Types"],
+        "summary": "Obter tipos de contas a pagar com paginação",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SkipParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada de tipos de contas a pagar",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tcr": {
+      "get": {
+        "tags": ["Account Types"],
+        "summary": "Obter todos os tipos de contas a receber",
+        "responses": {
+          "200": {
+            "description": "Lista de tipos de contas a receber",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Account Types"],
+        "summary": "Criar novo tipo de conta a receber",
+        "responses": {
+          "201": {
+            "description": "Tipo de conta a receber criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tcr/{id}": {
+      "get": {
+        "tags": ["Account Types"],
+        "summary": "Obter tipo de conta a receber específico por ID",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tipo de conta a receber encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Account Types"],
+        "summary": "Atualizar tipo de conta a receber específico",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tipo de conta a receber atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Account Types"],
+        "summary": "Remover tipo de conta a receber específico",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tipo de conta a receber removido com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tcr/many/{skip}": {
+      "get": {
+        "tags": ["Account Types"],
+        "summary": "Obter tipos de contas a receber com paginação",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SkipParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada de tipos de contas a receber",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/partner": {
+      "get": {
+        "tags": ["Partners"],
+        "summary": "Obter todos os parceiros",
+        "responses": {
+          "200": {
+            "description": "Lista de parceiros",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Partners"],
+        "summary": "Criar novo parceiro",
+        "responses": {
+          "201": {
+            "description": "Parceiro criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/partner/{id}": {
+      "get": {
+        "tags": ["Partners"],
+        "summary": "Obter parceiro específico por ID",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Parceiro encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Partners"],
+        "summary": "Atualizar parceiro específico",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Parceiro atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Partners"],
+        "summary": "Remover parceiro específico",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Parceiro removido com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/partner/many/{skip}": {
+      "get": {
+        "tags": ["Partners"],
+        "summary": "Obter parceiros com paginação",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SkipParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada de parceiros",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tx": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Obter todas as transações",
+        "responses": {
+          "200": {
+            "description": "Lista de transações",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Transactions"],
+        "summary": "Criar nova transação",
+        "responses": {
+          "201": {
+            "description": "Transação criada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tx/{id}": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Obter transação específica por ID",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transação encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Transactions"],
+        "summary": "Atualizar transação específica",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transação atualizada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Transactions"],
+        "summary": "Remover transação específica",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transação removida com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tx/many/{skip}": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Obter transações com paginação",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SkipParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada de transações",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cat": {
+      "get": {
+        "tags": ["Categories"],
+        "summary": "Obter todas as categorias",
+        "responses": {
+          "200": {
+            "description": "Lista de categorias",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/CatProps"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Categories"],
+        "summary": "Criar nova categoria",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCat"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Categoria criada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cat/{id}": {
+      "get": {
+        "tags": ["Categories"],
+        "summary": "Obter categoria específica por ID",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Categoria encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/CatProps"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Categories"],
+        "summary": "Atualizar categoria específica",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCat"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Categoria atualizada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Categories"],
+        "summary": "Remover categoria específica",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Categoria removida com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cat/many/{skip}": {
+      "get": {
+        "tags": ["Categories"],
+        "summary": "Obter categorias com paginação",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SkipParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada de categorias",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/db/balances/{date}": {
+      "get": {
+        "tags": ["Dashboard"],
+        "summary": "Obter balanços de contas financeiras até uma data específica",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/DateParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Balanços obtidos com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/DbBalanceProps"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/db/cpscrs/{date}": {
+      "get": {
+        "tags": ["Dashboard"],
+        "summary": "Obter contas a pagar e a receber até uma data futura",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/DateParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contas obtidas com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/DbCpsCrsProps"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Realizar autenticação/login",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["cpf", "pwd"],
+                "properties": {
+                  "cpf": {
+                    "type": "string",
+                    "description": "CPF do usuário"
+                  },
+                  "pwd": {
+                    "type": "string",
+                    "description": "Senha do usuário"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login realizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/ApiResponse"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "token": {
+                              "type": "string",
+                              "description": "Token JWT de autenticação"
+                            },
+                            "user": {
+                              "$ref": "#/components/schemas/UserProps"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Credenciais inválidas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login/{id}": {
+      "get": {
+        "tags": ["Authentication"],
+        "summary": "Obter informações de login por ID",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Informações de login obtidas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

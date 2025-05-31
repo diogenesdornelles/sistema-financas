@@ -6,12 +6,15 @@ import cors from "cors";
 import * as dotenv from "dotenv";
 import helmet from "helmet";
 
+import swaggerUi from "swagger-ui-express";
 import { DataSource } from "typeorm";
 import { AppDataSource } from "./config/typeorm.db.config.js";
 import { runAllSeeds } from "./seeds/runAllSeeds.js";
 import { RouteConfigType } from "./types/routeConfig.type.js";
 
 dotenv.config();
+
+import swaggerDocument from "../swagger.json" with { type: "json" };
 
 const corsOptions: cors.CorsOptions = {
   origin: "*",
@@ -35,6 +38,7 @@ class App {
     this.routesConfig = routes;
     this.appDataSource = null;
     this.initializeMiddlewares();
+    this.initializeSwagger();
     this.initializeRoutes();
   }
 
@@ -52,6 +56,29 @@ class App {
       }),
     );
     this.app.use(morgan("dev"));
+  }
+
+    /**
+   * Configura o Swagger UI
+   */
+  private initializeSwagger(): void {
+    const swaggerOptions = {
+      explorer: true,
+      swaggerOptions: {
+        docExpansion: "none",
+        filter: true,
+        showRequestHeaders: true,
+      },
+    };
+
+    this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swaggerOptions));
+    
+    this.app.get('/swagger.json', (req, res) => {
+      res.setHeader('Content-Type', 'application/json');
+      res.send(swaggerDocument);
+    });
+
+    console.log('Swagger UI disponível em: http://localhost:' + PORT + '/api-docs');
   }
 
   /**

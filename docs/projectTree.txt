@@ -1,0 +1,243 @@
+sys_finan
+ ├── README.md
+ ├─> backend
+ │   ├── eslint.config.js
+ │   ├── package-lock.json
+ │   ├── package.json
+ │   ├─> src
+ │   │   ├── app.ts
+ │   │   ├── appRoutes.ts
+ │   │   ├─> config
+ │   │   │   ├── sequelize.db.config.ts
+ │   │   │   └── typeorm.db.config.ts
+ │   │   ├─> controller
+ │   │   │   ├── base.controller.ts
+ │   │   │   ├── cat.controller.ts
+ │   │   │   ├── cf.controller.ts
+ │   │   │   ├── cp.controller.ts
+ │   │   │   ├── cr.controller.ts
+ │   │   │   ├── db.controller.ts
+ │   │   │   ├── login.controller.ts
+ │   │   │   ├── partner.controller.ts
+ │   │   │   ├── tcf.controller.ts
+ │   │   │   ├── tcp.controller.ts
+ │   │   │   ├── tcr.controller.ts
+ │   │   │   ├── tx.controller.ts
+ │   │   │   └── user.controller.ts
+ │   │   ├─> entity
+ │   │   │   └── entities.ts
+ │   │   ├─> interfaces
+ │   │   │   ├── AuthPayload.interface.ts
+ │   │   │   └── CustomRequest.interface.ts
+ │   │   ├─> middleware
+ │   │   │   └── GeneralMiddleware.ts
+ │   │   ├─> migrations
+ │   │   │   └─> forTypeorm
+ │   │   │       └── InicitalMigration.ts
+ │   │   ├─> route
+ │   │   │   ├── base.route.ts
+ │   │   │   ├── cat.route.ts
+ │   │   │   ├── cf.route.ts
+ │   │   │   ├── cp.route.ts
+ │   │   │   ├── cr.route.ts
+ │   │   │   ├── db.route.ts
+ │   │   │   ├── login.routes.ts
+ │   │   │   ├── partner.route.ts
+ │   │   │   ├── tcf.route.ts
+ │   │   │   ├── tcp.route.ts
+ │   │   │   ├── tcr.route.ts
+ │   │   │   ├── tx.route.ts
+ │   │   │   └── user.route.ts
+ │   │   ├─> seeds
+ │   │   │   ├── SeedManager.ts
+ │   │   │   ├─> create
+ │   │   │   │   ├── createSeedCat.ts
+ │   │   │   │   ├── createSeedPartner.ts
+ │   │   │   │   ├── createSeedSuperUser.ts
+ │   │   │   │   ├── createSeedTcf.ts
+ │   │   │   │   ├── createSeedTcp.ts
+ │   │   │   │   ├── createSeedTcr.ts
+ │   │   │   │   └── createSeedUser.ts
+ │   │   │   ├─> dataSeed
+ │   │   │   │   ├── catsSeed.ts
+ │   │   │   │   ├── partnersSeed.ts
+ │   │   │   │   ├── tcfsSeed.ts
+ │   │   │   │   ├── tcpsSeed.ts
+ │   │   │   │   ├── tcrsSeed.ts
+ │   │   │   │   └── usersSeed.ts
+ │   │   │   ├─> forTypeorm
+ │   │   │   │   └── createSeedSuperUser.ts
+ │   │   │   ├── runAllSeeds.ts
+ │   │   │   └─> utils
+ │   │   │       ├── generateValidCNPJ.ts
+ │   │   │       └── generateValidCPF.ts
+ │   │   ├── server.ts
+ │   │   ├─> service
+ │   │   │   ├── base.service.ts
+ │   │   │   ├── cat.service.ts
+ │   │   │   ├── cf.service.ts
+ │   │   │   ├── cp.service.ts
+ │   │   │   ├── cr.service.ts
+ │   │   │   ├── db.service.ts
+ │   │   │   ├── login.service.ts
+ │   │   │   ├── partner.service.ts
+ │   │   │   ├── tcf.service.ts
+ │   │   │   ├── tcp.service.ts
+ │   │   │   ├── tcr.service.ts
+ │   │   │   ├── tx.service.ts
+ │   │   │   └── user.service.ts
+ │   │   ├─> types
+ │   │   │   ├── baseRouter.type.ts
+ │   │   │   └── routeConfig.type.ts
+ │   │   └─> utils
+ │   │       ├── apiError.util.ts
+ │   │       └── hashPwd.util.ts
+ │   ├── swagger.json
+ │   └── tsconfig.json
+ ├─> docs
+ │   └── erdSysFinan.png
+ ├── dree.setup.ts
+ ├─> frontend
+ │   ├── eslint.config.js
+ │   ├── index.html
+ │   ├── package-lock.json
+ │   ├── package.json
+ │   ├─> public
+ │   │   └── env.js
+ │   ├─> src
+ │   │   ├── App.css
+ │   │   ├── App.tsx
+ │   │   ├─> api
+ │   │   │   └── Api.ts
+ │   │   ├─> assets
+ │   │   │   └─> images
+ │   │   │       ├── dashboard.svg
+ │   │   │       ├── help.svg
+ │   │   │       ├── logout.svg
+ │   │   │       └── manage.svg
+ │   │   ├─> components
+ │   │   │   ├─> alerts
+ │   │   │   │   └── ErrorAlert.tsx
+ │   │   │   ├─> dialogs
+ │   │   │   │   └── ExcludeDialog.tsx
+ │   │   │   ├─> forms
+ │   │   │   │   ├─> create
+ │   │   │   │   ├─> search
+ │   │   │   │   └─> update
+ │   │   │   ├─> tables
+ │   │   │   │   ├── CatTable.tsx
+ │   │   │   │   ├── CfTable.tsx
+ │   │   │   │   ├── CpTable.tsx
+ │   │   │   │   ├── CrTable.tsx
+ │   │   │   │   ├── PartnerTable.tsx
+ │   │   │   │   ├── TcfTable.tsx
+ │   │   │   │   ├── TcpTable.tsx
+ │   │   │   │   ├── TcrTable.tsx
+ │   │   │   │   ├── TxTable.tsx
+ │   │   │   │   └── UserTable.tsx
+ │   │   │   └─> ui
+ │   │   │       ├── ButtonUpdateForm.tsx
+ │   │   │       ├── CustomBackdrop.tsx
+ │   │   │       ├── FormContainer.tsx
+ │   │   │       ├── ManageArea.tsx
+ │   │   │       ├── RequireAuth.tsx
+ │   │   │       └── ToggleThemeButton.tsx
+ │   │   ├─> constants
+ │   │   │   ├── css.ts
+ │   │   │   └── dashboard.ts
+ │   │   ├─> contexts
+ │   │   │   ├── AuthContext.tsx
+ │   │   │   └── ColorModeContext.tsx
+ │   │   ├─> domain
+ │   │   │   └─> types
+ │   │   │       └── formState.ts
+ │   │   ├─> hooks
+ │   │   │   ├─> service
+ │   │   │   │   ├─> cat
+ │   │   │   │   ├─> cf
+ │   │   │   │   ├─> cp
+ │   │   │   │   ├─> cr
+ │   │   │   │   ├─> db
+ │   │   │   │   ├─> login
+ │   │   │   │   ├─> partner
+ │   │   │   │   ├─> tcf
+ │   │   │   │   ├─> tcp
+ │   │   │   │   ├─> tcr
+ │   │   │   │   ├─> tx
+ │   │   │   │   └─> user
+ │   │   │   ├── useAuth.tsx
+ │   │   │   ├── useEndSession.tsx
+ │   │   │   └── useFormStore.tsx
+ │   │   ├── index.css
+ │   │   ├─> layouts
+ │   │   │   └── RootLayout.tsx
+ │   │   ├── main.tsx
+ │   │   ├─> pages
+ │   │   │   ├── Dashboard.tsx
+ │   │   │   ├── ErrorPage.tsx
+ │   │   │   ├── Home.tsx
+ │   │   │   ├── Login.tsx
+ │   │   │   ├── Manage.tsx
+ │   │   │   └── Manual.tsx
+ │   │   ├─> providers
+ │   │   │   ├── ColorModeProvider.tsx
+ │   │   │   └── SessionProvider.tsx
+ │   │   ├─> templates
+ │   │   │   ├── footer.tsx
+ │   │   │   └── nav.tsx
+ │   │   ├─> utils
+ │   │   │   ├── clients.tsx
+ │   │   │   ├── getTokenFromSession.ts
+ │   │   │   └── handleUnauthorizedAccess.ts
+ │   │   └── vite-env.d.ts
+ │   ├── tsconfig.app.json
+ │   ├── tsconfig.json
+ │   ├── tsconfig.node.json
+ │   └── vite.config.ts
+ ├── package-lock.json
+ ├── package.json
+ └─> packages
+     ├── jest.config.js
+     ├── package-lock.json
+     ├── package.json
+     ├─> src
+     │   ├─> dtos
+     │   │   ├── cat.dto.ts
+     │   │   ├── cf.dto.ts
+     │   │   ├── cp.dto.ts
+     │   │   ├── cr.dto.ts
+     │   │   ├── db.dto.ts
+     │   │   ├── index.ts
+     │   │   ├── partner.dto.ts
+     │   │   ├── tcf.dto.ts
+     │   │   ├── tcp.dto.ts
+     │   │   ├── tcr.dto.ts
+     │   │   ├── token.dto.ts
+     │   │   ├── tx.dto.ts
+     │   │   ├── user.dto.ts
+     │   │   └─> utils
+     │   │       ├── enums.ts
+     │   │       └── index.ts
+     │   ├── index.ts
+     │   ├─> utils
+     │   │   ├── floatToPtBrMoney.ts
+     │   │   ├── index.ts
+     │   │   └── strToPtBrMoney.ts
+     │   └─> validators
+     │       ├── GeneralValidator.ts
+     │       ├── index.ts
+     │       ├─> utils
+     │       │   ├── dateSchema.ts
+     │       │   ├── index.ts
+     │       │   └── statusBoolSchema.ts
+     │       └─> zodSchemas
+     │           ├─> create
+     │           ├── index.ts
+     │           ├─> query
+     │           └─> update
+     ├─> tests
+     │   ├── createValidators.test.ts
+     │   ├── dateSchema.test.ts
+     │   ├── generalValidator.test.ts
+     │   └── queryValidator.test.ts
+     └── tsconfig.json

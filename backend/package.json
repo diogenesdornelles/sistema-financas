@@ -14,13 +14,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "lint:and:format": "npm run lint:fix && npm run format",
-    "typeorm": "typeorm-ts-node-esm -d src/config/typeorm.db.config.ts",
-    "migration:generate": "npm run typeorm -- migration:generate",
-    "migration:create": "npm run typeorm -- migration:create",
-    "migration:revert": "npm run typeorm -- migration:revert",
-    "migration:show": "npm run typeorm -- migration:show",
-    "seed:run": "node --loader ts-node/esm src/seeds/_typeorm/runSeeds.ts",
-    "seed:super-user": "node --loader ts-node/esm -e \"import('./src/seeds/_typeorm/seeds/001-super-user.seed.ts').then(m => m.createSuperUserSeed())\""
+    "typeorm": "typeorm-ts-node-esm -d src/config/typeorm.db.config.ts"
   },
   "keywords": [],
   "author": "",

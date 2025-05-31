@@ -1,20 +1,61 @@
 {
-  "name": "sistema-financas",
-  "private": true,
-  "packageManager": "npm@10.9.2",
-  "workspaces": [
-    "backend/*",
-    "frontend/*",
-    "packages/*"
-  ],
-  "scripts": {
-    "build": "turbo run build",
-    "test": "turbo run test",
-    "lint": "turbo run lint",
-    "dev": "turbo run dev"
+  "name": "sys_finan",
+  "version": "1.0.0",
+  "description": "sistema de finanças",
+  "directories": {
+    "doc": "docs"
   },
+  "scripts": {
+    "test": "cd packages && npm run test",
+    "dree": "tsx ./dree.setup.ts",
+    "install:packages": "cd packages && npm install",
+    "install:backend": "cd backend && npm install",
+    "install:frontend": "cd frontend && npm install",
+    "install:all": "npm run install:packages && npm run install:backend && npm run install:frontend",
+    "build:packages": "cd packages && npm i && npm run build",
+    "clean:packages": "cd packages && rm -rf node_modules",
+    "clean:backend": "cd backend && rm -rf node_modules",
+    "clean:frontend": "cd frontend && rm -rf node_modules",
+    "clean:all": "npm run clean:packages && npm run clean:backend && npm run clean:frontend",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:all": "npm run dev:backend && npm run dev:frontend",
+    "start:app": "npm run build:packages && npm run install:backend && npm run install:frontend && npm run dev:all",
+    "lint:backend": "cd backend && npm run lint",
+    "lint:frontend": "cd frontend && npm run lint",
+    "lint:packages": "cd packages && npm run lint",
+    "lint:all": "npm run lint:backend && npm run lint:frontend && npm run lint:packages",
+    "lint:fix:backend": "cd backend && npm run lint:fix",
+    "lint:fix:frontend": "cd frontend && npm run lint:fix",
+    "lint:fix:packages": "cd packages && npm run lint:fix",
+    "lint:fix:all": "npm run lint:fix:backend && npm run lint:fix:frontend && npm run lint:fix:packages",
+    "format:backend": "cd backend && npm run format",
+    "format:frontend": "cd frontend && npm run format",
+    "format:packages": "cd packages && npm run format",
+    "format:all": "npm run format:backend && npm run format:frontend && npm run format:packages",
+    "format:check:backend": "cd backend && npm run format:check",
+    "format:check:frontend": "cd frontend && npm run format:check",
+    "format:check:packages": "cd packages && npm run format:check",
+    "format:check:all": "npm run format:check:backend && npm run format:check:frontend && npm run format:check:packages",
+    "lint:and:format:backend": "cd backend && npm run lint:and:format",
+    "lint:and:format:frontend": "cd frontend && npm run lint:and:format",
+    "lint:and:format:packages": "cd packages && npm run lint:and:format",
+    "lint:and:format:all": "npm run lint:and:format:backend && npm run lint:and:format:frontend && npm run lint:and:format:packages"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/diogenesdornelles/sistema-financas.git"
+  },
+  "author": "Diogenes Dornelles Costa",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/diogenesdornelles/sistema-financas/issues"
+  },
+  "homepage": "https://github.com/diogenesdornelles/sistema-financas#readme",
   "devDependencies": {
-    "@types/morgan": "^1.9.9",
-    "turbo": "^2.4.4"
+    "@types/node": "^22.15.29",
+    "concurrently": "^9.1.2",
+    "dree": "^5.1.5",
+    "tsx": "^4.19.4"
   }
 }

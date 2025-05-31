@@ -1,0 +1,30 @@
+{"editor.formatOnSave": true,
+ "editor.defaultFormatter": "esbenp.prettier-vscode",
+ "editor.codeActionsOnSave": {
+   "source.fixAll.eslint": "explicit",
+   "source.organizeImports": "explicit"
+ },
+ "eslint.format.enable": false,
+ "eslint.lintTask.enable": true,
+ "eslint.experimental.useFlatConfig": true,
+ "prettier.requireConfig": true,
+ "typescript.preferences.organizeImportsOnSave": true,
+ "typescript.preferences.includePackageJsonAutoImports": "auto",
+ "typescript.suggest.autoImports": true,
+ "editor.rulers": [120],
+ "files.eol": "\n",
+ "files.insertFinalNewline": true,
+ "files.trimTrailingWhitespace": true,
+ "[javascript]": {
+   "editor.defaultFormatter": "esbenp.prettier-vscode"
+ },
+ "[javascriptreact]": {
+   "editor.defaultFormatter": "esbenp.prettier-vscode"
+ },
+ "[typescript]": {
+   "editor.defaultFormatter": "esbenp.prettier-vscode"
+ },
+ "[typescriptreact]": {
+   "editor.defaultFormatter": "esbenp.prettier-vscode"
+ }
+}

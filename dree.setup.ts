@@ -66,7 +66,8 @@ try {
 
   const stringOutput = dree.parseTree(tree);
 
-  const outputPath = path.join(__dirname, 'projectTree.txt');
+
+  const outputPath = path.join(__dirname, 'docs', 'projectTree.txt');
 
   fs.writeFileSync(outputPath, stringOutput, 'utf8');
 

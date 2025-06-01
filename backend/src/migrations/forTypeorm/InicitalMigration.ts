@@ -15,7 +15,6 @@ export class InitialMigrationTIMESTAMP implements MigrationInterface {
 
     await queryRunner.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`);
 
-    // Verificar e criar ENUMs apenas se não existirem
     const cpStatusExists = await queryRunner.query(
       `SELECT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'cp_status_enum');`,
     );

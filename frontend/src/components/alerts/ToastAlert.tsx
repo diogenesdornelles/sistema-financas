@@ -13,16 +13,18 @@ interface ToastAlertProps {
 }
 
 export default function ToastAlert({ severity, title, message, details, icon, open, handleClose }: ToastAlertProps) {
+  const [isOpen, setIsOpen] = React.useState(open);
+  
   return (
     <Snackbar
-      open={open}
+      open={isOpen}
       autoHideDuration={6000}
       onClose={handleClose}
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       sx={{ marginTop: '120px' }}
     >
       <Alert
-        onClose={handleClose || (() => {})}
+        onClose={handleClose || (() => setIsOpen(false))}
         severity={severity || 'error'}
         icon={icon || <ErrorIcon fontSize="inherit" />}
         sx={{ width: '100%' }}

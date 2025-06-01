@@ -240,20 +240,16 @@ const CfTable = (): JSX.Element => {
           </TableBody>
         </Table>
       </TableContainer>
-      {items && items.length > 0 && (
-        <Box
-          sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', flex: 0.1 }}
-        >
-          <ButtonGroup variant="contained" aria-label="basic button group">
-            <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
-              Anterior
-            </Button>
-            <Button onClick={() => handleChangePage(1)} disabled={!items || items.length === 0}>
-              Próximo
-            </Button>
-          </ButtonGroup>
-        </Box>
-      )}
+      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-end', flex: 0.1 }}>
+        <ButtonGroup variant="contained" aria-label="basic button group">
+          <Button onClick={() => handleChangePage(-1)} disabled={page === 1}>
+            Anterior
+          </Button>
+          <Button onClick={() => handleChangePage(1)} disabled={!items || items.length === 0}>
+            Próximo
+          </Button>
+        </ButtonGroup>
+      </Box>
       {itemIdToDelete && (
         <ExcludeDialog
           open={!!itemIdToDelete}

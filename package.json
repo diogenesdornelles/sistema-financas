@@ -19,7 +19,7 @@
     "clean:all": "npm run clean:packages && npm run clean:backend && npm run clean:frontend",
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
-    "dev:all": "npm run dev:backend && npm run dev:frontend",
+    "dev:all": "npm run dev:backend & npm run dev:frontend",
     "start:app": "npm run build:packages && npm run install:backend && npm run install:frontend && npm run dev:all",
     "lint:backend": "cd backend && npm run lint",
     "lint:frontend": "cd frontend && npm run lint",
@@ -54,7 +54,6 @@
   "homepage": "https://github.com/diogenesdornelles/sistema-financas#readme",
   "devDependencies": {
     "@types/node": "^22.15.29",
-    "concurrently": "^9.1.2",
     "dree": "^5.1.5",
     "tsx": "^4.19.4"
   }

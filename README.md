@@ -180,6 +180,7 @@ SUPER_CPF=senha do super usuário
 SUPER_PWD=senha do super usuário
 SECRET_KEY=secret key do JWT
 EXPIRES_IN=tempo de expiração do token ("1d", por exemplo)
+NODE_ENV=development # or production
 ```
 
 ## 7. Testes

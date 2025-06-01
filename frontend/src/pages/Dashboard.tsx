@@ -7,7 +7,6 @@ import { Bar, Pie } from 'react-chartjs-2';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-
 import CustomBackdrop from '@/components/ui/CustomBackdrop';
 import { colors, optionsCpsCrs, optionsPie } from '@/constants/dashboard';
 import { useGetAllCf } from '@/hooks/service/cf/useGetAllCf';
@@ -211,7 +210,9 @@ function Dashboard() {
 
   return (
     <Grid container sx={{ padding: 1, width: '100%', maxHeight: '85vh', overflow: 'scroll' }}>
-      {(errorBalances || errorCpsCrs || errorCfs) && <ToastAlert severity="error" title="Erro" message={'Erro ao obter dados.'} open />}
+      {(errorBalances || errorCpsCrs || errorCfs) && (
+        <ToastAlert severity="error" title="Erro" message={'Erro ao obter dados.'} open />
+      )}
       <Grid size={6}>
         <Box
           sx={{

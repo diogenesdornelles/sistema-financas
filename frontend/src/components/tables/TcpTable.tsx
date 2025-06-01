@@ -130,7 +130,9 @@ const TcpTable = (): JSX.Element => {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
-      {(error || queryTcpMutation.isError) && <ToastAlert severity="error" title="Erro" message={'Erro ao obter dados.'} open />}
+      {(error || queryTcpMutation.isError) && (
+        <ToastAlert severity="error" title="Erro" message={'Erro ao obter dados.'} open />
+      )}
       {(isPending ||
         isLoading ||
         isFetching ||

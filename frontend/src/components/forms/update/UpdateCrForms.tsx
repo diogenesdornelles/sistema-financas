@@ -63,15 +63,11 @@ export function UpdateCrForm(): JSX.Element | null | string {
   return (
     <FormContainer formName="cr">
       <ButtonUpdateForm name="cr" title="Atualizar Conta a Receber" />
-      {(errorTcr || errorPartner) && <ToastAlert severity="error" title="Erro" message={'Erro ao alterar conta.'} open />}
+      {(errorTcr || errorPartner) && (
+        <ToastAlert severity="error" title="Erro" message={'Erro ao alterar conta.'} open />
+      )}
       {mutation.isSuccess && (
-        <ToastAlert
-          severity="success"
-          title="Sucesso"
-          message="Conta alterada com sucesso!"
-          open
-          icon={<DoneIcon />}
-        />
+        <ToastAlert severity="success" title="Sucesso" message="Conta alterada com sucesso!" open icon={<DoneIcon />} />
       )}
 
       {mutation.isError && <ToastAlert severity="error" title="Erro" message={'Erro ao alterar conta.'} open />}

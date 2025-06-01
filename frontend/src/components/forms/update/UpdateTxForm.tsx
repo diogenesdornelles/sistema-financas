@@ -88,11 +88,12 @@ export function UpdateTxForm(): JSX.Element | null | string {
 
   if (forms.tx.type === 'create' || !forms.tx.updateItem) return null;
 
-
   return (
     <FormContainer formName="tx">
       <ButtonUpdateForm name="tx" title="Atualizar Transação" />
-      {(errorCf || errorCat || errorCp || errorCr) && <ToastAlert severity="error" title="Erro" message={'Erro ao alterar transação.'} open />}
+      {(errorCf || errorCat || errorCp || errorCr) && (
+        <ToastAlert severity="error" title="Erro" message={'Erro ao alterar transação.'} open />
+      )}
       {mutation.isSuccess && (
         <ToastAlert
           severity="success"

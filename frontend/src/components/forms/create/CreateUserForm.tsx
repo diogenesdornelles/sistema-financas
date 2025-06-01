@@ -59,13 +59,7 @@ export function CreateUserForm(): JSX.Element | null {
     <FormContainer formName="user">
       <Typography variant="h4">Novo Usuário</Typography>
       {mutation.isSuccess && (
-        <ToastAlert
-          severity="success"
-          title="Sucesso"
-          message="usuário criado com sucesso!"
-          open
-          icon={<DoneIcon />}
-        />
+        <ToastAlert severity="success" title="Sucesso" message="usuário criado com sucesso!" open icon={<DoneIcon />} />
       )}
 
       {mutation.isError && <ToastAlert severity="error" title="Erro" message={'Erro ao criar usuário.'} open />}

@@ -49,13 +49,7 @@ export function CreateTcpForm(): JSX.Element | null {
     <FormContainer formName="tcp">
       <Typography variant="h4">Novo Tipo de conta a pagar</Typography>
       {mutation.isSuccess && (
-        <ToastAlert
-          severity="success"
-          title="Sucesso"
-          message="Tipo criado com sucesso!"
-          open
-          icon={<DoneIcon />}
-        />
+        <ToastAlert severity="success" title="Sucesso" message="Tipo criado com sucesso!" open icon={<DoneIcon />} />
       )}
 
       {mutation.isError && <ToastAlert severity="error" title="Erro" message={'Erro ao criar tipo.'} open />}

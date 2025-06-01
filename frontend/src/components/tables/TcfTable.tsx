@@ -130,7 +130,9 @@ const TcfTable = (): JSX.Element => {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', rowGap: 2, mx: 2 }}>
-      {(error || queryTcfMutation.isError) && <ToastAlert severity="error" title="Erro" message={'Erro ao obter dados.'} open />}
+      {(error || queryTcfMutation.isError) && (
+        <ToastAlert severity="error" title="Erro" message={'Erro ao obter dados.'} open />
+      )}
       {(isPending ||
         isLoading ||
         isFetching ||

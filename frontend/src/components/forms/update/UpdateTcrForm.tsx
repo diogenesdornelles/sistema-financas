@@ -61,13 +61,7 @@ export function UpdateTcrForm(): JSX.Element | null {
       <ButtonUpdateForm title="Atualizar Tipo de conta a receber" name="tcr" />
 
       {mutation.isSuccess && (
-        <ToastAlert
-          severity="success"
-          title="Sucesso"
-          message="Tipo alterado com sucesso!"
-          open
-          icon={<DoneIcon />}
-        />
+        <ToastAlert severity="success" title="Sucesso" message="Tipo alterado com sucesso!" open icon={<DoneIcon />} />
       )}
 
       {mutation.isError && <ToastAlert severity="error" title="Erro" message={'Erro ao alterar tipo.'} open />}

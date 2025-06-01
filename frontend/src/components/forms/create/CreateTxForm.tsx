@@ -79,7 +79,9 @@ export function CreateTxForm(): JSX.Element | null | string {
   return (
     <FormContainer formName="tx">
       <Typography variant="h4">Nova Transação</Typography>
-      {(errorCf || errorCat || errorCp || errorCr) && <ToastAlert severity="error" title="Erro" message={'Erro ao criar transação.'} open />}
+      {(errorCf || errorCat || errorCp || errorCr) && (
+        <ToastAlert severity="error" title="Erro" message={'Erro ao criar transação.'} open />
+      )}
       {mutation.isSuccess && (
         <ToastAlert
           severity="success"

@@ -51,11 +51,15 @@ export function CreateCatForm(): JSX.Element | null {
       <Typography variant="h4">Nova Categoria</Typography>
 
       {mutation.isSuccess && (
-        <ToastAlert severity="success" title="Sucesso" message="Categoria criada com sucesso!" open icon={<DoneIcon/>}/>
+        <ToastAlert
+          severity="success"
+          title="Sucesso"
+          message="Categoria criada com sucesso!"
+          open
+          icon={<DoneIcon />}
+        />
       )}
-      {mutation.isError && (
-        <ToastAlert severity="error" title="Erro" message={'Erro ao criar categoria.'} open />
-      )}
+      {mutation.isError && <ToastAlert severity="error" title="Erro" message={'Erro ao criar categoria.'} open />}
       {mutation.isPending && <CustomBackdrop isOpen={mutation.isPending} />}
 
       <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%', minWidth: 500 }}>

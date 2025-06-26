@@ -3,6 +3,7 @@ import { generateValidCPF } from '../utils/generateValidCPF.js';
 import { generateValidCNPJ } from '../utils/generateValidCNPJ.js';
 
 
+
 export const partnersSeed = [
   // Clientes Pessoa Física
   {

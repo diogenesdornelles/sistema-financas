@@ -1,3 +1,5 @@
+
+
 export type TValue = 'cf' | 'tcf' | 'cr' | 'tcr' | 'cp' | 'tcp' | 'partner' | 'tx' | 'cat' | 'user';
 
 export type TopType = 'update' | 'create';
@@ -5,15 +7,15 @@ export type TopType = 'update' | 'create';
 import {
   UpdateUser,
   UpdateCat,
-  UpdateCf,
   UpdateCp,
   UpdatePartner,
   UpdateCr,
+  UpdateCf,
   UpdateTcf,
   UpdateTcp,
   UpdateTcr,
   UpdateTx,
-} = packages;;
+} from "@packages/src/dist";
 
 type UpdateItemMap = {
   cf: UpdateCf;
